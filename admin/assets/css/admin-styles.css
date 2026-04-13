@@ -1,0 +1,395 @@
+/**
+ * MH Plug Admin Styles - Final Version
+ * Includes modern accordion, neumorphic buttons, and enhanced 3D toggles.
+ */
+
+/* ===================================================================
+ * General Admin Page Styles
+ * =================================================================== */
+.mh-plug-admin-wrap {
+    max-width: 1100px;
+    margin-top: 20px;
+}
+.mh-plug-admin-wrap h1 {
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+/* ===================================================================
+ * Modern Accordion Styles
+ * =================================================================== */
+.mh-accordion {
+    margin: 25px 0;
+    border: none; /* Remove main border */
+    border-radius: 8px; /* Rounded corners for the container */
+    overflow: hidden; /* Keep content within rounded corners */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Softer shadow */
+}
+
+.mh-accordion-item {
+    border-bottom: 1px solid #e5e5e5; /* Separator line */
+    margin-bottom: 0;
+}
+.mh-accordion-item:last-child {
+    border-bottom: none;
+}
+
+/* Accordion Header - Div styled as a button */
+.mh-accordion-header {
+    background: #ffffff; /* Cleaner white background */
+    border: none;
+    width: 100%;
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 15px; /* Slightly smaller font */
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #3c434a;
+    transition: background-color 0.2s ease-in-out;
+    border-bottom: 1px solid transparent; /* Placeholder for active border */
+}
+
+.mh-accordion-item.mh-active .mh-accordion-header {
+    background-color: #f8f9fa; /* Subtle background when active */
+    border-bottom-color: #e5e5e5; /* Show border when open */
+}
+
+.mh-accordion-header:hover {
+    background: #f8f9fa; /* Subtle hover */
+    color: #2271b1; /* WordPress blue on hover */
+}
+
+.mh-accordion-title {
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+/* Container for buttons and icon on the right */
+.mh-header-controls {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Container specifically for the Enable/Disable buttons */
+.mh-widget-controls {
+    margin: 0 15px 0 0;
+    padding: 0;
+    border: none;
+}
+
+.mh-widget-controls .button { /* Target general button class first */
+    margin-right: 5px;
+    vertical-align: middle;
+}
+.mh-widget-controls .button:last-child {
+    margin-right: 0;
+}
+
+/* Icon Styling (+/-) */
+.mh-accordion-icon {
+    font-size: 20px;
+    font-weight: bold;
+    color: #777;
+    transition: transform 0.3s ease;
+    width: 20px;
+    text-align: center;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.mh-accordion-item.mh-active .mh-accordion-icon {
+     transform: rotate(45deg); /* Rotate '+' to 'x' */
+     color: #2271b1;
+}
+
+/* Accordion Content Area */
+.mh-accordion-content {
+    display: none;
+    padding: 25px 20px; /* More padding */
+    background: #fdfdfd; /* Slightly off-white background */
+}
+
+/* ===================================================================
+ * Modern Widget Card Styles
+ * =================================================================== */
+.mh-settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* Slightly wider cards */
+    gap: 20px;
+}
+
+.mh-widget-card {
+    background-color: #fff;
+    border: 1px solid #e0e4e7; /* Lighter border */
+    border-radius: 6px; /* Slightly less rounded */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+    padding: 10px 15px;
+    transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.mh-widget-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.mh-widget-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40px; /* Ensure consistent height */
+}
+
+.mh-widget-title {
+    font-weight: 500; /* Medium weight */
+    font-size: 14px;
+    color: #2c3338;
+    margin-right: 10px; /* Space between title and switch */
+}
+
+/* ===================================================================
+ * Enhanced Sliding Toggle Switch Styles
+ * =================================================================== */
+/* ===================================================================
+ * NEW: 3D Toggle Switch Styles (From Uiverse.io by r7chardgh)
+ * Scoped and slightly smaller.
+ * =================================================================== */
+.mh-plug-admin-wrap .switch {
+  font-size: 12px; /* ADJUST THIS VALUE TO MAKE IT SMALLER (original was 17px) */
+  position: relative;
+  display: inline-block;
+  width: 5em; /* Width is relative to font-size */
+  height: 2.5em; /* Height is relative to font-size */
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.mh-plug-admin-wrap .switch .cb {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  min-width: 0;
+  margin: 0px -6px 0px 0px;
+}
+
+.mh-plug-admin-wrap .toggle {
+  position: absolute;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  background-color: #373737;
+  border-radius: 0.1em;
+  transition: 0.4s;
+  text-transform: uppercase;
+  font-weight: 700;
+  overflow: hidden;
+  box-shadow: -0.3em 0 0 0 #373737, -0.3em 0.3em 0 0 #373737,
+    0.3em 0 0 0 #373737, 0.3em 0.3em 0 0 #373737, 0 0.3em 0 0 #373737;
+}
+
+.mh-plug-admin-wrap .toggle > .left {
+  position: absolute;
+  display: flex;
+  width: 50%;
+  height: 88%;
+  background-color: #f3f3f3;
+  color: #373737;
+  left: 0;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  transform-origin: right;
+  transform: rotateX(10deg);
+  transform-style: preserve-3d;
+  transition: all 150ms;
+}
+
+.mh-plug-admin-wrap .left::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgb(206, 206, 206);
+  transform-origin: center left;
+  transform: rotateY(90deg);
+}
+
+.mh-plug-admin-wrap .left::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgb(112, 112, 112);
+  transform-origin: center bottom;
+  transform: rotateX(90deg);
+}
+
+.mh-plug-admin-wrap .toggle > .right {
+  position: absolute;
+  display: flex;
+  width: 50%;
+  height: 88%;
+  background-color: #f3f3f3;
+  color: rgb(206, 206, 206);
+  right: 1px;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  transform-origin: left;
+  transform: rotateX(10deg) rotateY(-45deg);
+  transform-style: preserve-3d;
+  transition: all 150ms;
+}
+
+.mh-plug-admin-wrap .right::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgb(206, 206, 206);
+  transform-origin: center right;
+  transform: rotateY(-90deg);
+}
+
+.mh-plug-admin-wrap .right::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgb(112, 112, 112);
+  transform-origin: center bottom;
+  transform: rotateX(90deg);
+}
+
+.mh-plug-admin-wrap .switch input:checked + .toggle > .left {
+  transform: rotateX(10deg) rotateY(45deg);
+  color: rgb(206, 206, 206);
+}
+
+.mh-plug-admin-wrap .switch input:checked + .toggle > .right {
+  transform: rotateX(10deg) rotateY(0deg);
+  color: #487bdb; /* Color for 'on' state */
+}
+
+/* --- Keep the Neumorphic Button Styles Below --- */
+/* ===================================================================
+ * Neumorphic Button Styles ...
+ * =================================================================== */
+ /* ... your existing button styles ... */
+
+/* ===================================================================
+ * Neumorphic Button Styles (From Uiverse.io by adamgiebl)
+ * Applied to Save Changes, Enable All, Disable All
+ * =================================================================== */
+
+/* Target the specific buttons */
+.mh-plug-admin-wrap .button.button-primary,
+.mh-plug-admin-wrap .mh-widget-controls .button {
+  color: #090909;
+  padding: 0.7em 1.7em;
+  font-size: 14px; /* Adjusted size */
+  border-radius: 0.5em;
+  background: #e8e8e8;
+  cursor: pointer;
+  border: 1px solid #e8e8e8;
+  transition: all 0.3s;
+  box-shadow: 4px 4px 8px #c5c5c5, -4px -4px 8px #ffffff; /* Slightly reduced shadow */
+  text-shadow: none; /* Remove default WP text shadow */
+  font-weight: 600;
+  height: auto; /* Override WP default height */
+  line-height: normal; /* Override WP default line-height */
+}
+
+/* Specific adjustments for smaller Enable/Disable buttons */
+.mh-plug-admin-wrap .mh-widget-controls .button {
+  padding: 0.5em 1em;
+  font-size: 12px;
+}
+
+.mh-plug-admin-wrap .button.button-primary:hover,
+.mh-plug-admin-wrap .mh-widget-controls .button:hover {
+  border: 1px solid #f0f0f0; /* Slightly off-white border */
+  color: #000; /* Ensure text remains visible */
+  background: #e8e8e8; /* Keep background same on hover */
+}
+
+.mh-plug-admin-wrap .button.button-primary:active,
+.mh-plug-admin-wrap .mh-widget-controls .button:active {
+  box-shadow: inset 2px 2px 5px #c5c5c5, inset -2px -2px 5px #ffffff; /* Inset shadow for active state */
+  color: #000;
+}
+
+/* Add some space above the Save Changes button */
+.mh-plug-admin-wrap form p.submit {
+    margin-top: 25px;
+}
+
+/* =======================================
+ * Disabled Admin Sections
+ * ======================================= */
+
+/* This grays out the whole accordion item */
+.mh-accordion-item.mh-plug-disabled {
+    opacity: 0.7;
+    user-select: none;
+}
+
+/* --- NEW RULE ---
+ * This disables clicks on the accordion *content* (the toggles)
+ * but leaves the header clickable.
+*/
+.mh-accordion-item.mh-plug-disabled .mh-accordion-content {
+    pointer-events: none;
+}
+/* --- END OF NEW RULE --- */
+/* This allows the error notice to be clicked/copied */
+.mh-accordion-item.mh-plug-disabled .mh-plug-admin-notice {
+    pointer-events: auto;
+}
+
+/* This styles the 'off' text in your specific switch */
+/* It finds a disabled '.cb' input, looks for its sibling '.toggle', 
+   then finds the '.left' span inside that */
+label.switch input.cb:disabled ~ span.toggle span.left {
+    color: #999 !important;
+    opacity: 0.8 !important;
+}
+
+/* This makes the disabled switch non-clickable */
+.mh-plug-disabled .switch {
+    cursor: not-allowed;
+}
+
+/* --- ADD THIS RULE --- 
+ * This makes the disabled 'Enable/Disable All' buttons look correct
+ * and ensures they are not clickable.
+*/
+.mh-plug-disabled .mh-widget-controls button:disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* --- THIS IS THE "VISUAL OFF" FIX --- */
+
+/* 1. Force the 'off' text to be gray and visible */
+label.switch input.cb:disabled ~ span.toggle span.left {
+    color: #999 !important;
+    opacity: 1 !important;
+    visibility: visible !important; /* Make sure it's visible */
+}
+
+/* 2. Force the 'on' text to be hidden */
+label.switch input.cb:disabled ~ span.toggle span.right {
+    /* visibility: hidden !important; Hide the "on" text */
+    color: #999 !important;
+}
+
+
+/* 4. Force the toggle circle (if it's a ::before or ::after) to the left */
+label.switch input.cb:disabled ~ span.toggle::before {
+    transform: translateX(0) !important; /* Or whatever your 'off' position is */
+    /* background: #fff !important; */
+}

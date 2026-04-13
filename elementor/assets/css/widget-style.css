@@ -1,0 +1,454 @@
+/* =======================================
+ * MH Brush Text Widget (Base Styles)
+ * ======================================= */
+.mh-brush-text-wrapper {
+    position: relative; 
+    display: inline-flex; 
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: inherit; 
+    width: 100%; 
+    height: 180px; 
+    transition: transform 0.3s ease;
+}
+.mh-brush-text-wrapper:hover {
+    text-decoration: none;
+    color: inherit;
+    transform: scale(1.09);
+}
+.mh-brush-text-wrapper .mh-brush-text-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.mh-brush-text-wrapper .mh-brush-text-svg svg {
+    width: 100%;
+    height: 100%;
+    perspective-origin: none;
+}
+.mh-brush-text-wrapper .mh-brush-text-content {
+    position: relative;
+    z-index: 2; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.mh-brush-text-wrapper .mh-brush-primary-text {
+    line-height: 1.1;
+    color: #000000;
+    transition: color 0.3s ease;
+}
+.mh-brush-text-wrapper .mh-brush-secondary-text {
+    line-height: 1.2;
+    color: #000000;
+    transition: color 0.3s ease;
+}
+/* This path rule is now used by BOTH widgets */
+.mh-brush-text-wrapper .mh-brush-text-svg path {
+    fill: #ecd3cb; /* Default color */
+    transition: fill 0.3s ease;
+}
+
+
+/* =======================================
+ * MH Brush SLIDER Widget (New Styles)
+ * ======================================= */
+
+.mh-brush-slider-wrapper {
+    position: relative;
+    padding: 0 40px; /* Space for arrows */
+}
+
+/* Individual slide item */
+.mh-brush-slide-item {
+    padding: 10px; /* Spacing between slides */
+    box-sizing: border-box;
+    /* CSS Variables for this slide will be injected here */
+}
+
+/* Make slide fill the container */
+.mh-brush-slide-item .mh-brush-text-wrapper {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* --- NEW: Use CSS Variables for per-slide colors --- */
+.mh-brush-slide-item .mh-brush-text-svg path {
+    fill: var(--slide-brush-color, #ecd3cb); /* Use var, fallback to default */
+}
+
+.mh-brush-slide-item:hover .mh-brush-text-svg path {
+    fill: var(--slide-brush-color-hover, #004265); /* Use hover var */
+}
+/* --- END NEW --- */
+
+
+/* Editor-only: Make slides stack */
+.elementor-editor-active .mh-brush-slider-preview-editor .mh-brush-slide-item {
+    margin-bottom: 20px;
+}
+
+/* --- Arrows --- */
+.mh-brush-slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 24px;
+    color: #000;
+    transition: color 0.3s ease;
+}
+.mh-brush-slider-arrow.slick-disabled {
+    opacity: 0.2;
+    cursor: default;
+}
+.mh-brush-slider-arrow:not(.slick-disabled):hover {
+    color: #004265; /* Brand color */
+}
+[class*="mh-brush-slider-prev-"] { left: 0; }
+[class*="mh-brush-slider-next-"] { right: 0; }
+/* --- Dots --- */
+.mh-brush-slider-wrapper .slick-dots {
+    position: absolute;
+    bottom: -15px; /* Moved down slightly */
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+}
+
+.mh-brush-slider-wrapper .slick-dots li {
+    position: relative;
+    display: inline-block;
+    width: auto;
+    height: auto;
+    margin: 0 6px; /* Default spacing */
+    padding: 0;
+    cursor: pointer;
+}
+
+.slick-dots li button::before {
+    content: " " !important;
+}
+.mh-brush-slider-wrapper .slick-dots li button {
+    font-size: 0;
+    line-height: 0;
+    display: block;
+    width: 12px; /* Default size */
+    height: 12px; /* Default size */
+    padding: 0;
+    cursor: pointer;
+    color: transparent;
+    border: 0;
+    outline: none;
+    
+    /* --- NEW STYLES FOR HOLLOW DOTS --- */
+    background: transparent;       /* Transparent by default */
+    border: 2px solid #cccccc;     /* 2px Border */
+    border-radius: 50%;            /* Make it round */
+    box-sizing: border-box;        /* Ensure border is included in size */
+    transition: all 0.3s linear;
+}
+
+.mh-brush-slider-wrapper .slick-dots li button:hover {
+     border-color: #a8a8a8; /* Darker border on hover */
+}
+
+.mh-brush-slider-wrapper .slick-dots li.slick-active button {
+    background: #004265;
+    border-color: #004265;
+    transform: scale(1.1);
+    width: 30px !important;
+    border-radius: 10px;
+}
+/* =======================================
+ * MH Image Circle Widget
+ * ======================================= */
+
+.mh-image-circle-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.mh-image-circle-wrapper > a,
+.mh-image-circle-wrapper > div {
+    display: flex;
+    flex-direction: column;
+    align-items: inherit;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+}
+
+/* Wrapper for Image + Border */
+.mh-image-circle-image-wrapper {
+    display: block;
+    position: relative;
+    box-sizing: border-box;
+    width: 180px; /* Default size */
+    height: 180px; /* Default size */
+    /* Padding acts as the GAP between border and image */
+    padding: 10px; 
+}
+
+/* The Border Element (Rotates) */
+.mh-image-circle-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 50%;
+    /* Border styles set by Elementor Control */
+    border: 2px dotted #DDDDDD; 
+    transition: border-color 0.3s ease;
+    pointer-events: none; /* Let clicks pass through to image/link */
+}
+.mh-image-circle-wrapper:hover .mh-image-circle-inner {
+
+    transform: scale(1.04);
+}
+/* The Image Element (Static) */
+.mh-image-circle-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #f0f0f0;
+    transition: transform 0.3s ease;
+}
+
+.mh-image-circle-text {
+    color: #333333;
+    font-size: 1.2em;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+/* --- Spin Animation --- */
+@keyframes mh-spin-border {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Apply animation on hover if the class is present */
+.mh-image-circle-wrapper:hover .mh-spin-on-hover {
+    animation-name: mh-spin-border;
+    animation-duration: 10s; /* Default, overridden by control */
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+/* --- MH Image Circle Alignment Fix --- */
+
+/* Left Alignment (Desktop, Tablet, Mobile) */
+.mh-align-left .mh-image-circle-wrapper,
+.mh-align-tablet-left .mh-image-circle-wrapper,
+.mh-align-mobile-left .mh-image-circle-wrapper {
+    align-items: flex-start;
+    text-align: left;
+}
+
+/* Center Alignment (Desktop, Tablet, Mobile) */
+.mh-align-center .mh-image-circle-wrapper,
+.mh-align-tablet-center .mh-image-circle-wrapper,
+.mh-align-mobile-center .mh-image-circle-wrapper {
+    align-items: center;
+    text-align: center;
+}
+
+/* Right Alignment (Desktop, Tablet, Mobile) */
+.mh-align-right .mh-image-circle-wrapper,
+.mh-align-tablet-right .mh-image-circle-wrapper,
+.mh-align-mobile-right .mh-image-circle-wrapper {
+    align-items: flex-end;
+    text-align: right;
+}
+
+
+/* =======================================
+ * MH Image Circle Slider Widget
+ * ======================================= */
+
+/* Re-using styles from 'mh-brush-slider' and 'mh-image-circle' */
+
+/* Ensure the slide content is centered */
+.mh-brush-slider-wrapper .mh-image-circle-wrapper {
+    margin: 0 auto;
+}
+
+/* Inherit the flex behavior for alignment */
+.mh-image-circle-slide-item {
+    display: flex; 
+    justify-content: center;
+}
+
+/* =======================================
+ * MH Feature Card Widget
+ * ======================================= */
+
+.mh-feature-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertical Center */
+    transition: all 0.3s ease;
+    
+    /* Default Background Props */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #000;
+    
+    position: relative; /* Establish stacking context */
+    overflow: hidden; 
+    z-index: 0; /* Ensure ::before sits behind content */
+}
+
+/* Overlay Pseudo-element */
+.mh-feature-card-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: 0; /* Top/Right/Bottom/Left = 0 */
+    z-index: -1; /* Behind content */
+    transition: background 0.3s ease;
+    /* Background color set by Elementor Control */
+}
+
+/* Content Layers */
+.mh-feature-card-title,
+.mh-feature-card-description,
+.mh-feature-card-button-wrapper {
+    position: relative;
+    z-index: 1; /* On top of overlay */
+}
+
+.mh-feature-card-title {
+    margin: 0 0 15px 0;
+    font-weight: 600;
+}
+
+.mh-feature-card-description {
+    margin: 0 0 25px 0;
+    line-height: 1.6;
+}
+
+.mh-feature-card-button-wrapper {
+    display: flex;
+}
+
+.mh-feature-card-button {
+    display: inline-block;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+}
+
+.mh-feature-card-button:hover {
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   MH Button Widget Styles
+   ========================================= */
+
+/* Core Button Base */
+.mh-button {
+    display: inline-block;
+    line-height: 1;
+    background-color: #0073e6; /* Fallback */
+    color: white; /* Fallback */
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+/* Flexbox Layout for Icon Alignment */
+.mh-button-content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Icon Styles */
+.mh-button-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Smooth Transition for Slide Effect */
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.mh-button-icon svg {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+}
+
+.mh-button-icon i {
+    font-size: 1em;
+    color: currentColor;
+}
+
+/* Default Icon Spacing */
+.mh-button-icon-right {
+    margin-left: 8px;
+}
+
+.mh-button-icon-left {
+    margin-right: 8px;
+}
+
+/* Size Presets */
+.mh-button-size-xs { font-size: 12px; padding: 8px 16px; }
+.mh-button-size-sm { font-size: 14px; padding: 10px 20px; }
+.mh-button-size-md { font-size: 16px; padding: 12px 24px; }
+.mh-button-size-lg { font-size: 18px; padding: 16px 32px; }
+.mh-button-size-xl { font-size: 22px; padding: 20px 40px; }
+
+/* Responsive Alignment Support */
+.elementor-align-left .mh-button-wrapper { text-align: left; }
+.elementor-align-center .mh-button-wrapper { text-align: center; }
+.elementor-align-right .mh-button-wrapper { text-align: right; }
+.elementor-align-justify .mh-button-wrapper { text-align: justify; }
+.elementor-align-justify .mh-button { width: 100%; }
+
+/* =========================================
+   Icon Slide Animation
+   ========================================= */
+
+/* Only animate if the 'mh-icon-slide' class is present */
+.mh-icon-slide:hover .mh-button-icon-right {
+    transform: translateX(6px);
+}
+
+.mh-icon-slide:hover .mh-button-icon-left {
+    transform: translateX(-6px);
+}
+
+
+

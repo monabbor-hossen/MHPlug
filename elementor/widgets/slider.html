@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synced Slick Sliders</title>
+    
+    <!-- 1. Include Slick CSS and Theme -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+    
+    <style>
+        /* General Page Styling */
+        body {
+            background-color: #1a202c; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow-x: hidden;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Layout Grid */
+        .main-container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            align-items: center;
+            gap: 60px; 
+        }
+
+        .left-col {
+            width: 35%;
+            padding: 20px;
+            cursor: grab;
+        }
+        .left-col:active {
+            cursor: grabbing;
+        }
+
+        .right-col {
+            width: 65%;
+            position: relative;
+        }
+
+        /* --- LEFT SLIDER (CONTENT) STYLES --- */
+        
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .text-slider .slick-slide {
+            display: block; 
+            min-height: 200px;
+            outline: none;
+            padding: 10px; 
+        }
+
+        .text-content {
+            background-color: transparent; 
+            color: white;                  
+            padding: 20px 0;               
+            border-radius: 0;       
+            box-shadow: none;              
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 350px;
+        }
+        
+        /* Initial State: Hidden */
+        .text-content h2, 
+        .text-content p, 
+        .text-content .meta,
+        .text-content .price,
+        .text-content .shop-btn {
+            opacity: 0; 
+        }
+
+        /* Active State: Trigger Animation */
+        .slick-active .text-content .meta { animation: slideUpFade 0.5s ease forwards 0.1s; }
+        .slick-active .text-content h2 { animation: slideUpFade 0.5s ease forwards 0.2s; }
+        .slick-active .text-content .price { animation: slideUpFade 0.5s ease forwards 0.3s; }
+        .slick-active .text-content .shop-btn { animation: slideUpFade 0.5s ease forwards 0.4s; }
+        
+        /* Typography */
+        .text-content .meta {
+            display: block;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            color: #94a3b8; 
+            font-weight: 600;
+        }
+
+        .text-content h2 {
+            font-size: 3.5rem; 
+            font-weight: 800;
+            margin: 0 0 1rem 0;
+            line-height: 1.1;
+            color: #ffffff; 
+        }
+
+        .text-content .price {
+            font-size: 1.25rem;
+            color: #e2e8f0; 
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .shop-btn {
+            background-color: #ff8787; 
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 50px; 
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(255, 135, 135, 0.4); 
+        }
+        
+        .shop-btn:hover {
+            background-color: #ff6b6b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 135, 135, 0.6);
+        }
+
+        /* --- RIGHT SLIDER (IMAGE) STYLES --- */
+        
+        .image-slider .slick-slide {
+            z-index: 0;
+            position: relative;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .image-slider .slick-slide.slick-active { z-index: 1; }
+        .image-slider .slick-center { z-index: 20 !important; }
+
+        .card {
+            border-radius: 15px;
+            width: 150%; 
+            margin-left: -25%; 
+            height: 400px;
+            overflow: hidden; 
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            opacity: 0; 
+            pointer-events: none;
+            transform: scale(0.7) translateX(-50px);
+        }
+        
+        .slick-active .card {
+            opacity: 0.5;
+            pointer-events: auto;
+            border: 4px solid rgb(231, 255, 18);
+            transform: scale(0.8);
+        }
+
+        .slick-center .card {
+            opacity: 1;
+            transform: scale(1.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            border: 4px solid rgb(255, 217, 0);
+            z-index: 20;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            display: block;
+        }
+
+        /* Arrows */
+        .slick-arrow {
+            position: absolute;
+            bottom: -60px;
+            top: auto;
+            transform: none;
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transition: all 0.2s;
+            z-index: 100;
+            cursor: pointer;
+            background: transparent;
+        }
+        .slick-arrow:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
+        }
+        .slick-arrow:before { color: white; }
+
+        .slick-prev { left: calc(50% - 60px); }
+        .slick-next { right: calc(50% - 60px); }
+        .slick-prev:before, .slick-next:before { font-size: 24px; opacity: 1; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column-reverse;
+                padding: 10px;
+                gap: 20px;
+            }
+            .left-col, .right-col { width: 100%; }
+            .text-slider { text-align: center; }
+            .text-content { align-items: center; text-align: center; } 
+            .text-content h2 { font-size: 2.5rem; }
+            .card { height: 250px; width: 120%; margin-left: -10%;}
+            .slick-center .card { transform: scale(1.05); }
+            .slick-arrow { bottom: -40px; width: 40px; height: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <!-- LEFT COLUMN: Content Slider -->
+        <div class="left-col">
+            <div class="text-slider">
+                
+                <!-- Slide 1 Text -->
+                <div>
+                    <div class="text-content">
+                        <span class="meta">SEASONAL SALE - UP TO 30% OFF</span>
+                        <h2>Digital<br>Dreams</h2>
+                        <div class="price">Price from : $850</div>
+                        <button class="shop-btn">Shop now</button>
+                    </div>
+                </div>
+
+                <!-- Slide 2 Text -->
+                <div>
+                    <div class="text-content">
+                        <span class="meta">NEW ARRIVAL - HOT DEAL</span>
+                        <h2>Bold<br>Impact</h2>
+                        <div class="price">Price from : $420</div>
+                        <button class="shop-btn">Shop now</button>
+                    </div>
+                </div>
+
+                <!-- Slide 3 Text -->
+                <div>
+                    <div class="text-content">
+                        <span class="meta">LIMITED EDITION</span>
+                        <h2>Clear<br>Vision</h2>
+                        <div class="price">Price from : $999</div>
+                        <button class="shop-btn">Shop now</button>
+                    </div>
+                </div>
+
+                <!-- Slide 4 Text -->
+                <div>
+                    <div class="text-content">
+                        <span class="meta">SUMMER COLLECTION</span>
+                        <h2>Organic<br>Growth</h2>
+                        <div class="price">Price from : $350</div>
+                        <button class="shop-btn">Shop now</button>
+                    </div>
+                </div>
+
+                <!-- Slide 5 Text -->
+                <div>
+                    <div class="text-content">
+                        <span class="meta">BEST SELLER</span>
+                        <h2>Warm<br>Horizons</h2>
+                        <div class="price">Price from : $600</div>
+                        <button class="shop-btn">Shop now</button>
+                    </div>
+                </div>
+
+                <!-- Slide 6 Text -->
+                <div>
+                    <div class="text-content">
+                        <span class="meta">EXCLUSIVE OFFER</span>
+                        <h2>Deep<br>Waters</h2>
+                        <div class="price">Price from : $725</div>
+                        <button class="shop-btn">Shop now</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Image Slider -->
+        <div class="right-col">
+            <div class="image-slider">
+                
+                <!-- Slide 1 -->
+                <div>
+                    <div class="card">
+                        <img src="https://placehold.co/600x800/667eea/ffffff.png?text=Indigo" alt="Slide 1">
+                    </div>
+                </div>
+                
+                <!-- Slide 2 -->
+                <div>
+                    <div class="card">
+                        <img src="https://placehold.co/600x800/e91e63/ffffff.png?text=Crimson" alt="Slide 2">
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div>
+                    <div class="card">
+                        <img src="https://placehold.co/600x800/2196f3/ffffff.png?text=Azure" alt="Slide 3">
+                    </div>
+                </div>
+
+                <!-- Slide 4 -->
+                <div>
+                    <div class="card">
+                        <img src="https://placehold.co/600x800/4caf50/ffffff.png?text=Emerald" alt="Slide 4">
+                    </div>
+                </div>
+
+                <!-- Slide 5 -->
+                <div>
+                    <div class="card">
+                        <img src="https://placehold.co/600x800/ff9800/ffffff.png?text=Amber" alt="Slide 5">
+                    </div>
+                </div>
+
+                <!-- Slide 6 -->
+                <div>
+                    <div class="card">
+                        <img src="https://placehold.co/600x800/009688/ffffff.png?text=Teal" alt="Slide 6">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            
+            // 1. Initialize Left Slider (Content)
+            $('.text-slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: false,
+                fade: false,          // Sliding effect
+                asNavFor: '.image-slider',
+                draggable: true, 
+                swipe: true,
+                speed: 500,           
+                touchThreshold: 10
+            });
+
+            // 2. Initialize Right Slider (Images)
+            $('.image-slider').slick({
+                centerMode: true,
+                centerPadding: '0px',
+                slidesToShow: 3,
+                infinite: true,
+                autoplay: true,       // ENABLED AUTOPLAY
+                autoplaySpeed: 3000,  // 3 Seconds per slide
+                speed: 500,        
+                arrows: true,
+                asNavFor: '.text-slider',
+                focusOnSelect: true,
+                responsive: [
+                    {
+                        breakpoint: 900,
+                        settings: {
+                            slidesToShow: 3,
+                            centerPadding: '20px'
+                        }
+                    },
+                    {
+                        breakpoint: 600,
+                        settings: {
+                            slidesToShow: 3, 
+                            centerPadding: '10px'
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+</body>
+</html>
