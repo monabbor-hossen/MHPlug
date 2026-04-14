@@ -131,6 +131,9 @@ final class MH_Elementor_Loader {
             'mh_synced_slider' => ['file'  => 'mh-synced-slider-widget.php','class' => 'MH_Synced_Slider_Widget'],
             'mh_button' => ['file'  => 'mh-button-widget.php','class' => 'MH_Button_Widget'],
             'mh_stacked_carousel' => [ 'file' => 'mh-stacked-carousel-widget.php', 'class' => 'MH_Stacked_Carousel_Widget' ],
+            // WooCommerce Wishlist Widgets
+            'mh_wishlist_button' => [ 'file' => 'mh-wishlist-button-widget.php', 'class' => 'MH_Wishlist_Button_Widget' ],
+            'mh_wishlist_table'  => [ 'file' => 'mh-wishlist-table-widget.php',  'class' => 'MH_Wishlist_Table_Widget'  ],
         ];
 
         // Command: Loop through each widget in our map.

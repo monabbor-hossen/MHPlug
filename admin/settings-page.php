@@ -18,7 +18,7 @@ $widget_section_class = $is_elementor_active ? '' : 'mh-plug-disabled';
 $disabled_attr = $is_elementor_active ? '' : 'disabled';
 
 ?>
-<div class="wrap mh-plug-admin-wrap">
+<div class="wrap mh-plug-admin-wrap mh-main-settings-wrap">
     <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
 
     <form method="post" action="options.php">
@@ -49,6 +49,35 @@ $disabled_attr = $is_elementor_active ? '' : 'disabled';
                         if (isset($wp_settings_fields['mh-plug-settings-page']['mh_plug_global_settings_section'])) {
                             foreach ((array) $wp_settings_fields['mh-plug-settings-page']['mh_plug_global_settings_section'] as $field) {
                                 call_user_func($field['callback'], $field['args']);
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <?php /* ── WooCommerce Features Accordion ── */ ?>
+            <div class="mh-accordion-item">
+                <div class="mh-accordion-header">
+                    <span class="mh-accordion-title"><?php esc_html_e( 'WooCommerce Features', 'mh-plug' ); ?></span>
+                    <span class="mh-header-controls">
+                        <span class="mh-accordion-icon">+</span>
+                    </span>
+                </div>
+                <div class="mh-accordion-content">
+                    <?php if ( ! class_exists( 'WooCommerce' ) ) : ?>
+                        <div class="mh-plug-admin-notice notice-error">
+                            <p>
+                                <strong><?php esc_html_e( 'WooCommerce is not active.', 'mh-plug' ); ?></strong>
+                                <?php esc_html_e( 'Please install and activate WooCommerce to use these features.', 'mh-plug' ); ?>
+                            </p>
+                        </div>
+                    <?php endif; ?>
+                    <div class="mh-settings-grid">
+                        <?php
+                        global $wp_settings_fields;
+                        if ( isset( $wp_settings_fields['mh-plug-settings-page']['mh_plug_woocommerce_section'] ) ) {
+                            foreach ( (array) $wp_settings_fields['mh-plug-settings-page']['mh_plug_woocommerce_section'] as $field ) {
+                                call_user_func( $field['callback'], $field['args'] );
                             }
                         }
                         ?>

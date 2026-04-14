@@ -49,7 +49,7 @@ class MH_Plug_Age_Gate_Admin {
     public function create_admin_page() {
         global $wp_settings_fields;
         ?>
-        <div class="wrap mh-plug-admin-wrap">
+        <div class="wrap mh-plug-admin-wrap mh-age-gate-admin-wrap">
             <h1><?php esc_html_e( 'MH Age Gate Settings', 'mh-plug' ); ?></h1>
             <form method="post" action="options.php">
                 <?php settings_fields( 'mh_age_gate_option_group' ); ?>

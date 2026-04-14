@@ -19,19 +19,25 @@ class MH_Admin_Menu {
         'mh_site_logo'      => 'Site Logo', 
         'mh_site_title'     => 'Site Title',
         
-        // Add Global Settings here for now
+        // Global Settings
         'enable_menu_icons' => 'Menu Icons',
         
         'mh_brush_text'     => 'Brush Text',
-        
         'mh_brush_slider'   => 'Brush Slider',
         'mh_image_circle'   => 'Image Circle',
         'mh_image_circle_slider' => 'Image Circle Slider',
         'mh_feature_card'   => 'Feature Card',
         'mh_post_carousel'  => 'Post',
-        'mh_synced_slider' => 'Synced Slider',
-        'mh_button' => 'Button',
-        'mh_stacked_carousel' =>'Stacked Carousel',
+        'mh_synced_slider'  => 'Synced Slider',
+        'mh_button'         => 'Button',
+        'mh_stacked_carousel' => 'Stacked Carousel',
+
+        // Elementor WooCommerce Wishlist Widgets
+        'mh_wishlist_button' => 'MH Wishlist Button',
+        'mh_wishlist_table'  => 'MH Wishlist Table',
+
+        // WooCommerce Global Feature
+        'enable_wc_wishlist' => 'Enable WooCommerce Wishlist',
     ];
 
     public function __construct() {
@@ -150,21 +156,29 @@ class MH_Admin_Menu {
             [$this, 'sanitize_widgets_settings'] // <-- Add this sanitize callback
         );
         add_settings_section('mh_plug_widgets_section', null, null, 'mh-plug-settings-page');
-// --- ADD THIS NEW SECTION ---
+// --- GLOBAL SECTION ---
         add_settings_section(
-            'mh_plug_global_settings_section', // New unique ID for global settings
-            null, 
-            null, 
+            'mh_plug_global_settings_section',
+            null,
+            null,
+            'mh-plug-settings-page'
+        );
+// --- WOOCOMMERCE SECTION ---
+        add_settings_section(
+            'mh_plug_woocommerce_section',
+            null,
+            null,
             'mh-plug-settings-page'
         );
 // Loop through all registered settings
         foreach ($this->widgets as $key => $label) {
             
-            // --- ADD THIS LOGIC ---
-            // Decide which section this setting belongs to
-            $section_id = 'mh_plug_widgets_section'; // Default to widgets section
-            if ($key === 'enable_menu_icons') {
-                $section_id = 'mh_plug_global_settings_section'; // Assign this one to the global section
+            // Route each key to the correct section
+            $section_id = 'mh_plug_widgets_section'; // Default: Elementor widgets section
+            if ( $key === 'enable_menu_icons' ) {
+                $section_id = 'mh_plug_global_settings_section';
+            } elseif ( $key === 'enable_wc_wishlist' ) {
+                $section_id = 'mh_plug_woocommerce_section';
             }
             // --- END LOGIC ---
 

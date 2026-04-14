@@ -1,0 +1,299 @@
+/* =============================================================
+   MH Plug - WooCommerce Wishlist Styles
+   ============================================================= */
+
+/* ---- Add to Wishlist Button (inline / loop) ---- */
+.mh-wishlist-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    padding: 8px 14px;
+    margin-top: 10px;
+    border: 1.5px solid #d63638;
+    border-radius: 6px;
+    background: transparent;
+    color: #d63638;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    user-select: none;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.mh-wishlist-btn i {
+    font-size: 1rem;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mh-wishlist-btn:hover {
+    background: #d63638;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(214, 54, 56, 0.3);
+    transform: translateY(-1px);
+}
+
+.mh-wishlist-btn:hover i {
+    transform: scale(1.2);
+}
+
+/* ---- Active / In-Wishlist State ---- */
+.mh-wishlist-btn.mh-in-wishlist {
+    background: #d63638;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(214, 54, 56, 0.25);
+}
+
+.mh-wishlist-btn.mh-in-wishlist i {
+    animation: mh-heartbeat 0.45s ease forwards;
+}
+
+@keyframes mh-heartbeat {
+    0%   { transform: scale(1);   }
+    30%  { transform: scale(1.35);}
+    60%  { transform: scale(0.9); }
+    100% { transform: scale(1);   }
+}
+
+/* ---- Loading state ---- */
+.mh-wishlist-btn.mh-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* ---- Loop (archive) context: floating overlay ---- */
+.mh-wishlist-ctx-loop {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin: 0;
+    padding: 7px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    z-index: 5;
+}
+
+.mh-wishlist-ctx-loop .mh-wishlist-btn-text {
+    display: none; /* Hide text in loop / floating badge */
+}
+
+.mh-wishlist-ctx-loop:hover {
+    background: #d63638;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(214, 54, 56, 0.35);
+}
+
+/* Ensure the product loop item is positioned so the button can be absolute */
+.woocommerce ul.products li.product {
+    position: relative;
+}
+
+/* ============================================================
+   Wishlist Table (Elementor widget + shortcode)
+   ============================================================ */
+
+.mh-wishlist-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 20px 0;
+}
+
+table.mh-wishlist-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+}
+
+table.mh-wishlist-table thead {
+    background: #1d2327;
+    color: #fff;
+}
+
+table.mh-wishlist-table thead th {
+    padding: 14px 16px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: left;
+    white-space: nowrap;
+}
+
+table.mh-wishlist-table thead th.mh-wl-col-remove {
+    width: 44px;
+    text-align: center;
+}
+
+table.mh-wishlist-table tbody tr {
+    border-bottom: 1px solid #f0f0f1;
+    transition: background 0.15s ease;
+}
+
+table.mh-wishlist-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+table.mh-wishlist-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+table.mh-wishlist-table td {
+    padding: 14px 16px;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+/* Image column */
+.mh-wl-col-image a {
+    display: inline-block;
+    line-height: 0;
+}
+
+.mh-wl-col-image img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #e0e4e7;
+}
+
+/* Product title */
+.mh-wl-col-name a {
+    color: #1d2327;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.mh-wl-col-name a:hover {
+    color: #d63638;
+}
+
+/* Price */
+.mh-wl-col-price .price {
+    font-weight: 700;
+    color: #1d2327;
+}
+
+.mh-wl-col-price del {
+    color: #8c8f94;
+}
+
+/* Stock status */
+.mh-wl-stock-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.mh-wl-stock-instock {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.mh-wl-stock-outofstock {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.mh-wl-stock-onbackorder {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* Add to cart button */
+.mh-wl-col-cart .button,
+.mh-wl-col-cart a.button {
+    background: #1d2327;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.15s ease;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+
+.mh-wl-col-cart .button:hover,
+.mh-wl-col-cart a.button:hover {
+    background: #d63638;
+    transform: translateY(-1px);
+}
+
+/* Remove button */
+.mh-wl-remove-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1.5px solid #d63638;
+    color: #d63638;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-size: 0.8rem;
+}
+
+.mh-wl-remove-btn:hover {
+    background: #d63638;
+    color: #fff;
+}
+
+/* Empty wishlist message */
+.mh-wishlist-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #8c8f94;
+}
+
+.mh-wishlist-empty i {
+    display: block;
+    font-size: 3rem;
+    margin-bottom: 16px;
+    color: #d1d5db;
+}
+
+.mh-wishlist-empty p {
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+    table.mh-wishlist-table thead th.mh-wl-col-stock,
+    table.mh-wishlist-table td.mh-wl-col-stock {
+        display: none;
+    }
+
+    table.mh-wishlist-table thead th.mh-wl-col-image,
+    table.mh-wishlist-table td.mh-wl-col-image {
+        display: none;
+    }
+
+    .mh-wishlist-btn-text {
+        display: none;
+    }
+
+    .mh-wishlist-btn {
+        padding: 8px;
+        border-radius: 50%;
+    }
+}

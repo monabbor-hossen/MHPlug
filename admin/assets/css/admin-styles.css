@@ -122,18 +122,27 @@
     gap: 24px; /* Space between fields */
 }
 
-/* Appearance Grid Row Override */
-#mh-appearance-grid {
+/* 3-per-row grid — Main MH Plug Settings page ONLY */
+.mh-main-settings-wrap .mh-settings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 100%;
+    gap: 16px;
+    align-items: stretch;
+}
+
+/* Appearance Grid Row Override — ONLY for Age Gate Appearance tab */
+.mh-age-gate-admin-wrap #mh-appearance-grid {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-end;
 }
-#mh-appearance-grid .mh-form-group {
-    flex: 0 0 auto; /* Do not stretch fully */
-    margin-bottom: 0; 
+.mh-age-gate-admin-wrap #mh-appearance-grid .mh-form-group {
+    flex: 0 0 auto;
+    margin-bottom: 0;
 }
-#mh-appearance-grid h3 {
-    flex: 0 0 100%; /* Force line break */
+.mh-age-gate-admin-wrap #mh-appearance-grid h3 {
+    flex: 0 0 100%; /* Force sub-header onto its own row */
 }
 
 .mh-widget-card {
