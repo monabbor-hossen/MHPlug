@@ -163,4 +163,53 @@ jQuery(document).ready(function($) {
         });
     });
 
+    // ── Delete Template Button ──────────────────────────────────────────────
+    // Uses event delegation so it works for any dynamically rendered card.
+    $(document).on('click', '.mh-tb-delete-btn', function(e) {
+        e.preventDefault();
+
+        var $btn  = $(this);
+        var id    = $btn.data('id');
+        var $card = $btn.closest('.mh-tb-card');
+
+        if ( !id ) {
+            alert('Invalid template ID.');
+            return;
+        }
+
+        if ( !confirm('Are you sure you want to delete this template? This cannot be undone.') ) {
+            return;
+        }
+
+        // Visual feedback while waiting
+        $btn.prop('disabled', true).css('opacity', '0.5');
+
+        $.ajax({
+            url: typeof mhTbAjaxUrl !== 'undefined' ? mhTbAjaxUrl : ajaxurl,
+            type: 'POST',
+            data: {
+                action:      'mh_tb_delete_template',
+                template_id:  id,
+                _ajax_nonce:  typeof mhTbDeleteNonce !== 'undefined' ? mhTbDeleteNonce : ''
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Shrink and fade the card, then remove it from the DOM
+                    $card.animate(
+                        { opacity: 0, height: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0 },
+                        400,
+                        function() { $card.remove(); }
+                    );
+                } else {
+                    alert(response.data.message || 'Error deleting template.');
+                    $btn.prop('disabled', false).css('opacity', '1');
+                }
+            },
+            error: function() {
+                alert('An error occurred. Please try again.');
+                $btn.prop('disabled', false).css('opacity', '1');
+            }
+        });
+    });
+
 });

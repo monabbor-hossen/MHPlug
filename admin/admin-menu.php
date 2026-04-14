@@ -122,6 +122,10 @@ class MH_Admin_Menu {
              if (file_exists($js_path)) {
                 $js_version = filemtime($js_path);
                 wp_enqueue_script('mh-plug-admin-scripts', MH_PLUG_URL . 'admin/assets/js/admin-scripts.js', ['jquery'], $js_version, true);
+
+                // Expose AJAX URL and nonces to JS (available as global vars)
+                wp_localize_script( 'mh-plug-admin-scripts', 'mhTbDeleteNonce', wp_create_nonce( 'mh_tb_delete_template' ) );
+                wp_localize_script( 'mh-plug-admin-scripts', 'mhTbAjaxUrl', admin_url( 'admin-ajax.php' ) );
              }
         }
         // Check if we are on the Nav Menus admin page

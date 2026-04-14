@@ -57,6 +57,7 @@ register_activation_hook( __FILE__, 'mh_plug_create_wishlist_table' );
  */
 require_once MH_PLUG_PATH . 'admin/admin-menu.php';
 require_once MH_PLUG_PATH . 'includes/theme-builder-cpt.php';
+require_once MH_PLUG_PATH . 'includes/theme-builder-display.php';
 
 /**
  * Load Elementor Integration.

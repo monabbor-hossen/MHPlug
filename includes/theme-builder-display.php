@@ -1,0 +1,284 @@
+<?php
+/**
+ * MH Plug - Theme Builder Display Logic
+ *
+ * Handles frontend injection of active Header / Footer templates AND
+ * strict single-post vs single-product content overrides.
+ *
+ * Template type slugs (authoritative, stored in `_mh_template_type`):
+ *   header | footer | single_post | single_product | archive_post | archive_product
+ *
+ * KEY SAFETY RULE — Elementor Edit Mode:
+ *   When Elementor's editor is active (is_edit_mode() === true) ALL overrides
+ *   are completely skipped. The editor renders inside our canvas (mh-canvas.php)
+ *   which already contains the_content(), so no interference is needed.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helper: is the current request inside the Elementor visual editor?
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Returns true when Elementor's editor iframe is active.
+ *
+ * Wrapped so callers never repeat the null-safe chain or risk fatals on
+ * sites without Elementor.
+ *
+ * @return bool
+ */
+function mh_plug_is_elementor_edit_mode() {
+    return (
+        did_action( 'elementor/loaded' ) &&
+        class_exists( '\Elementor\Plugin' ) &&
+        isset( \Elementor\Plugin::$instance->editor ) &&
+        \Elementor\Plugin::$instance->editor->is_edit_mode()
+    );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helper: fetch the active template post of a given type
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Retrieves the first published, active `mh_templates` post of a given type.
+ *
+ * Searches the new `_mh_template_type` meta key. Falls back to the old
+ * `mh_template_type` key via an OR relation so legacy templates still match.
+ *
+ * @param  string       $type  Canonical slug: header | footer | single_post |
+ *                             single_product | archive_post | archive_product
+ * @return WP_Post|null        The matching post, or null if none found.
+ */
+function mh_plug_get_active_template( $type ) {
+    $type = sanitize_key( $type );
+
+    // Legacy slug this new slug maps back to (for backward compat)
+    $legacy_reverse_map = [
+        'single_post'     => 'single',
+        'single_product'  => 'product_single',
+        'archive_post'    => 'archive',
+        'archive_product' => 'product_archive',
+    ];
+
+    $meta_query = [
+        'relation' => 'AND',
+        // Active status: check both meta keys
+        [
+            'relation' => 'OR',
+            [
+                'key'   => '_mh_template_active',
+                'value' => 'yes',
+            ],
+            [
+                'key'   => 'mh_template_active',
+                'value' => 'yes',
+            ],
+        ],
+        // Template type: check both new and legacy keys
+        [
+            'relation' => 'OR',
+            [
+                'key'   => '_mh_template_type',
+                'value' => $type,
+            ],
+        ],
+    ];
+
+    // Add legacy key clause only if a mapping exists
+    if ( isset( $legacy_reverse_map[ $type ] ) ) {
+        $meta_query[2][] = [
+            'key'   => 'mh_template_type',
+            'value' => $legacy_reverse_map[ $type ],
+        ];
+        // Also support the new slug stored in the old key (migration in progress)
+        $meta_query[2][] = [
+            'key'   => 'mh_template_type',
+            'value' => $type,
+        ];
+    } else {
+        // header / footer never had different slugs, just add old-key check
+        $meta_query[2][] = [
+            'key'   => 'mh_template_type',
+            'value' => $type,
+        ];
+    }
+
+    $posts = get_posts( [
+        'post_type'      => 'mh_templates',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
+        'no_found_rows'  => true,     // skip COUNT(*) — we only need 1 row
+        'meta_query'     => $meta_query,
+    ] );
+
+    return ! empty( $posts ) ? $posts[0] : null;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helper: render a template post's Elementor content safely
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Outputs the Elementor-built content of an mh_templates post.
+ *
+ * Falls back to `apply_filters('the_content', …)` if Elementor is absent.
+ *
+ * @param WP_Post $template_post
+ * @return void
+ */
+function mh_plug_render_template( $template_post ) {
+    if (
+        did_action( 'elementor/loaded' ) &&
+        class_exists( '\Elementor\Plugin' ) &&
+        isset( \Elementor\Plugin::$instance->frontend )
+    ) {
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo \Elementor\Plugin::$instance->frontend->get_builder_content_for_display(
+            $template_post->ID,
+            true  // with_css: include Elementor's inline styles
+        );
+    } else {
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo apply_filters( 'the_content', $template_post->post_content );
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Header injection
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Outputs the custom Header template in place of the active theme's header.
+ *
+ * Skipped entirely when Elementor's editor is open or no active header exists.
+ */
+function mh_plug_inject_header() {
+    if ( mh_plug_is_elementor_edit_mode() ) {
+        return;
+    }
+
+    $header = mh_plug_get_active_template( 'header' );
+    if ( ! $header ) {
+        return;
+    }
+    ?><!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+    <meta charset="<?php bloginfo( 'charset' ); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php wp_head(); ?>
+</head>
+<body <?php body_class(); ?>>
+<?php wp_body_open(); ?>
+<header class="mh-custom-header" id="mh-site-header">
+    <?php mh_plug_render_template( $header ); ?>
+</header>
+    <?php
+}
+add_action( 'get_header', 'mh_plug_inject_header', 0 );
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Footer injection
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Outputs the custom Footer template before the theme's own footer markup.
+ *
+ * Skipped entirely when Elementor's editor is open or no active footer exists.
+ */
+function mh_plug_inject_footer() {
+    if ( mh_plug_is_elementor_edit_mode() ) {
+        return;
+    }
+
+    $footer = mh_plug_get_active_template( 'footer' );
+    if ( ! $footer ) {
+        return;
+    }
+    ?>
+<footer class="mh-custom-footer" id="mh-site-footer">
+    <?php mh_plug_render_template( $footer ); ?>
+</footer>
+<?php wp_footer(); ?>
+</body>
+</html>
+    <?php
+}
+add_action( 'get_footer', 'mh_plug_inject_footer', 0 );
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Content override — Single Post (standard WordPress blog post)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Replaces the_content on standard singular blog posts with the active
+ * `single_post` template, if one exists.
+ *
+ * Deliberate constraints:
+ *   - Only fires on `post` post type (NOT 'page', NOT 'product').
+ *   - Skips mh_templates posts to prevent infinite recursion.
+ *   - Skips Elementor edit mode.
+ *   - Must be in the main WP loop (in_the_loop()).
+ *
+ * @param  string $content  Original post content.
+ * @return string           Template HTML or original content.
+ */
+function mh_plug_override_single_post_content( $content ) {
+    if ( ! in_the_loop() )                    return $content;
+    if ( ! is_singular( 'post' ) )            return $content;
+    if ( is_singular( 'mh_templates' ) )      return $content;
+    if ( mh_plug_is_elementor_edit_mode() )   return $content;
+
+    $template = mh_plug_get_active_template( 'single_post' );
+    if ( ! $template ) {
+        return $content;
+    }
+
+    ob_start();
+    mh_plug_render_template( $template );
+    return ob_get_clean();
+}
+add_filter( 'the_content', 'mh_plug_override_single_post_content', 20 );
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Content override — Single Product (WooCommerce)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Replaces the_content on WooCommerce single product pages with the active
+ * `single_product` template, if one exists.
+ *
+ * Deliberate constraints:
+ *   - Only fires when WooCommerce is active AND is_product() is true.
+ *   - Skips mh_templates posts to prevent infinite recursion.
+ *   - Skips Elementor edit mode.
+ *   - Must be in the main WP loop (in_the_loop()).
+ *
+ * NOTE: WooCommerce wraps product content with its own hooks so this filter
+ * works inside WC's template system without needing separate template overrides.
+ *
+ * @param  string $content  Original post content.
+ * @return string           Template HTML or original content.
+ */
+function mh_plug_override_single_product_content( $content ) {
+    if ( ! in_the_loop() )                     return $content;
+    if ( ! class_exists( 'WooCommerce' ) )     return $content;
+    if ( ! function_exists( 'is_product' ) )   return $content;
+    if ( ! is_product() )                      return $content;
+    if ( is_singular( 'mh_templates' ) )       return $content;
+    if ( mh_plug_is_elementor_edit_mode() )    return $content;
+
+    $template = mh_plug_get_active_template( 'single_product' );
+    if ( ! $template ) {
+        return $content;
+    }
+
+    ob_start();
+    mh_plug_render_template( $template );
+    return ob_get_clean();
+}
+add_filter( 'the_content', 'mh_plug_override_single_product_content', 20 );
