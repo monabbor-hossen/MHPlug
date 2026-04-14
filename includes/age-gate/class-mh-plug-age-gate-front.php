@@ -69,15 +69,15 @@ class MH_Plug_Age_Gate_Front {
         $shadow     = isset( $this->options['modal_shadow'] ) && $this->options['modal_shadow'] == '1' ? '0 15px 50px rgba(0,0,0,0.3)' : 'none';
         
         $title_color = $this->options['title_color'] ?? '#333333';
-        $title_size  = $this->options['title_font_size'] ?? '32px';
-        
         $text_color = $this->options['text_color'] ?? '#666666';
-        $text_size  = $this->options['text_font_size'] ?? '16px';
         
-        $btn_bg    = $this->options['btn_bg_color'] ?? '#007cba';
-        $btn_hover = $this->options['btn_hover_color'] ?? '#005a87';
-        $btn_text  = $this->options['btn_text_color'] ?? '#ffffff';
-        $btn_size  = $this->options['btn_font_size'] ?? '18px';
+        $btn_yes_bg    = $this->options['btn_yes_bg_color'] ?? '#007cba';
+        $btn_yes_hover = $this->options['btn_yes_hover_color'] ?? '#005a87';
+        $btn_yes_text  = $this->options['btn_yes_text_color'] ?? '#ffffff';
+
+        $btn_no_bg    = $this->options['btn_no_bg_color'] ?? '#f0f0f1';
+        $btn_no_hover = $this->options['btn_no_hover_color'] ?? '#dcdcdc';
+        $btn_no_text  = $this->options['btn_no_text_color'] ?? '#3c434a';
 
         $custom_css = "
             :root {
@@ -86,15 +86,16 @@ class MH_Plug_Age_Gate_Front {
                 --mh-ag-shadow: {$shadow};
                 
                 --mh-ag-title-color: {$title_color};
-                --mh-ag-title-size: {$title_size};
                 
                 --mh-ag-text-color: {$text_color};
-                --mh-ag-text-size: {$text_size};
                 
-                --mh-ag-btn-bg: {$btn_bg};
-                --mh-ag-btn-hover: {$btn_hover};
-                --mh-ag-btn-color: {$btn_text};
-                --mh-ag-btn-size: {$btn_size};
+                --mh-ag-btn-yes-bg: {$btn_yes_bg};
+                --mh-ag-btn-yes-hover: {$btn_yes_hover};
+                --mh-ag-btn-yes-color: {$btn_yes_text};
+
+                --mh-ag-btn-no-bg: {$btn_no_bg};
+                --mh-ag-btn-no-hover: {$btn_no_hover};
+                --mh-ag-btn-no-color: {$btn_no_text};
             }
         ";
         wp_add_inline_style( 'mh-age-gate-public', $custom_css );
@@ -126,6 +127,7 @@ class MH_Plug_Age_Gate_Front {
         $btn_yes          = $this->options['btn_yes_text'] ?? __( 'Yes, I am older', 'mh-plug' );
         $btn_no           = $this->options['btn_no_text'] ?? __( 'No, I am not', 'mh-plug' );
         $min_age          = $this->options['minimum_age'] ?? 18;
+        $show_logo        = !empty( $this->options['show_logo'] );
 
         // Replace any potential [Age] placeholder
         $btn_yes = str_replace( '[Age]', $min_age, $btn_yes );
@@ -133,6 +135,17 @@ class MH_Plug_Age_Gate_Front {
         ?>
         <div id="mh-age-gate-overlay">
             <div class="mh-age-gate-content">
+                <?php if ( $show_logo ) : ?>
+                    <div class="mh-age-gate-logo">
+                        <?php 
+                        if ( function_exists( 'the_custom_logo' ) && has_custom_logo() ) {
+                            the_custom_logo();
+                        } else {
+                            echo '<span class="mh-age-gate-fallback-logo">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+                        }
+                        ?>
+                    </div>
+                <?php endif; ?>
                 <h2><?php echo esc_html( $modal_heading ); ?></h2>
                 <div class="mh-age-gate-desc">
                     <p><?php echo nl2br( esc_html( $modal_subheading ) ); ?></p>

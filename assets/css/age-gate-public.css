@@ -23,17 +23,34 @@
     width: 90%;
 }
 
+.mh-age-gate-logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.mh-age-gate-logo img {
+    max-height: 80px;
+    width: auto;
+    margin: 0 auto;
+}
+
+.mh-age-gate-fallback-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--mh-ag-title-color, #333333);
+}
+
 .mh-age-gate-content h2 {
     margin-top: 0;
     margin-bottom: 15px;
     color: var(--mh-ag-title-color, #333333);
-    font-size: var(--mh-ag-title-size, 32px);
+    font-size: 2rem; /* Dynamically scales with theme root */
     font-weight: 700;
 }
 
 .mh-age-gate-desc p {
     color: var(--mh-ag-text-color, #666666);
-    font-size: var(--mh-ag-text-size, 16px);
+    font-size: 1rem; /* Dynamically scales with theme root */
     line-height: 1.6;
     margin-bottom: 35px;
 }
@@ -47,26 +64,30 @@
 
 .mh-age-gate-btn {
     padding: 15px 30px;
-    font-size: var(--mh-ag-btn-size, 18px);
+    font-size: 1.125rem; /* Dynamically scales with theme root */
     cursor: pointer;
     border: none;
     border-radius: 8px;
-    background: var(--mh-ag-btn-bg, #007cba);
-    color: var(--mh-ag-btn-color, #ffffff);
     transition: all 0.3s ease;
     font-weight: 600;
 }
 
-.mh-age-gate-btn:hover {
-    background: var(--mh-ag-btn-hover, #005a87);
+.mh-btn-yes {
+    background: var(--mh-ag-btn-yes-bg, #007cba);
+    color: var(--mh-ag-btn-yes-color, #ffffff);
+}
+
+.mh-btn-yes:hover {
+    background: var(--mh-ag-btn-yes-hover, #005a87);
     transform: translateY(-2px);
 }
 
-/* We could apply distinct styles to the NO button if needed later, right now both use generic btn style + same custom color */
 .mh-btn-no {
-    opacity: 0.8;
+    background: var(--mh-ag-btn-no-bg, #f0f0f1);
+    color: var(--mh-ag-btn-no-color, #3c434a);
 }
 
 .mh-btn-no:hover {
-    opacity: 1;
+    background: var(--mh-ag-btn-no-hover, #dcdcdc);
+    transform: translateY(-2px);
 }
