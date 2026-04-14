@@ -211,54 +211,7 @@ function mh_plug_force_canvas_template( $template ) {
 }
 add_filter( 'template_include', 'mh_plug_force_canvas_template', 99 );
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Elementor editor: inject WooCommerce product preview context
-// ─────────────────────────────────────────────────────────────────────────────
 
-/**
- * When a single_product mh_template is opened in Elementor, override the
- * editor's post_id to a real published WooCommerce product.
- *
- * This gives WC widgets (Add to Cart, Product Price, etc.) a real product
- * object to bind to, eliminating "No product context" warnings.
- *
- * @param  array $settings  Elementor editor localisation settings.
- * @return array
- */
-function mh_plug_elementor_product_preview_context( $settings ) {
-    $post_id = isset( $settings['post_id'] ) ? intval( $settings['post_id'] ) : 0;
-    if ( ! $post_id || get_post_type( $post_id ) !== 'mh_templates' ) {
-        return $settings;
-    }
-
-    // Read the authoritative meta key; fall back to legacy key
-    $template_type = mh_plug_get_template_type_meta( $post_id );
-
-    if ( $template_type !== 'single_product' ) {
-        return $settings;
-    }
-
-    if ( ! class_exists( 'WooCommerce' ) ) {
-        return $settings;
-    }
-
-    $products = get_posts( [
-        'post_type'      => 'product',
-        'post_status'    => 'publish',
-        'posts_per_page' => 1,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-        'fields'         => 'ids',
-        'no_found_rows'  => true,
-    ] );
-
-    if ( ! empty( $products ) ) {
-        $settings['post_id'] = $products[0];
-    }
-
-    return $settings;
-}
-add_filter( 'elementor/editor/localize_settings', 'mh_plug_elementor_product_preview_context' );
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helper: read template type meta with backward-compat fallback

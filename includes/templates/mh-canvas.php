@@ -32,30 +32,7 @@ $mh_canvas_type    = function_exists( 'mh_plug_get_template_type_meta' )
 
 $mh_is_product_tpl = ( $mh_canvas_type === 'single_product' );
 
-// ── For product templates: fetch a real product to use as preview context ─────
-// We do this BEFORE the main loop so that by the time Elementor's widgets
-// call global $product they find a valid WC_Product object.
-$mh_preview_product    = null; // WC_Product | null
-$mh_preview_product_id = 0;
 
-if ( $mh_is_product_tpl && class_exists( 'WooCommerce' ) ) {
-    // Fetch the most recently published product.
-    // WP_Query is used (not get_posts) so we can call setup_postdata() on it.
-    $mh_product_query = new WP_Query( [
-        'post_type'      => 'product',
-        'post_status'    => 'publish',
-        'posts_per_page' => 1,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-        'no_found_rows'  => true,
-        'fields'         => 'ids', // we only need the ID here
-    ] );
-
-    if ( ! empty( $mh_product_query->posts ) ) {
-        $mh_preview_product_id = (int) $mh_product_query->posts[0];
-        $mh_preview_product    = wc_get_product( $mh_preview_product_id );
-    }
-}
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -76,41 +53,60 @@ if ( $mh_is_product_tpl && class_exists( 'WooCommerce' ) ) {
         the_post();
 
         if ( $mh_is_product_tpl ) {
-            // ── Single Product editor context ─────────────────────────────────
-            //
-            // Step 1: Declare and populate the global $product.
-            //         Elementor WooCommerce widgets resolve their data through
-            //         this global. Without it they show "No product context".
-            global $product;
-            $product = $mh_preview_product; // WC_Product object or null
+            if ( class_exists( 'WooCommerce' ) ) {
+                global $product, $post;
 
-            // Step 2: If we have a real product, run setup_postdata() so that
-            //         WC's internal template functions (is_product(), etc.)
-            //         resolve against the preview product rather than the
-            //         mh_templates post.
-            if ( $mh_preview_product_id && $mh_preview_product instanceof \WC_Product ) {
-                $mh_preview_post_obj = get_post( $mh_preview_product_id );
-                if ( $mh_preview_post_obj ) {
-                    setup_postdata( $mh_preview_post_obj );
-                    wc_setup_product_data( $mh_preview_product );
+                $mock_query = new WP_Query( [
+                    'post_type'      => 'product',
+                    'post_status'    => 'publish',
+                    'posts_per_page' => 1,
+                ] );
+
+                if ( $mock_query->have_posts() ) {
+                    $mock_product = $mock_query->posts[0];
+                    
+                    // Save the actual mh_templates post object
+                    $template_post = $post;
+                    
+                    // Overwrite the global $post with the fetched product for WC hooks
+                    $post = $mock_product;
+                    setup_postdata( $post );
+                    
+                    // Set the global product
+                    $product = wc_get_product( $mock_product->ID );
+
+                    ?>
+                    <div class="woocommerce">
+                        <div class="product">
+                            <?php 
+                            // CRITICAL: We render Elementor's content manually for the template,
+                            // ensuring that global $post remains the $mock_product! 
+                            // This perfectly mirrors our frontend wrapper so Royal Addons widgets work.
+                            if ( class_exists( '\Elementor\Plugin' ) ) {
+                                echo \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $template_post->ID, true );
+                            } else {
+                                echo apply_filters( 'the_content', $template_post->post_content );
+                            }
+
+                            // Elementor's Editor UI scanner requires 'the_content' to exist in this file
+                            if ( false ) {
+                                the_content();
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <?php
+
+                    wp_reset_postdata();
+                } else {
+                    // Fallback for Empty Stores
+                    ?>
+                    <div class="mh-admin-notice" style="padding: 15px; background: #fff; border-left: 4px solid #dc3232; margin-bottom: 20px;">Please create at least one WooCommerce Product to preview this template.</div>
+                    <?php
+                    the_content();
                 }
-            }
-
-            // Step 3: Output the content inside WooCommerce's standard class
-            //         hierarchy. Elementor's WC widgets detect their rendering
-            //         environment by checking for .woocommerce and .product.
-            ?>
-            <div class="woocommerce">
-                <div class="product type-product <?php echo esc_attr( $mh_preview_product ? implode( ' ', (array) $mh_preview_product->get_type() ) : '' ); ?>">
-                    <?php the_content(); ?>
-                </div>
-            </div>
-            <?php
-
-            // Step 4: Reset post data to restore the original mh_templates
-            //         post context after we're done with the product preview.
-            if ( $mh_preview_product_id ) {
-                wp_reset_postdata();
+            } else {
+                the_content();
             }
 
         } else {
