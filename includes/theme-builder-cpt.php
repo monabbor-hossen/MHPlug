@@ -92,6 +92,16 @@ function mh_plug_ajax_create_template() {
     // Save Template Type Meta
     update_post_meta($post_id, 'mh_template_type', $template_type);
     
+    // Elementor Specific Metadata to identify template type
+    $elementor_type = 'wp-post'; // Default
+    if ( $template_type === 'header' ) $elementor_type = 'header';
+    if ( $template_type === 'footer' ) $elementor_type = 'footer';
+    if ( $template_type === 'archive' || $template_type === 'product_archive' ) $elementor_type = 'archive';
+    if ( $template_type === 'product_single' ) $elementor_type = 'single-product';
+    
+    update_post_meta($post_id, '_elementor_template_type', $elementor_type);
+    update_post_meta($post_id, '_elementor_edit_mode', 'builder');
+    
     // Set default status to active if you want newly created to be active
     update_post_meta($post_id, 'mh_template_active', 'yes');
 
@@ -104,3 +114,25 @@ function mh_plug_ajax_create_template() {
     ]);
 }
 add_action('wp_ajax_mh_tb_create_template', 'mh_plug_ajax_create_template');
+
+/**
+ * Handle Theme Builder AJAX Toggle Status
+ */
+function mh_plug_ajax_toggle_status() {
+    // Note: In your admin setup, might want to use a more specific nonce check if needed
+    if ( !current_user_can('edit_posts') ) {
+        wp_send_json_error(['message' => __('You do not have permission to do this.', 'mh-plug')]);
+    }
+
+    $template_id = isset($_POST['template_id']) ? intval($_POST['template_id']) : 0;
+    $is_active   = isset($_POST['is_active']) && $_POST['is_active'] === 'true' ? 'yes' : 'no';
+
+    if ( !$template_id ) {
+        wp_send_json_error(['message' => __('Invalid ID.', 'mh-plug')]);
+    }
+
+    update_post_meta($template_id, 'mh_template_active', $is_active);
+
+    wp_send_json_success(['message' => __('Status updated.', 'mh-plug')]);
+}
+add_action('wp_ajax_mh_tb_toggle_status', 'mh_plug_ajax_toggle_status');

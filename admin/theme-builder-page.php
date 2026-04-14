@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 $is_wc_active = class_exists( 'WooCommerce' );
 ?>
 
-<div class="wrap mh-plug-wrap">
+<div class="wrap mh-plug-admin-wrap">
     
     <!-- Header Area -->
     <div class="mh-tb-header">
@@ -93,7 +93,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
                 <div class="mh-tb-status-toggle">
                     <span class="mh-tb-status-label"><?php esc_html_e('Active Status', 'mh-plug'); ?></span>
                     <label class="switch">
-                        <input class="cb" type="checkbox" <?php echo $is_active; ?> />
+                        <input class="cb mh-tb-status-cb" type="checkbox" data-id="<?php echo esc_attr($template_id); ?>" <?php echo $is_active; ?> />
                         <span class="toggle">
                             <span class="left">off</span>
                             <span class="right">on</span>
@@ -104,7 +104,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
             
             <div class="mh-tb-card-actions">
                 <a href="<?php echo esc_url($edit_url); ?>" class="mh-tb-edit-link"><i class="dashicons dashicons-edit"></i> <?php esc_html_e('Edit with Elementor', 'mh-plug'); ?></a>
-                <button class="mh-tb-delete-btn"><i class="dashicons dashicons-trash"></i></button>
+                <button class="mh-tb-delete-btn" data-id="<?php echo esc_attr($template_id); ?>"><i class="dashicons dashicons-trash"></i></button>
             </div>
         </div>
         <?php

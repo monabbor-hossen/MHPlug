@@ -132,4 +132,35 @@ jQuery(document).ready(function($) {
         });
     });
 
+    // Template Card Status Toggle AJAX
+    $(document).on('change', '.mh-tb-status-cb', function() {
+        var $cb = $(this);
+        var id = $cb.data('id');
+        var isActive = $cb.prop('checked');
+        
+        $cb.prop('disabled', true); // Temporarily disable to prevent double clicks
+        
+        $.ajax({
+            url: typeof mhTbAjaxUrl !== 'undefined' ? mhTbAjaxUrl : ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'mh_tb_toggle_status',
+                template_id: id,
+                is_active: isActive
+            },
+            success: function(response) {
+                if (!response.success) {
+                    alert(response.data.message || 'Error updating status.');
+                    $cb.prop('checked', !isActive); // Revert checkbox
+                }
+                $cb.prop('disabled', false);
+            },
+            error: function() {
+                alert('An error occurred. Status not saved.');
+                $cb.prop('checked', !isActive); // Revert
+                $cb.prop('disabled', false);
+            }
+        });
+    });
+
 });
