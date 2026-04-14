@@ -90,19 +90,46 @@ jQuery(document).ready(function($) {
         }
     });
 
-    // Form Submit (Mock logic for now)
+    // Form Submit logic
     $('#mh-tb-create-form').on('submit', function(e) {
         e.preventDefault();
+        
+        var $form = $(this);
+        var $btn = $form.find('button[type="submit"]');
+        var $btnText = $btn.find('.mh-button-text');
+        var originalText = $btnText.text();
+        
         var templateName = $('#mh_tb_template_name').val();
         var templateType = $('#mh_tb_template_type').val();
+        var nonce = $('#mh_tb_nonce').val();
         
-        // In a real app, send AJAX here. For now, close modal.
-        $('#mh-tb-modal').fadeOut(300);
+        $btn.prop('disabled', true);
+        $btnText.text('Creating...');
         
-        // Reset form
-        $(this)[0].reset();
-        
-        // Optional: Trigger a notification plugin here
+        $.ajax({
+            url: typeof mhTbAjaxUrl !== 'undefined' ? mhTbAjaxUrl : ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'mh_tb_create_template',
+                template_name: templateName,
+                template_type: templateType,
+                _ajax_nonce: nonce
+            },
+            success: function(response) {
+                if (response.success && response.data.edit_url) {
+                    window.location.href = response.data.edit_url;
+                } else {
+                    alert(response.data.message || 'Error creating template.');
+                    $btn.prop('disabled', false);
+                    $btnText.text(originalText);
+                }
+            },
+            error: function() {
+                alert('An error occurred. Please try again.');
+                $btn.prop('disabled', false);
+                $btnText.text(originalText);
+            }
+        });
     });
 
 });

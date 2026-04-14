@@ -785,3 +785,20 @@ label.switch input.cb:disabled ~ span.toggle::before {
 .mh-tb-submit-btn {
     width: 100%;
 }
+
+/* --- Disabled Tabs (WooCommerce Inactive) --- */
+.mh-tb-tabs li.mh-disabled-tab {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none; /* Flatten disabled tab */
+    background: #e0e0e0;
+}
+
+.mh-tb-wc-req {
+    font-size: 10px;
+    font-weight: normal;
+    display: block;
+    margin-top: 4px;
+    color: #888;
+}
