@@ -139,7 +139,8 @@ final class MH_Elementor_Loader {
         // WooCommerce-only widgets — registered separately so we can guard them
         if ( class_exists( 'WooCommerce' ) ) {
             $wc_widget_map = [
-                'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php', 'class' => 'MH_Woo_Add_To_Cart_Widget' ],
+                'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php',  'class' => 'MH_Woo_Add_To_Cart_Widget' ],
+                'mh_woo_attributes'  => [ 'file' => 'mh-woo-attributes-widget.php',   'class' => 'MH_Woo_Attributes_Widget' ],
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
