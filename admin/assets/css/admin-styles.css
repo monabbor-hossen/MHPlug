@@ -396,6 +396,60 @@ label.switch input.cb:disabled ~ span.toggle span.left {
     opacity: 0.6;
 }
 
+/* ===================================================================
+ * WooCommerce Disabled Section (.mh-disabled-section)
+ * =================================================================== */
+
+/* Grey out entire accordion item when WooCommerce is absent */
+.mh-accordion-item.mh-disabled-section {
+    opacity: 1; /* Keep header readable; content fades via children */
+}
+
+/* Fade the content area */
+.mh-accordion-item.mh-disabled-section .mh-accordion-content {
+    opacity: 0.5;
+    pointer-events: none; /* Block all interaction */
+    user-select: none;
+}
+
+/* But allow the error notice to be selectable / readable */
+.mh-accordion-item.mh-disabled-section .mh-plug-admin-notice {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+/* widget card text greyed */
+.mh-accordion-item.mh-disabled-section .mh-widget-title {
+    color: #8c8f94;
+}
+
+/* Switches get not-allowed cursor */
+.mh-accordion-item.mh-disabled-section .switch {
+    cursor: not-allowed;
+}
+
+/* Disabled Enable/Disable All buttons in WC section */
+.mh-accordion-item.mh-disabled-section .mh-widget-controls button:disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+/* Inline "(Requires WooCommerce plugin)" notice beside the accordion title */
+.mh-dependency-notice {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 11px;
+    font-weight: 400;
+    color: #b32d2e;
+    background: #fce8e8;
+    border: 1px solid #f5c6c6;
+    border-radius: 4px;
+    padding: 2px 8px;
+    vertical-align: middle;
+    letter-spacing: 0.02em;
+}
+
 /* --- THIS IS THE "VISUAL OFF" FIX --- */
 
 /* 1. Force the 'off' text to be gray and visible */

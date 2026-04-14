@@ -1,15 +1,14 @@
 // Use a safe wrapper for jQuery to avoid conflicts with other libraries.
 jQuery(document).ready(function($) {
 
-// Accordion Toggle Logic
+    // ── Accordion Toggle Logic ──────────────────────────────────────────
     $('.mh-accordion-header').on('click', function(e) {
 
         var $item = $(this).closest('.mh-accordion-item');
-       
 
-        // *** IMPORTANT: Ignore clicks if they came from the Enable/Disable buttons ***
+        // Ignore clicks that came from the Enable/Disable buttons
         if ($(e.target).closest('.mh-widget-controls').length) {
-            return; // Stop if the click was on the buttons or their container
+            return;
         }
 
         var $content = $item.find('.mh-accordion-content');
@@ -25,23 +24,25 @@ jQuery(document).ready(function($) {
         $icon.text($icon.text() === '+' ? '-' : '+');
     });
 
-    // --- ADD THIS NEW CODE BLOCK ---
-// Handle "Enable All" / "Disable All" button clicks
-    $('.mh-toggle-all').on('click', function(e) { // Add 'e' for event object
-        e.stopPropagation(); // *** IMPORTANT: Stop the click from bubbling up to the header ***
-// --- CHANGED: START ---
-        // Check if the button itself is disabled.
-        // The 'disabled' attribute is added by settings-page.php if Elementor is inactive.
-        if ($(this).is(':disabled')) {
-            return; // Do nothing if the button is disabled
-        }
-        // --- CHANGED: END ---
+    // ── "Enable All" / "Disable All" button logic ───────────────────────
+    $('.mh-toggle-all').on('click', function(e) {
+        e.stopPropagation(); // Prevent accordion from toggling
 
-        var action = $(this).data('action');
-        // Find the accordion ITEM, then find the content area within it
-        var $accordionItem = $(this).closest('.mh-accordion-item');
-        var $contentArea = $accordionItem.find('.mh-accordion-content');
-        var $checkboxes = $contentArea.find('.mh-widget-card input[type="checkbox"]');
+        var $btn = $(this);
+
+        // Respect the disabled attribute — do nothing if disabled.
+        // This guards the WooCommerce section when WC is inactive,
+        // and also guards the Elementor section when Elementor is inactive.
+        if ($btn.is(':disabled')) {
+            return;
+        }
+
+        var action        = $btn.data('action');
+        var $accordionItem = $btn.closest('.mh-accordion-item');
+        var $contentArea  = $accordionItem.find('.mh-accordion-content');
+
+        // Only target non-disabled checkboxes within THIS accordion item
+        var $checkboxes = $contentArea.find('.mh-widget-card input[type="checkbox"]:not(:disabled)');
 
         if (action === 'enable') {
             $checkboxes.prop('checked', true);
@@ -50,5 +51,4 @@ jQuery(document).ready(function($) {
         }
     });
 
-// --- END OF NEW CODE BLOCK ---
 });

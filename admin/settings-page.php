@@ -55,16 +55,34 @@ $disabled_attr = $is_elementor_active ? '' : 'disabled';
                     </div>
                 </div>
             </div>
-            <?php /* ── WooCommerce Features Accordion ── */ ?>
-            <div class="mh-accordion-item">
+            <?php
+            /* ── WooCommerce Features Accordion ── */
+            $is_wc_active       = class_exists( 'WooCommerce' );
+            $wc_section_class   = $is_wc_active ? '' : 'mh-disabled-section';
+            $wc_disabled_attr   = $is_wc_active ? '' : 'disabled';
+            ?>
+            <div class="mh-accordion-item <?php echo esc_attr( $wc_section_class ); ?>">
                 <div class="mh-accordion-header">
-                    <span class="mh-accordion-title"><?php esc_html_e( 'WooCommerce Features', 'mh-plug' ); ?></span>
+                    <span class="mh-accordion-title">
+                        <?php esc_html_e( 'WooCommerce Features', 'mh-plug' ); ?>
+                        <?php if ( ! $is_wc_active ) : ?>
+                            <span class="mh-dependency-notice"><?php esc_html_e( '(Requires WooCommerce plugin)', 'mh-plug' ); ?></span>
+                        <?php endif; ?>
+                    </span>
                     <span class="mh-header-controls">
+                        <span class="mh-widget-controls">
+                            <button type="button" class="button button-small mh-toggle-all" data-action="enable" data-section="woocommerce" <?php echo $wc_disabled_attr; ?>>
+                                <?php esc_html_e( 'Enable All', 'mh-plug' ); ?>
+                            </button>
+                            <button type="button" class="button button-small mh-toggle-all" data-action="disable" data-section="woocommerce" <?php echo $wc_disabled_attr; ?>>
+                                <?php esc_html_e( 'Disable All', 'mh-plug' ); ?>
+                            </button>
+                        </span>
                         <span class="mh-accordion-icon">+</span>
                     </span>
                 </div>
                 <div class="mh-accordion-content">
-                    <?php if ( ! class_exists( 'WooCommerce' ) ) : ?>
+                    <?php if ( ! $is_wc_active ) : ?>
                         <div class="mh-plug-admin-notice notice-error">
                             <p>
                                 <strong><?php esc_html_e( 'WooCommerce is not active.', 'mh-plug' ); ?></strong>
@@ -77,6 +95,7 @@ $disabled_attr = $is_elementor_active ? '' : 'disabled';
                         global $wp_settings_fields;
                         if ( isset( $wp_settings_fields['mh-plug-settings-page']['mh_plug_woocommerce_section'] ) ) {
                             foreach ( (array) $wp_settings_fields['mh-plug-settings-page']['mh_plug_woocommerce_section'] as $field ) {
+                                $field['args']['disabled'] = $wc_disabled_attr;
                                 call_user_func( $field['callback'], $field['args'] );
                             }
                         }
