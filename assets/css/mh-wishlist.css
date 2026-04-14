@@ -1,103 +1,161 @@
 /* =============================================================
-   MH Plug - WooCommerce Wishlist Styles
+   MH Plug — WooCommerce Wishlist Styles
+   Neumorphic circular heart button for product archives & single pages.
    ============================================================= */
 
-/* ---- Add to Wishlist Button (inline / loop) ---- */
+/* ── CSS Custom Properties ─────────────────────────────────── */
+:root {
+    --mh-wl-bg:           #e8edf2;          /* Neumorphic base surface    */
+    --mh-wl-shadow-light: #ffffff;          /* Highlight edge             */
+    --mh-wl-shadow-dark:  #bec8d4;          /* Depth edge                 */
+    --mh-wl-heart-idle:   #8a9bb0;          /* Outline heart colour       */
+    --mh-wl-heart-added:  #e05260;          /* Filled heart colour        */
+    --mh-wl-accent:       #004265;          /* MH-Plug primary            */
+    --mh-wl-size:         42px;             /* Button diameter            */
+    --mh-wl-radius:       50%;
+    --mh-wl-duration:     0.22s;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Core Button — shared across both contexts
+   ══════════════════════════════════════════════════════════════ */
 .mh-wishlist-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    padding: 8px 14px;
-    margin-top: 10px;
-    border: 1.5px solid #d63638;
-    border-radius: 6px;
-    background: transparent;
-    color: #d63638;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1;
-    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    /* Layout */
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    width:           var(--mh-wl-size);
+    height:          var(--mh-wl-size);
+    border-radius:   var(--mh-wl-radius);
+    flex-shrink:     0;
+
+    /* Neumorphic surface */
+    background:  var(--mh-wl-bg);
+    border:      none;
+    outline:     none;
+    box-shadow:
+        5px  5px 10px  var(--mh-wl-shadow-dark),
+       -5px -5px 10px  var(--mh-wl-shadow-light);
+
+    /* Icon */
+    color:       var(--mh-wl-heart-idle);
+    font-size:   1rem;
+
+    /* Interaction */
+    cursor:      pointer;
     user-select: none;
-    text-decoration: none;
-    white-space: nowrap;
+    transition:
+        box-shadow   var(--mh-wl-duration) ease,
+        color        var(--mh-wl-duration) ease,
+        transform    var(--mh-wl-duration) ease,
+        background   var(--mh-wl-duration) ease;
 }
 
+/* Icon itself */
 .mh-wishlist-btn i {
-    font-size: 1rem;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;           /* prevent icon eating the click  */
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), color var(--mh-wl-duration) ease;
 }
 
+/* ── Hover state ────────────────────────────────────────────── */
 .mh-wishlist-btn:hover {
-    background: #d63638;
-    color: #fff;
-    box-shadow: 0 4px 14px rgba(214, 54, 56, 0.3);
+    color:      var(--mh-wl-heart-added);
+    box-shadow:
+        2px  2px 5px  var(--mh-wl-shadow-dark),
+       -2px -2px 5px  var(--mh-wl-shadow-light);
     transform: translateY(-1px);
 }
 
 .mh-wishlist-btn:hover i {
-    transform: scale(1.2);
+    transform: scale(1.18);
 }
 
-/* ---- Active / In-Wishlist State ---- */
-.mh-wishlist-btn.mh-in-wishlist {
-    background: #d63638;
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(214, 54, 56, 0.25);
+/* ── Active / In-Wishlist state (.mh-added set by JS) ────────── */
+.mh-wishlist-btn.mh-added {
+    background:  var(--mh-wl-bg);
+    color:       var(--mh-wl-heart-added);
+    box-shadow:
+        inset  3px  3px  7px  var(--mh-wl-shadow-dark),
+        inset -3px -3px  7px  var(--mh-wl-shadow-light);
 }
 
-.mh-wishlist-btn.mh-in-wishlist i {
-    animation: mh-heartbeat 0.45s ease forwards;
+/* Heartbeat animation fires once when item is just added */
+.mh-wishlist-btn.mh-added i {
+    animation: mh-heartbeat 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 @keyframes mh-heartbeat {
-    0%   { transform: scale(1);   }
-    30%  { transform: scale(1.35);}
-    60%  { transform: scale(0.9); }
-    100% { transform: scale(1);   }
+    0%   { transform: scale(1);    }
+    35%  { transform: scale(1.45); }
+    65%  { transform: scale(0.88); }
+    85%  { transform: scale(1.12); }
+    100% { transform: scale(1);    }
 }
 
-/* ---- Loading state ---- */
-.mh-wishlist-btn.mh-loading {
-    opacity: 0.6;
+/* ── Loading / AJAX-in-progress state (.mh-adding set by JS) ─── */
+.mh-wishlist-btn.mh-adding {
     pointer-events: none;
+    opacity: 0.75;
+    color: var(--mh-wl-accent);
+    box-shadow:
+        inset  2px  2px  5px  var(--mh-wl-shadow-dark),
+        inset -2px -2px  5px  var(--mh-wl-shadow-light);
 }
 
-/* ---- Loop (archive) context: floating overlay ---- */
+.mh-wishlist-btn.mh-adding i {
+    animation: mh-wl-pulse 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes mh-wl-pulse {
+    from { transform: scale(0.82); opacity: 0.55; }
+    to   { transform: scale(1.10); opacity: 1;    }
+}
+
+/* ── Focus visible (accessibility) ─────────────────────────── */
+.mh-wishlist-btn:focus-visible {
+    outline: 2px solid var(--mh-wl-accent);
+    outline-offset: 3px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Loop / Archive context  (.mh-wishlist-ctx-loop)
+   Floats as a circular badge in the top-right of each product card.
+   ══════════════════════════════════════════════════════════════ */
 .mh-wishlist-ctx-loop {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    margin: 0;
-    padding: 7px;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    z-index: 5;
+    position:  absolute;
+    top:       12px;
+    right:     12px;
+    z-index:   5;
+    margin:    0;
+
+    /* Slightly smaller on card overlay */
+    --mh-wl-size: 38px;
+    width:  var(--mh-wl-size);
+    height: var(--mh-wl-size);
+
+    /* Semi-transparent surface so product image shows through */
+    background: rgba(232, 237, 242, 0.92);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 
-.mh-wishlist-ctx-loop .mh-wishlist-btn-text {
-    display: none; /* Hide text in loop / floating badge */
-}
-
-.mh-wishlist-ctx-loop:hover {
-    background: #d63638;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(214, 54, 56, 0.35);
-}
-
-/* Ensure the product loop item is positioned so the button can be absolute */
+/* Ensure product cards are positioned so the button can overlay */
 .woocommerce ul.products li.product {
     position: relative;
 }
 
-/* ============================================================
-   Wishlist Table (Elementor widget + shortcode)
-   ============================================================ */
+/* ══════════════════════════════════════════════════════════════
+   Single Product context  (.mh-wishlist-ctx-single)
+   Renders inline beside / after the Add-to-Cart button.
+   ══════════════════════════════════════════════════════════════ */
+.mh-wishlist-ctx-single {
+    margin-left: 10px;
+    /* Inherits all base styles — no override needed unless theme breaks it */
+}
 
+/* ══════════════════════════════════════════════════════════════
+   Wishlist Table  (shortcode / Elementor widget)
+   ══════════════════════════════════════════════════════════════ */
 .mh-wishlist-table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -199,20 +257,9 @@ table.mh-wishlist-table td {
     letter-spacing: 0.04em;
 }
 
-.mh-wl-stock-instock {
-    background: #d1fae5;
-    color: #065f46;
-}
-
-.mh-wl-stock-outofstock {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.mh-wl-stock-onbackorder {
-    background: #fef3c7;
-    color: #92400e;
-}
+.mh-wl-stock-instock    { background: #d1fae5; color: #065f46; }
+.mh-wl-stock-outofstock { background: #fee2e2; color: #991b1b; }
+.mh-wl-stock-onbackorder{ background: #fef3c7; color: #92400e; }
 
 /* Add to cart button */
 .mh-wl-col-cart .button,
@@ -236,7 +283,7 @@ table.mh-wishlist-table td {
     transform: translateY(-1px);
 }
 
-/* Remove button */
+/* Remove button (table) */
 .mh-wl-remove-btn {
     display: inline-flex;
     align-items: center;
@@ -276,24 +323,14 @@ table.mh-wishlist-table td {
     margin: 0;
 }
 
-/* ---- Responsive ---- */
+/* ══════════════════════════════════════════════════════════════
+   Responsive
+   ══════════════════════════════════════════════════════════════ */
 @media (max-width: 640px) {
     table.mh-wishlist-table thead th.mh-wl-col-stock,
-    table.mh-wishlist-table td.mh-wl-col-stock {
-        display: none;
-    }
-
+    table.mh-wishlist-table td.mh-wl-col-stock,
     table.mh-wishlist-table thead th.mh-wl-col-image,
     table.mh-wishlist-table td.mh-wl-col-image {
         display: none;
-    }
-
-    .mh-wishlist-btn-text {
-        display: none;
-    }
-
-    .mh-wishlist-btn {
-        padding: 8px;
-        border-radius: 50%;
     }
 }

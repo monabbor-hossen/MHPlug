@@ -48,8 +48,8 @@ function mh_wishlist_get_identifier() {
  */
 function mh_wishlist_get_items() {
     global $wpdb;
-    $table  = $wpdb->prefix . 'mh_woocommerce_wishlist';
-    $ident  = mh_wishlist_get_identifier();
+    $table = $wpdb->prefix . 'mh_woocommerce_wishlist';
+    $ident = mh_wishlist_get_identifier();
 
     if ( $ident['type'] === 'user' ) {
         $results = $wpdb->get_results(
@@ -207,6 +207,96 @@ add_action( 'wp_ajax_mh_wishlist_remove',        'mh_wishlist_ajax_remove' );
 add_action( 'wp_ajax_nopriv_mh_wishlist_remove', 'mh_wishlist_ajax_remove' );
 
 /**
+ * AJAX: Unified toggle — adds if absent, removes if present.
+ * Action: mh_toggle_wishlist (sent from JS).
+ */
+function mh_wishlist_ajax_toggle() {
+    if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'nonce', false ) ) {
+        wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug' ) ], 403 );
+    }
+
+    $product_id = isset( $_POST['product_id'] ) ? absint( $_POST['product_id'] ) : 0;
+    if ( ! $product_id ) {
+        wp_send_json_error( [ 'message' => __( 'Invalid product.', 'mh-plug' ) ], 400 );
+    }
+
+    global $wpdb;
+    $table = $wpdb->prefix . 'mh_woocommerce_wishlist';
+    $ident = mh_wishlist_get_identifier();
+
+    // ── Check if already in wishlist ──────────────────────────────────────────
+    if ( $ident['type'] === 'user' ) {
+        $exists = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT id FROM {$table} WHERE user_id = %d AND product_id = %d",
+                (int) $ident['id'],
+                $product_id
+            )
+        );
+    } else {
+        $exists = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT id FROM {$table} WHERE session_id = %s AND user_id = 0 AND product_id = %d",
+                sanitize_text_field( $ident['id'] ),
+                $product_id
+            )
+        );
+    }
+
+    if ( $exists ) {
+        // ── REMOVE ────────────────────────────────────────────────────────────
+        if ( $ident['type'] === 'user' ) {
+            $wpdb->delete(
+                $table,
+                [ 'user_id' => (int) $ident['id'], 'product_id' => $product_id ],
+                [ '%d', '%d' ]
+            );
+        } else {
+            $wpdb->delete(
+                $table,
+                [ 'session_id' => sanitize_text_field( $ident['id'] ), 'user_id' => 0, 'product_id' => $product_id ],
+                [ '%s', '%d', '%d' ]
+            );
+        }
+
+        wp_send_json_success( [
+            'status'  => 'removed',
+            'added'   => false,
+            'count'   => mh_wishlist_count(),
+            'message' => __( 'Removed from wishlist.', 'mh-plug' ),
+        ] );
+    }
+
+    // ── ADD ───────────────────────────────────────────────────────────────────
+    $variation_id = isset( $_POST['variation_id'] ) ? absint( $_POST['variation_id'] ) : 0;
+
+    $inserted = $wpdb->insert(
+        $table,
+        [
+            'user_id'      => $ident['type'] === 'user' ? (int) $ident['id'] : 0,
+            'session_id'   => $ident['type'] === 'session' ? sanitize_text_field( $ident['id'] ) : '',
+            'product_id'   => $product_id,
+            'variation_id' => $variation_id,
+            'date_added'   => current_time( 'mysql' ),
+        ],
+        [ '%d', '%s', '%d', '%d', '%s' ]
+    );
+
+    if ( false === $inserted ) {
+        wp_send_json_error( [ 'message' => __( 'Could not add to wishlist.', 'mh-plug' ) ], 500 );
+    }
+
+    wp_send_json_success( [
+        'status'  => 'added',
+        'added'   => true,
+        'count'   => mh_wishlist_count(),
+        'message' => __( 'Added to wishlist!', 'mh-plug' ),
+    ] );
+}
+add_action( 'wp_ajax_mh_toggle_wishlist',        'mh_wishlist_ajax_toggle' );
+add_action( 'wp_ajax_nopriv_mh_toggle_wishlist', 'mh_wishlist_ajax_toggle' );
+
+/**
  * AJAX: Return the full wishlist data (for dynamic rendering).
  */
 function mh_wishlist_ajax_load() {
@@ -214,8 +304,8 @@ function mh_wishlist_ajax_load() {
         wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug' ) ], 403 );
     }
 
-    $items      = mh_wishlist_get_items();
-    $products   = [];
+    $items    = mh_wishlist_get_items();
+    $products = [];
 
     foreach ( $items as $product_id ) {
         $product = wc_get_product( $product_id );
@@ -248,29 +338,35 @@ add_action( 'wp_ajax_nopriv_mh_wishlist_load', 'mh_wishlist_ajax_load' );
 /**
  * Render the Add to Wishlist button HTML.
  *
- * @param int    $product_id
- * @param string $context 'single' | 'loop'
+ * Outputs a Neumorphic circular <button> containing a FontAwesome heart icon.
+ * The .mh-added class (applied by JS) triggers the filled-heart state.
+ * The .mh-adding class (applied by JS during AJAX) triggers the pulse animation.
+ *
+ * @param int    $product_id  The WooCommerce product ID.
+ * @param string $context     'single' | 'loop'
  */
 function mh_wishlist_render_button( $product_id, $context = 'single' ) {
     $in_wishlist = mh_wishlist_has_product( $product_id );
-    $btn_class   = 'mh-wishlist-btn' . ( $in_wishlist ? ' mh-in-wishlist' : '' );
-    $icon_class  = $in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
-    $label       = $in_wishlist
+    $btn_class   = 'mh-wishlist-btn mh-wishlist-ctx-' . esc_attr( $context );
+    if ( $in_wishlist ) {
+        $btn_class .= ' mh-added';
+    }
+    $icon_class = $in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+    $label      = $in_wishlist
         ? __( 'Remove from Wishlist', 'mh-plug' )
         : __( 'Add to Wishlist', 'mh-plug' );
+    $nonce      = wp_create_nonce( 'mh_wishlist_nonce' );
     ?>
-    <span
-        class="<?php echo esc_attr( $btn_class ); ?> mh-wishlist-ctx-<?php echo esc_attr( $context ); ?>"
-        data-product-id="<?php echo esc_attr( $product_id ); ?>"
-        data-nonce="<?php echo esc_attr( wp_create_nonce( 'mh_wishlist_nonce' ) ); ?>"
+    <button
+        class="<?php echo esc_attr( $btn_class ); ?>"
+        data-product-id="<?php echo esc_attr( (int) $product_id ); ?>"
+        data-nonce="<?php echo esc_attr( $nonce ); ?>"
         title="<?php echo esc_attr( $label ); ?>"
-        role="button"
-        tabindex="0"
         aria-label="<?php echo esc_attr( $label ); ?>"
+        type="button"
     >
-        <i class="<?php echo esc_attr( $icon_class ); ?>"></i>
-        <span class="mh-wishlist-btn-text"><?php echo esc_html( $label ); ?></span>
-    </span>
+        <i class="<?php echo esc_attr( $icon_class ); ?>" aria-hidden="true"></i>
+    </button>
     <?php
 }
 

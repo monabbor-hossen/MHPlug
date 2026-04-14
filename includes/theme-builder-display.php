@@ -245,40 +245,60 @@ function mh_plug_override_single_post_content( $content ) {
 add_filter( 'the_content', 'mh_plug_override_single_post_content', 20 );
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Content override — Single Product (WooCommerce)
+// Template override — Single Product (WooCommerce)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Replaces the_content on WooCommerce single product pages with the active
- * `single_product` template, if one exists.
+ * Intercepts the WordPress template loading pipeline for WooCommerce single
+ * product pages and returns our dedicated frontend wrapper instead.
  *
- * Deliberate constraints:
- *   - Only fires when WooCommerce is active AND is_product() is true.
- *   - Skips mh_templates posts to prevent infinite recursion.
- *   - Skips Elementor edit mode.
- *   - Must be in the main WP loop (in_the_loop()).
+ * WHY template_include and NOT the_content filter:
+ *   WooCommerce loads its own template (single-product.php) which calls
+ *   wc_setup_product_data() to populate the global $product object BEFORE
+ *   the_content ever fires. If we intercept via the_content we arrive after
+ *   WC's context setup has already run for the default template — but our
+ *   Elementor widgets expect $product to be available from the start of the
+ *   page render. Using template_include lets us own the entire page lifecycle:
+ *   we set up the product context ourselves and then render the Elementor
+ *   template inside it.
  *
- * NOTE: WooCommerce wraps product content with its own hooks so this filter
- * works inside WC's template system without needing separate template overrides.
+ * The queried template post ID is stored in a plugin-namespaced global so the
+ * wrapper file (mh-single-product-frontend.php) can retrieve it without a
+ * second database query.
  *
- * @param  string $content  Original post content.
- * @return string           Template HTML or original content.
+ * Skipped when Elementor's editor is active — the editor renders inside
+ * mh-canvas.php which handles the product context setup separately.
+ *
+ * @param  string $template  Path to the template WordPress / WooCommerce chose.
+ * @return string            Our wrapper path, or original $template.
  */
-function mh_plug_override_single_product_content( $content ) {
-    if ( ! in_the_loop() )                     return $content;
-    if ( ! class_exists( 'WooCommerce' ) )     return $content;
-    if ( ! function_exists( 'is_product' ) )   return $content;
-    if ( ! is_product() )                      return $content;
-    if ( is_singular( 'mh_templates' ) )       return $content;
-    if ( mh_plug_is_elementor_edit_mode() )    return $content;
+function mh_plug_single_product_template_include( $template ) {
+    // Safety checks — bail early if this isn't a WooCommerce product page
+    if ( ! class_exists( 'WooCommerce' ) )   return $template;
+    if ( ! function_exists( 'is_product' ) ) return $template;
+    if ( ! is_product() )                    return $template;
 
-    $template = mh_plug_get_active_template( 'single_product' );
-    if ( ! $template ) {
-        return $content;
+    // Never interfere while Elementor editor is open
+    if ( mh_plug_is_elementor_edit_mode() )  return $template;
+
+    // Look for an active single_product template
+    $mh_template = mh_plug_get_active_template( 'single_product' );
+    if ( ! $mh_template ) {
+        return $template; // No active template — let WooCommerce handle it
     }
 
-    ob_start();
-    mh_plug_render_template( $template );
-    return ob_get_clean();
+    // Store the template post ID in a global so the wrapper file can read it
+    // without running a second query.
+    global $mh_plug_product_template_id;
+    $mh_plug_product_template_id = $mh_template->ID;
+
+    // Point WordPress at our wrapper file
+    $wrapper = MH_PLUG_PATH . 'includes/templates/mh-single-product-frontend.php';
+    if ( file_exists( $wrapper ) ) {
+        return $wrapper;
+    }
+
+    return $template;
 }
-add_filter( 'the_content', 'mh_plug_override_single_product_content', 20 );
+add_filter( 'template_include', 'mh_plug_single_product_template_include', 99 );
+
