@@ -39,6 +39,7 @@ class MH_Admin_Menu {
         // WooCommerce Global Feature
         'enable_wc_wishlist' => 'Enable WooCommerce Wishlist',
         'mh_woo_add_to_cart' => 'MH Custom Add to Cart',
+        'mh_woo_attributes'  => 'MH Attributes',
     ];
 
     public function __construct() {
@@ -200,6 +201,7 @@ class MH_Admin_Menu {
                 'mh_wishlist_button',
                 'mh_wishlist_table',
                 'mh_woo_add_to_cart',
+                'mh_woo_attributes',
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
             }
