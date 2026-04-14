@@ -136,6 +136,14 @@ final class MH_Elementor_Loader {
             'mh_wishlist_table'  => [ 'file' => 'mh-wishlist-table-widget.php',  'class' => 'MH_Wishlist_Table_Widget'  ],
         ];
 
+        // WooCommerce-only widgets — registered separately so we can guard them
+        if ( class_exists( 'WooCommerce' ) ) {
+            $wc_widget_map = [
+                'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php', 'class' => 'MH_Woo_Add_To_Cart_Widget' ],
+            ];
+            $widget_map = array_merge( $widget_map, $wc_widget_map );
+        }
+
         // Command: Loop through each widget in our map.
         foreach ($widget_map as $option_key => $widget_data) {
             
@@ -202,3 +210,25 @@ add_action( 'elementor/editor/before_enqueue_scripts', 'mh_plug_enqueue_editor_i
 // For editor only: add_action( 'elementor/editor/after_enqueue_scripts', 'mh_plug_enqueue_editor_icons' );
 // For both:
 add_action( 'elementor/frontend/after_register_scripts', 'mh_plug_enqueue_editor_icons' ); // Enqueue on frontend for runtime effects
+
+/**
+ * Enqueue MH WooCommerce widget scripts on the frontend.
+ * Only loads when WooCommerce is active.
+ */
+function mh_plug_enqueue_woo_scripts() {
+    if ( ! class_exists( 'WooCommerce' ) ) {
+        return;
+    }
+
+    $js_path = MH_PLUG_PATH . 'elementor/assets/js/mh-woo-scripts.js';
+
+    wp_register_script(
+        'mh-woo-scripts',
+        MH_PLUG_URL . 'elementor/assets/js/mh-woo-scripts.js',
+        [ 'jquery' ],
+        file_exists( $js_path ) ? filemtime( $js_path ) : MH_PLUG_VERSION,
+        true // Load in footer
+    );
+}
+add_action( 'wp_enqueue_scripts',                       'mh_plug_enqueue_woo_scripts' );
+add_action( 'elementor/frontend/after_register_scripts', 'mh_plug_enqueue_woo_scripts' );

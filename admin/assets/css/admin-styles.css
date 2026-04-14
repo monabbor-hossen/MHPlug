@@ -517,3 +517,271 @@ label.switch input.cb:disabled ~ span.toggle::before {
 .mh-form-field-control .wp-picker-container {
     display: block;
 }
+
+/* ==============================================================
+   THEME BUILDER DASHBOARD
+   ============================================================== */
+
+/* --- Header --- */
+.mh-tb-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.mh-tb-description {
+    color: #666;
+    margin: 5px 0 0 0;
+    font-size: 14px;
+}
+
+/* --- Navigation Tabs --- */
+.mh-tb-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 0 0 30px 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mh-tb-tabs li {
+    padding: 10px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #555;
+    background: #e8e8e8;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 4px 4px 8px #c5c5c5, -4px -4px 8px #ffffff;
+    transition: all 0.3s ease;
+}
+
+.mh-tb-tabs li:hover {
+    color: #004265;
+}
+
+.mh-tb-tabs li.active {
+    color: #004265;
+    background: #e8e8e8;
+    box-shadow: inset 2px 2px 5px #c5c5c5, inset -2px -2px 5px #ffffff;
+}
+
+/* --- Template Grid --- */
+.mh-tb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+/* --- Cards General --- */
+.mh-tb-card {
+    background: #e8e8e8;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 4px 4px 8px #c5c5c5, -4px -4px 8px #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+/* --- Add New Placeholder Card --- */
+.mh-tb-card-add-new {
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    min-height: 200px;
+    border: 2px dashed #bbb;
+    box-shadow: none;
+    color: #555;
+}
+
+.mh-tb-card-add-new:hover {
+    color: #004265;
+    border-color: #004265;
+    background: rgba(0, 66, 101, 0.03);
+}
+
+.mh-tb-add-icon i {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+/* --- Existing Template Cards --- */
+.mh-tb-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.mh-tb-card-icon i {
+    font-size: 24px;
+    color: #004265;
+}
+
+.mh-tb-badge {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #004265;
+    background: rgba(0, 66, 101, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.mh-tb-card-content {
+    flex-grow: 1;
+}
+
+.mh-tb-card-title {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Status Toggle Wrapper */
+.mh-tb-status-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0,0,0,0.03);
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.mh-tb-status-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+}
+
+.mh-tb-card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    padding-top: 15px;
+}
+
+.mh-tb-edit-link {
+    text-decoration: none;
+    color: #004265;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.mh-tb-edit-link:hover {
+    text-decoration: underline;
+}
+
+.mh-tb-delete-btn {
+    background: transparent;
+    border: none;
+    color: #d63638;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.2s;
+}
+
+.mh-tb-delete-btn:hover {
+    transform: scale(1.1);
+}
+
+/* --- Theme Builder Modal --- */
+.mh-tb-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 99999;
+    display: none; /* Initially hidden */
+    align-items: center;
+    justify-content: center;
+}
+
+.mh-tb-modal-content {
+    background: #e8e8e8;
+    border-radius: 12px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 10px 10px 20px #b0b0b0, -10px -10px 20px #ffffff;
+    padding: 30px;
+}
+
+.mh-tb-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.mh-tb-modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #004265;
+}
+
+.mh-tb-modal-close {
+    cursor: pointer;
+    color: #555;
+}
+
+.mh-tb-modal-close i {
+    font-size: 24px;
+}
+
+.mh-tb-modal-close:hover {
+    color: #d63638;
+}
+
+.mh-tb-form-group {
+    margin-bottom: 20px;
+}
+
+.mh-tb-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+.mh-tb-form-group input,
+.mh-tb-form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: none;
+    background: #e8e8e8;
+    box-shadow: inset 4px 4px 8px #c5c5c5, inset -4px -4px 8px #ffffff;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+}
+
+.mh-tb-form-group input:focus,
+.mh-tb-form-group select:focus {
+    box-shadow: inset 6px 6px 12px #c5c5c5, inset -6px -6px 12px #ffffff;
+}
+
+.mh-tb-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+}
+
+.mh-tb-submit-btn {
+    width: 100%;
+}

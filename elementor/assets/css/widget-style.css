@@ -450,5 +450,159 @@
     transform: translateX(-6px);
 }
 
+/* =======================================================
+ * MH Woo Add to Cart Widget
+ * ======================================================= */
 
+/* Outer widget shell */
+.mh-atc-widget {
+    width: 100%;
+}
 
+.mh-atc-form {
+    margin: 0;
+    padding: 0;
+}
+
+/* ── Flex row: qty + button side by side ── */
+.mh-atc-wrap {
+    display:      flex;
+    align-items:  center;
+    flex-wrap:    wrap;    /* Stacks gracefully on very small screens */
+    gap:          12px;    /* Overridden by Elementor control */
+}
+
+/* ── Quantity wrapper: acts as a single grouped control ── */
+.mh-qty-wrapper {
+    display:         inline-flex;
+    align-items:     stretch;
+    border:          1px solid #ddd;
+    border-radius:   6px;         /* Overridden by Elementor control */
+    overflow:        hidden;       /* Clips ± buttons to the same radius */
+    background:      #f5f5f5;     /* Overridden by Elementor control */
+    height:          46px;         /* Overridden by Elementor control */
+    box-sizing:      border-box;
+}
+
+/* Minus and Plus buttons */
+.mh-qty-btn {
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    width:           40px;         /* Overridden by Elementor control */
+    height:          100%;         /* Fills the wrapper height */
+    border:          none;
+    background:      #e8e8e8;     /* Overridden by Elementor control */
+    color:           #1d2327;
+    font-size:       1.1rem;
+    font-weight:     600;
+    cursor:          pointer;
+    line-height:     1;
+    padding:         0;
+    transition:      background 0.2s ease, color 0.2s ease;
+    user-select:     none;
+    flex-shrink:     0;
+}
+
+.mh-qty-btn:hover {
+    background: #d63638;          /* Overridden by Elementor control */
+    color:       #fff;
+}
+
+.mh-qty-btn:focus-visible {
+    outline:        2px solid #0073e6;
+    outline-offset: -2px;
+    z-index:        1;
+}
+
+/* Number input — sits between the two buttons */
+.mh-qty-input {
+    width:        56px;           /* Overridden by Elementor control */
+    height:       100%;
+    border:       none;
+    border-left:  1px solid #ddd;
+    border-right: 1px solid #ddd;
+    background:   transparent;
+    text-align:   center;
+    font-size:    1rem;
+    color:        #1d2327;
+    -moz-appearance:    textfield; /* Firefox: hide spinner */
+    appearance:         textfield;
+    padding:      0;
+    box-sizing:   border-box;
+    outline:      none;
+}
+
+/* Chrome / Safari / Edge: hide number spinner arrows */
+.mh-qty-input::-webkit-outer-spin-button,
+.mh-qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* ── Add to Cart button ── */
+.mh-atc-btn {
+    display:          inline-flex;
+    align-items:      center;
+    justify-content:  center;
+    gap:              6px;
+    padding:          12px 24px;   /* Overridden by Elementor control */
+    background-color: #1d2327;    /* Overridden by Elementor control */
+    color:            #fff;
+    font-weight:      600;
+    font-size:        0.9375rem;
+    border:           none;
+    border-radius:    6px;        /* Overridden by Elementor control */
+    cursor:           pointer;
+    text-decoration:  none;
+    white-space:      nowrap;
+    transition:       background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    line-height:      1;
+}
+
+.mh-atc-btn:hover {
+    background-color: #d63638;   /* Overridden by Elementor control */
+    transform:        translateY(-1px);
+    box-shadow:       0 4px 12px rgba(214, 54, 56, 0.3);
+}
+
+.mh-atc-btn:active {
+    transform:  translateY(0);
+    box-shadow: none;
+}
+
+/* Loading state added by WooCommerce JS */
+.mh-atc-btn.loading {
+    opacity:        0.7;
+    pointer-events: none;
+}
+
+/* ── Editor-only placeholder notice ── */
+.mh-atc-editor-notice {
+    padding:       12px 16px;
+    background:    #fff8e1;
+    border:        1px solid #ffe082;
+    border-radius: 6px;
+    color:         #795548;
+    font-size:     13px;
+}
+
+/* ── Unavailable message ── */
+.mh-atc-unavailable {
+    color:       #d63638;
+    font-weight: 500;
+    margin:      0;
+}
+
+/* ── Responsive: stack on mobile ── */
+@media (max-width: 480px) {
+    .mh-atc-wrap {
+        flex-direction: column;
+        align-items:    flex-start;
+    }
+
+    .mh-atc-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

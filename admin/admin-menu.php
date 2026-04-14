@@ -38,6 +38,7 @@ class MH_Admin_Menu {
 
         // WooCommerce Global Feature
         'enable_wc_wishlist' => 'Enable WooCommerce Wishlist',
+        'mh_woo_add_to_cart' => 'MH Custom Add to Cart',
     ];
 
     public function __construct() {
@@ -60,6 +61,15 @@ class MH_Admin_Menu {
             [$this, 'render_settings_page'],
             'dashicons-admin-generic', // Placeholder
             58
+        );
+
+        add_submenu_page(
+            'mh-plug-settings',
+            esc_html__('Theme Builder', 'mh-plug'),
+            esc_html__('Theme Builder', 'mh-plug'),
+            'manage_options',
+            'mh-plug-theme-builder',
+            [$this, 'render_theme_builder_page']
         );
     }
 
@@ -98,8 +108,8 @@ class MH_Admin_Menu {
      */
     public function enqueue_page_assets($hook) {
 
-        // Check if we are on the main plugin settings page
-        if ('toplevel_page_mh-plug-settings' === $hook) {
+        // Check if we are on the main plugin settings page or theme builder page
+        if ( in_array( $hook, [ 'toplevel_page_mh-plug-settings', 'mh-plug_page_mh-plug-theme-builder' ], true ) ) {
             // Enqueue the external stylesheet for accordion and widget cards.
             $css_path = MH_PLUG_PATH . 'admin/assets/css/admin-styles.css';
             if (file_exists($css_path)) {
@@ -149,6 +159,10 @@ class MH_Admin_Menu {
     
     // --- The rest of the functions are unchanged ---
     public function render_settings_page() { require_once MH_PLUG_PATH . 'admin/settings-page.php'; }
+
+    public function render_theme_builder_page() {
+        require_once MH_PLUG_PATH . 'admin/theme-builder-page.php';
+    }
     public function register_settings() {
         register_setting(
             'mh_plug_settings_group',
@@ -177,7 +191,12 @@ class MH_Admin_Menu {
             $section_id = 'mh_plug_widgets_section'; // Default: Elementor widgets section
             if ( $key === 'enable_menu_icons' ) {
                 $section_id = 'mh_plug_global_settings_section';
-            } elseif ( $key === 'enable_wc_wishlist' ) {
+            } elseif ( in_array( $key, [
+                'enable_wc_wishlist',
+                'mh_wishlist_button',
+                'mh_wishlist_table',
+                'mh_woo_add_to_cart',
+            ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
             }
             // --- END LOGIC ---
