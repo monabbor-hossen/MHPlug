@@ -71,15 +71,16 @@ class MH_Product_Price_Widget extends Widget_Base {
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [
-                '{{WRAPPER}} .mh-product-price > .amount' => 'color: {{VALUE}};', // Normal price
-                '{{WRAPPER}} .mh-product-price ins .amount' => 'color: {{VALUE}};', // Sale price
+                '{{WRAPPER}} .mh-product-price > .amount' => 'color: {{VALUE}};', 
+                '{{WRAPPER}} .mh-product-price ins .amount' => 'color: {{VALUE}};', 
                 '{{WRAPPER}} .mh-product-price ins' => 'text-decoration: none;',
+                '{{WRAPPER}} .mh-product-price > bdi' => 'color: {{VALUE}};',
             ],
         ] );
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
             'name'     => 'main_price_typography',
-            'selector' => '{{WRAPPER}} .mh-product-price > .amount, {{WRAPPER}} .mh-product-price ins .amount',
+            'selector' => '{{WRAPPER}} .mh-product-price > .amount, {{WRAPPER}} .mh-product-price ins .amount, {{WRAPPER}} .mh-product-price ins, {{WRAPPER}} .mh-product-price > bdi',
         ] );
 
         $this->add_group_control( Group_Control_Text_Shadow::get_type(), [
@@ -100,14 +101,15 @@ class MH_Product_Price_Widget extends Widget_Base {
             'type'      => Controls_Manager::COLOR,
             'default'   => '#a8a8a8',
             'selectors' => [
+                '{{WRAPPER}} .mh-product-price del' => 'color: {{VALUE}}; text-decoration-color: {{VALUE}};',
                 '{{WRAPPER}} .mh-product-price del .amount' => 'color: {{VALUE}};',
-                '{{WRAPPER}} .mh-product-price del' => 'color: {{VALUE}};',
             ],
         ] );
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
             'name'     => 'old_price_typography',
-            'selector' => '{{WRAPPER}} .mh-product-price del .amount',
+            // 🚀 THE FIX: We apply typography to the <del> wrapper as well so the line scales perfectly in the middle!
+            'selector' => '{{WRAPPER}} .mh-product-price del, {{WRAPPER}} .mh-product-price del .amount, {{WRAPPER}} .mh-product-price del bdi',
         ] );
 
         $this->add_responsive_control( 'old_price_gap', [
@@ -117,7 +119,6 @@ class MH_Product_Price_Widget extends Widget_Base {
             'range'      => [ 'px' => [ 'min' => 0, 'max' => 50 ] ],
             'default'    => [ 'size' => 8, 'unit' => 'px' ],
             'selectors'  => [
-                // If inline, add right margin to the old price
                 '{{WRAPPER}} .mh-product-price del' => 'margin-right: {{SIZE}}{{UNIT}};',
             ],
             'condition' => [
@@ -152,7 +153,7 @@ class MH_Product_Price_Widget extends Widget_Base {
             'size_units' => [ 'px', 'em' ],
             'range'      => [ 'px' => [ 'min' => 0, 'max' => 20 ] ],
             'selectors'  => [
-                '{{WRAPPER}} .mh-product-price .woocommerce-Price-currencySymbol' => 'margin-right: {{SIZE}}{{UNIT}};',
+                '{{WRAPPER}} .mh-product-price .woocommerce-Price-currencySymbol' => 'margin-right: {{SIZE}}{{UNIT}}; margin-left: {{SIZE}}{{UNIT}};',
             ],
         ] );
 
@@ -192,8 +193,9 @@ class MH_Product_Price_Widget extends Widget_Base {
         $price_html = $product->get_price_html();
         
         if ( ! empty( $price_html ) ) {
-            // Apply a base line-height to fix common theme alignment issues
-            echo '<div class="mh-product-price" style="display: inline-block; line-height: 1;">' . $price_html . '</div>';
+            // Added explicit text-decoration line-through to the del tag to ensure theme resets don't break it
+            echo '<style>.mh-product-price del { text-decoration: line-through !important; }</style>';
+            echo '<div class="mh-product-price" style="display: inline-block; line-height: 1.2;">' . $price_html . '</div>';
         }
     }
 }
