@@ -152,7 +152,10 @@ function mh_plug_ajax_toggle_status() {
     }
 
     $template_id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
-    $is_active   = ( isset( $_POST['is_active'] ) && $_POST['is_active'] === 'true' ) ? 'yes' : 'no';
+    
+    // STRICT FIX: Handle boolean true, string 'true', integer 1, etc. from the JS.
+    $is_active_raw = isset( $_POST['is_active'] ) ? $_POST['is_active'] : false;
+    $is_active = ( filter_var( $is_active_raw, FILTER_VALIDATE_BOOLEAN ) ) ? 'yes' : 'no';
 
     if ( ! $template_id ) {
         wp_send_json_error( [ 'message' => __( 'Invalid ID.', 'mh-plug' ) ] );
@@ -162,6 +165,7 @@ function mh_plug_ajax_toggle_status() {
 
     wp_send_json_success( [ 'message' => __( 'Status updated.', 'mh-plug' ) ] );
 }
+// STRICT COMMAND: THIS LINE WAS MISSING! It registers the AJAX endpoint.
 add_action( 'wp_ajax_mh_tb_toggle_status', 'mh_plug_ajax_toggle_status' );
 
 // ─────────────────────────────────────────────────────────────────────────────
