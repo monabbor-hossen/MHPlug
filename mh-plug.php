@@ -141,3 +141,45 @@ function mh_plug_enqueue_frontend_scripts() {
     }
 }
 add_action('wp_enqueue_scripts', 'mh_plug_enqueue_frontend_scripts');
+/**
+ * COMMAND: Database Diagnostic
+ * This will reveal exactly why the database query is failing to find your header.
+ */
+add_action( 'wp_footer', function() {
+    echo '<div style="position:fixed; bottom:0; left:0; width:100%; background:#111; color:#0f0; padding:20px; z-index:9999999; font-family:monospace; font-size:16px; border-top: 4px solid #0f0;">';
+    echo '<strong style="color:#fff;">MH-PLUG DATABASE DIAGNOSTIC:</strong><br><br>';
+    
+    // Fetch ALL templates, even drafts
+    $all_templates = get_posts([
+        'post_type' => 'mh_templates',
+        'post_status' => 'any',
+        'posts_per_page' => -1
+    ]);
+    
+    if ( empty( $all_templates ) ) {
+        echo '<span style="color:red;">CRITICAL: Zero templates found in the database. Did you create one?</span><br>';
+    } else {
+        foreach( $all_templates as $t ) {
+            $status = $t->post_status;
+            
+            // Check both new and legacy meta keys
+            $type = get_post_meta( $t->ID, '_mh_template_type', true );
+            if ( ! $type ) $type = get_post_meta( $t->ID, 'mh_template_type', true );
+            
+            $active = get_post_meta( $t->ID, '_mh_template_active', true );
+            if ( ! $active ) $active = get_post_meta( $t->ID, 'mh_template_active', true );
+            
+            // Color code the output to easily spot the error
+            $status_color = ( $status === 'publish' ) ? '#0f0' : 'red';
+            $type_color   = ( $type === 'header' ) ? '#0f0' : 'orange';
+            $active_color = ( $active === 'yes' ) ? '#0f0' : 'red';
+
+            echo "Template ID: <strong>{$t->ID}</strong> | ";
+            echo "Title: <strong>{$t->post_title}</strong> | ";
+            echo "Status: <strong style='color:{$status_color};'>{$status}</strong> | ";
+            echo "Type: <strong style='color:{$type_color};'>" . ( $type ? $type : 'NOT SET' ) . "</strong> | ";
+            echo "Active: <strong style='color:{$active_color};'>" . ( $active ? $active : 'NOT SET' ) . "</strong><br>";
+        }
+    }
+    echo '</div>';
+}, 99999 );
