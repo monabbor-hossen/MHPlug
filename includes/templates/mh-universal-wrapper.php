@@ -1,7 +1,6 @@
 <?php
 /**
- * MH Plug - Universal Theme Wrapper
- * This file replaces the entire theme's layout to force the Header/Footer.
+ * MH Plug - Universal Theme Wrapper (Safe Version)
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
@@ -23,24 +22,30 @@ $footer = mh_plug_get_active_template( 'footer' );
         <header class="mh-custom-header">
             <?php mh_plug_render_template( $header ); ?>
         </header>
-    <?php else : 
-        // Fallback to theme header if no MH header exists
-        get_header(); 
-    endif; ?>
+    <?php endif; ?>
 
     <main id="primary" class="site-main mh-universal-content">
         <?php
-        while ( have_posts() ) : the_post();
-            // If it's a page/post and we have a custom "Single" template, use it
-            $type = is_singular( 'product' ) ? 'single_product' : 'single_post';
-            $single_template = mh_plug_get_active_template( $type );
+        if ( have_posts() ) :
+            while ( have_posts() ) : the_post();
+                
+                // WooCommerce Context Setup
+                if ( is_singular( 'product' ) && class_exists( 'WooCommerce' ) ) {
+                    global $product;
+                    $product = wc_get_product( get_the_ID() );
+                }
 
-            if ( $single_template && !is_singular('mh_templates') ) {
-                mh_plug_render_template( $single_template );
-            } else {
-                the_content();
-            }
-        endwhile;
+                $type = is_singular( 'product' ) ? 'single_product' : 'single_post';
+                $single_template = mh_plug_get_active_template( $type );
+
+                if ( $single_template && !is_singular('mh_templates') ) {
+                    mh_plug_render_template( $single_template );
+                } else {
+                    the_content();
+                }
+
+            endwhile;
+        endif;
         ?>
     </main>
 
@@ -48,9 +53,7 @@ $footer = mh_plug_get_active_template( 'footer' );
         <footer class="mh-custom-footer">
             <?php mh_plug_render_template( $footer ); ?>
         </footer>
-    <?php else : 
-        get_footer(); 
-    endif; ?>
+    <?php endif; ?>
 
     <?php wp_footer(); ?>
 </body>

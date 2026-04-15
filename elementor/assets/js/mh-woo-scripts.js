@@ -18,28 +18,29 @@
     function initMhATC($scope) {
         var $context = $scope || $(document);
 
-        /* ── Minus button ──────────────────────────────── */
-        $context.find('.mh-qty-minus').off('click.mhAtc').on('click.mhAtc', function () {
-            var $input = $(this).siblings('.mh-qty-input');
-            var current = parseInt($input.val(), 10) || 1;
-            var min     = parseInt($input.attr('min'), 10) || 1;
+/* ── Minus button ──────────────────────────────── */
+$context.find('.mh-qty-minus').off('click.mhAtc').on('click.mhAtc', function () {
+    // Command: Search the parent wrapper to find the input safely
+    var $input = $(this).closest('.mh-qty-wrapper').find('.mh-qty-input');
+    var current = parseInt($input.val(), 10) || 1;
+    var min     = parseInt($input.attr('min'), 10) || 1;
 
-            if (current > min) {
-                $input.val(current - 1).trigger('change');
-            }
-        });
+    if (current > min) {
+        $input.val(current - 1).trigger('change');
+    }
+});
 
-        /* ── Plus button ───────────────────────────────── */
-        $context.find('.mh-qty-plus').off('click.mhAtc').on('click.mhAtc', function () {
-            var $input = $(this).siblings('.mh-qty-input');
-            var current = parseInt($input.val(), 10) || 1;
-            var max     = parseInt($input.attr('max'), 10);
+/* ── Plus button ───────────────────────────────── */
+$context.find('.mh-qty-plus').off('click.mhAtc').on('click.mhAtc', function () {
+    // Command: Search the parent wrapper to find the input safely
+    var $input = $(this).closest('.mh-qty-wrapper').find('.mh-qty-input');
+    var current = parseInt($input.val(), 10) || 1;
+    var max     = parseInt($input.attr('max'), 10);
 
-            // Respect stock limit; if max is -1 (unlimited) skip the check
-            if (isNaN(max) || max < 0 || current < max) {
-                $input.val(current + 1).trigger('change');
-            }
-        });
+    if (isNaN(max) || max < 0 || current < max) {
+        $input.val(current + 1).trigger('change');
+    }
+});
 
         /* ── Sanitise direct input ─────────────────────── */
         $context.find('.mh-qty-input').off('change.mhAtc').on('change.mhAtc', function () {

@@ -216,9 +216,8 @@ add_action( 'elementor/frontend/after_register_scripts', 'mh_plug_enqueue_editor
 
 /**
  * Enqueue MH WooCommerce widget scripts on the frontend.
- * Only loads when WooCommerce is active.
  */
-function mh_plug_enqueue_woo_scripts() {
+public function mh_plug_enqueue_woo_scripts() {
     if ( ! class_exists( 'WooCommerce' ) ) {
         return;
     }
@@ -230,8 +229,10 @@ function mh_plug_enqueue_woo_scripts() {
         MH_PLUG_URL . 'elementor/assets/js/mh-woo-scripts.js',
         [ 'jquery' ],
         file_exists( $js_path ) ? filemtime( $js_path ) : MH_PLUG_VERSION,
-        true // Load in footer
+        true 
     );
 }
-add_action( 'wp_enqueue_scripts',                       'mh_plug_enqueue_woo_scripts' );
-add_action( 'elementor/frontend/after_register_scripts', 'mh_plug_enqueue_woo_scripts' );
+
+
+add_action( 'wp_enqueue_scripts', [$this, 'mh_plug_enqueue_woo_scripts'] );
+add_action( 'elementor/frontend/after_register_scripts', [$this, 'mh_plug_enqueue_woo_scripts'] );
