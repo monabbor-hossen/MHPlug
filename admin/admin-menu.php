@@ -211,6 +211,7 @@ class MH_Admin_Menu {
                 'mh_product_category',
                 'mh_product_tags',
                 'mh_product_brands',
+                'mh_product_breadcrumb',
 
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
