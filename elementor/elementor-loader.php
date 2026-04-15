@@ -153,10 +153,11 @@ function mh_plug_enqueue_editor_icons() {
         MH_PLUG_VERSION
     );
 
+    // 🚀 THE FIX: Removed 'elementor-frontend' to clear the notice.
     wp_enqueue_script(
         'mh-brush-color-filter-script',
         MH_PLUG_URL . 'elementor/assets/js/brush-color-filter.js',
-        ['jquery', 'elementor-frontend'],
+        ['jquery'], 
         MH_PLUG_VERSION,
         true
     );

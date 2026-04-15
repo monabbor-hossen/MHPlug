@@ -1,11 +1,6 @@
 <?php
 /**
  * MH Wishlist Button Widget
- *
- * Renders an "Add to Wishlist" button for the current WooCommerce product.
- * Supports full Typography, Color (Normal/Hover/Added), Icon, Padding controls.
- *
- * @package MH_Plug
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,16 +30,28 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
+        // 🚀 NEW: Toggle to hide the text label
+        $this->add_control( 'show_label', [
+            'label'        => __( 'Show Text Label', 'mh-plug' ),
+            'type'         => Controls_Manager::SWITCHER,
+            'label_on'     => __( 'Show', 'mh-plug' ),
+            'label_off'    => __( 'Hide', 'mh-plug' ),
+            'return_value' => 'yes',
+            'default'      => 'yes',
+        ] );
+
         $this->add_control( 'btn_text_normal', [
-            'label'   => __( 'Button Label (Normal)', 'mh-plug' ),
-            'type'    => Controls_Manager::TEXT,
-            'default' => __( 'Add to Wishlist', 'mh-plug' ),
+            'label'     => __( 'Button Label (Normal)', 'mh-plug' ),
+            'type'      => Controls_Manager::TEXT,
+            'default'   => __( 'Add to Wishlist', 'mh-plug' ),
+            'condition' => [ 'show_label' => 'yes' ], // Only show if label is enabled
         ] );
 
         $this->add_control( 'btn_text_added', [
-            'label'   => __( 'Button Label (Added)', 'mh-plug' ),
-            'type'    => Controls_Manager::TEXT,
-            'default' => __( 'Remove from Wishlist', 'mh-plug' ),
+            'label'     => __( 'Button Label (Added)', 'mh-plug' ),
+            'type'      => Controls_Manager::TEXT,
+            'default'   => __( 'Remove from Wishlist', 'mh-plug' ),
+            'condition' => [ 'show_label' => 'yes' ], // Only show if label is enabled
         ] );
 
         $this->add_control( 'btn_icon', [
@@ -57,13 +64,14 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         ] );
 
         $this->add_control( 'icon_position', [
-            'label'   => __( 'Icon Position', 'mh-plug' ),
-            'type'    => Controls_Manager::CHOOSE,
-            'options' => [
+            'label'     => __( 'Icon Position', 'mh-plug' ),
+            'type'      => Controls_Manager::CHOOSE,
+            'options'   => [
                 'left'  => [ 'title' => __( 'Left', 'mh-plug' ),  'icon' => 'eicon-h-align-left' ],
                 'right' => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-h-align-right' ],
             ],
-            'default' => 'left',
+            'default'   => 'left',
+            'condition' => [ 'show_label' => 'yes' ], // Position only matters if text exists
         ] );
 
         $this->add_responsive_control( 'align', [
@@ -89,8 +97,22 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         ] );
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
-            'name'     => 'btn_typography',
-            'selector' => '{{WRAPPER}} .mh-wishlist-btn',
+            'name'      => 'btn_typography',
+            'selector'  => '{{WRAPPER}} .mh-wishlist-btn',
+            'condition' => [ 'show_label' => 'yes' ],
+        ] );
+
+        // 🚀 UPGRADED: Icon Size control now affects SVGs properly
+        $this->add_responsive_control( 'icon_size', [
+            'label'      => __( 'Icon Size', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px', 'em' ],
+            'range'      => [ 'px' => [ 'min' => 10, 'max' => 80 ] ],
+            'default'    => [ 'size' => 16, 'unit' => 'px' ],
+            'selectors'  => [
+                '{{WRAPPER}} .mh-wishlist-btn i' => 'font-size: {{SIZE}}{{UNIT}};',
+                '{{WRAPPER}} .mh-wishlist-btn svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}; fill: currentColor;',
+            ],
         ] );
 
         $this->start_controls_tabs( 'btn_color_tabs' );
@@ -98,7 +120,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         /* Normal */
         $this->start_controls_tab( 'btn_tab_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
         $this->add_control( 'btn_color_normal', [
-            'label'     => __( 'Text / Icon Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#d63638',
             'selectors' => [ '{{WRAPPER}} .mh-wishlist-btn' => 'color: {{VALUE}}; border-color: {{VALUE}};' ],
@@ -114,7 +136,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         /* Hover */
         $this->start_controls_tab( 'btn_tab_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
         $this->add_control( 'btn_color_hover', [
-            'label'     => __( 'Text / Icon Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#fff',
             'selectors' => [ '{{WRAPPER}} .mh-wishlist-btn:hover' => 'color: {{VALUE}};' ],
@@ -130,7 +152,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         /* Added state */
         $this->start_controls_tab( 'btn_tab_added', [ 'label' => __( 'Added', 'mh-plug' ) ] );
         $this->add_control( 'btn_color_added', [
-            'label'     => __( 'Text / Icon Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#fff',
             'selectors' => [ '{{WRAPPER}} .mh-wishlist-btn.mh-in-wishlist' => 'color: {{VALUE}};' ],
@@ -155,55 +177,14 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             'label'      => __( 'Border Radius', 'mh-plug' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
-            'default'    => [
-                'top'    => 6, 'right'  => 6,
-                'bottom' => 6, 'left'   => 6,
-                'unit'   => 'px',
-            ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-wishlist-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-            ],
-        ] );
-
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
-            'name'     => 'btn_shadow',
-            'selector' => '{{WRAPPER}} .mh-wishlist-btn',
+            'selectors'  => [ '{{WRAPPER}} .mh-wishlist-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ],
         ] );
 
         $this->add_responsive_control( 'btn_padding', [
             'label'      => __( 'Padding', 'mh-plug' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em' ],
-            'default'    => [
-                'top'    => 8,  'right'  => 14,
-                'bottom' => 8,  'left'   => 14,
-                'unit'   => 'px',
-            ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-wishlist-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-            ],
-            'separator' => 'before',
-        ] );
-
-        $this->add_responsive_control( 'btn_margin', [
-            'label'      => __( 'Margin', 'mh-plug' ),
-            'type'       => Controls_Manager::DIMENSIONS,
-            'size_units' => [ 'px', 'em' ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-wishlist-btn' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-            ],
-        ] );
-
-        $this->add_control( 'icon_size', [
-            'label'      => __( 'Icon Size', 'mh-plug' ),
-            'type'       => Controls_Manager::SLIDER,
-            'size_units' => [ 'px', 'em' ],
-            'range'      => [ 'px' => [ 'min' => 10, 'max' => 60 ] ],
-            'default'    => [ 'size' => 16, 'unit' => 'px' ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-wishlist-btn i, {{WRAPPER}} .mh-wishlist-btn svg' => 'font-size: {{SIZE}}{{UNIT}};',
-            ],
-            'separator' => 'before',
+            'selectors'  => [ '{{WRAPPER}} .mh-wishlist-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ],
         ] );
 
         $this->add_control( 'icon_gap', [
@@ -212,9 +193,8 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             'size_units' => [ 'px' ],
             'range'      => [ 'px' => [ 'min' => 0, 'max' => 30 ] ],
             'default'    => [ 'size' => 6, 'unit' => 'px' ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-wishlist-btn' => 'gap: {{SIZE}}{{UNIT}};',
-            ],
+            'selectors'  => [ '{{WRAPPER}} .mh-wishlist-btn' => 'gap: {{SIZE}}{{UNIT}};', ],
+            'condition'  => [ 'show_label' => 'yes' ],
         ] );
 
         $this->end_controls_section();
@@ -228,56 +208,62 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             $product = wc_get_product();
         }
 
-        // 🚀 THE FIX: Elementor Editor Mock Product Context
+        // Elementor Editor Mock Product Context
         if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) {
             if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-                $mock_products = wc_get_products( [ 
-                    'limit'  => 1, 
-                    'status' => 'publish' 
-                ] );
-                
+                $mock_products = wc_get_products( [ 'limit' => 1, 'status' => 'publish' ] );
                 if ( ! empty( $mock_products ) ) {
                     $product = $mock_products[0];
                 }
             }
         }
 
-        // Final safety check: If there are NO products in the store at all.
         if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) {
             if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-                echo '<div style="padding: 15px; border: 1px dashed #d63638; color: #d63638; text-align: center; background: #fff;">';
-                echo '<strong>MH Plug:</strong> Please create at least one published WooCommerce product to preview this widget.';
-                echo '</div>';
+                echo '<div style="padding: 15px; border: 1px dashed #d63638; color: #d63638; text-align: center;"><strong>MH Plug:</strong> Please create a product first.</div>';
             }
             return;
         }
 
         $product_id   = $product->get_id();
+        
+        // 🚀 User Account Context Data
+        $is_logged_in = is_user_logged_in() ? 'true' : 'false'; 
+        
         $in_wishlist  = function_exists( 'mh_wishlist_has_product' ) && mh_wishlist_has_product( $product_id );
         $btn_class    = 'mh-wishlist-btn' . ( $in_wishlist ? ' mh-in-wishlist' : '' );
-        $label        = $in_wishlist ? $settings['btn_text_added'] : $settings['btn_text_normal'];
+        
+        // Use labels if enabled, otherwise fallback to standard text for accessibility
+        $text_normal  = !empty($settings['btn_text_normal']) ? $settings['btn_text_normal'] : 'Add to Wishlist';
+        $text_added   = !empty($settings['btn_text_added']) ? $settings['btn_text_added'] : 'Remove from Wishlist';
+        $label        = $in_wishlist ? $text_added : $text_normal;
+        
         $nonce        = wp_create_nonce( 'mh_wishlist_nonce' );
+        $show_label   = $settings['show_label'] === 'yes';
+        $icon_pos     = $settings['icon_position'] ?? 'left';
 
-        $icon_pos = $settings['icon_position'] ?? 'left';
         ?>
         <div class="mh-wishlist-widget-wrap">
             <span
                 class="<?php echo esc_attr( $btn_class ); ?>"
                 data-product-id="<?php echo esc_attr( $product_id ); ?>"
                 data-nonce="<?php echo esc_attr( $nonce ); ?>"
-                data-text-normal="<?php echo esc_attr( $settings['btn_text_normal'] ); ?>"
-                data-text-added="<?php echo esc_attr( $settings['btn_text_added'] ); ?>"
+                data-text-normal="<?php echo esc_attr( $text_normal ); ?>"
+                data-text-added="<?php echo esc_attr( $text_added ); ?>"
+                data-logged-in="<?php echo esc_attr( $is_logged_in ); ?>"
                 role="button"
                 tabindex="0"
                 aria-label="<?php echo esc_attr( $label ); ?>"
                 title="<?php echo esc_attr( $label ); ?>"
-                style="display: inline-flex; align-items: center; cursor: pointer; transition: all 0.3s ease;"
+                style="display: inline-flex; align-items: center; cursor: pointer; transition: all 0.3s ease; justify-content: center;"
             >
                 <?php if ( $icon_pos === 'left' && ! empty( $settings['btn_icon']['value'] ) ) : ?>
                     <?php Icons_Manager::render_icon( $settings['btn_icon'], [ 'aria-hidden' => 'true' ] ); ?>
                 <?php endif; ?>
 
-                <span class="mh-wishlist-btn-text"><?php echo esc_html( $label ); ?></span>
+                <?php if ( $show_label ) : ?>
+                    <span class="mh-wishlist-btn-text"><?php echo esc_html( $label ); ?></span>
+                <?php endif; ?>
 
                 <?php if ( $icon_pos === 'right' && ! empty( $settings['btn_icon']['value'] ) ) : ?>
                     <?php Icons_Manager::render_icon( $settings['btn_icon'], [ 'aria-hidden' => 'true' ] ); ?>
