@@ -208,6 +208,7 @@ class MH_Admin_Menu {
                 'mh_product_title',
                 'mh_product_price',
                 'mh_product_short_description',
+                'mh_product_category',
 
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
