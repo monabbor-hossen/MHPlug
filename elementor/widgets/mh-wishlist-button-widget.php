@@ -221,12 +221,33 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
     }
 
     protected function render() {
-        $settings   = $this->get_settings_for_display();
-        $product    = wc_get_product();
+        $settings = $this->get_settings_for_display();
 
-        if ( ! $product ) {
+        global $product;
+        if ( ! is_a( $product, 'WC_Product' ) ) {
+            $product = wc_get_product();
+        }
+
+        // 🚀 THE FIX: Elementor Editor Mock Product Context
+        if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) {
             if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-                echo '<p style="color:#999;font-size:13px;">' . esc_html__( 'WooCommerce Wishlist Button: No product context. Preview on a single product page.', 'mh-plug' ) . '</p>';
+                $mock_products = wc_get_products( [ 
+                    'limit'  => 1, 
+                    'status' => 'publish' 
+                ] );
+                
+                if ( ! empty( $mock_products ) ) {
+                    $product = $mock_products[0];
+                }
+            }
+        }
+
+        // Final safety check: If there are NO products in the store at all.
+        if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) {
+            if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+                echo '<div style="padding: 15px; border: 1px dashed #d63638; color: #d63638; text-align: center; background: #fff;">';
+                echo '<strong>MH Plug:</strong> Please create at least one published WooCommerce product to preview this widget.';
+                echo '</div>';
             }
             return;
         }
@@ -250,6 +271,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                 tabindex="0"
                 aria-label="<?php echo esc_attr( $label ); ?>"
                 title="<?php echo esc_attr( $label ); ?>"
+                style="display: inline-flex; align-items: center; cursor: pointer; transition: all 0.3s ease;"
             >
                 <?php if ( $icon_pos === 'left' && ! empty( $settings['btn_icon']['value'] ) ) : ?>
                     <?php Icons_Manager::render_icon( $settings['btn_icon'], [ 'aria-hidden' => 'true' ] ); ?>
