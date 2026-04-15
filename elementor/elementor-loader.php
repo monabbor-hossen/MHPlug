@@ -99,6 +99,7 @@ final class MH_Elementor_Loader {
                 'mh_product_short_description' => [ 'file' => 'mh-product-short-description-widget.php',  'class' => 'MH_Product_Short_Description_Widget' ],
                 'mh_product_category'          => [ 'file' => 'mh-product-category-widget.php',           'class' => 'MH_Product_Category_Widget' ],
                 'mh_product_tags'              => [ 'file' => 'mh-product-tags-widget.php',               'class' => 'MH_Product_Tags_Widget' ],
+                'mh_product_brands'            => [ 'file' => 'mh-product-brands-widget.php',             'class' => 'MH_Product_Brands_Widget' ],
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
