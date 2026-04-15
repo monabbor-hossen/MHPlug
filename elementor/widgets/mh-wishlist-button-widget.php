@@ -22,6 +22,10 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords()   { return [ 'wishlist', 'heart', 'woocommerce', 'mh' ]; }
 
+    // 🚀 THE FIX: Tell Elementor to load the JavaScript file when this widget is on the page!
+    public function get_script_depends() {
+        return [ 'mh-woo-scripts' ];
+    }
     protected function register_controls() {
 
         /* ── CONTENT ── */

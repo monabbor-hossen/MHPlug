@@ -141,3 +141,66 @@ function mh_plug_enqueue_frontend_scripts() {
     }
 }
 add_action('wp_enqueue_scripts', 'mh_plug_enqueue_frontend_scripts');
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WOOCOMMERCE WISHLIST AJAX HANDLER & LOCALIZATION
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 1. Pass the AJAX URL to JavaScript safely
+add_action( 'wp_enqueue_scripts', 'mh_plug_global_js_variables' );
+function mh_plug_global_js_variables() {
+    if ( class_exists( 'WooCommerce' ) ) {
+        wp_localize_script( 'jquery', 'mh_plug_ajax', [
+            'ajax_url'  => admin_url( 'admin-ajax.php' ),
+            'login_url' => wc_get_page_permalink( 'myaccount' )
+        ]);
+    }
+}
+
+// 2. The Database Save Logic
+add_action( 'wp_ajax_mh_wishlist_toggle', 'mh_plug_ajax_wishlist_toggle' );
+add_action( 'wp_ajax_nopriv_mh_wishlist_toggle', 'mh_plug_ajax_wishlist_toggle' );
+
+function mh_plug_ajax_wishlist_toggle() {
+    check_ajax_referer( 'mh_wishlist_nonce', 'security' );
+
+    if ( ! is_user_logged_in() ) {
+        wp_send_json_error( [ 'message' => 'Please log in first.' ] );
+    }
+
+    $product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
+    $user_id    = get_current_user_id();
+
+    if ( ! $product_id ) {
+        wp_send_json_error( [ 'message' => 'Invalid product.' ] );
+    }
+
+    $wishlist = get_user_meta( $user_id, '_mh_wishlist', true );
+    if ( ! is_array( $wishlist ) ) $wishlist = [];
+
+    if ( in_array( $product_id, $wishlist ) ) {
+        $wishlist = array_diff( $wishlist, [ $product_id ] );
+        $status = 'removed';
+    } else {
+        $wishlist[] = $product_id;
+        $status = 'added';
+    }
+
+    update_user_meta( $user_id, '_mh_wishlist', array_unique( $wishlist ) );
+
+    wp_send_json_success( [
+        'status'  => $status,
+        'message' => 'Wishlist updated successfully.'
+    ] );
+}
+
+// 3. Helper Function for the Widget
+if ( ! function_exists( 'mh_wishlist_has_product' ) ) {
+    function mh_wishlist_has_product( $product_id ) {
+        if ( ! is_user_logged_in() ) return false;
+        $wishlist = get_user_meta( get_current_user_id(), '_mh_wishlist', true );
+        if ( ! is_array( $wishlist ) ) return false;
+        return in_array( $product_id, $wishlist );
+    }
+}
