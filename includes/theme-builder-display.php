@@ -6,12 +6,12 @@
  * strict single-post vs single-product content overrides.
  *
  * Template type slugs (authoritative, stored in `_mh_template_type`):
- *   header | footer | single_post | single_product | archive_post | archive_product
+ * header | footer | single_post | single_product | archive_post | archive_product
  *
  * KEY SAFETY RULE — Elementor Edit Mode:
- *   When Elementor's editor is active (is_edit_mode() === true) ALL overrides
- *   are completely skipped. The editor renders inside our canvas (mh-canvas.php)
- *   which already contains the_content(), so no interference is needed.
+ * When Elementor's editor is active (is_edit_mode() === true) ALL overrides
+ * are completely skipped. The editor renders inside our canvas (mh-canvas.php)
+ * which already contains the_content(), so no interference is needed.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -50,7 +50,7 @@ function mh_plug_is_elementor_edit_mode() {
  * `mh_template_type` key via an OR relation so legacy templates still match.
  *
  * @param  string       $type  Canonical slug: header | footer | single_post |
- *                             single_product | archive_post | archive_product
+ * single_product | archive_post | archive_product
  * @return WP_Post|null        The matching post, or null if none found.
  */
 function mh_plug_get_active_template( $type ) {
@@ -146,51 +146,46 @@ function mh_plug_render_template( $template_post ) {
         echo apply_filters( 'the_content', $template_post->post_content );
     }
 }
-
 // ─────────────────────────────────────────────────────────────────────────────
-// Header injection
+// Header injection (Corrected Override)
 // ─────────────────────────────────────────────────────────────────────────────
+function mh_plug_inject_header( $name ) {
+    // 1. Force the red debug message to prove the hook is alive
+    echo '<div style="background:red; color:white; padding:20px; z-index:99999; position:relative; text-align:center;">
+        <strong>MH PLUG DEBUG:</strong> get_header is firing!
+    </div>';
 
-/**
- * Outputs the custom Header template in place of the active theme's header.
- *
- * Skipped entirely when Elementor's editor is open or no active header exists.
- */
-function mh_plug_inject_header() {
-    if ( mh_plug_is_elementor_edit_mode() ) {
-        return;
-    }
+    // 2. Hard-fetch the first header regardless of active status
+    $header_posts = get_posts([
+        'post_type' => 'mh_templates',
+        'meta_key' => '_mh_template_type',
+        'meta_value' => 'header',
+        'numberposts' => 1
+    ]);
 
-    $header = mh_plug_get_active_template( 'header' );
-    if ( ! $header ) {
-        return;
+    if ( !empty($header_posts) ) {
+        echo '<header class="mh-custom-header" style="border: 5px solid blue;">';
+        mh_plug_render_template( $header_posts[0] );
+        echo '</header>';
+    } else {
+        echo '<div style="background:orange; padding:20px;">No header templates found in database at all!</div>';
     }
-    ?><!DOCTYPE html>
-<html <?php language_attributes(); ?>>
-<head>
-    <meta charset="<?php bloginfo( 'charset' ); ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php wp_head(); ?>
-</head>
-<body <?php body_class(); ?>>
-<?php wp_body_open(); ?>
-<header class="mh-custom-header" id="mh-site-header">
-    <?php mh_plug_render_template( $header ); ?>
-</header>
-    <?php
+    
+    // 3. Kill the theme's default header
+    $templates = [];
+    $name = (string) $name;
+    if ( '' !== $name ) { $templates[] = "header-{$name}.php"; }
+    $templates[] = 'header.php';
+    ob_start(); locate_template( $templates, true ); ob_get_clean();
 }
+// Ensure priority is 0 to fire before the theme
 add_action( 'get_header', 'mh_plug_inject_header', 0 );
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Footer injection
+// Footer injection (Corrected Override)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/**
- * Outputs the custom Footer template before the theme's own footer markup.
- *
- * Skipped entirely when Elementor's editor is open or no active footer exists.
- */
-function mh_plug_inject_footer() {
+function mh_plug_inject_footer( $name ) {
     if ( mh_plug_is_elementor_edit_mode() ) {
         return;
     }
@@ -199,6 +194,8 @@ function mh_plug_inject_footer() {
     if ( ! $footer ) {
         return;
     }
+    
+    // Command: Render our custom Elementor footer
     ?>
 <footer class="mh-custom-footer" id="mh-site-footer">
     <?php mh_plug_render_template( $footer ); ?>
@@ -207,9 +204,20 @@ function mh_plug_inject_footer() {
 </body>
 </html>
     <?php
+    
+    // STRICT RULE: Prevent the theme's original footer.php from loading.
+    $templates = [];
+    $name = (string) $name;
+    if ( '' !== $name ) {
+        $templates[] = "footer-{$name}.php";
+    }
+    $templates[] = 'footer.php';
+    
+    ob_start();
+    locate_template( $templates, true ); // true = require_once
+    ob_get_clean(); // Discard the original theme footer
 }
 add_action( 'get_footer', 'mh_plug_inject_footer', 0 );
-
 // ─────────────────────────────────────────────────────────────────────────────
 // Content override — Single Post (standard WordPress blog post)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -219,10 +227,10 @@ add_action( 'get_footer', 'mh_plug_inject_footer', 0 );
  * `single_post` template, if one exists.
  *
  * Deliberate constraints:
- *   - Only fires on `post` post type (NOT 'page', NOT 'product').
- *   - Skips mh_templates posts to prevent infinite recursion.
- *   - Skips Elementor edit mode.
- *   - Must be in the main WP loop (in_the_loop()).
+ * - Only fires on `post` post type (NOT 'page', NOT 'product').
+ * - Skips mh_templates posts to prevent infinite recursion.
+ * - Skips Elementor edit mode.
+ * - Must be in the main WP loop (in_the_loop()).
  *
  * @param  string $content  Original post content.
  * @return string           Template HTML or original content.
@@ -253,14 +261,14 @@ add_filter( 'the_content', 'mh_plug_override_single_post_content', 20 );
  * product pages and returns our dedicated frontend wrapper instead.
  *
  * WHY template_include and NOT the_content filter:
- *   WooCommerce loads its own template (single-product.php) which calls
- *   wc_setup_product_data() to populate the global $product object BEFORE
- *   the_content ever fires. If we intercept via the_content we arrive after
- *   WC's context setup has already run for the default template — but our
- *   Elementor widgets expect $product to be available from the start of the
- *   page render. Using template_include lets us own the entire page lifecycle:
- *   we set up the product context ourselves and then render the Elementor
- *   template inside it.
+ * WooCommerce loads its own template (single-product.php) which calls
+ * wc_setup_product_data() to populate the global $product object BEFORE
+ * the_content ever fires. If we intercept via the_content we arrive after
+ * WC's context setup has already run for the default template — but our
+ * Elementor widgets expect $product to be available from the start of the
+ * page render. Using template_include lets us own the entire page lifecycle:
+ * we set up the product context ourselves and then render the Elementor
+ * template inside it.
  *
  * The queried template post ID is stored in a plugin-namespaced global so the
  * wrapper file (mh-single-product-frontend.php) can retrieve it without a
@@ -302,3 +310,30 @@ function mh_plug_single_product_template_include( $template ) {
 }
 add_filter( 'template_include', 'mh_plug_single_product_template_include', 99 );
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Mandatory Canvas Routing for Elementor Editor
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Intercepts the template loading specifically for our Custom Post Type.
+ * Forces WordPress to use mh-canvas.php so Elementor has a clean environment
+ * without triggering the "the_content" missing error.
+ *
+ * @param  string $template Path to the template WordPress chose.
+ * @return string           Our canvas path, or original $template.
+ */
+function mh_plug_force_canvas_template( $template ) {
+    // Command: Check if we are viewing a single Theme Builder template
+    if ( is_singular( 'mh_templates' ) ) {
+        $canvas_template = MH_PLUG_PATH . 'includes/templates/mh-canvas.php';
+        
+        // Strict Rule: Ensure the file exists before forcing it
+        if ( file_exists( $canvas_template ) ) {
+            return $canvas_template;
+        }
+    }
+    return $template;
+}
+// Command: Priority 99 ensures this overrides standard theme templates.
+// Command: Change priority to 99999 to guarantee nothing overrides your custom canvas.
+add_filter( 'template_include', 'mh_plug_force_canvas_template', 99999 );

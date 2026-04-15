@@ -1,10 +1,6 @@
 <?php
 /**
  * MH Plug - Canvas Template (Elementor Editor Override)
- *
- * This aggressively forces Elementor to render via PHP using 
- * \Elementor\Plugin::instance()->frontend->get_builder_content_for_display()
- * effectively bypassing the standard the_content() loop which was breaking.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -43,17 +39,24 @@ if ( ! defined( 'ABSPATH' ) ) {
         if ( ! empty( $mock_products ) ) {
             global $post, $product;
             
-            // Overwrite globals to fake a single product page for widgets
+            $template_post = $post; // Save the template
+            
+            // Setup mock product for WooCommerce widgets
             $post = $mock_products[0];
             setup_postdata( $post );
             $product = wc_get_product( $post->ID );
 
             echo '<div class="woocommerce"><div class="product">';
             
-            // Force output using the original Template ID
-            if ( class_exists( '\Elementor\Plugin' ) ) {
-                echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id );
-            }
+            // STRICT RULE: Restore the template post so Elementor edits the template, not the mock product
+            $post = $template_post;
+            setup_postdata( $post );
+
+            if ( have_posts() ) :
+                while ( have_posts() ) : the_post();
+                    the_content(); 
+                endwhile;
+            endif;
             
             echo '</div></div>';
 
@@ -61,15 +64,20 @@ if ( ! defined( 'ABSPATH' ) ) {
         } else {
             echo '<div class="mh-admin-notice" style="padding: 15px; background: #fff; border-left: 4px solid #dc3232; margin-bottom: 20px;">Please add a WooCommerce product to preview this template.</div>';
             
-            if ( class_exists( '\Elementor\Plugin' ) ) {
-                echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id );
-            }
+            if ( have_posts() ) :
+                while ( have_posts() ) : the_post();
+                    the_content();
+                endwhile;
+            endif;
         }
     } else {
         // Standard template handling (Header, Footer, Single Post, etc.)
-        if ( class_exists( '\Elementor\Plugin' ) ) {
-            echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id );
-        }
+        // STRICT RULE: Elementor Editor absolutely requires the standard WordPress loop here.
+        if ( have_posts() ) :
+            while ( have_posts() ) : the_post();
+                the_content();
+            endwhile;
+        endif;
     }
     ?>
 
