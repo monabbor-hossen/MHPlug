@@ -29,11 +29,22 @@ class MH_Product_Category_Widget extends Widget_Base {
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
+        // 🚀 NEW: Toggle to show/hide the prefix text
+        $this->add_control( 'show_prefix', [
+            'label'        => __( 'Show Prefix', 'mh-plug' ),
+            'type'         => Controls_Manager::SWITCHER,
+            'label_on'     => __( 'Show', 'mh-plug' ),
+            'label_off'    => __( 'Hide', 'mh-plug' ),
+            'return_value' => 'yes',
+            'default'      => 'yes',
+        ] );
+
         $this->add_control( 'prefix_text', [
             'label'       => __( 'Prefix Text', 'mh-plug' ),
             'type'        => Controls_Manager::TEXT,
             'default'     => __( 'Categories: ', 'mh-plug' ),
             'placeholder' => __( 'e.g. Categories:', 'mh-plug' ),
+            'condition'   => [ 'show_prefix' => 'yes' ], // Only show if switch is ON
         ] );
 
         $this->add_control( 'separator', [
@@ -60,8 +71,9 @@ class MH_Product_Category_Widget extends Widget_Base {
 
         /* ── STYLE: PREFIX TEXT ── */
         $this->start_controls_section( 'style_prefix_section', [
-            'label' => __( 'Prefix Style', 'mh-plug' ),
-            'tab'   => Controls_Manager::TAB_STYLE,
+            'label'     => __( 'Prefix Style', 'mh-plug' ),
+            'tab'       => Controls_Manager::TAB_STYLE,
+            'condition' => [ 'show_prefix' => 'yes' ], // Hide these style settings if prefix is hidden
         ] );
 
         $this->add_control( 'prefix_color', [
@@ -154,23 +166,18 @@ class MH_Product_Category_Widget extends Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
-        // 1. Get the global product
         global $product;
         if ( ! is_a( $product, 'WC_Product' ) ) {
             $product = wc_get_product();
         }
 
-        // 2. Elementor Editor Mock Product Context
         if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) {
             if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
                 $mock_products = wc_get_products( [ 'limit' => 1, 'status' => 'publish' ] );
-                if ( ! empty( $mock_products ) ) {
-                    $product = $mock_products[0];
-                }
+                if ( ! empty( $mock_products ) ) $product = $mock_products[0];
             }
         }
 
-        // 3. Final Safety Check
         if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) {
             if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
                 echo '<div style="padding: 15px; border: 1px dashed #d63638; color: #d63638; text-align: center;"><strong>MH Plug:</strong> Please create a product to preview categories.</div>';
@@ -178,20 +185,19 @@ class MH_Product_Category_Widget extends Widget_Base {
             return;
         }
 
-        // 4. Fetch the Categories natively
-        // wc_get_product_category_list( $product_id, $separator, $before, $after );
         $separator = $settings['separator'] ? esc_html( $settings['separator'] ) : ', ';
         $categories_html = wc_get_product_category_list( $product->get_id(), $separator );
 
-        // If the product doesn't have any categories, don't show the prefix at all
         if ( empty( $categories_html ) ) {
             return; 
         }
 
-        // 5. Render
         ?>
         <div class="mh-product-category-wrap">
-            <?php if ( ! empty( $settings['prefix_text'] ) ) : ?>
+            <?php 
+            // 🚀 THE FIX: Only output the prefix if the switch is set to 'yes'
+            if ( $settings['show_prefix'] === 'yes' && ! empty( $settings['prefix_text'] ) ) : 
+            ?>
                 <span class="mh-category-prefix"><?php echo esc_html( $settings['prefix_text'] ); ?></span>
             <?php endif; ?>
             <span class="mh-category-list"><?php echo wp_kses_post( $categories_html ); ?></span>
