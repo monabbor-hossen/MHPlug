@@ -40,6 +40,8 @@ class MH_Admin_Menu {
         'enable_wc_wishlist' => 'Enable WooCommerce Wishlist',
         'mh_woo_add_to_cart' => 'MH Custom Add to Cart',
         'mh_woo_attributes'  => 'MH Attributes',
+        'mh_product_search'  => 'Product Search'
+        
     ];
 
     public function __construct() {
@@ -202,6 +204,8 @@ class MH_Admin_Menu {
                 'mh_wishlist_table',
                 'mh_woo_add_to_cart',
                 'mh_woo_attributes',
+                'mh_product_search',
+
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
             }

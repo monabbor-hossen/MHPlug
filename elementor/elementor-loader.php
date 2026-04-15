@@ -141,6 +141,8 @@ final class MH_Elementor_Loader {
             $wc_widget_map = [
                 'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php',  'class' => 'MH_Woo_Add_To_Cart_Widget' ],
                 'mh_woo_attributes'  => [ 'file' => 'mh-woo-attributes-widget.php',   'class' => 'MH_Woo_Attributes_Widget' ],
+                // Command: Mandatory inclusion of the new Product Search Widget
+                'mh_product_search'  => [ 'file' => 'mh-product-search-widget.php',   'class' => 'MH_Plug_Product_Search_Widget' ],
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
