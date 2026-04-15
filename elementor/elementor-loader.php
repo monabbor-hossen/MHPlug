@@ -96,6 +96,7 @@ final class MH_Elementor_Loader {
                 'mh_product_search'  => [ 'file' => 'mh-product-search-widget.php',   'class' => 'MH_Plug_Product_Search_Widget' ],
                 'mh_product_title'   => [ 'file' => 'mh-product-title-widget.php',    'class' => 'MH_Product_Title_Widget' ],
                 'mh_product_price'   => [ 'file' => 'mh-product-price-widget.php',    'class' => 'MH_Product_Price_Widget' ],
+                'mh_product_short_description' => [ 'file' => 'mh-product-short-description-widget.php',  'class' => 'MH_Product_Short_Description_Widget' ],
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
