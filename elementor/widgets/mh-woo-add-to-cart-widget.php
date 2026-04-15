@@ -283,29 +283,20 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
-        /* ── Product context ── */
-        $product = wc_get_product();
+        global $product;
+        if ( ! is_a( $product, 'WC_Product' ) ) {
+            $product = wc_get_product();
+        }
 
-        if ( ! $product ) {
-            if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-                echo '<div class="mh-atc-editor-notice" style="padding:12px 16px;background:#fff8e1;border:1px solid #ffe082;border-radius:6px;color:#795548;font-size:13px;">';
-                echo '<strong>MH Add to Cart:</strong> ' . esc_html__( 'No product context. Place this widget on a single product page or use Elementor\'s Loop / Loop Item template.', 'mh-plug' );
-                echo '</div>';
-            }
+        if ( empty( $product ) || ! $product->is_purchasable() || ! $product->is_in_stock() ) {
             return;
         }
 
-        if ( ! $product->is_purchasable() || ! $product->is_in_stock() ) {
-            echo '<p class="mh-atc-unavailable" style="color:#d63638;">' . esc_html__( 'This product is currently unavailable.', 'mh-plug' ) . '</p>';
-            return;
-        }
-
-        $product_id   = $product->get_id();
-        $default_qty  = max( 1, absint( $settings['quantity_default'] ?? 1 ) );
-        $btn_text     = ! empty( $settings['btn_text'] ) ? $settings['btn_text'] : __( 'Add to Cart', 'mh-plug' );
+        $default_qty = max( 1, absint( $settings['quantity_default'] ?? 1 ) );
+        $btn_text    = ! empty( $settings['btn_text'] ) ? $settings['btn_text'] : __( 'Add to Cart', 'mh-plug' );
         ?>
         <div class="mh-atc-widget">
-            <form class="mh-atc-form cart" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data'>
+            <form class="cart mh-custom-cart-form mh-atc-form" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype="multipart/form-data">
 
                 <div class="mh-atc-wrap">
 
@@ -318,7 +309,6 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
                             type="number"
                             class="mh-qty-input input-text qty text"
                             name="quantity"
-                            id="mh-qty-<?php echo esc_attr( $product_id ); ?>"
                             value="<?php echo esc_attr( $default_qty ); ?>"
                             min="1"
                             max="<?php echo esc_attr( $product->get_max_purchase_quantity() ); ?>"
@@ -332,14 +322,7 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
                     </div><!-- /.mh-qty-wrapper -->
 
                     <!-- Add to Cart Button -->
-                    <button
-                        type="submit"
-                        name="add-to-cart"
-                        value="<?php echo esc_attr( $product_id ); ?>"
-                        class="mh-atc-btn single_add_to_cart_button button alt"
-                        data-product_id="<?php echo esc_attr( $product_id ); ?>"
-                        data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>"
-                    >
+                    <button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="single_add_to_cart_button button alt mh-atc-btn">
                         <?php echo esc_html( $btn_text ); ?>
                     </button>
 

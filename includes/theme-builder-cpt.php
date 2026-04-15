@@ -76,6 +76,8 @@ function mh_plug_add_cpt_elementor_support() {
         $cpt_support[] = 'mh_templates';
         update_option( 'elementor_cpt_support', $cpt_support );
     }
+    // Explicitly add Elementor support
+    add_post_type_support( 'mh_templates', 'elementor' );
 }
 add_action( 'init', 'mh_plug_add_cpt_elementor_support' );
 
@@ -190,17 +192,14 @@ function mh_plug_ajax_delete_template() {
 add_action( 'wp_ajax_mh_tb_delete_template', 'mh_plug_ajax_delete_template' );
 
 // ─────────────────────────────────────────────────────────────────────────────
-// template_include: force our canvas for all mh_templates singular views
+// single_template: Force our canvas for all mh_templates singular views
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * Routes every singular mh_templates request through mh-canvas.php.
- *
- * This gives Elementor a page that contains the_content() so the editor
- * can open without throwing "content area not found".
- * Priority 99 overrides any theme-level template filters.
+ * Priority 999 overrides any theme-level template filters.
  */
-function mh_plug_force_canvas_template( $template ) {
+function mh_force_elementor_canvas( $template ) {
     if ( is_singular( 'mh_templates' ) ) {
         $canvas = MH_PLUG_PATH . 'includes/templates/mh-canvas.php';
         if ( file_exists( $canvas ) ) {
@@ -209,8 +208,7 @@ function mh_plug_force_canvas_template( $template ) {
     }
     return $template;
 }
-add_filter( 'template_include', 'mh_plug_force_canvas_template', 99 );
-
+add_filter( 'single_template', 'mh_force_elementor_canvas', 999 );
 
 
 // ─────────────────────────────────────────────────────────────────────────────
