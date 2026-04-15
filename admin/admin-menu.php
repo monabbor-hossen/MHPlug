@@ -205,6 +205,7 @@ class MH_Admin_Menu {
                 'mh_woo_add_to_cart',
                 'mh_woo_attributes',
                 'mh_product_search',
+                'mh_product_title',
 
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
