@@ -104,6 +104,7 @@ final class MH_Elementor_Loader {
                 'mh_product_rating'            => [ 'file' => 'mh-product-rating-widget.php',             'class' => 'MH_Product_Rating_Widget' ],
                 // 🚀 NEW: Register the Gallery Widget
                 'mh_product_gallery'           => [ 'file' => 'mh-product-gallery-widget.php',            'class' => 'MH_Product_Gallery_Widget' ],
+                'mh_product_share'             => [ 'file' => 'mh-product-share-widget.php',              'class' => 'MH_Product_Share_Widget' ],
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
