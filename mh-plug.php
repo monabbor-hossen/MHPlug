@@ -4,8 +4,8 @@
  * Description:       A custom Elementor addon with a dedicated dashboard for managing widgets and features.
  * Plugin URI:        https://your-website.com/
  * Version:           1.0.0
- * Author:            Your Name
- * Author URI:        https://your-website.com/
+ * Author:            MHutin
+ * Author URI:        https://mhutin.com/
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       mh-plug
@@ -99,8 +99,8 @@ function mh_plug_enqueue_frontend_scripts() {
     wp_enqueue_script('slick-js',       MH_PLUG_URL . 'assets/slick/slick.min.js', ['jquery'], MH_PLUG_VERSION, true);
 
     // MH Icons + Font Awesome
-    wp_enqueue_style('mhi-icons',        MH_PLUG_URL . './elementor/assets/css/style.css',         [], MH_PLUG_VERSION);
-    wp_enqueue_style('fontawesome-icons',MH_PLUG_URL . './assets/fontawesome-7/css/all.min.css',   [], MH_PLUG_VERSION);
+    wp_enqueue_style('mhi-icons',        MH_PLUG_URL . 'elementor/assets/css/style.css',         [], MH_PLUG_VERSION);
+    wp_enqueue_style('fontawesome-icons',MH_PLUG_URL . 'assets/fontawesome-7/css/all.min.css',   [], MH_PLUG_VERSION);
 
     // WooCommerce Wishlist Assets — only when WooCommerce is active, feature is on, and we're on a WC page
     $settings           = get_option('mh_plug_widgets_settings', []);
@@ -128,7 +128,7 @@ function mh_plug_enqueue_frontend_scripts() {
                 true
             );
 
-            // 🚀 THE FIX: Modern wp_add_inline_script replacing the old wp_localize_script!
+            // The Modern wp_add_inline_script replacing the old wp_localize_script!
             $wishlist_data = [
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce'   => wp_create_nonce('mh_wishlist_nonce'),
@@ -143,7 +143,6 @@ function mh_plug_enqueue_frontend_scripts() {
     }
 }
 add_action('wp_enqueue_scripts', 'mh_plug_enqueue_frontend_scripts');
-
 
 // ─────────────────────────────────────────────────────────────────────────────
 // WOOCOMMERCE WISHLIST AJAX HANDLER
