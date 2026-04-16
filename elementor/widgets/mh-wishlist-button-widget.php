@@ -1,6 +1,6 @@
 <?php
 /**
- * MH Wishlist Button Widget (Smart Dual-Mode + Custom Icons)
+ * MH Wishlist Button Widget (Smart Dual-Mode + Custom Icons + Bulletproof JS)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -94,7 +94,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
-        // 🚀 THE FIX: Restored Custom Elementor Icon Selectors!
         $this->add_control( 'icon_normal', [
             'label'   => __( 'Normal Icon (Empty)', 'mh-plug' ),
             'type'    => Controls_Manager::ICONS,
@@ -141,7 +140,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
 
         $this->start_controls_tabs( 'style_tabs' );
 
-        // Normal State (Empty)
         $this->start_controls_tab( 'tab_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
         $this->add_control( 'color_normal', [
             'label'     => __( 'Color', 'mh-plug' ),
@@ -150,13 +148,12 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn' => 'color: {{VALUE}}; text-decoration: none;' ],
         ] );
         $this->add_control( 'svg_fill_normal', [
-            'label'     => __( 'SVG Fill (If using custom SVG)', 'mh-plug' ),
+            'label'     => __( 'SVG Fill', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn svg' => 'fill: {{VALUE}};' ],
         ] );
         $this->end_controls_tab();
 
-        // Active State (Added/Filled)
         $this->start_controls_tab( 'tab_active', [ 'label' => __( 'Added', 'mh-plug' ) ] );
         $this->add_control( 'color_active', [
             'label'     => __( 'Color', 'mh-plug' ),
@@ -165,7 +162,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn.added' => 'color: {{VALUE}}; text-decoration: none;' ],
         ] );
         $this->add_control( 'svg_fill_active', [
-            'label'     => __( 'SVG Fill (If using custom SVG)', 'mh-plug' ),
+            'label'     => __( 'SVG Fill', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn.added svg' => 'fill: {{VALUE}};' ],
         ] );
@@ -213,13 +210,15 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             }
         }
 
+        // 🚀 BULLETPROOF FIX: Generate the AJAX variables right here in PHP
+        $ajax_url = admin_url( 'admin-ajax.php' );
+        $nonce    = wp_create_nonce( 'mh_wishlist_nonce' );
+
         ?>
         <style>
             .mh-advanced-wishlist-btn { display: inline-flex; align-items: center; cursor: pointer; transition: 0.3s ease; }
             .mh-icon-wrap { display: inline-flex; align-items: center; justify-content: center; }
             .mh-icon-wrap i, .mh-icon-wrap svg { transition: 0.3s ease; }
-            
-            /* Logic to hide/show the correct custom icon */
             .mh-advanced-wishlist-btn .mh-icon-added { display: none; }
             .mh-advanced-wishlist-btn.added .mh-icon-normal { display: none; }
             .mh-advanced-wishlist-btn.added .mh-icon-added { display: inline-flex !important; }
@@ -251,6 +250,10 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
 
         <script>
             jQuery(document).ready(function($){
+                // 🚀 Injecting the PHP variables directly into the local script
+                var mhAjaxUrl = '<?php echo esc_url( $ajax_url ); ?>';
+                var mhNonce   = '<?php echo esc_attr( $nonce ); ?>';
+
                 $('.mh-advanced-wishlist-btn').off('click.mhSmartWishlist').on('click.mhSmartWishlist', function(e){
                     var $btn = $(this);
                     var behavior = $btn.data('behavior');
@@ -261,18 +264,13 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                     
                     e.preventDefault(); 
                     
-                    if(typeof mhWishlist === 'undefined') {
-                        alert('Wishlist script is missing.');
-                        return;
-                    }
-
                     var pid = $btn.data('product-id');
                     $btn.css({'opacity': '0.5', 'pointer-events': 'none'});
 
-                    $.post(mhWishlist.ajaxUrl, {
+                    $.post(mhAjaxUrl, {
                         action: 'mh_wishlist_toggle',
                         product_id: pid,
-                        security: mhWishlist.nonce
+                        security: mhNonce
                     }, function(response) {
                         $btn.css({'opacity': '1', 'pointer-events': 'auto'});
                         
