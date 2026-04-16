@@ -101,6 +101,15 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
             'default'   => __( 'Reviews', 'mh-plug' ),
             'condition' => [ 'show_reviews' => 'yes' ],
         ] );
+        
+        // 🚀 NEW: Show Review Count Toggle
+        $this->add_control( 'show_reviews_count', [
+            'label'     => __( 'Show Review Count in Title', 'mh-plug' ),
+            'type'      => Controls_Manager::SWITCHER,
+            'default'   => 'yes',
+            'description' => __( 'Will display as "Reviews (5)"', 'mh-plug' ),
+            'condition' => [ 'show_reviews' => 'yes' ],
+        ] );
 
         $this->end_controls_section();
 
@@ -343,11 +352,20 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
         // 4. Gather Reviews (Native WooCommerce Template)
         $has_reviews = false;
         $reviews_content = '';
+        $review_count = 0;
+        
         if ( $settings['show_reviews'] === 'yes' && comments_open() ) {
             $has_reviews = true;
+            $review_count = $product->get_review_count();
             ob_start();
             comments_template();
             $reviews_content = ob_get_clean();
+        }
+        
+        // Format the Reviews Title dynamically
+        $title_reviews_display = esc_html( $settings['title_reviews'] );
+        if ( $has_reviews && $settings['show_reviews_count'] === 'yes' ) {
+            $title_reviews_display .= ' (' . esc_html( $review_count ) . ')';
         }
 
         if ( ! $has_desc && ! $has_info && ! $has_shipping && ! $has_reviews ) return;
@@ -358,7 +376,6 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
         elseif ( $has_shipping ) $first_active = 'shipping';
         elseif ( $has_reviews ) $first_active = 'reviews';
 
-        // Add some basic styling to make sure native WooCommerce reviews look okay inside our containers
         $custom_css = "
             .mh-review-container h2.woocommerce-Reviews-title { display: none; }
             .mh-review-container ol.commentlist { padding-left: 0; list-style: none; }
@@ -431,7 +448,7 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
                 <?php if ( $has_reviews ) : ?>
                     <div class="mh-accordion-item <?php echo $is_first ? 'active' : ''; ?>">
                         <div class="mh-accordion-header">
-                            <span class="mh-accordion-title"><?php echo esc_html( $settings['title_reviews'] ); ?></span>
+                            <span class="mh-accordion-title"><?php echo $title_reviews_display; ?></span>
                             <span class="mh-accordion-icon"><i class="fas fa-plus"></i><i class="fas fa-minus"></i></span>
                         </div>
                         <div class="mh-accordion-content mh-review-container" style="display: <?php echo $is_first ? 'block' : 'none'; ?>;">
@@ -505,7 +522,7 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
                     <?php endif; ?>
                     <?php if ( $has_reviews ) : ?>
                         <li class="mh-tab-btn <?php echo ( $first_active === 'reviews' ) ? 'mh-active-tab' : ''; ?>" data-target="mh-tab-reviews-<?php echo esc_attr( $widget_id ); ?>">
-                            <?php echo esc_html( $settings['title_reviews'] ); ?>
+                            <?php echo $title_reviews_display; ?>
                         </li>
                     <?php endif; ?>
                 </ul>
