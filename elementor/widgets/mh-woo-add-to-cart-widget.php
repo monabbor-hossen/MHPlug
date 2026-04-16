@@ -2,9 +2,8 @@
 /**
  * MH Woo Add to Cart Widget
  *
- * Renders an inline Quantity Selector + Add to Cart button for any
- * WooCommerce simple product. Designed for use on single product pages
- * or any page where a product context is available.
+ * Renders an inline Quantity Selector + Add to Cart button + Buy Now Button
+ * for WooCommerce simple products.
  *
  * @package MH_Plug
  */
@@ -25,12 +24,8 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
     public function get_title()       { return __( 'MH Add to Cart', 'mh-plug' ); }
     public function get_icon()        { return 'eicon-cart-solid'; }
     public function get_categories()  { return [ 'mh-plug-widgets' ]; }
-    public function get_keywords()    { return [ 'add to cart', 'quantity', 'woocommerce', 'buy', 'mh' ]; }
+    public function get_keywords()    { return [ 'add to cart', 'quantity', 'woocommerce', 'buy', 'buy now', 'mh' ]; }
 
-    /**
-     * Enqueue scripts / styles specific to this widget on the frontend.
-     * Called automatically by Elementor when the widget is rendered.
-     */
     public function get_script_depends() {
         return [ 'mh-woo-scripts' ];
     }
@@ -46,21 +41,39 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
 
         /* ── CONTENT ─────────────────────────────────────────── */
         $this->start_controls_section( 'content_section', [
-            'label' => __( 'Button Content', 'mh-plug' ),
+            'label' => __( 'Buttons Content', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_control( 'btn_text', [
-            'label'   => __( 'Button Text', 'mh-plug' ),
+            'label'   => __( 'Add to Cart Text', 'mh-plug' ),
             'type'    => Controls_Manager::TEXT,
             'default' => __( 'Add to Cart', 'mh-plug' ),
         ] );
 
+        $this->add_control( 'show_buy_now', [
+            'label'        => __( 'Show "Buy Now" Button', 'mh-plug' ),
+            'type'         => Controls_Manager::SWITCHER,
+            'label_on'     => __( 'Show', 'mh-plug' ),
+            'label_off'    => __( 'Hide', 'mh-plug' ),
+            'return_value' => 'yes',
+            'default'      => 'no',
+            'separator'    => 'before',
+        ] );
+
+        $this->add_control( 'buy_now_text', [
+            'label'     => __( 'Buy Now Text', 'mh-plug' ),
+            'type'      => Controls_Manager::TEXT,
+            'default'   => __( 'Buy Now', 'mh-plug' ),
+            'condition' => [ 'show_buy_now' => 'yes' ],
+        ] );
+
         $this->add_control( 'quantity_default', [
-            'label'   => __( 'Default Quantity', 'mh-plug' ),
-            'type'    => Controls_Manager::NUMBER,
-            'default' => 1,
-            'min'     => 1,
+            'label'     => __( 'Default Quantity', 'mh-plug' ),
+            'type'      => Controls_Manager::NUMBER,
+            'default'   => 1,
+            'min'       => 1,
+            'separator' => 'before',
         ] );
 
         $this->add_responsive_control( 'layout_align', [
@@ -103,7 +116,6 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
 
         $this->start_controls_tabs( 'btn_tabs' );
 
-        /* — Normal — */
         $this->start_controls_tab( 'btn_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
         $this->add_control( 'btn_color', [
             'label'     => __( 'Text Color', 'mh-plug' ),
@@ -119,7 +131,6 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
         ] );
         $this->end_controls_tab();
 
-        /* — Hover — */
         $this->start_controls_tab( 'btn_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
         $this->add_control( 'btn_color_hover', [
             'label'     => __( 'Text Color', 'mh-plug' ),
@@ -130,7 +141,7 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
         $this->add_control( 'btn_bg_hover', [
             'label'     => __( 'Background', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
-            'default'   => '#d63638',
+            'default'   => '#333333',
             'selectors' => [ '{{WRAPPER}} .mh-atc-btn:hover' => 'background-color: {{VALUE}};' ],
         ] );
         $this->end_controls_tab();
@@ -147,10 +158,7 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
             'default'    => [ 'top' => 6, 'right' => 6, 'bottom' => 6, 'left' => 6, 'unit' => 'px' ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-atc-btn' =>
-                    'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-            ],
+            'selectors'  => [ '{{WRAPPER}} .mh-atc-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ],
         ] );
 
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
@@ -163,10 +171,82 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'top' => 12, 'right' => 24, 'bottom' => 12, 'left' => 24, 'unit' => 'px' ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-atc-btn' =>
-                    'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-            ],
+            'selectors'  => [ '{{WRAPPER}} .mh-atc-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ],
+            'separator' => 'before',
+        ] );
+
+        $this->end_controls_section();
+
+        /* ── STYLE: BUY NOW BUTTON ───────────────────────── */
+        $this->start_controls_section( 'style_buy_now_btn', [
+            'label'     => __( 'Buy Now Button', 'mh-plug' ),
+            'tab'       => Controls_Manager::TAB_STYLE,
+            'condition' => [ 'show_buy_now' => 'yes' ],
+        ] );
+
+        $this->add_group_control( Group_Control_Typography::get_type(), [
+            'name'     => 'buy_now_typography',
+            'selector' => '{{WRAPPER}} .mh-buy-now-btn',
+        ] );
+
+        $this->start_controls_tabs( 'buy_now_tabs' );
+
+        $this->start_controls_tab( 'buy_now_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->add_control( 'buy_now_color', [
+            'label'     => __( 'Text Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#ffffff',
+            'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn' => 'color: {{VALUE}};' ],
+        ] );
+        $this->add_control( 'buy_now_bg', [
+            'label'     => __( 'Background', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#d63638', // Distinct Accent color
+            'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn' => 'background-color: {{VALUE}};' ],
+        ] );
+        $this->end_controls_tab();
+
+        $this->start_controls_tab( 'buy_now_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->add_control( 'buy_now_color_hover', [
+            'label'     => __( 'Text Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#ffffff',
+            'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn:hover' => 'color: {{VALUE}};' ],
+        ] );
+        $this->add_control( 'buy_now_bg_hover', [
+            'label'     => __( 'Background', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#a82a2b',
+            'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn:hover' => 'background-color: {{VALUE}};' ],
+        ] );
+        $this->end_controls_tab();
+        $this->end_controls_tabs();
+
+        $this->add_group_control( Group_Control_Border::get_type(), [
+            'name'      => 'buy_now_border',
+            'selector'  => '{{WRAPPER}} .mh-buy-now-btn',
+            'separator' => 'before',
+        ] );
+
+        $this->add_control( 'buy_now_border_radius', [
+            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', '%' ],
+            'default'    => [ 'top' => 6, 'right' => 6, 'bottom' => 6, 'left' => 6, 'unit' => 'px' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-buy-now-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ],
+        ] );
+
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
+            'name'     => 'buy_now_shadow',
+            'selector' => '{{WRAPPER}} .mh-buy-now-btn',
+        ] );
+
+        $this->add_responsive_control( 'buy_now_padding', [
+            'label'      => __( 'Padding', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', 'em' ],
+            'default'    => [ 'top' => 12, 'right' => 24, 'bottom' => 12, 'left' => 24, 'unit' => 'px' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-buy-now-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ],
             'separator' => 'before',
         ] );
 
@@ -232,12 +312,10 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
             'size_units' => [ 'px', '%' ],
             'default'    => [ 'top' => 6, 'right' => 6, 'bottom' => 6, 'left' => 6, 'unit' => 'px' ],
             'selectors'  => [
-                '{{WRAPPER}} .mh-qty-wrapper' =>
-                    'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                '{{WRAPPER}} .mh-qty-wrapper' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
             ],
         ] );
 
-        /* Height of the entire quantity row (buttons + input) */
         $this->add_responsive_control( 'qty_height', [
             'label'      => __( 'Height', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
@@ -294,14 +372,20 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
 
         $default_qty = max( 1, absint( $settings['quantity_default'] ?? 1 ) );
         $btn_text    = ! empty( $settings['btn_text'] ) ? $settings['btn_text'] : __( 'Add to Cart', 'mh-plug' );
+        $buy_now_text = ! empty( $settings['buy_now_text'] ) ? $settings['buy_now_text'] : __( 'Buy Now', 'mh-plug' );
         
-        // 🚀 THE FIX: Safely determine max quantity attribute
         $max_qty = $product->get_max_purchase_quantity();
-        // If the product has unlimited stock, WooCommerce sets this to -1.
-        // We only output the max attribute if it is greater than 0!
         $max_attr = ( $max_qty > 0 ) ? 'max="' . esc_attr( $max_qty ) . '"' : '';
 
+        // Pre-fetch the checkout URL for the Buy Now redirect
+        $checkout_url = function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : '';
+
         ?>
+        <style>
+            .mh-atc-wrap { display: flex; flex-wrap: wrap; align-items: stretch; }
+            .mh-buy-now-btn { display: inline-flex; align-items: center; justify-content: center; cursor: pointer; border: none; transition: all 0.3s ease; text-decoration: none; }
+        </style>
+
         <div class="mh-atc-widget">
             <form class="cart mh-custom-cart-form mh-atc-form" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype="multipart/form-data">
 
@@ -318,7 +402,7 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
                             name="quantity"
                             value="<?php echo esc_attr( $default_qty ); ?>"
                             min="1"
-                            <?php echo $max_attr; // Prints max="..." safely or nothing at all! ?>
+                            <?php echo $max_attr; ?>
                             step="1"
                             autocomplete="off"
                             aria-label="<?php esc_attr_e( 'Quantity', 'mh-plug' ); ?>"
@@ -327,11 +411,78 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
                         <button type="button" class="mh-qty-btn mh-qty-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'mh-plug' ); ?>">
                             <span aria-hidden="true">&#43;</span>
                         </button>
-                    </div><button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="single_add_to_cart_button button alt mh-atc-btn">
+                    </div>
+
+                    <button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="single_add_to_cart_button button alt mh-atc-btn">
                         <?php echo esc_html( $btn_text ); ?>
                     </button>
 
-                </div></form>
-        </div><?php
+                    <?php if ( 'yes' === $settings['show_buy_now'] && ! empty( $checkout_url ) ) : ?>
+                        <button type="button" class="button mh-buy-now-btn" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>" data-checkout-url="<?php echo esc_url( $checkout_url ); ?>">
+                            <?php echo esc_html( $buy_now_text ); ?>
+                        </button>
+                    <?php endif; ?>
+
+                </div>
+
+            </form>
+        </div>
+
+        <script>
+            jQuery(document).ready(function($){
+                
+                // Plus / Minus Quantity Buttons Logic
+                $('.mh-atc-form').on('click', '.mh-qty-plus, .mh-qty-minus', function() {
+                    var $qty = $(this).closest('.mh-qty-wrapper').find('.qty');
+                    var currentVal = parseFloat($qty.val());
+                    var max = parseFloat($qty.attr('max'));
+                    var min = parseFloat($qty.attr('min'));
+                    var step = $qty.attr('step');
+
+                    if (!currentVal || currentVal === '' || currentVal === 'NaN') currentVal = 0;
+                    if (max === '' || max === 'NaN') max = '';
+                    if (min === '' || min === 'NaN') min = 0;
+                    if (step === 'any' || step === '' || step === undefined || parseFloat(step) === 'NaN') step = 1;
+
+                    if ($(this).is('.mh-qty-plus')) {
+                        if (max && (max == currentVal || currentVal > max)) {
+                            $qty.val(max);
+                        } else {
+                            $qty.val(currentVal + parseFloat(step));
+                        }
+                    } else {
+                        if (min && (min == currentVal || currentVal < min)) {
+                            $qty.val(min);
+                        } else if (currentVal > 0) {
+                            $qty.val(currentVal - parseFloat(step));
+                        }
+                    }
+                    $qty.trigger('change');
+                });
+
+                // Buy Now Direct-to-Checkout Logic
+                $('.mh-buy-now-btn').on('click', function(e) {
+                    e.preventDefault();
+                    var $btn = $(this);
+                    var $wrap = $btn.closest('.mh-atc-wrap');
+                    
+                    // Grab chosen quantity and URLs
+                    var qty = $wrap.find('.mh-qty-input').val() || 1;
+                    var pid = $btn.data('product-id');
+                    var checkoutUrl = $btn.data('checkout-url');
+                    
+                    // Build the direct buy link with exact quantity
+                    var separator = checkoutUrl.indexOf('?') !== -1 ? '&' : '?';
+                    var directBuyUrl = checkoutUrl + separator + 'add-to-cart=' + pid + '&quantity=' + qty;
+                    
+                    // Small loading visual
+                    $btn.css({'opacity': '0.6', 'pointer-events': 'none'}).text('Processing...');
+                    
+                    // Redirect directly to checkout
+                    window.location.href = directBuyUrl;
+                });
+            });
+        </script>
+        <?php
     }
 }
