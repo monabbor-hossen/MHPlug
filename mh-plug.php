@@ -4,8 +4,8 @@
  * Description:       A custom Elementor addon with a dedicated dashboard for managing widgets and features.
  * Plugin URI:        https://your-website.com/
  * Version:           1.0.0
- * Author:            Your Name
- * Author URI:        https://your-website.com/
+ * Author:            MHutin
+ * Author URI:        https://mhutin.com/
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       mh-plug
