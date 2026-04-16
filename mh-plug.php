@@ -9,25 +9,18 @@
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       mh-plug
- * Elementor tested up to: 3.7.0
- * Elementor Pro tested up to: 3.7.0
  */
 
-// If this file is called directly, abort.
 if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Define Plugin Constants.
- */
 define('MH_PLUG_VERSION', '1.0.0');
 define('MH_PLUG_PATH', plugin_dir_path(__FILE__));
 define('MH_PLUG_URL', plugin_dir_url(__FILE__));
 
 /**
- * 🚀 THE FIX: Bulletproof File Loader
- * This prevents the website from crashing if a file was deleted or failed to upload.
+ * Bulletproof File Loader
  */
 if ( ! function_exists('mh_plug_safe_require') ) {
     function mh_plug_safe_require( $file_path ) {
@@ -42,7 +35,6 @@ if ( ! function_exists('mh_plug_safe_require') ) {
  */
 function mh_plug_create_wishlist_table() {
     global $wpdb;
-
     $table_name      = $wpdb->prefix . 'mh_woocommerce_wishlist';
     $charset_collate = $wpdb->get_charset_collate();
 
@@ -64,60 +56,53 @@ function mh_plug_create_wishlist_table() {
 }
 register_activation_hook( __FILE__, 'mh_plug_create_wishlist_table' );
 
-/**
- * Load Admin Functionality Safely.
- */
-mh_plug_safe_require( MH_PLUG_PATH . 'admin/admin-menu.php' );
-mh_plug_safe_require( MH_PLUG_PATH . 'includes/theme-builder-cpt.php' );
-mh_plug_safe_require( MH_PLUG_PATH . 'includes/theme-builder-display.php' );
 
 /**
- * Load Elementor Integration Safely.
+ * Delay Loading Until WordPress is Ready
  */
-mh_plug_safe_require( MH_PLUG_PATH . 'elementor/elementor-loader.php' );
+add_action( 'plugins_loaded', 'mh_plug_initialize_all_files' );
 
-/**
- * Load global plugin features based on dashboard settings.
- */
-function mh_plug_load_global_features() {
+function mh_plug_initialize_all_files() {
+    
+    // 1. Load Admin & Core Features
+    mh_plug_safe_require( MH_PLUG_PATH . 'admin/admin-menu.php' );
+    mh_plug_safe_require( MH_PLUG_PATH . 'includes/theme-builder-cpt.php' );
+    mh_plug_safe_require( MH_PLUG_PATH . 'includes/theme-builder-display.php' );
+
+    // 2. Load Elementor ONLY if Elementor is installed and active
+    if ( did_action( 'elementor/loaded' ) ) {
+        mh_plug_safe_require( MH_PLUG_PATH . 'elementor/elementor-loader.php' );
+    }
+
+    // 3. Load Dashboard Settings Features
     $settings = get_option('mh_plug_widgets_settings', []);
 
-    // Menu Icons Feature
-    $enable_menu_icons = isset($settings['enable_menu_icons']) ? (bool) $settings['enable_menu_icons'] : false;
-    if ( $enable_menu_icons ) {
+    if ( isset($settings['enable_menu_icons']) && $settings['enable_menu_icons'] ) {
         mh_plug_safe_require( MH_PLUG_PATH . 'includes/menu-icon-fields.php' );
     }
 
-    // Age Gate Feature
     mh_plug_safe_require( MH_PLUG_PATH . 'includes/age-gate/class-mh-plug-age-gate-admin.php' );
     mh_plug_safe_require( MH_PLUG_PATH . 'includes/age-gate/class-mh-plug-age-gate-meta.php' );
     mh_plug_safe_require( MH_PLUG_PATH . 'includes/age-gate/class-mh-plug-age-gate-front.php' );
 
-    // WooCommerce Wishlist Feature
-    $enable_wc_wishlist = isset($settings['enable_wc_wishlist']) ? (bool) $settings['enable_wc_wishlist'] : false;
-    if ( $enable_wc_wishlist && class_exists('WooCommerce') ) {
+    if ( isset($settings['enable_wc_wishlist']) && $settings['enable_wc_wishlist'] && class_exists('WooCommerce') ) {
         mh_plug_safe_require( MH_PLUG_PATH . 'includes/mh-wishlist-functions.php' );
     }
 }
-add_action('plugins_loaded', 'mh_plug_load_global_features');
 
 /**
- * Enqueue Frontend Scripts.
+ * Enqueue Frontend Scripts
  */
 function mh_plug_enqueue_frontend_scripts() {
-    // Slick Slider
     wp_enqueue_style('slick-css',       MH_PLUG_URL . 'assets/slick/slick.css',       [], MH_PLUG_VERSION);
     wp_enqueue_style('slick-theme-css', MH_PLUG_URL . 'assets/slick/slick-theme.css', [], MH_PLUG_VERSION);
     wp_enqueue_script('slick-js',       MH_PLUG_URL . 'assets/slick/slick.min.js', ['jquery'], MH_PLUG_VERSION, true);
 
-    // MH Icons + Font Awesome
     wp_enqueue_style('mhi-icons',        MH_PLUG_URL . 'elementor/assets/css/style.css',         [], MH_PLUG_VERSION);
     wp_enqueue_style('fontawesome-icons',MH_PLUG_URL . 'assets/fontawesome-7/css/all.min.css',   [], MH_PLUG_VERSION);
 
-    $settings           = get_option('mh_plug_widgets_settings', []);
-    $enable_wc_wishlist = isset($settings['enable_wc_wishlist']) ? (bool) $settings['enable_wc_wishlist'] : false;
-
-    if ( $enable_wc_wishlist && class_exists('WooCommerce') ) {
+    $settings = get_option('mh_plug_widgets_settings', []);
+    if ( isset($settings['enable_wc_wishlist']) && $settings['enable_wc_wishlist'] && class_exists('WooCommerce') ) {
         $css_path = MH_PLUG_PATH . 'assets/css/mh-wishlist.css';
         $js_path  = MH_PLUG_PATH . 'assets/js/mh-wishlist.js';
 
@@ -127,14 +112,13 @@ function mh_plug_enqueue_frontend_scripts() {
 
         if ( file_exists($js_path) ) {
             wp_enqueue_script( 'mh-wishlist-js', MH_PLUG_URL . 'assets/js/mh-wishlist.js', ['jquery'], filemtime($js_path), true );
-
             $wishlist_data = [
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce'   => wp_create_nonce('mh_wishlist_nonce'),
                 'i18n'    => [
-                    'addLabel'     => __('Add to Wishlist',          'mh-plug'),
-                    'removeLabel'  => __('Remove from Wishlist',     'mh-plug'),
-                    'emptyMessage' => __('Your wishlist is empty.',  'mh-plug'),
+                    'addLabel'     => __('Add to Wishlist', 'mh-plug'),
+                    'removeLabel'  => __('Remove from Wishlist', 'mh-plug'),
+                    'emptyMessage' => __('Your wishlist is empty.', 'mh-plug'),
                 ],
             ];
             wp_add_inline_script('mh-wishlist-js', 'var mhWishlist = ' . wp_json_encode($wishlist_data) . ';', 'before');
@@ -143,53 +127,6 @@ function mh_plug_enqueue_frontend_scripts() {
 }
 add_action('wp_enqueue_scripts', 'mh_plug_enqueue_frontend_scripts');
 
-// ─────────────────────────────────────────────────────────────────────────────
-// WOOCOMMERCE WISHLIST AJAX HANDLER
-// ─────────────────────────────────────────────────────────────────────────────
-add_action( 'wp_ajax_mh_wishlist_toggle', 'mh_plug_ajax_wishlist_toggle' );
-add_action( 'wp_ajax_nopriv_mh_wishlist_toggle', 'mh_plug_ajax_wishlist_toggle' );
-
-function mh_plug_ajax_wishlist_toggle() {
-    check_ajax_referer( 'mh_wishlist_nonce', 'security' );
-
-    if ( ! is_user_logged_in() ) {
-        wp_send_json_error( [ 'message' => 'Please log in first.' ] );
-    }
-
-    $product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
-    $user_id    = get_current_user_id();
-
-    if ( ! $product_id ) {
-        wp_send_json_error( [ 'message' => 'Invalid product.' ] );
-    }
-
-    $wishlist = get_user_meta( $user_id, '_mh_wishlist', true );
-    if ( ! is_array( $wishlist ) ) $wishlist = [];
-
-    if ( in_array( $product_id, $wishlist ) ) {
-        $wishlist = array_diff( $wishlist, [ $product_id ] );
-        $status = 'removed';
-    } else {
-        $wishlist[] = $product_id;
-        $status = 'added';
-    }
-
-    update_user_meta( $user_id, '_mh_wishlist', array_unique( $wishlist ) );
-
-    wp_send_json_success( [
-        'status'  => $status,
-        'message' => 'Wishlist updated successfully.'
-    ] );
-}
-
-if ( ! function_exists( 'mh_wishlist_has_product' ) ) {
-    function mh_wishlist_has_product( $product_id ) {
-        if ( ! is_user_logged_in() ) return false;
-        $wishlist = get_user_meta( get_current_user_id(), '_mh_wishlist', true );
-        if ( ! is_array( $wishlist ) ) return false;
-        return in_array( $product_id, $wishlist );
-    }
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // WOOCOMMERCE LIVE PRODUCT SEARCH AJAX HANDLER
@@ -200,12 +137,8 @@ add_action( 'wp_ajax_nopriv_mh_live_product_search', 'mh_plug_ajax_live_search' 
 function mh_plug_ajax_live_search() {
     $keyword = isset( $_POST['keyword'] ) ? sanitize_text_field( $_POST['keyword'] ) : '';
 
-    if ( empty( $keyword ) ) {
+    if ( empty( $keyword ) || ! class_exists( 'WooCommerce' ) ) {
         wp_send_json_error(); 
-    }
-
-    if ( ! class_exists( 'WooCommerce' ) ) {
-        wp_send_json_error();
     }
 
     $args = [
@@ -231,7 +164,6 @@ function mh_plug_ajax_live_search() {
             $html .= '</div></a>';
         }
     }
-
     wp_reset_postdata();
     wp_send_json_success( $html );
 }
