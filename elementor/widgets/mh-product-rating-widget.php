@@ -2,7 +2,7 @@
 /**
  * MH Product Rating Widget
  *
- * Displays WooCommerce Product Rating (Stars, Numeric Value, and Review Count).
+ * Displays WooCommerce Product Rating (Pure FontAwesome Stars, Numeric Value, and Review Count).
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -98,17 +98,17 @@ class MH_Product_Rating_Widget extends Widget_Base {
         ] );
 
         $this->add_control( 'star_color', [
-            'label'     => __( 'Star Color', 'mh-plug' ),
+            'label'     => __( 'Filled Star Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffb200', // Classic gold
-            'selectors' => [ '{{WRAPPER}} .mh-rating-wrapper .star-rating span::before' => 'color: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-stars-container i.fas' => 'color: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'empty_star_color', [
             'label'     => __( 'Empty Star Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#e2e2e2',
-            'selectors' => [ '{{WRAPPER}} .mh-rating-wrapper .star-rating::before' => 'color: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-stars-container i.far' => 'color: {{VALUE}};' ],
         ] );
 
         $this->add_responsive_control( 'star_size', [
@@ -116,9 +116,15 @@ class MH_Product_Rating_Widget extends Widget_Base {
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'size' => 14, 'unit' => 'px' ],
-            'selectors'  => [ 
-                '{{WRAPPER}} .mh-rating-wrapper .star-rating' => 'font-size: {{SIZE}}{{UNIT}};',
-            ],
+            'selectors'  => [ '{{WRAPPER}} .mh-stars-container i' => 'font-size: {{SIZE}}{{UNIT}};', ],
+        ] );
+        
+        $this->add_responsive_control( 'star_gap', [
+            'label'      => __( 'Gap Between Stars', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px' ],
+            'default'    => [ 'size' => 2, 'unit' => 'px' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-stars-container' => 'gap: {{SIZE}}{{UNIT}};', ],
         ] );
 
         $this->end_controls_section();
@@ -183,7 +189,7 @@ class MH_Product_Rating_Widget extends Widget_Base {
         }
 
         $rating_count   = $product->get_rating_count();
-        $average_rating = $product->get_average_rating();
+        $average_rating = (float) $product->get_average_rating();
 
         // Hide if setting is enabled and there are no reviews
         if ( 'yes' === $settings['hide_empty'] && $rating_count == 0 ) {
@@ -191,20 +197,15 @@ class MH_Product_Rating_Widget extends Widget_Base {
         }
 
         // Formatting for display
-        $formatted_average = number_format( (float) $average_rating, 1, '.', '' ); // Formats to 1 decimal point (e.g., "4.8" or "0.0")
+        $formatted_average = number_format( $average_rating, 1, '.', '' ); 
 
         ?>
         <style>
             .mh-rating-wrapper { display: flex; align-items: center; flex-wrap: wrap; }
+            .mh-stars-container { display: inline-flex; align-items: center; }
+            .mh-stars-container i { line-height: 1; }
             .mh-numeric-rating { font-weight: bold; line-height: 1; }
             .mh-rating-count { line-height: 1; }
-            
-            /* WooCommerce Native Star Rating Overrides */
-            .mh-rating-wrapper .star-rating {
-                margin: 0;
-                float: none;
-                width: 5.4em; /* Standard Woo Width */
-            }
         </style>
 
         <div class="mh-rating-wrapper">
@@ -216,10 +217,28 @@ class MH_Product_Rating_Widget extends Widget_Base {
                 </div>
             <?php endif; ?>
 
-            <?php // 2. Star Ratings ?>
+            <?php // 2. 🚀 THE FIX: Bulletproof FontAwesome Stars ?>
             <?php if ( 'yes' === $settings['show_stars'] ) : ?>
                 <div class="mh-stars-container">
-                    <?php echo wc_get_rating_html( $average_rating, $rating_count ); ?>
+                    <?php
+                    // Calculate stars based on exact rating
+                    $full_stars  = floor( $average_rating );
+                    $half_star   = ( $average_rating - $full_stars ) >= 0.5 ? 1 : 0;
+                    $empty_stars = 5 - $full_stars - $half_star;
+
+                    // Output Full Stars
+                    for ( $i = 0; $i < $full_stars; $i++ ) {
+                        echo '<i class="fas fa-star"></i>';
+                    }
+                    // Output Half Star
+                    if ( $half_star ) {
+                        echo '<i class="fas fa-star-half-alt"></i>';
+                    }
+                    // Output Empty Stars
+                    for ( $i = 0; $i < $empty_stars; $i++ ) {
+                        echo '<i class="far fa-star"></i>';
+                    }
+                    ?>
                 </div>
             <?php endif; ?>
 
