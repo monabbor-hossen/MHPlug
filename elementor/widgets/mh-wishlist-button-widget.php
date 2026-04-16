@@ -1,6 +1,6 @@
 <?php
 /**
- * MH Wishlist Button Widget (Smart Dual-Mode + Custom Icons + Bulletproof JS)
+ * MH Wishlist Button Widget (Smart Dual-Mode + Custom Icons + Bug Fix)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -210,7 +210,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             }
         }
 
-        // 🚀 BULLETPROOF FIX: Generate the AJAX variables right here in PHP
         $ajax_url = admin_url( 'admin-ajax.php' );
         $nonce    = wp_create_nonce( 'mh_wishlist_nonce' );
 
@@ -219,8 +218,13 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             .mh-advanced-wishlist-btn { display: inline-flex; align-items: center; cursor: pointer; transition: 0.3s ease; }
             .mh-icon-wrap { display: inline-flex; align-items: center; justify-content: center; }
             .mh-icon-wrap i, .mh-icon-wrap svg { transition: 0.3s ease; }
+            
+            /* Default State (Empty) */
             .mh-advanced-wishlist-btn .mh-icon-added { display: none; }
-            .mh-advanced-wishlist-btn.added .mh-icon-normal { display: none; }
+            .mh-advanced-wishlist-btn .mh-icon-normal { display: inline-flex; }
+            
+            /* Active State (Added) */
+            .mh-advanced-wishlist-btn.added .mh-icon-normal { display: none !important; }
             .mh-advanced-wishlist-btn.added .mh-icon-added { display: inline-flex !important; }
         </style>
 
@@ -234,11 +238,11 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                data-browse-text="<?php echo esc_attr( $browse_text ); ?>"
                data-wishlist-url="<?php echo esc_url( $browse_url ); ?>">
                 
-                <span class="mh-icon-wrap mh-icon-normal" style="display: <?php echo $in_wishlist ? 'none' : 'inline-flex'; ?>;">
+                <span class="mh-icon-wrap mh-icon-normal">
                     <?php Icons_Manager::render_icon( $settings['icon_normal'], [ 'aria-hidden' => 'true' ] ); ?>
                 </span>
                 
-                <span class="mh-icon-wrap mh-icon-added" style="display: <?php echo $in_wishlist ? 'inline-flex' : 'none'; ?>;">
+                <span class="mh-icon-wrap mh-icon-added">
                     <?php Icons_Manager::render_icon( $settings['icon_added'], [ 'aria-hidden' => 'true' ] ); ?>
                 </span>
 
@@ -250,7 +254,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
 
         <script>
             jQuery(document).ready(function($){
-                // 🚀 Injecting the PHP variables directly into the local script
                 var mhAjaxUrl = '<?php echo esc_url( $ajax_url ); ?>';
                 var mhNonce   = '<?php echo esc_attr( $nonce ); ?>';
 
