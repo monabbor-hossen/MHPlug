@@ -1,6 +1,6 @@
 <?php
 /**
- * MH Wishlist Button Widget (Smart Dual-Mode)
+ * MH Wishlist Button Widget (Smart Dual-Mode + Custom Icons)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,7 +35,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                 'toggle' => __( 'Toggle (Add / Remove instantly)', 'mh-plug' ),
                 'browse' => __( 'Browse (Go to Wishlist Page)', 'mh-plug' ),
             ],
-            'description' => __( 'Choose what happens after a product is added to the wishlist.', 'mh-plug' ),
         ] );
 
         $this->add_control( 'wishlist_url', [
@@ -89,20 +88,42 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
 
         $this->end_controls_section();
 
-        /* ── STYLE: ICONS & TEXT ── */
+        /* ── ICONS & STYLING ── */
         $this->start_controls_section( 'style_section', [
-            'label' => __( 'Button Styling', 'mh-plug' ),
+            'label' => __( 'Icons & Styling', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
-        $this->add_control( 'icon_size', [
+        // 🚀 THE FIX: Restored Custom Elementor Icon Selectors!
+        $this->add_control( 'icon_normal', [
+            'label'   => __( 'Normal Icon (Empty)', 'mh-plug' ),
+            'type'    => Controls_Manager::ICONS,
+            'default' => [
+                'value'   => 'far fa-heart',
+                'library' => 'fa-regular',
+            ],
+        ] );
+
+        $this->add_control( 'icon_added', [
+            'label'   => __( 'Added Icon (Filled)', 'mh-plug' ),
+            'type'    => Controls_Manager::ICONS,
+            'default' => [
+                'value'   => 'fas fa-heart',
+                'library' => 'fa-solid',
+            ],
+        ] );
+
+        $this->add_responsive_control( 'icon_size', [
             'label'      => __( 'Icon Size', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-advanced-wishlist-btn i' => 'font-size: {{SIZE}}{{UNIT}};', ],
+            'selectors'  => [ 
+                '{{WRAPPER}} .mh-advanced-wishlist-btn i' => 'font-size: {{SIZE}}{{UNIT}};', 
+                '{{WRAPPER}} .mh-advanced-wishlist-btn svg' => 'width: {{SIZE}}{{UNIT}}; height: auto;', 
+            ],
         ] );
 
-        $this->add_control( 'icon_spacing', [
+        $this->add_responsive_control( 'icon_spacing', [
             'label'      => __( 'Space Between Icon & Text', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
@@ -115,6 +136,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             'name'      => 'typography',
             'selector'  => '{{WRAPPER}} .mh-wishlist-label',
             'condition' => [ 'show_label' => 'yes' ],
+            'separator' => 'before',
         ] );
 
         $this->start_controls_tabs( 'style_tabs' );
@@ -127,15 +149,25 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             'default'   => '#333333',
             'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn' => 'color: {{VALUE}}; text-decoration: none;' ],
         ] );
+        $this->add_control( 'svg_fill_normal', [
+            'label'     => __( 'SVG Fill (If using custom SVG)', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn svg' => 'fill: {{VALUE}};' ],
+        ] );
         $this->end_controls_tab();
 
         // Active State (Added/Filled)
-        $this->start_controls_tab( 'tab_active', [ 'label' => __( 'Added (Filled)', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_active', [ 'label' => __( 'Added', 'mh-plug' ) ] );
         $this->add_control( 'color_active', [
             'label'     => __( 'Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
-            'default'   => '#d63638', // Standard red fill
+            'default'   => '#d63638',
             'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn.added' => 'color: {{VALUE}}; text-decoration: none;' ],
+        ] );
+        $this->add_control( 'svg_fill_active', [
+            'label'     => __( 'SVG Fill (If using custom SVG)', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn.added svg' => 'fill: {{VALUE}};' ],
         ] );
         $this->end_controls_tab();
 
@@ -169,7 +201,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         $browse_text = ! empty( $settings['browse_text'] ) ? $settings['browse_text'] : 'Browse Wishlist';
         $browse_url  = ! empty( $settings['wishlist_url']['url'] ) ? $settings['wishlist_url']['url'] : '#';
 
-        // Determine current state
         $current_text = $add_text;
         $current_href = '#';
 
@@ -185,9 +216,13 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         ?>
         <style>
             .mh-advanced-wishlist-btn { display: inline-flex; align-items: center; cursor: pointer; transition: 0.3s ease; }
-            .mh-advanced-wishlist-btn i { transition: 0.3s ease; }
+            .mh-icon-wrap { display: inline-flex; align-items: center; justify-content: center; }
+            .mh-icon-wrap i, .mh-icon-wrap svg { transition: 0.3s ease; }
+            
+            /* Logic to hide/show the correct custom icon */
+            .mh-advanced-wishlist-btn .mh-icon-added { display: none; }
             .mh-advanced-wishlist-btn.added .mh-icon-normal { display: none; }
-            .mh-advanced-wishlist-btn.added .mh-icon-added { display: inline-block !important; }
+            .mh-advanced-wishlist-btn.added .mh-icon-added { display: inline-flex !important; }
         </style>
 
         <div class="mh-advanced-wishlist-wrap">
@@ -200,8 +235,13 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                data-browse-text="<?php echo esc_attr( $browse_text ); ?>"
                data-wishlist-url="<?php echo esc_url( $browse_url ); ?>">
                 
-                <i class="far fa-heart mh-icon-normal" style="display: <?php echo $in_wishlist ? 'none' : 'inline-block'; ?>;"></i>
-                <i class="fas fa-heart mh-icon-added" style="display: <?php echo $in_wishlist ? 'inline-block' : 'none'; ?>;"></i>
+                <span class="mh-icon-wrap mh-icon-normal" style="display: <?php echo $in_wishlist ? 'none' : 'inline-flex'; ?>;">
+                    <?php Icons_Manager::render_icon( $settings['icon_normal'], [ 'aria-hidden' => 'true' ] ); ?>
+                </span>
+                
+                <span class="mh-icon-wrap mh-icon-added" style="display: <?php echo $in_wishlist ? 'inline-flex' : 'none'; ?>;">
+                    <?php Icons_Manager::render_icon( $settings['icon_added'], [ 'aria-hidden' => 'true' ] ); ?>
+                </span>
 
                 <?php if ( $show_label ) : ?>
                     <span class="mh-wishlist-label"><?php echo esc_html( $current_text ); ?></span>
@@ -215,12 +255,11 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                     var $btn = $(this);
                     var behavior = $btn.data('behavior');
                     
-                    // If behavior is Browse AND it's already added, act as a normal link to the Wishlist Page!
                     if( behavior === 'browse' && $btn.hasClass('added') ) {
                         return; 
                     }
                     
-                    e.preventDefault(); // Stop normal click logic if we need to fire AJAX
+                    e.preventDefault(); 
                     
                     if(typeof mhWishlist === 'undefined') {
                         alert('Wishlist script is missing.');
@@ -244,7 +283,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                             if(status === 'added') {
                                 $btn.addClass('added');
                                 
-                                // Update text and link based on behavior
                                 if(behavior === 'browse') {
                                     if($label.length) $label.text($btn.data('browse-text'));
                                     $btn.attr('href', $btn.data('wishlist-url'));
@@ -252,7 +290,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                                     if($label.length) $label.text($btn.data('remove-text'));
                                 }
                             } else {
-                                // Status is Removed (Toggle Mode)
                                 $btn.removeClass('added');
                                 if($label.length) $label.text($btn.data('add-text'));
                                 $btn.attr('href', '#');
