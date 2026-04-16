@@ -213,7 +213,7 @@ class MH_Admin_Menu {
                 'mh_product_brands',
                 'mh_product_breadcrumb',
                 'mh_product_rating',
-
+                'mh_product_gallery',
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
             }
