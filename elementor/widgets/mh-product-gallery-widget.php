@@ -1,6 +1,8 @@
 <?php
 /**
- * MH Product Image & Gallery Slider Widget
+ * MH Product Price Widget (Advanced)
+ *
+ * Fully customizable WooCommerce Product Price with Perfect Strikethrough.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -9,37 +11,171 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
+use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Text_Shadow;
 
-class MH_Product_Gallery_Widget extends Widget_Base {
+class MH_Product_Price_Widget extends Widget_Base {
 
-    public function get_name() { return 'mh_product_gallery'; }
-    public function get_title() { return __( 'MH Product Gallery', 'mh-plug' ); }
-    public function get_icon() { return 'eicon-product-gallery'; }
+    public function get_name() { return 'mh_product_price'; }
+    public function get_title() { return __( 'MH Product Price', 'mh-plug' ); }
+    public function get_icon() { return 'eicon-product-price'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
+    public function get_keywords() { return [ 'product', 'price', 'sale', 'woocommerce', 'mh', 'advanced' ]; }
 
     protected function register_controls() {
-        $this->start_controls_section( 'section_layout', [
-            'label' => __( 'Gallery Settings', 'mh-plug' ),
+
+        /* ── CONTENT ── */
+        $this->start_controls_section( 'content_section', [
+            'label' => __( 'Price Layout', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
-        $this->add_responsive_control( 'gallery_width', [
-            'label'      => __( 'Gallery Max Width', 'mh-plug' ),
-            'type'       => Controls_Manager::SLIDER,
-            'size_units' => [ 'px', '%' ],
-            'range'      => [ 'px' => [ 'min' => 200, 'max' => 1200 ], '%' => [ 'min' => 20, 'max' => 100 ] ],
-            'default'    => [ 'size' => 100, 'unit' => '%' ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-premium-gallery-container' => 'max-width: {{SIZE}}{{UNIT}}; margin: 0 auto;',
+        $this->add_responsive_control( 'align', [
+            'label'        => __( 'Alignment', 'mh-plug' ),
+            'type'         => Controls_Manager::CHOOSE,
+            'options'      => [
+                'left'   => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
+                'center' => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
+                'right'  => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+            ],
+            'default'      => 'left',
+            'selectors'    => [
+                '{{WRAPPER}} .mh-product-price' => 'text-align: {{VALUE}};',
             ],
         ] );
 
-        $this->add_control( 'active_thumb_border', [
-            'label'     => __( 'Active Thumbnail Border Color', 'mh-plug' ),
+        $this->add_control( 'layout_style', [
+            'label'   => __( 'Layout Style', 'mh-plug' ),
+            'type'    => Controls_Manager::SELECT,
+            'default' => 'inline',
+            'options' => [
+                'inline'  => __( 'Inline (Side by Side)', 'mh-plug' ),
+                'stacked' => __( 'Stacked (Top & Bottom)', 'mh-plug' ),
+            ],
+            'selectors' => [
+                '{{WRAPPER}} .mh-product-price del' => 'display: {{VALUE}} === "stacked" ? "block" : "inline-block"; margin-bottom: {{VALUE}} === "stacked" ? "5px" : "0";',
+                '{{WRAPPER}} .mh-product-price ins' => 'display: {{VALUE}} === "stacked" ? "block" : "inline-block";',
+            ],
+        ] );
+
+        $this->end_controls_section();
+
+        /* ── STYLE: MAIN PRICE ── */
+        $this->start_controls_section( 'style_main_price', [
+            'label' => __( 'Main Price (or Sale Price)', 'mh-plug' ),
+            'tab'   => Controls_Manager::TAB_STYLE,
+        ] );
+
+        $this->add_control( 'main_price_color', [
+            'label'     => __( 'Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [
-                '{{WRAPPER}} .mh-thumb-slide-item.slick-current img' => 'border: 2px solid {{VALUE}}; opacity: 1;',
+                '{{WRAPPER}} .mh-product-price > .amount' => 'color: {{VALUE}};', 
+                '{{WRAPPER}} .mh-product-price ins .amount' => 'color: {{VALUE}};', 
+                '{{WRAPPER}} .mh-product-price ins' => 'text-decoration: none;',
+                '{{WRAPPER}} .mh-product-price > bdi' => 'color: {{VALUE}};',
+            ],
+        ] );
+
+        $this->add_group_control( Group_Control_Typography::get_type(), [
+            'name'     => 'main_price_typography',
+            'selector' => '{{WRAPPER}} .mh-product-price > .amount, {{WRAPPER}} .mh-product-price ins .amount, {{WRAPPER}} .mh-product-price ins, {{WRAPPER}} .mh-product-price > bdi',
+        ] );
+
+        $this->add_group_control( Group_Control_Text_Shadow::get_type(), [
+            'name'     => 'main_price_shadow',
+            'selector' => '{{WRAPPER}} .mh-product-price > .amount, {{WRAPPER}} .mh-product-price ins .amount',
+        ] );
+
+        $this->end_controls_section();
+
+        /* ── STYLE: OLD PRICE (STRIKETHROUGH) ── */
+        $this->start_controls_section( 'style_old_price', [
+            'label' => __( 'Old Price (Original)', 'mh-plug' ),
+            'tab'   => Controls_Manager::TAB_STYLE,
+        ] );
+
+        $this->add_control( 'old_price_color', [
+            'label'     => __( 'Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#a8a8a8',
+            'selectors' => [
+                '{{WRAPPER}} .mh-product-price del' => 'color: {{VALUE}};',
+                '{{WRAPPER}} .mh-product-price del .amount' => 'color: {{VALUE}};',
+                // Apply the color to our custom strikethrough line
+                '{{WRAPPER}} .mh-product-price del::after' => 'background-color: {{VALUE}};',
+            ],
+        ] );
+
+        $this->add_group_control( Group_Control_Typography::get_type(), [
+            'name'     => 'old_price_typography',
+            'selector' => '{{WRAPPER}} .mh-product-price del, {{WRAPPER}} .mh-product-price del .amount, {{WRAPPER}} .mh-product-price del bdi',
+        ] );
+
+        $this->add_control( 'strikethrough_thickness', [
+            'label'      => __( 'Line Thickness', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px' ],
+            'range'      => [ 'px' => [ 'min' => 1, 'max' => 5 ] ],
+            'default'    => [ 'size' => 1.5, 'unit' => 'px' ],
+            'selectors'  => [
+                '{{WRAPPER}} .mh-product-price del::after' => 'height: {{SIZE}}{{UNIT}};',
+            ],
+        ] );
+
+        $this->add_responsive_control( 'old_price_gap', [
+            'label'      => __( 'Gap (Distance from Main Price)', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px', 'em' ],
+            'range'      => [ 'px' => [ 'min' => 0, 'max' => 50 ] ],
+            'default'    => [ 'size' => 8, 'unit' => 'px' ],
+            'selectors'  => [
+                '{{WRAPPER}} .mh-product-price del' => 'margin-right: {{SIZE}}{{UNIT}};',
+            ],
+            'condition' => [
+                'layout_style' => 'inline',
+            ],
+        ] );
+
+        $this->end_controls_section();
+
+        /* ── STYLE: CURRENCY SYMBOL ── */
+        $this->start_controls_section( 'style_currency', [
+            'label' => __( 'Currency Symbol ($)', 'mh-plug' ),
+            'tab'   => Controls_Manager::TAB_STYLE,
+        ] );
+
+        $this->add_control( 'currency_color', [
+            'label'     => __( 'Symbol Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'selectors' => [
+                '{{WRAPPER}} .mh-product-price .woocommerce-Price-currencySymbol' => 'color: {{VALUE}};',
+            ],
+        ] );
+
+        $this->add_group_control( Group_Control_Typography::get_type(), [
+            'name'     => 'currency_typography',
+            'selector' => '{{WRAPPER}} .mh-product-price .woocommerce-Price-currencySymbol',
+        ] );
+
+        $this->add_responsive_control( 'currency_spacing', [
+            'label'      => __( 'Spacing (from numbers)', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px', 'em' ],
+            'range'      => [ 'px' => [ 'min' => 0, 'max' => 20 ] ],
+            'selectors'  => [
+                '{{WRAPPER}} .mh-product-price .woocommerce-Price-currencySymbol' => 'margin-right: {{SIZE}}{{UNIT}}; margin-left: {{SIZE}}{{UNIT}};',
+            ],
+        ] );
+
+        $this->add_responsive_control( 'currency_align', [
+            'label'      => __( 'Vertical Adjust', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px', 'em' ],
+            'range'      => [ 'px' => [ 'min' => -20, 'max' => 20 ] ],
+            'selectors'  => [
+                '{{WRAPPER}} .mh-product-price .woocommerce-Price-currencySymbol' => 'position: relative; top: {{SIZE}}{{UNIT}};',
             ],
         ] );
 
@@ -59,96 +195,35 @@ class MH_Product_Gallery_Widget extends Widget_Base {
             }
         }
 
-        if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) return;
+        if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) {
+            if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+                echo '<div style="padding: 15px; border: 1px dashed #d63638; color: #d63638; text-align: center;"><strong>MH Plug:</strong> Please create a product to preview the price.</div>';
+            }
+            return;
+        }
 
-        $main_image_id = $product->get_image_id();
-        $gallery_ids   = $product->get_gallery_image_ids();
+        $price_html = $product->get_price_html();
         
-        if ( ! $main_image_id && empty( $gallery_ids ) ) return; 
-
-        // Combine all IDs for the Lightbox loop
-        $all_image_ids = array_merge( [ $main_image_id ], $gallery_ids );
-        ?>
-
-        <style>
-            .mh-premium-gallery-container { width: 100%; display: flex; flex-direction: column; }
-            
-            /* Main Image Area */
-            .mh-main-slider-wrapper { position: relative; width: 100%; margin-bottom: 20px; border-radius: 10px; overflow: hidden; background: #fff; }
-            .mh-gallery-main-viewport { width: 100%; overflow: hidden; }
-            .mh-main-slide-item img { width: 100%; height: auto; display: block; object-fit: contain; aspect-ratio: 1/1; cursor: grab; }
-            .mh-main-slide-item img:active { cursor: grabbing; }
-            
-            /* Main Thin Arrows */
-            .mh-gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); font-size: 28px; color: #aaaaaa; cursor: pointer; z-index: 10; transition: 0.3s ease; }
-            .mh-gallery-arrow:hover { color: #111111; }
-            .mh-main-prev { left: 15px; }
-            .mh-main-next { right: 15px; }
-            
-            /* Lightbox "Click to enlarge" Button */
-            .mh-lightbox-trigger { position: absolute; bottom: 20px; left: 20px; background: rgba(255,255,255,0.9); height: 36px; width: 36px; border-radius: 20px; display: flex; align-items: center; text-decoration: none; color: #333; z-index: 15; overflow: hidden; transition: width 0.3s ease, background 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-            .mh-lightbox-trigger i { flex-shrink: 0; width: 36px; text-align: center; font-size: 14px; }
-            .mh-lightbox-text { opacity: 0; white-space: nowrap; font-size: 13px; font-weight: 500; transition: opacity 0.3s ease; padding-right: 15px; }
-            .mh-lightbox-trigger:hover { width: 145px; background: #ffffff; }
-            .mh-lightbox-trigger:hover .mh-lightbox-text { opacity: 1; }
-
-            /* Thumbnails Area */
-            .mh-thumb-slider-wrapper { position: relative; width: 100%; padding: 0 25px; box-sizing: border-box; }
-            .mh-thumb-slide-item { cursor: pointer; outline: none; padding: 0 6px; }
-            .mh-thumb-slide-item img { width: 100%; height: auto; display: block; aspect-ratio: 1/1; object-fit: cover; border-radius: 6px; border: 2px solid transparent; opacity: 0.5; transition: 0.3s ease; }
-            .mh-thumb-slide-item:hover img { opacity: 1; }
-            
-            /* Thumbnail Tiny Arrows */
-            .mh-thumb-arrow { position: absolute; top: 50%; transform: translateY(-50%); font-size: 16px; color: #888; cursor: pointer; z-index: 10; transition: 0.3s; }
-            .mh-thumb-arrow:hover { color: #111; }
-            .mh-thumb-prev { left: 0; }
-            .mh-thumb-next { right: 0; }
-
-            /* Fallback before Slick JS loads */
-            .mh-gallery-thumb-slider:not(.slick-initialized) { display: flex; overflow: hidden; }
-            .mh-gallery-thumb-slider:not(.slick-initialized) .mh-thumb-slide-item { width: 25%; flex-shrink: 0; }
-        </style>
-
-        <div class="mh-premium-gallery-container">
-            
-            <div class="mh-main-slider-wrapper">
-                <div class="mh-gallery-main-viewport">
-                    <?php foreach ( $all_image_ids as $index => $attachment_id ) : 
-                        $full_img_url = wp_get_attachment_image_url( $attachment_id, 'full' );
-                    ?>
-                        <div class="mh-main-slide-item">
-                            <a href="<?php echo esc_url( $full_img_url ); ?>" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="product-gallery-<?php echo esc_attr( $product->get_id() ); ?>">
-                                <?php echo wp_get_attachment_image( $attachment_id, 'woocommerce_single' ); ?>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-
-                <div class="mh-gallery-arrow mh-main-prev"><i class="eicon-chevron-left"></i></div>
-                <div class="mh-gallery-arrow mh-main-next"><i class="eicon-chevron-right"></i></div>
-
-                <?php $first_full_img = wp_get_attachment_image_url( $main_image_id, 'full' ); ?>
-                <a href="<?php echo esc_url( $first_full_img ); ?>" class="mh-lightbox-trigger" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="product-gallery-<?php echo esc_attr( $product->get_id() ); ?>">
-                    <i class="eicon-qr-code"></i> <span class="mh-lightbox-text"><?php echo esc_html__( 'Click to enlarge', 'mh-plug' ); ?></span>
-                </a>
-            </div>
-
-            <?php if ( ! empty( $gallery_ids ) ) : ?>
-                <div class="mh-thumb-slider-wrapper">
-                    <div class="mh-gallery-thumb-slider">
-                        <?php foreach ( $all_image_ids as $attachment_id ) : ?>
-                            <div class="mh-thumb-slide-item">
-                                <?php echo wp_get_attachment_image( $attachment_id, 'woocommerce_thumbnail' ); ?>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-
-                    <div class="mh-thumb-arrow mh-thumb-prev"><i class="eicon-chevron-left"></i></div>
-                    <div class="mh-thumb-arrow mh-thumb-next"><i class="eicon-chevron-right"></i></div>
-                </div>
-            <?php endif; ?>
-
-        </div>
-        <?php
+        if ( ! empty( $price_html ) ) {
+            // 🚀 THE FIX: Disable native text-decoration and use a perfect center-aligned pseudo-element
+            echo '<style>
+                .mh-product-price del { 
+                    text-decoration: none !important; 
+                    position: relative; 
+                    display: inline-block; 
+                }
+                .mh-product-price del::after { 
+                    content: ""; 
+                    position: absolute; 
+                    top: 50%; 
+                    left: 0; 
+                    width: 100%; 
+                    background-color: currentColor; 
+                    transform: translateY(-50%);
+                    pointer-events: none;
+                }
+            </style>';
+            echo '<div class="mh-product-price" style="display: inline-block; line-height: 1.2;">' . $price_html . '</div>';
+        }
     }
 }
