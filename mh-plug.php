@@ -4,8 +4,8 @@
  * Description:       A custom Elementor addon with a dedicated dashboard for managing widgets and features.
  * Plugin URI:        https://your-website.com/
  * Version:           1.0.0
- * Author:            MHutin
- * Author URI:        https://mhutin.com/
+ * Author:            Your Name
+ * Author URI:        https://your-website.com/
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       mh-plug
@@ -24,6 +24,18 @@ if (!defined('ABSPATH')) {
 define('MH_PLUG_VERSION', '1.0.0');
 define('MH_PLUG_PATH', plugin_dir_path(__FILE__));
 define('MH_PLUG_URL', plugin_dir_url(__FILE__));
+
+/**
+ * 🚀 THE FIX: Bulletproof File Loader
+ * This prevents the website from crashing if a file was deleted or failed to upload.
+ */
+if ( ! function_exists('mh_plug_safe_require') ) {
+    function mh_plug_safe_require( $file_path ) {
+        if ( file_exists( $file_path ) ) {
+            require_once $file_path;
+        }
+    }
+}
 
 /**
  * Activation Hook: Create the Wishlist custom DB table.
@@ -53,16 +65,16 @@ function mh_plug_create_wishlist_table() {
 register_activation_hook( __FILE__, 'mh_plug_create_wishlist_table' );
 
 /**
- * Load Admin Functionality.
+ * Load Admin Functionality Safely.
  */
-require_once MH_PLUG_PATH . 'admin/admin-menu.php';
-require_once MH_PLUG_PATH . 'includes/theme-builder-cpt.php';
-require_once MH_PLUG_PATH . 'includes/theme-builder-display.php';
+mh_plug_safe_require( MH_PLUG_PATH . 'admin/admin-menu.php' );
+mh_plug_safe_require( MH_PLUG_PATH . 'includes/theme-builder-cpt.php' );
+mh_plug_safe_require( MH_PLUG_PATH . 'includes/theme-builder-display.php' );
 
 /**
- * Load Elementor Integration.
+ * Load Elementor Integration Safely.
  */
-require_once MH_PLUG_PATH . 'elementor/elementor-loader.php';
+mh_plug_safe_require( MH_PLUG_PATH . 'elementor/elementor-loader.php' );
 
 /**
  * Load global plugin features based on dashboard settings.
@@ -73,24 +85,24 @@ function mh_plug_load_global_features() {
     // Menu Icons Feature
     $enable_menu_icons = isset($settings['enable_menu_icons']) ? (bool) $settings['enable_menu_icons'] : false;
     if ( $enable_menu_icons ) {
-        require_once MH_PLUG_PATH . 'includes/menu-icon-fields.php';
+        mh_plug_safe_require( MH_PLUG_PATH . 'includes/menu-icon-fields.php' );
     }
 
     // Age Gate Feature
-    require_once MH_PLUG_PATH . 'includes/age-gate/class-mh-plug-age-gate-admin.php';
-    require_once MH_PLUG_PATH . 'includes/age-gate/class-mh-plug-age-gate-meta.php';
-    require_once MH_PLUG_PATH . 'includes/age-gate/class-mh-plug-age-gate-front.php';
+    mh_plug_safe_require( MH_PLUG_PATH . 'includes/age-gate/class-mh-plug-age-gate-admin.php' );
+    mh_plug_safe_require( MH_PLUG_PATH . 'includes/age-gate/class-mh-plug-age-gate-meta.php' );
+    mh_plug_safe_require( MH_PLUG_PATH . 'includes/age-gate/class-mh-plug-age-gate-front.php' );
 
-    // WooCommerce Wishlist Feature — load only if WooCommerce is active and toggle is on
+    // WooCommerce Wishlist Feature
     $enable_wc_wishlist = isset($settings['enable_wc_wishlist']) ? (bool) $settings['enable_wc_wishlist'] : false;
     if ( $enable_wc_wishlist && class_exists('WooCommerce') ) {
-        require_once MH_PLUG_PATH . 'includes/mh-wishlist-functions.php';
+        mh_plug_safe_require( MH_PLUG_PATH . 'includes/mh-wishlist-functions.php' );
     }
 }
 add_action('plugins_loaded', 'mh_plug_load_global_features');
 
 /**
- * Enqueue Frontend Scripts (Slick, icons, wishlist assets).
+ * Enqueue Frontend Scripts.
  */
 function mh_plug_enqueue_frontend_scripts() {
     // Slick Slider
@@ -102,7 +114,6 @@ function mh_plug_enqueue_frontend_scripts() {
     wp_enqueue_style('mhi-icons',        MH_PLUG_URL . 'elementor/assets/css/style.css',         [], MH_PLUG_VERSION);
     wp_enqueue_style('fontawesome-icons',MH_PLUG_URL . 'assets/fontawesome-7/css/all.min.css',   [], MH_PLUG_VERSION);
 
-    // WooCommerce Wishlist Assets — only when WooCommerce is active, feature is on, and we're on a WC page
     $settings           = get_option('mh_plug_widgets_settings', []);
     $enable_wc_wishlist = isset($settings['enable_wc_wishlist']) ? (bool) $settings['enable_wc_wishlist'] : false;
 
@@ -111,24 +122,12 @@ function mh_plug_enqueue_frontend_scripts() {
         $js_path  = MH_PLUG_PATH . 'assets/js/mh-wishlist.js';
 
         if ( file_exists($css_path) ) {
-            wp_enqueue_style(
-                'mh-wishlist-css',
-                MH_PLUG_URL . 'assets/css/mh-wishlist.css',
-                [],
-                filemtime($css_path)
-            );
+            wp_enqueue_style( 'mh-wishlist-css', MH_PLUG_URL . 'assets/css/mh-wishlist.css', [], filemtime($css_path) );
         }
 
         if ( file_exists($js_path) ) {
-            wp_enqueue_script(
-                'mh-wishlist-js',
-                MH_PLUG_URL . 'assets/js/mh-wishlist.js',
-                ['jquery'],
-                filemtime($js_path),
-                true
-            );
+            wp_enqueue_script( 'mh-wishlist-js', MH_PLUG_URL . 'assets/js/mh-wishlist.js', ['jquery'], filemtime($js_path), true );
 
-            // The Modern wp_add_inline_script replacing the old wp_localize_script!
             $wishlist_data = [
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce'   => wp_create_nonce('mh_wishlist_nonce'),
@@ -147,7 +146,6 @@ add_action('wp_enqueue_scripts', 'mh_plug_enqueue_frontend_scripts');
 // ─────────────────────────────────────────────────────────────────────────────
 // WOOCOMMERCE WISHLIST AJAX HANDLER
 // ─────────────────────────────────────────────────────────────────────────────
-
 add_action( 'wp_ajax_mh_wishlist_toggle', 'mh_plug_ajax_wishlist_toggle' );
 add_action( 'wp_ajax_nopriv_mh_wishlist_toggle', 'mh_plug_ajax_wishlist_toggle' );
 
@@ -206,12 +204,15 @@ function mh_plug_ajax_live_search() {
         wp_send_json_error(); 
     }
 
-    // Search WooCommerce Products
+    if ( ! class_exists( 'WooCommerce' ) ) {
+        wp_send_json_error();
+    }
+
     $args = [
         'post_type'      => 'product',
         'post_status'    => 'publish',
-        'posts_per_page' => 5, // Show max 5 results in the dropdown
-        's'              => $keyword, // The search term
+        'posts_per_page' => 5,
+        's'              => $keyword,
     ];
 
     $query = new WP_Query( $args );
@@ -222,26 +223,15 @@ function mh_plug_ajax_live_search() {
             $query->the_post();
             $product = wc_get_product( get_the_ID() );
             
-            // Build the HTML for each row in the dropdown
             $html .= '<a href="' . esc_url( get_permalink() ) . '" style="display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #eee; text-decoration: none; color: #333;">';
-            
-            // Product Image
-            $html .= '<div style="width: 40px; height: 40px; margin-right: 15px; flex-shrink: 0;">';
-            $html .= $product->get_image( [40, 40] ); 
-            $html .= '</div>';
-            
-            // Product Title and Price
+            $html .= '<div style="width: 40px; height: 40px; margin-right: 15px; flex-shrink: 0;">' . $product->get_image( [40, 40] ) . '</div>';
             $html .= '<div style="flex-grow: 1;">';
             $html .= '<strong style="display: block; font-size: 14px;">' . get_the_title() . '</strong>';
             $html .= '<span style="color: #d63638; font-size: 13px;">' . $product->get_price_html() . '</span>';
-            $html .= '</div>';
-            
-            $html .= '</a>';
+            $html .= '</div></a>';
         }
     }
 
     wp_reset_postdata();
-
-    // Send the HTML back to the Javascript
     wp_send_json_success( $html );
 }
