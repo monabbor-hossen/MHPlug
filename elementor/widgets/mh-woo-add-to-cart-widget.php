@@ -294,42 +294,44 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
 
         $default_qty = max( 1, absint( $settings['quantity_default'] ?? 1 ) );
         $btn_text    = ! empty( $settings['btn_text'] ) ? $settings['btn_text'] : __( 'Add to Cart', 'mh-plug' );
+        
+        // 🚀 THE FIX: Safely determine max quantity attribute
+        $max_qty = $product->get_max_purchase_quantity();
+        // If the product has unlimited stock, WooCommerce sets this to -1.
+        // We only output the max attribute if it is greater than 0!
+        $max_attr = ( $max_qty > 0 ) ? 'max="' . esc_attr( $max_qty ) . '"' : '';
+
         ?>
         <div class="mh-atc-widget">
             <form class="cart mh-custom-cart-form mh-atc-form" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype="multipart/form-data">
 
                 <div class="mh-atc-wrap">
 
-                    <!-- Quantity Selector -->
                     <div class="mh-qty-wrapper" role="group" aria-label="<?php esc_attr_e( 'Product quantity', 'mh-plug' ); ?>">
                         <button type="button" class="mh-qty-btn mh-qty-minus" aria-label="<?php esc_attr_e( 'Decrease quantity', 'mh-plug' ); ?>">
                             <span aria-hidden="true">&#8722;</span>
                         </button>
+                        
                         <input
                             type="number"
                             class="mh-qty-input input-text qty text"
                             name="quantity"
                             value="<?php echo esc_attr( $default_qty ); ?>"
                             min="1"
-                            max="<?php echo esc_attr( $product->get_max_purchase_quantity() ); ?>"
+                            <?php echo $max_attr; // Prints max="..." safely or nothing at all! ?>
                             step="1"
                             autocomplete="off"
                             aria-label="<?php esc_attr_e( 'Quantity', 'mh-plug' ); ?>"
                         />
+                        
                         <button type="button" class="mh-qty-btn mh-qty-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'mh-plug' ); ?>">
                             <span aria-hidden="true">&#43;</span>
                         </button>
-                    </div><!-- /.mh-qty-wrapper -->
-
-                    <!-- Add to Cart Button -->
-                    <button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="single_add_to_cart_button button alt mh-atc-btn">
+                    </div><button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="single_add_to_cart_button button alt mh-atc-btn">
                         <?php echo esc_html( $btn_text ); ?>
                     </button>
 
-                </div><!-- /.mh-atc-wrap -->
-
-            </form>
-        </div><!-- /.mh-atc-widget -->
-        <?php
+                </div></form>
+        </div><?php
     }
 }
