@@ -4,65 +4,72 @@
 (function($) {
     'use strict';
 
-    const initProductGallery = function() {
-        
-        $('.mh-product-gallery-container').each(function() {
-            const $wrapper         = $(this);
-            const $mainSlider      = $wrapper.find('.mh-gallery-main-viewport');
-            const $thumbSlider     = $wrapper.find('.mh-gallery-thumb-slider');
+    var WidgetGalleryHandler = function($scope, $) {
+        var $wrapper = $scope.find('.mh-premium-gallery-container');
+        if ( ! $wrapper.length ) return;
 
-            if ( ! $mainSlider.length ) return;
+        var $mainSlider  = $wrapper.find('.mh-gallery-main-viewport');
+        var $thumbSlider = $wrapper.find('.mh-gallery-thumb-slider');
 
-            const hasThumbs = $thumbSlider.length > 0;
+        if ( ! $mainSlider.length ) return;
 
-            // 1. MAIN IMAGE SLIDER
-            $mainSlider.slick({
-                slidesToShow: 1,
+        var hasThumbs = $thumbSlider.length > 0;
+
+        // Destroy existing sliders if Elementor reloads the widget while editing
+        if ( $mainSlider.hasClass('slick-initialized') ) {
+            $mainSlider.slick('unslick');
+        }
+        if ( hasThumbs && $thumbSlider.hasClass('slick-initialized') ) {
+            $thumbSlider.slick('unslick');
+        }
+
+        // 1. MAIN IMAGE SLIDER
+        $mainSlider.slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            fade: false, 
+            infinite: true,
+            arrows: false, 
+            asNavFor: hasThumbs ? $thumbSlider : null,
+            adaptiveHeight: true
+        });
+
+        // 2. THUMBNAILS SLIDER
+        if ( hasThumbs ) {
+            $thumbSlider.slick({
+                slidesToShow: 4, 
                 slidesToScroll: 1,
-                fade: false, // Forces the smooth Slide animation from the video
+                asNavFor: $mainSlider,
+                focusOnSelect: true,
                 infinite: true,
-                arrows: false, // Handled by our custom external arrows
-                asNavFor: hasThumbs ? $thumbSlider : null,
-                adaptiveHeight: true
+                arrows: false, 
+                responsive: [
+                    { breakpoint: 1024, settings: { slidesToShow: 3 } },
+                    { breakpoint: 767,  settings: { slidesToShow: 3 } }
+                ]
             });
+        }
 
-            // 2. THUMBNAILS SLIDER
-            if ( hasThumbs ) {
-                $thumbSlider.slick({
-                    slidesToShow: 4, 
-                    slidesToScroll: 1,
-                    asNavFor: $mainSlider,
-                    focusOnSelect: true,
-                    infinite: true,
-                    arrows: false, // Handled by our custom external arrows
-                    responsive: [
-                        { breakpoint: 1024, settings: { slidesToShow: 3 } },
-                        { breakpoint: 767,  settings: { slidesToShow: 3 } }
-                    ]
-                });
-            }
+        // 3. MAIN SLIDER ARROWS
+        $wrapper.find('.mh-main-prev').off('click').on('click', function() {
+            $mainSlider.slick('slickPrev');
+        });
+        $wrapper.find('.mh-main-next').off('click').on('click', function() {
+            $mainSlider.slick('slickNext');
+        });
 
-            // 3. MAIN SLIDER NAVIGATION CLICKS
-            $wrapper.find('.mh-main-prev').on('click', function() {
-                $mainSlider.slick('slickPrev');
-            });
-            $wrapper.find('.mh-main-next').on('click', function() {
-                $mainSlider.slick('slickNext');
-            });
-
-            // 4. THUMBNAIL SLIDER NAVIGATION CLICKS
-            $wrapper.find('.mh-thumb-prev').on('click', function() {
-                $thumbSlider.slick('slickPrev');
-            });
-            $wrapper.find('.mh-thumb-next').on('click', function() {
-                $thumbSlider.slick('slickNext');
-            });
-
+        // 4. THUMBNAIL SLIDER ARROWS
+        $wrapper.find('.mh-thumb-prev').off('click').on('click', function() {
+            $thumbSlider.slick('slickPrev');
+        });
+        $wrapper.find('.mh-thumb-next').off('click').on('click', function() {
+            $thumbSlider.slick('slickNext');
         });
     };
 
-    $(window).on('load', function() {
-        initProductGallery();
+    // 🚀 Hook directly into Elementor's widget loading process
+    $(window).on('elementor/frontend/init', function() {
+        elementorFrontend.hooks.addAction('frontend/element_ready/mh_product_gallery.default', WidgetGalleryHandler);
     });
 
 })(jQuery);

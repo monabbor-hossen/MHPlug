@@ -1,8 +1,6 @@
 <?php
 /**
  * MH Product Image & Gallery Slider Widget
- *
- * Premium E-Commerce Layout (Main Image + Floating Arrows + Bottom Thumbnails)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,7 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
-use Elementor\Group_Control_Box_Shadow;
 
 class MH_Product_Gallery_Widget extends Widget_Base {
 
@@ -19,13 +16,10 @@ class MH_Product_Gallery_Widget extends Widget_Base {
     public function get_title() { return __( 'MH Product Gallery', 'mh-plug' ); }
     public function get_icon() { return 'eicon-product-gallery'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
-    public function get_keywords() { return [ 'product', 'gallery', 'image', 'slider', 'woocommerce', 'mh' ]; }
 
     protected function register_controls() {
-
-        /* ── CONTENT: RESPONSIVE LAYOUT & BEHAVIOR ── */
         $this->start_controls_section( 'section_layout', [
-            'label' => __( 'Gallery Layout', 'mh-plug' ),
+            'label' => __( 'Gallery Settings', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
@@ -40,86 +34,12 @@ class MH_Product_Gallery_Widget extends Widget_Base {
             ],
         ] );
 
-        $this->add_control( 'transition_type', [
-            'label'   => __( 'Transition Type', 'mh-plug' ),
-            'type'    => Controls_Manager::SELECT,
-            'default' => 'fade',
-            'options' => [
-                'fade'  => 'Fade (Smooth)',
-                'slide' => 'Slide',
-            ],
-        ] );
-
-        $this->end_controls_section();
-
-        /* ── STYLE: MAIN IMAGE & ARROWS ── */
-        $this->start_controls_section( 'style_main_gallery', [
-            'label' => __( 'Main Image & Arrows', 'mh-plug' ),
-            'tab'   => Controls_Manager::TAB_STYLE,
-        ] );
-
-        $this->add_responsive_control( 'main_image_border_radius', [
-            'label'      => __( 'Image Rounded Corners', 'mh-plug' ),
-            'type'       => Controls_Manager::DIMENSIONS,
-            'size_units' => [ 'px' ],
-            'default'    => [ 'top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10, 'unit' => 'px', 'isLinked' => true ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-main-slide-item img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-            ],
-        ] );
-
-        $this->add_control( 'arrow_color', [
-            'label'     => __( 'Arrow Color', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#111111',
-            'selectors' => [
-                '{{WRAPPER}} .mh-gallery-arrow' => 'color: {{VALUE}};',
-            ],
-        ] );
-
-        $this->add_control( 'arrow_bg_color', [
-            'label'     => __( 'Arrow Background', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#ffffff',
-            'selectors' => [
-                '{{WRAPPER}} .mh-gallery-arrow' => 'background-color: {{VALUE}};',
-            ],
-        ] );
-
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
-            'name'     => 'arrow_shadow',
-            'label'    => __( 'Arrow Shadow', 'mh-plug' ),
-            'selector' => '{{WRAPPER}} .mh-gallery-arrow',
-        ] );
-
-        $this->end_controls_section();
-
-        /* ── STYLE: THUMBNAILS ── */
-        $this->start_controls_section( 'style_gallery_thumbs', [
-            'label' => __( 'Thumbnails', 'mh-plug' ),
-            'tab'   => Controls_Manager::TAB_STYLE,
-        ] );
-
-        $this->add_responsive_control( 'thumb_gap', [
-            'label'      => __( 'Spacing Between Thumbs', 'mh-plug' ),
-            'type'       => Controls_Manager::SLIDER,
-            'size_units' => [ 'px' ],
-            'range'      => [ 'px' => [ 'min' => 0, 'max' => 30 ] ],
-            'default'    => [ 'size' => 10, 'unit' => 'px' ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-gallery-thumb-slider' => 'margin: 0 calc(-{{SIZE}}{{UNIT}} / 2);',
-                '{{WRAPPER}} .mh-thumb-slide-item' => 'padding: 0 calc({{SIZE}}{{UNIT}} / 2);',
-            ],
-        ] );
-
         $this->add_control( 'active_thumb_border', [
-            'label'     => __( 'Active Thumbnail Accent', 'mh-plug' ),
+            'label'     => __( 'Active Thumbnail Border Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
-            'default'   => '#000000',
+            'default'   => '#1d2327',
             'selectors' => [
                 '{{WRAPPER}} .mh-thumb-slide-item.slick-current img' => 'border: 2px solid {{VALUE}}; opacity: 1;',
-                '{{WRAPPER}} .mh-thumb-slide-item img' => 'opacity: 0.6; transition: 0.3s ease; border: 2px solid transparent;',
-                '{{WRAPPER}} .mh-thumb-slide-item:hover img' => 'opacity: 1;',
             ],
         ] );
 
@@ -127,8 +47,6 @@ class MH_Product_Gallery_Widget extends Widget_Base {
     }
 
     protected function render() {
-        $settings = $this->get_settings_for_display();
-
         global $product;
         if ( ! is_a( $product, 'WC_Product' ) ) {
             $product = wc_get_product();
@@ -141,76 +59,92 @@ class MH_Product_Gallery_Widget extends Widget_Base {
             }
         }
 
-        if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) {
-            return;
-        }
+        if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) return;
 
         $main_image_id = $product->get_image_id();
         $gallery_ids   = $product->get_gallery_image_ids();
         
-        if ( ! $main_image_id && empty( $gallery_ids ) ) {
-            return; 
-        }
+        if ( ! $main_image_id && empty( $gallery_ids ) ) return; 
 
+        // Combine all IDs for the Lightbox loop
+        $all_image_ids = array_merge( [ $main_image_id ], $gallery_ids );
         ?>
+
         <style>
             .mh-premium-gallery-container { width: 100%; display: flex; flex-direction: column; }
             
             /* Main Image Area */
-            .mh-main-slider-wrapper { position: relative; width: 100%; margin-bottom: 15px; }
+            .mh-main-slider-wrapper { position: relative; width: 100%; margin-bottom: 20px; border-radius: 10px; overflow: hidden; background: #fff; }
             .mh-gallery-main-viewport { width: 100%; overflow: hidden; }
-            .mh-main-slide-item img { width: 100%; height: auto; display: block; object-fit: contain; aspect-ratio: 1/1; background: #f9f9f9; }
+            .mh-main-slide-item img { width: 100%; height: auto; display: block; object-fit: contain; aspect-ratio: 1/1; cursor: grab; }
+            .mh-main-slide-item img:active { cursor: grabbing; }
             
-            /* Floating Arrows (Over Image) */
-            .mh-gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.3s; }
-            .mh-gallery-arrow:hover { transform: translateY(-50%) scale(1.1); }
-            .mh-gallery-prev { left: 10px; }
-            .mh-gallery-next { right: 10px; }
+            /* Main Thin Arrows */
+            .mh-gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); font-size: 28px; color: #aaaaaa; cursor: pointer; z-index: 10; transition: 0.3s ease; }
+            .mh-gallery-arrow:hover { color: #111111; }
+            .mh-main-prev { left: 15px; }
+            .mh-main-next { right: 15px; }
             
+            /* Lightbox "Click to enlarge" Button */
+            .mh-lightbox-trigger { position: absolute; bottom: 20px; left: 20px; background: rgba(255,255,255,0.9); height: 36px; width: 36px; border-radius: 20px; display: flex; align-items: center; text-decoration: none; color: #333; z-index: 15; overflow: hidden; transition: width 0.3s ease, background 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+            .mh-lightbox-trigger i { flex-shrink: 0; width: 36px; text-align: center; font-size: 14px; }
+            .mh-lightbox-text { opacity: 0; white-space: nowrap; font-size: 13px; font-weight: 500; transition: opacity 0.3s ease; padding-right: 15px; }
+            .mh-lightbox-trigger:hover { width: 145px; background: #ffffff; }
+            .mh-lightbox-trigger:hover .mh-lightbox-text { opacity: 1; }
+
             /* Thumbnails Area */
-            .mh-thumb-slider-wrapper { width: 100%; padding: 0 10px; }
-            .mh-thumb-slide-item { cursor: pointer; outline: none; }
-            .mh-thumb-slide-item img { width: 100%; height: auto; display: block; aspect-ratio: 1/1; object-fit: cover; border-radius: 6px; }
+            .mh-thumb-slider-wrapper { position: relative; width: 100%; padding: 0 25px; box-sizing: border-box; }
+            .mh-thumb-slide-item { cursor: pointer; outline: none; padding: 0 6px; }
+            .mh-thumb-slide-item img { width: 100%; height: auto; display: block; aspect-ratio: 1/1; object-fit: cover; border-radius: 6px; border: 2px solid transparent; opacity: 0.5; transition: 0.3s ease; }
+            .mh-thumb-slide-item:hover img { opacity: 1; }
             
-            /* Fallback before Slick loads */
+            /* Thumbnail Tiny Arrows */
+            .mh-thumb-arrow { position: absolute; top: 50%; transform: translateY(-50%); font-size: 16px; color: #888; cursor: pointer; z-index: 10; transition: 0.3s; }
+            .mh-thumb-arrow:hover { color: #111; }
+            .mh-thumb-prev { left: 0; }
+            .mh-thumb-next { right: 0; }
+
+            /* Fallback before Slick JS loads */
             .mh-gallery-thumb-slider:not(.slick-initialized) { display: flex; overflow: hidden; }
             .mh-gallery-thumb-slider:not(.slick-initialized) .mh-thumb-slide-item { width: 25%; flex-shrink: 0; }
         </style>
 
-        <div class="mh-premium-gallery-container" data-mh-settings="<?php echo esc_attr( wp_json_encode( $settings ) ); ?>">
+        <div class="mh-premium-gallery-container">
             
             <div class="mh-main-slider-wrapper">
                 <div class="mh-gallery-main-viewport">
-                    <?php if ( $main_image_id ) : ?>
+                    <?php foreach ( $all_image_ids as $index => $attachment_id ) : 
+                        $full_img_url = wp_get_attachment_image_url( $attachment_id, 'full' );
+                    ?>
                         <div class="mh-main-slide-item">
-                            <?php echo wp_get_attachment_image( $main_image_id, 'woocommerce_single' ); ?>
-                        </div>
-                    <?php endif; ?>
-                    <?php foreach ( $gallery_ids as $attachment_id ) : ?>
-                        <div class="mh-main-slide-item">
-                            <?php echo wp_get_attachment_image( $attachment_id, 'woocommerce_single' ); ?>
+                            <a href="<?php echo esc_url( $full_img_url ); ?>" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="product-gallery-<?php echo esc_attr( $product->get_id() ); ?>">
+                                <?php echo wp_get_attachment_image( $attachment_id, 'woocommerce_single' ); ?>
+                            </a>
                         </div>
                     <?php endforeach; ?>
                 </div>
 
-                <div class="mh-gallery-arrow mh-gallery-prev"><i class="eicon-chevron-left"></i></div>
-                <div class="mh-gallery-arrow mh-gallery-next"><i class="eicon-chevron-right"></i></div>
+                <div class="mh-gallery-arrow mh-main-prev"><i class="eicon-chevron-left"></i></div>
+                <div class="mh-gallery-arrow mh-main-next"><i class="eicon-chevron-right"></i></div>
+
+                <?php $first_full_img = wp_get_attachment_image_url( $main_image_id, 'full' ); ?>
+                <a href="<?php echo esc_url( $first_full_img ); ?>" class="mh-lightbox-trigger" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="product-gallery-<?php echo esc_attr( $product->get_id() ); ?>">
+                    <i class="eicon-qr-code"></i> <span class="mh-lightbox-text"><?php echo esc_html__( 'Click to enlarge', 'mh-plug' ); ?></span>
+                </a>
             </div>
 
             <?php if ( ! empty( $gallery_ids ) ) : ?>
                 <div class="mh-thumb-slider-wrapper">
                     <div class="mh-gallery-thumb-slider">
-                        <?php if ( $main_image_id ) : ?>
-                            <div class="mh-thumb-slide-item">
-                                <?php echo wp_get_attachment_image( $main_image_id, 'woocommerce_thumbnail' ); ?>
-                            </div>
-                        <?php endif; ?>
-                        <?php foreach ( $gallery_ids as $attachment_id ) : ?>
+                        <?php foreach ( $all_image_ids as $attachment_id ) : ?>
                             <div class="mh-thumb-slide-item">
                                 <?php echo wp_get_attachment_image( $attachment_id, 'woocommerce_thumbnail' ); ?>
                             </div>
                         <?php endforeach; ?>
                     </div>
+
+                    <div class="mh-thumb-arrow mh-thumb-prev"><i class="eicon-chevron-left"></i></div>
+                    <div class="mh-thumb-arrow mh-thumb-next"><i class="eicon-chevron-right"></i></div>
                 </div>
             <?php endif; ?>
 
