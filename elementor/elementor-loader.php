@@ -16,19 +16,13 @@ final class MH_Elementor_Loader {
     }
 
     private function __construct() {
-        add_action('plugins_loaded', [$this, 'init']);
-    }
-
-    public function init() {
-        if (!did_action('elementor/loaded')) {
-            return;
-        }
-
+        // 🚀 THE FIX: We removed the redundant 'plugins_loaded' check because
+        // mh-plug.php already guarantees Elementor is loaded before this file runs.
+        // We bind directly to Elementor's native hooks immediately!
         add_action('elementor/elements/categories_registered', [$this, 'register_widget_category']);
         add_action('elementor/widgets/register', [$this, 'register_widgets']);
         add_action('elementor/editor/before_enqueue_scripts', [$this, 'print_inline_editor_styles']);
         
-        // Command: Correctly placed hooks inside the init method
         add_action( 'wp_enqueue_scripts', [$this, 'mh_plug_enqueue_woo_scripts'] );
         add_action( 'elementor/frontend/after_register_scripts', [$this, 'mh_plug_enqueue_woo_scripts'] );
     }
@@ -102,7 +96,6 @@ final class MH_Elementor_Loader {
                 'mh_product_brands'            => [ 'file' => 'mh-product-brands-widget.php',             'class' => 'MH_Product_Brands_Widget' ],
                 'mh_product_breadcrumb'        => [ 'file' => 'mh-product-breadcrumb-widget.php',         'class' => 'MH_Product_Breadcrumb_Widget' ],
                 'mh_product_rating'            => [ 'file' => 'mh-product-rating-widget.php',             'class' => 'MH_Product_Rating_Widget' ],
-                // 🚀 NEW: Register the Gallery Widget
                 'mh_product_gallery'           => [ 'file' => 'mh-product-gallery-widget.php',            'class' => 'MH_Product_Gallery_Widget' ],
                 'mh_product_share'             => [ 'file' => 'mh-product-share-widget.php',              'class' => 'MH_Product_Share_Widget' ],
                 'mh_product_data_accordion'    => [ 'file' => 'mh-product-data-accordion-widget.php',     'class' => 'MH_Product_Data_Accordion_Widget' ],
@@ -124,20 +117,12 @@ final class MH_Elementor_Loader {
         }
     }
 
-    /**
-     * Command: Enqueue MH WooCommerce widget scripts on the frontend.
-     * Safely secured inside the class.
-     */
-    /**
-     * Enqueue MH WooCommerce widget scripts on the frontend.
-     * Safely secured inside the class.
-     */
     public function mh_plug_enqueue_woo_scripts() {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return;
         }
 
-        // Standard Woo Scripts (for Add to Cart, Live Search, etc)
+        // Standard Woo Scripts
         $js_path_universal = MH_PLUG_PATH . 'elementor/assets/js/mh-woo-scripts.js';
         wp_register_script(
             'mh-woo-scripts',
@@ -147,25 +132,22 @@ final class MH_Elementor_Loader {
             true 
         );
 
-        // 🚀 NEW: Register the script for the Advanced Product Gallery Widget
+        // Gallery Script
         $js_path_gallery = MH_PLUG_PATH . 'elementor/assets/js/mh-product-gallery.js';
         wp_register_script(
             'mh-product-gallery-script',
             MH_PLUG_URL . 'elementor/assets/js/mh-product-gallery.js',
-            [ 'jquery', 'slick-js' ], // Depends on Slick!
+            [ 'jquery', 'slick-js' ],
             file_exists( $js_path_gallery ) ? filemtime( $js_path_gallery ) : MH_PLUG_VERSION,
             true 
         );
 
-        // Enqueue universal scripts
         wp_enqueue_script('mh-woo-scripts');
         
-        // 🚀 NEW: Only enqueue the gallery script if we are on a single product page
         if ( is_product() ) {
             wp_enqueue_script('mh-product-gallery-script');
         }
 
-        // Pass standard global data (AJAX URL)
         $ajax_data = [
             'ajax_url'  => admin_url( 'admin-ajax.php' ),
             'login_url' => wc_get_page_permalink( 'myaccount' )
@@ -173,7 +155,7 @@ final class MH_Elementor_Loader {
         wp_add_inline_script( 'mh-woo-scripts', 'var mh_plug_ajax = ' . wp_json_encode( $ajax_data ) . ';', 'before' );
     }
 
-} // End of MH_Elementor_Loader class. Nothing public goes past this line.
+}
 
 MH_Elementor_Loader::instance();
 
@@ -183,18 +165,17 @@ MH_Elementor_Loader::instance();
 function mh_plug_enqueue_editor_icons() {
     wp_enqueue_style(
         'mhi-icons',
-        MH_PLUG_URL . './elementor/assets/css/style.css',
+        MH_PLUG_URL . 'elementor/assets/css/style.css',
         [],
         MH_PLUG_VERSION
     );
     wp_enqueue_style(
         'style',
-        MH_PLUG_URL . './elementor/assets/css/widget-style.css',
+        MH_PLUG_URL . 'elementor/assets/css/widget-style.css',
         [],
         MH_PLUG_VERSION
     );
 
-    // 🚀 THE FIX: Removed 'elementor-frontend' to clear the notice.
     wp_enqueue_script(
         'mh-brush-color-filter-script',
         MH_PLUG_URL . 'elementor/assets/js/brush-color-filter.js',
