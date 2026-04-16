@@ -40,7 +40,20 @@ class MH_Admin_Menu {
         'enable_wc_wishlist' => 'Enable WooCommerce Wishlist',
         'mh_woo_add_to_cart' => 'MH Custom Add to Cart',
         'mh_woo_attributes'  => 'MH Attributes',
-        'mh_product_search'  => 'Product Search'
+        'mh_product_search'  => 'Product Search',
+
+        // 🚀 THE FIX: Added the missing WooCommerce Widgets here!
+        'mh_product_title'             => 'Product Title',
+        'mh_product_price'             => 'Product Price',
+        'mh_product_short_description' => 'Product Short Description',
+        'mh_product_category'          => 'Product Category',
+        'mh_product_tags'              => 'Product Tags',
+        'mh_product_brands'            => 'Product Brands',
+        'mh_product_breadcrumb'        => 'Product Breadcrumb',
+        'mh_product_rating'            => 'Product Rating',
+        'mh_product_gallery'           => 'Product Gallery',
+        'mh_product_share'             => 'Product Share',
+        'mh_product_data_accordion'    => 'Product Data (Tabs & Accordion)'
         
     ];
 
@@ -273,7 +286,6 @@ class MH_Admin_Menu {
     }
 
     /**
-     * --- ADD THIS ENTIRE NEW FUNCTION ---
      * Sanitize Callback for Widget Settings.
      * This function ensures that unchecked boxes are saved as '0' (off).
      * @param array $input The raw data submitted from the form.
