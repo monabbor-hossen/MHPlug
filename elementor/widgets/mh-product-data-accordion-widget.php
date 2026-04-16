@@ -2,7 +2,7 @@
 /**
  * MH Product Data Widget (Tabs & Accordion)
  *
- * Displays Description, Additional Info, and Shipping in either an Accordion or Tabs layout.
+ * Displays Description, Additional Info, Shipping, and Reviews in either an Accordion or Tabs layout.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -16,11 +16,11 @@ use Elementor\Group_Control_Border;
 
 class MH_Product_Data_Accordion_Widget extends Widget_Base {
 
-    public function get_name() { return 'mh_product_data_accordion'; } // Kept original ID so your existing pages don't break
+    public function get_name() { return 'mh_product_data_accordion'; }
     public function get_title() { return __( 'MH Product Data (Tabs & Accordion)', 'mh-plug' ); }
     public function get_icon() { return 'eicon-tabs'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
-    public function get_keywords() { return [ 'product', 'accordion', 'tabs', 'description', 'shipping', 'woocommerce', 'mh' ]; }
+    public function get_keywords() { return [ 'product', 'accordion', 'tabs', 'description', 'shipping', 'reviews', 'woocommerce', 'mh' ]; }
 
     protected function register_controls() {
 
@@ -86,6 +86,20 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
             'type'      => Controls_Manager::WYSIWYG,
             'default'   => __( 'Enter your shipping and delivery policy here.', 'mh-plug' ),
             'condition' => [ 'show_shipping' => 'yes' ],
+        ] );
+
+        // 4. Reviews
+        $this->add_control( 'show_reviews', [
+            'label'     => __( 'Show Reviews', 'mh-plug' ),
+            'type'      => Controls_Manager::SWITCHER,
+            'default'   => 'yes',
+            'separator' => 'before',
+        ] );
+        $this->add_control( 'title_reviews', [
+            'label'     => __( 'Reviews Title', 'mh-plug' ),
+            'type'      => Controls_Manager::TEXT,
+            'default'   => __( 'Reviews', 'mh-plug' ),
+            'condition' => [ 'show_reviews' => 'yes' ],
         ] );
 
         $this->end_controls_section();
@@ -326,12 +340,33 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
             $shipping_content = $settings['content_shipping'];
         }
 
-        if ( ! $has_desc && ! $has_info && ! $has_shipping ) return;
+        // 4. Gather Reviews (Native WooCommerce Template)
+        $has_reviews = false;
+        $reviews_content = '';
+        if ( $settings['show_reviews'] === 'yes' && comments_open() ) {
+            $has_reviews = true;
+            ob_start();
+            comments_template();
+            $reviews_content = ob_get_clean();
+        }
+
+        if ( ! $has_desc && ! $has_info && ! $has_shipping && ! $has_reviews ) return;
 
         $first_active = '';
         if ( $has_desc ) $first_active = 'desc';
         elseif ( $has_info ) $first_active = 'info';
         elseif ( $has_shipping ) $first_active = 'shipping';
+        elseif ( $has_reviews ) $first_active = 'reviews';
+
+        // Add some basic styling to make sure native WooCommerce reviews look okay inside our containers
+        $custom_css = "
+            .mh-review-container h2.woocommerce-Reviews-title { display: none; }
+            .mh-review-container ol.commentlist { padding-left: 0; list-style: none; }
+            .mh-review-container .comment_container { display: flex; align-items: flex-start; margin-bottom: 20px; }
+            .mh-review-container .comment_container img.avatar { margin-right: 15px; border-radius: 50%; max-width: 50px; }
+            .mh-review-container .comment-text { flex-grow: 1; padding: 15px; border: 1px solid #eee; border-radius: 5px; }
+            .mh-review-container .star-rating { float: right; }
+        ";
 
         // ==========================================
         // RENDER ACCORDION LAYOUT
@@ -340,6 +375,7 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
             $is_first = true; 
             ?>
             <style>
+                <?php echo $custom_css; ?>
                 .mh-accordion-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 500; transition: color 0.3s ease; }
                 .mh-accordion-icon { font-size: 14px; transition: 0.3s ease; display: inline-flex; align-items: center; justify-content: center; }
                 .mh-accordion-item.active .fa-plus { display: none; }
@@ -389,6 +425,19 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
                             <?php echo wp_kses_post( $shipping_content ); ?>
                         </div>
                     </div>
+                    <?php $is_first = false; ?>
+                <?php endif; ?>
+
+                <?php if ( $has_reviews ) : ?>
+                    <div class="mh-accordion-item <?php echo $is_first ? 'active' : ''; ?>">
+                        <div class="mh-accordion-header">
+                            <span class="mh-accordion-title"><?php echo esc_html( $settings['title_reviews'] ); ?></span>
+                            <span class="mh-accordion-icon"><i class="fas fa-plus"></i><i class="fas fa-minus"></i></span>
+                        </div>
+                        <div class="mh-accordion-content mh-review-container" style="display: <?php echo $is_first ? 'block' : 'none'; ?>;">
+                            <?php echo $reviews_content; ?>
+                        </div>
+                    </div>
                 <?php endif; ?>
             </div>
 
@@ -421,6 +470,7 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
         else { 
             ?>
             <style>
+                <?php echo $custom_css; ?>
                 .mh-tabs-container-<?php echo esc_attr( $widget_id ); ?> .mh-tabs-nav { display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0 0 10px 0; border-bottom: 1px solid #eee; }
                 .mh-tabs-container-<?php echo esc_attr( $widget_id ); ?> .mh-tab-btn { cursor: pointer; font-weight: 600; transition: all 0.3s ease; margin-bottom: -1px; border-color: transparent; }
                 .mh-tabs-container-<?php echo esc_attr( $widget_id ); ?> .mh-tab-content-panel { display: none; animation: mhTabFadeIn 0.4s ease; }
@@ -453,6 +503,11 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
                             <?php echo esc_html( $settings['title_shipping'] ); ?>
                         </li>
                     <?php endif; ?>
+                    <?php if ( $has_reviews ) : ?>
+                        <li class="mh-tab-btn <?php echo ( $first_active === 'reviews' ) ? 'mh-active-tab' : ''; ?>" data-target="mh-tab-reviews-<?php echo esc_attr( $widget_id ); ?>">
+                            <?php echo esc_html( $settings['title_reviews'] ); ?>
+                        </li>
+                    <?php endif; ?>
                 </ul>
 
                 <div class="mh-tabs-content-wrapper">
@@ -469,6 +524,11 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
                     <?php if ( $has_shipping ) : ?>
                         <div id="mh-tab-shipping-<?php echo esc_attr( $widget_id ); ?>" class="mh-tab-content-panel <?php echo ( $first_active === 'shipping' ) ? 'mh-active-content' : ''; ?>">
                             <?php echo wp_kses_post( $shipping_content ); ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ( $has_reviews ) : ?>
+                        <div id="mh-tab-reviews-<?php echo esc_attr( $widget_id ); ?>" class="mh-tab-content-panel mh-review-container <?php echo ( $first_active === 'reviews' ) ? 'mh-active-content' : ''; ?>">
+                            <?php echo $reviews_content; ?>
                         </div>
                     <?php endif; ?>
                 </div>
