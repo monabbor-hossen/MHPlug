@@ -126,22 +126,44 @@ final class MH_Elementor_Loader {
      * Command: Enqueue MH WooCommerce widget scripts on the frontend.
      * Safely secured inside the class.
      */
+    /**
+     * Enqueue MH WooCommerce widget scripts on the frontend.
+     * Safely secured inside the class.
+     */
     public function mh_plug_enqueue_woo_scripts() {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return;
         }
 
-        $js_path = MH_PLUG_PATH . 'elementor/assets/js/mh-woo-scripts.js';
-
+        // Standard Woo Scripts (for Add to Cart, Live Search, etc)
+        $js_path_universal = MH_PLUG_PATH . 'elementor/assets/js/mh-woo-scripts.js';
         wp_register_script(
             'mh-woo-scripts',
             MH_PLUG_URL . 'elementor/assets/js/mh-woo-scripts.js',
             [ 'jquery' ],
-            file_exists( $js_path ) ? filemtime( $js_path ) : MH_PLUG_VERSION,
+            file_exists( $js_path_universal ) ? filemtime( $js_path_universal ) : MH_PLUG_VERSION,
             true 
         );
 
-        // The modern WordPress standard
+        // 🚀 NEW: Register the script for the Advanced Product Gallery Widget
+        $js_path_gallery = MH_PLUG_PATH . 'elementor/assets/js/mh-product-gallery.js';
+        wp_register_script(
+            'mh-product-gallery-script',
+            MH_PLUG_URL . 'elementor/assets/js/mh-product-gallery.js',
+            [ 'jquery', 'slick-js' ], // Depends on Slick!
+            file_exists( $js_path_gallery ) ? filemtime( $js_path_gallery ) : MH_PLUG_VERSION,
+            true 
+        );
+
+        // Enqueue universal scripts
+        wp_enqueue_script('mh-woo-scripts');
+        
+        // 🚀 NEW: Only enqueue the gallery script if we are on a single product page
+        if ( is_product() ) {
+            wp_enqueue_script('mh-product-gallery-script');
+        }
+
+        // Pass standard global data (AJAX URL)
         $ajax_data = [
             'ajax_url'  => admin_url( 'admin-ajax.php' ),
             'login_url' => wc_get_page_permalink( 'myaccount' )
