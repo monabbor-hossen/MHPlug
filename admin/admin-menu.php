@@ -215,6 +215,7 @@ class MH_Admin_Menu {
                 'mh_product_rating',
                 'mh_product_gallery',
                 'mh_product_share',
+                'mh_product_data_tabs',
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
             }
