@@ -138,6 +138,13 @@ final class MH_Elementor_Loader {
             file_exists( $js_path ) ? filemtime( $js_path ) : MH_PLUG_VERSION,
             true 
         );
+
+        // The modern WordPress standard
+        $ajax_data = [
+            'ajax_url'  => admin_url( 'admin-ajax.php' ),
+            'login_url' => wc_get_page_permalink( 'myaccount' )
+        ];
+        wp_add_inline_script( 'mh-woo-scripts', 'var mh_plug_ajax = ' . wp_json_encode( $ajax_data ) . ';', 'before' );
     }
 
 } // End of MH_Elementor_Loader class. Nothing public goes past this line.

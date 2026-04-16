@@ -128,7 +128,8 @@ function mh_plug_enqueue_frontend_scripts() {
                 true
             );
 
-            wp_localize_script('mh-wishlist-js', 'mhWishlist', [
+            // 🚀 THE FIX: Modern wp_add_inline_script replacing the old wp_localize_script!
+            $wishlist_data = [
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce'   => wp_create_nonce('mh_wishlist_nonce'),
                 'i18n'    => [
@@ -136,7 +137,8 @@ function mh_plug_enqueue_frontend_scripts() {
                     'removeLabel'  => __('Remove from Wishlist',     'mh-plug'),
                     'emptyMessage' => __('Your wishlist is empty.',  'mh-plug'),
                 ],
-            ]);
+            ];
+            wp_add_inline_script('mh-wishlist-js', 'var mhWishlist = ' . wp_json_encode($wishlist_data) . ';', 'before');
         }
     }
 }
@@ -144,21 +146,9 @@ add_action('wp_enqueue_scripts', 'mh_plug_enqueue_frontend_scripts');
 
 
 // ─────────────────────────────────────────────────────────────────────────────
-// WOOCOMMERCE WISHLIST AJAX HANDLER & LOCALIZATION
+// WOOCOMMERCE WISHLIST AJAX HANDLER
 // ─────────────────────────────────────────────────────────────────────────────
 
-// 1. Pass the AJAX URL to JavaScript safely
-add_action( 'wp_enqueue_scripts', 'mh_plug_global_js_variables' );
-function mh_plug_global_js_variables() {
-    if ( class_exists( 'WooCommerce' ) ) {
-        wp_localize_script( 'jquery', 'mh_plug_ajax', [
-            'ajax_url'  => admin_url( 'admin-ajax.php' ),
-            'login_url' => wc_get_page_permalink( 'myaccount' )
-        ]);
-    }
-}
-
-// 2. The Database Save Logic
 add_action( 'wp_ajax_mh_wishlist_toggle', 'mh_plug_ajax_wishlist_toggle' );
 add_action( 'wp_ajax_nopriv_mh_wishlist_toggle', 'mh_plug_ajax_wishlist_toggle' );
 
@@ -195,7 +185,6 @@ function mh_plug_ajax_wishlist_toggle() {
     ] );
 }
 
-// 3. Helper Function for the Widget
 if ( ! function_exists( 'mh_wishlist_has_product' ) ) {
     function mh_wishlist_has_product( $product_id ) {
         if ( ! is_user_logged_in() ) return false;
@@ -203,4 +192,57 @@ if ( ! function_exists( 'mh_wishlist_has_product' ) ) {
         if ( ! is_array( $wishlist ) ) return false;
         return in_array( $product_id, $wishlist );
     }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WOOCOMMERCE LIVE PRODUCT SEARCH AJAX HANDLER
+// ─────────────────────────────────────────────────────────────────────────────
+add_action( 'wp_ajax_mh_live_product_search', 'mh_plug_ajax_live_search' );
+add_action( 'wp_ajax_nopriv_mh_live_product_search', 'mh_plug_ajax_live_search' );
+
+function mh_plug_ajax_live_search() {
+    $keyword = isset( $_POST['keyword'] ) ? sanitize_text_field( $_POST['keyword'] ) : '';
+
+    if ( empty( $keyword ) ) {
+        wp_send_json_error(); 
+    }
+
+    // Search WooCommerce Products
+    $args = [
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'posts_per_page' => 5, // Show max 5 results in the dropdown
+        's'              => $keyword, // The search term
+    ];
+
+    $query = new WP_Query( $args );
+    $html  = '';
+
+    if ( $query->have_posts() ) {
+        while ( $query->have_posts() ) {
+            $query->the_post();
+            $product = wc_get_product( get_the_ID() );
+            
+            // Build the HTML for each row in the dropdown
+            $html .= '<a href="' . esc_url( get_permalink() ) . '" style="display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #eee; text-decoration: none; color: #333;">';
+            
+            // Product Image
+            $html .= '<div style="width: 40px; height: 40px; margin-right: 15px; flex-shrink: 0;">';
+            $html .= $product->get_image( [40, 40] ); 
+            $html .= '</div>';
+            
+            // Product Title and Price
+            $html .= '<div style="flex-grow: 1;">';
+            $html .= '<strong style="display: block; font-size: 14px;">' . get_the_title() . '</strong>';
+            $html .= '<span style="color: #d63638; font-size: 13px;">' . $product->get_price_html() . '</span>';
+            $html .= '</div>';
+            
+            $html .= '</a>';
+        }
+    }
+
+    wp_reset_postdata();
+
+    // Send the HTML back to the Javascript
+    wp_send_json_success( $html );
 }

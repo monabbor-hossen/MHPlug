@@ -111,10 +111,12 @@ class MH_Plug_Age_Gate_Front {
         $redirect_url = $this->options['redirect_url'] ?? '';
         $cookie_days  = $this->options['cookie_duration'] ?? 30;
 
-        wp_localize_script( 'mh-age-gate-public', 'mhAgeGate', array(
+        // 🚀 THE FIX: Replaced wp_localize_script with wp_add_inline_script
+        $age_gate_data = array(
             'redirectUrl' => esc_url_raw( $redirect_url ),
             'cookieDays'  => absint( $cookie_days )
-        ) );
+        );
+        wp_add_inline_script( 'mh-age-gate-public', 'var mhAgeGate = ' . wp_json_encode( $age_gate_data ) . ';', 'before' );
     }
 
     public function render_modal() {
