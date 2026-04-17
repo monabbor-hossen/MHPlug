@@ -2,7 +2,7 @@
 /**
  * MH Nav Menu Widget (Pro Version)
  *
- * Advanced navigation menu with hover pointers, custom mobile toggles, dividers, and sticky support.
+ * Advanced navigation menu with select option, hover pointers, and sticky support.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,10 +23,16 @@ class MH_Nav_Menu_Widget extends Widget_Base {
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'menu', 'nav', 'header', 'hamburger', 'dropdown' ]; }
 
+    // 🚀 THE FIX: Foolproof Menu Fetcher with a default "Select" option
     private function get_available_menus() {
         $menus = wp_get_nav_menus();
-        $options = [];
-        foreach ( $menus as $menu ) { $options[ $menu->slug ] = $menu->name; }
+        $options = [ '' => __( '— Select a Menu —', 'mh-plug' ) ]; 
+        
+        if ( ! empty( $menus ) ) {
+            foreach ( $menus as $menu ) { 
+                $options[ $menu->slug ] = $menu->name; 
+            }
+        }
         return $options;
     }
 
@@ -37,28 +43,23 @@ class MH_Nav_Menu_Widget extends Widget_Base {
          * ========================================== */
 
         // --- 1. Menu Layout ---
-        $this->start_controls_section( 'section_layout', [ 'label' => __( 'Menu Layout', 'mh-plug' ) ] );
+        $this->start_controls_section( 'section_layout', [ 'label' => __( 'Menu Settings', 'mh-plug' ) ] );
 
-        $menus = $this->get_available_menus();
-        if ( ! empty( $menus ) ) {
-            $this->add_control( 'menu', [
-                'label'   => __( 'Select Menu', 'mh-plug' ),
-                'type'    => Controls_Manager::SELECT,
-                'options' => $menus,
-                'default' => array_keys( $menus )[0],
-            ] );
-        } else {
-            $this->add_control( 'menu', [
-                'type' => Controls_Manager::RAW_HTML,
-                'raw'  => '<strong>' . __( 'No menus found.', 'mh-plug' ) . '</strong>',
-            ] );
-        }
+        // 🚀 THE FIX: The explicit Select Menu dropdown
+        $this->add_control( 'menu', [
+            'label'   => __( 'Select Menu', 'mh-plug' ),
+            'type'    => Controls_Manager::SELECT,
+            'options' => $this->get_available_menus(),
+            'default' => '',
+            'description' => __( 'Go to Appearance > Menus to create new menus.', 'mh-plug' ),
+        ] );
 
         $this->add_control( 'menu_layout', [
             'label'   => __( 'Menu Layout', 'mh-plug' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'horizontal',
             'options' => [ 'horizontal' => 'Horizontal', 'vertical' => 'Vertical' ],
+            'separator' => 'before',
         ] );
 
         $this->add_responsive_control( 'align_items', [
@@ -91,7 +92,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $this->end_controls_section();
 
         // --- 2. Menu Items (Animations) ---
-        $this->start_controls_section( 'section_menu_items', [ 'label' => __( 'Menu Items', 'mh-plug' ) ] );
+        $this->start_controls_section( 'section_menu_items', [ 'label' => __( 'Item Options', 'mh-plug' ) ] );
 
         $this->add_control( 'hover_effect', [
             'label'   => __( 'Hover Effect', 'mh-plug' ),
@@ -160,7 +161,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         ] );
 
         $this->start_controls_tabs( 'tabs_main_menu_style' );
-        // Normal
+        
         $this->start_controls_tab( 'tab_main_normal', [ 'label' => 'Normal' ] );
         $this->add_control( 'main_color', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
@@ -172,7 +173,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         ] );
         $this->end_controls_tab();
         
-        // Hover
         $this->start_controls_tab( 'tab_main_hover', [ 'label' => 'Hover' ] );
         $this->add_control( 'main_color_hover', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
@@ -185,7 +185,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         ] );
         $this->end_controls_tab();
 
-        // Active
         $this->start_controls_tab( 'tab_main_active', [ 'label' => 'Active' ] );
         $this->add_control( 'main_color_active', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
@@ -296,14 +295,15 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $display    = $settings['submenu_display'];
         $widget_id  = $this->get_id();
 
-        if ( ! $menu_slug ) {
-            echo '<div style="padding:10px; border:1px dashed #ccc; text-align:center;">Please select a menu.</div>';
+        // Output message if no menu is selected
+        if ( ! $menu_slug || $menu_slug === '' ) {
+            echo '<div style="padding:15px; border:1px dashed #d63638; text-align:center; color: #d63638;"><strong>' . __( 'Please select a menu from the Elementor Panel.', 'mh-plug' ) . '</strong></div>';
             return;
         }
 
         if ( $settings['enable_sticky'] === 'yes' ) {
             $this->add_render_attribute( '_wrapper', 'class', 'mh-sticky-active' );
-            echo '<style>.elementor-element-' . $widget_id . '.mh-sticky-active { position: sticky; top: 0; z-index: 999; }</style>';
+            echo '<style>.elementor-element-' . $widget_id . '.mh-sticky-active { position: sticky; top: 0; z-index: 999; transition: all 0.3s ease; }</style>';
         }
 
         ?>
@@ -328,10 +328,9 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 }
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a:hover::after,
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li.current-menu-item > a::after { width: 100%; }
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children > a::after { display: none; /* Hide icon if underline is active to prevent conflicts, or adjust css */ }
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children > a::after { display: none; }
                 
                 <?php if ( $icon !== 'none' ) : ?>
-                    /* Re-add icon if underline is used */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > .menu-item-has-children > a i.sub-icon { margin-left: 8px; font-size: 0.8em; }
                 <?php endif; ?>
             <?php endif; ?>
