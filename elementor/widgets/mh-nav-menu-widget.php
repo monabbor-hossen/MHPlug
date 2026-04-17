@@ -2,7 +2,7 @@
 /**
  * MH Nav Menu Widget (Pro Version)
  *
- * Advanced navigation menu with select option, hover pointers, and sticky support.
+ * Advanced navigation menu with hover borders, item alignment, and sticky support.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,7 +21,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
     public function get_title() { return __( 'MH Nav Menu', 'mh-plug' ); }
     public function get_icon() { return 'eicon-nav-menu'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
-    public function get_keywords() { return [ 'menu', 'nav', 'header', 'hamburger', 'dropdown' ]; }
+    public function get_keywords() { return [ 'menu', 'nav', 'header', 'hamburger', 'dropdown', 'border', 'align' ]; }
 
     private function get_available_menus() {
         $menus = wp_get_nav_menus();
@@ -59,8 +59,9 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'separator' => 'before',
         ] );
 
+        // 🚀 NEW: Alignment for the entire menu block
         $this->add_responsive_control( 'align_items', [
-            'label'     => __( 'Align', 'mh-plug' ),
+            'label'     => __( 'Menu Position Align', 'mh-plug' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
                 'flex-start' => [ 'title' => 'Left', 'icon' => 'eicon-h-align-left' ],
@@ -68,7 +69,21 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 'flex-end'   => [ 'title' => 'Right', 'icon' => 'eicon-h-align-right' ],
                 'stretch'    => [ 'title' => 'Stretch', 'icon' => 'eicon-h-align-stretch' ],
             ],
-            'selectors' => [ '{{WRAPPER}} .mh-menu' => 'justify-content: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-nav-desktop .mh-menu' => 'justify-content: {{VALUE}};' ],
+        ] );
+
+        // 🚀 NEW: Alignment for the text inside the menu items
+        $this->add_responsive_control( 'item_text_align', [
+            'label'     => __( 'Item Text Align', 'mh-plug' ),
+            'type'      => Controls_Manager::CHOOSE,
+            'options'   => [
+                'flex-start' => [ 'title' => 'Left', 'icon' => 'eicon-text-align-left' ],
+                'center'     => [ 'title' => 'Center', 'icon' => 'eicon-text-align-center' ],
+                'flex-end'   => [ 'title' => 'Right', 'icon' => 'eicon-text-align-right' ],
+            ],
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-menu > li > a' => 'justify-content: {{VALUE}}; text-align: {{VALUE}};',
+            ],
         ] );
 
         $this->add_control( 'enable_sticky', [
@@ -123,7 +138,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         ] );
 
         $this->add_control( 'mobile_stretch', [
-            'label'   => __( 'Stretch', 'mh-plug' ),
+            'label'   => __( 'Stretch Dropdown', 'mh-plug' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'full',
             'options' => [ 'full' => 'Full Width', 'custom' => 'Custom' ],
@@ -156,6 +171,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->start_controls_tabs( 'tabs_main_menu_style' );
         
+        // --- NORMAL TAB ---
         $this->start_controls_tab( 'tab_main_normal', [ 'label' => 'Normal' ] );
         $this->add_control( 'main_color', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
@@ -165,26 +181,52 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'label' => 'Background Color', 'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-menu > li > a' => 'background-color: {{VALUE}};' ],
         ] );
+        // 🚀 NEW: Border for Normal State
+        $this->add_group_control( Group_Control_Border::get_type(), [
+            'name'     => 'main_menu_border_normal',
+            'selector' => '{{WRAPPER}} .mh-menu > li > a',
+        ] );
         $this->end_controls_tab();
         
+        // --- HOVER TAB ---
         $this->start_controls_tab( 'tab_main_hover', [ 'label' => 'Hover' ] );
         $this->add_control( 'main_color_hover', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-menu > li > a:hover' => 'color: {{VALUE}};' ],
         ] );
+        $this->add_control( 'main_bg_hover', [
+            'label' => 'Background Color', 'type' => Controls_Manager::COLOR,
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a:hover' => 'background-color: {{VALUE}};' ],
+        ] );
+        // 🚀 NEW: Border for Hover State
+        $this->add_group_control( Group_Control_Border::get_type(), [
+            'name'     => 'main_menu_border_hover',
+            'selector' => '{{WRAPPER}} .mh-menu > li > a:hover',
+        ] );
         $this->add_control( 'main_pointer_color', [
-            'label' => 'Pointer Color', 'type' => Controls_Manager::COLOR,
+            'label' => 'Pointer Color (If Underline)', 'type' => Controls_Manager::COLOR,
             'condition' => [ 'hover_effect' => 'underline' ],
             'selectors' => [ '{{WRAPPER}} .mh-menu > li > a::after' => 'background-color: {{VALUE}};' ],
         ] );
         $this->end_controls_tab();
 
+        // --- ACTIVE TAB ---
         $this->start_controls_tab( 'tab_main_active', [ 'label' => 'Active' ] );
         $this->add_control( 'main_color_active', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-menu > li.current-menu-item > a' => 'color: {{VALUE}};' ],
         ] );
+        $this->add_control( 'main_bg_active', [
+            'label' => 'Background Color', 'type' => Controls_Manager::COLOR,
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li.current-menu-item > a' => 'background-color: {{VALUE}};' ],
+        ] );
+        // 🚀 NEW: Border for Active State
+        $this->add_group_control( Group_Control_Border::get_type(), [
+            'name'     => 'main_menu_border_active',
+            'selector' => '{{WRAPPER}} .mh-menu > li.current-menu-item > a',
+        ] );
         $this->end_controls_tab();
+        
         $this->end_controls_tabs();
 
         $this->add_control( 'pointer_height', [
@@ -240,6 +282,11 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $this->add_control( 'sub_text_color_hover', [
             'label' => 'Hover Text Color', 'type' => Controls_Manager::COLOR, 'default' => '#111111',
             'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu a:hover' => 'color: {{VALUE}};' ],
+        ] );
+        
+        $this->add_control( 'sub_bg_color_hover', [
+            'label' => 'Hover Background Color', 'type' => Controls_Manager::COLOR,
+            'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu a:hover' => 'background-color: {{VALUE}};' ],
         ] );
 
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
@@ -304,7 +351,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu a { display: flex; align-items: center; text-decoration: none; transition: all 0.3s ease; position: relative; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu li { position: relative; }
             
-            /* 🚀 THE FIX: Hide Mobile Toggle and Mobile Panel on Desktop by Default */
+            /* Hide Mobile Tools on Desktop */
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: none; width: 100%; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { display: none; }
             
@@ -318,12 +365,11 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
             /* Hover Effect: Underline */
             <?php if ( $hover === 'underline' ) : ?>
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a::after {
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a::before {
                     content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; background: #333; transition: width 0.3s ease;
                 }
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a:hover::after,
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li.current-menu-item > a::after { width: 100%; }
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children > a::after { display: none; }
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a:hover::before,
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li.current-menu-item > a::before { width: 100%; }
                 
                 <?php if ( $icon !== 'none' ) : ?>
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > .menu-item-has-children > a i.sub-icon { margin-left: 8px; font-size: 0.8em; }
@@ -361,7 +407,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { padding: 15px 20px; border-bottom: 1px solid #eee; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu { position: static; display: none; box-shadow: none; border: none; background: #fafafa; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu a { padding-left: 40px; }
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-mobile-caret { position: absolute; right: 0; top: 0; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-left: 1px solid #eee; z-index: 10; }
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-mobile-caret { position: absolute; right: 0; top: 0; width: 50px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; border-left: 1px solid #eee; z-index: 10; }
                 }
             <?php endif; ?>
         </style>
