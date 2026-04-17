@@ -2,7 +2,7 @@
 /**
  * MH Nav Menu Widget (Pro Version)
  *
- * Advanced navigation menu with hover borders, item alignment, and sticky support.
+ * Advanced navigation menu with buttery smooth hover pointers, fade-in dropdowns, and sticky support.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -59,7 +59,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'separator' => 'before',
         ] );
 
-        // 🚀 NEW: Alignment for the entire menu block
         $this->add_responsive_control( 'align_items', [
             'label'     => __( 'Menu Position Align', 'mh-plug' ),
             'type'      => Controls_Manager::CHOOSE,
@@ -72,7 +71,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'selectors' => [ '{{WRAPPER}} .mh-nav-desktop .mh-menu' => 'justify-content: {{VALUE}};' ],
         ] );
 
-        // 🚀 NEW: Alignment for the text inside the menu items
         $this->add_responsive_control( 'item_text_align', [
             'label'     => __( 'Item Text Align', 'mh-plug' ),
             'type'      => Controls_Manager::CHOOSE,
@@ -181,7 +179,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'label' => 'Background Color', 'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-menu > li > a' => 'background-color: {{VALUE}};' ],
         ] );
-        // 🚀 NEW: Border for Normal State
         $this->add_group_control( Group_Control_Border::get_type(), [
             'name'     => 'main_menu_border_normal',
             'selector' => '{{WRAPPER}} .mh-menu > li > a',
@@ -198,7 +195,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'label' => 'Background Color', 'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-menu > li > a:hover' => 'background-color: {{VALUE}};' ],
         ] );
-        // 🚀 NEW: Border for Hover State
         $this->add_group_control( Group_Control_Border::get_type(), [
             'name'     => 'main_menu_border_hover',
             'selector' => '{{WRAPPER}} .mh-menu > li > a:hover',
@@ -220,7 +216,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'label' => 'Background Color', 'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-menu > li.current-menu-item > a' => 'background-color: {{VALUE}};' ],
         ] );
-        // 🚀 NEW: Border for Active State
         $this->add_group_control( Group_Control_Border::get_type(), [
             'name'     => 'main_menu_border_active',
             'selector' => '{{WRAPPER}} .mh-menu > li.current-menu-item > a',
@@ -348,7 +343,12 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         <style>
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> { position: relative; width: 100%; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu a { display: flex; align-items: center; text-decoration: none; transition: all 0.3s ease; position: relative; }
+            
+            /* 🚀 THE FIX: Premium Smooth Transitions for Links */
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu a { 
+                display: flex; align-items: center; text-decoration: none; position: relative;
+                transition: color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu li { position: relative; }
             
             /* Hide Mobile Tools on Desktop */
@@ -359,21 +359,24 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             <?php if ( $icon !== 'none' ) : ?>
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children > a::after {
                     content: '\<?php echo ( $icon === 'fa-caret-down' ? 'f0d7' : ($icon === 'fa-angle-down' ? 'f107' : 'f067') ); ?>';
-                    font-family: 'Font Awesome 5 Free'; font-weight: 900; margin-left: 8px; font-size: 0.8em; transition: 0.3s;
+                    font-family: 'Font Awesome 5 Free'; font-weight: 900; margin-left: 8px; font-size: 0.8em; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
                 }
+                /* Rotate icon on dropdown hover */
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children:hover > a::after { transform: rotate(180deg); }
             <?php endif; ?>
 
-            /* Hover Effect: Underline */
+            /* 🚀 THE FIX: Buttery Smooth Hardware-Accelerated Underline Hover */
             <?php if ( $hover === 'underline' ) : ?>
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a::before {
-                    content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; background: #333; transition: width 0.3s ease;
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a::after {
+                    content: ''; position: absolute; bottom: 0; left: 0; width: 100%; background: #333; 
+                    transform: scaleX(0); transform-origin: center; 
+                    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
                 }
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a:hover::before,
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li.current-menu-item > a::before { width: 100%; }
-                
-                <?php if ( $icon !== 'none' ) : ?>
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > .menu-item-has-children > a i.sub-icon { margin-left: 8px; font-size: 0.8em; }
-                <?php endif; ?>
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a:hover::after,
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li.current-menu-item > a::after { 
+                    transform: scaleX(1); 
+                }
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children > a::after { display: none; }
             <?php endif; ?>
 
             /* Layout: Vertical */
@@ -382,16 +385,28 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li { width: 100%; }
             <?php endif; ?>
 
-            /* Dropdowns */
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu { position: absolute; top: 100%; left: 0; min-width: 220px; display: none; flex-direction: column; list-style: none; padding: 0; margin: 0; z-index: 999; }
+            /* 🚀 THE FIX: Premium Smooth Fade & Glide Dropdowns */
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu { 
+                position: absolute; top: 100%; left: 0; min-width: 220px; 
+                flex-direction: column; list-style: none; padding: 0; margin: 0; z-index: 999; 
+                
+                /* Smooth transition setup instead of display: none */
+                opacity: 0; visibility: hidden; pointer-events: none;
+                transform: translateY(15px);
+                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                display: flex;
+            }
+            
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu a { padding: 12px 20px; font-size: 14px; width: 100%; box-sizing: border-box; }
             
             <?php if ( $display === 'hover' ) : ?>
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li:hover > .sub-menu { display: flex; animation: mhFadeIn 0.3s ease; }
+                /* Show smoothly on hover */
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li:hover > .sub-menu { 
+                    opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); 
+                }
             <?php endif; ?>
             
-            @keyframes mhFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
+            /* Mobile Toggle */
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle { cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.3s; }
             
             /* Breakpoint Logic */
@@ -400,14 +415,18 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop { display: none !important; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: flex; }
                     
-                    /* Mobile Panel overrides */
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { width: 100%; position: absolute; top: 100%; left: 0; z-index: 9999; background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu { flex-direction: column; width: 100%; }
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { width: 100%; position: absolute; top: 100%; left: 0; z-index: 9999; background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); display: none; }
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu { flex-direction: column; width: 100%; display: flex; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu li { width: 100%; }
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { padding: 15px 20px; border-bottom: 1px solid #eee; }
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu { position: static; display: none; box-shadow: none; border: none; background: #fafafa; }
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { padding: 15px 20px; border-bottom: 1px solid #eee; width: 100%; box-sizing: border-box; }
+                    
+                    /* Mobile submenus use basic display toggle for slide effects */
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu { position: static; display: none; box-shadow: none; border: none; background: #fafafa; opacity: 1; visibility: visible; pointer-events: auto; transform: none; width: 100%; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu a { padding-left: 40px; }
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-mobile-caret { position: absolute; right: 0; top: 0; width: 50px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; border-left: 1px solid #eee; z-index: 10; }
+                    
+                    /* Reset mobile carets */
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .menu-item-has-children > a::after { display: none; }
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-mobile-caret { position: absolute; right: 0; top: 0; width: 50px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; border-left: 1px solid #eee; z-index: 10; transition: transform 0.3s; }
                 }
             <?php endif; ?>
         </style>
@@ -445,16 +464,23 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 $wrapper.find('.mh-mobile-caret').on('click', function(e) {
                     e.preventDefault();
                     $(this).parent('li').children('.sub-menu').slideToggle(300);
-                    $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
+                    $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up'); // Ensure the caret rotates smoothly
                 });
 
-                // 2. Desktop Click Display Logic
+                // 2. Desktop Click Display Logic (Using new opacity/visibility classes)
                 <?php if ( $display === 'click' ) : ?>
                     $wrapper.find('.mh-nav-desktop .menu-item-has-children > a').on('click', function(e) {
                         if ($(this).attr('href') === '#' || $(this).attr('href') === '') {
                             e.preventDefault();
                         }
-                        $(this).siblings('.sub-menu').fadeToggle(200);
+                        var $submenu = $(this).siblings('.sub-menu');
+                        if($submenu.css('opacity') === '0') {
+                            $submenu.css({'opacity': '1', 'visibility': 'visible', 'pointer-events': 'auto', 'transform': 'translateY(0)'});
+                            $(this).find('.sub-icon').css('transform', 'rotate(180deg)');
+                        } else {
+                            $submenu.css({'opacity': '0', 'visibility': 'hidden', 'pointer-events': 'none', 'transform': 'translateY(15px)'});
+                            $(this).find('.sub-icon').css('transform', 'rotate(0deg)');
+                        }
                     });
                 <?php endif; ?>
 
