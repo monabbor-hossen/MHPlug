@@ -81,6 +81,8 @@ final class MH_Elementor_Loader {
             'mh_stacked_carousel'    => ['file' => 'mh-stacked-carousel-widget.php', 'class' => 'MH_Stacked_Carousel_Widget' ],
             'mh_wishlist_button'     => ['file' => 'mh-wishlist-button-widget.php', 'class' => 'MH_Wishlist_Button_Widget' ],
             'mh_wishlist_table'      => ['file' => 'mh-wishlist-table-widget.php',  'class' => 'MH_Wishlist_Table_Widget'  ],
+            'mh_nav_menu'            => ['file' => 'mh-nav-menu-widget.php', 'class' => 'MH_Nav_Menu_Widget' ],
+            'mh_copyright'           => ['file' => 'mh-copyright-widget.php', 'class' => 'MH_Copyright_Widget'],
         ];
 
         if ( class_exists( 'WooCommerce' ) ) {
@@ -99,8 +101,7 @@ final class MH_Elementor_Loader {
                 'mh_product_gallery'           => [ 'file' => 'mh-product-gallery-widget.php',            'class' => 'MH_Product_Gallery_Widget' ],
                 'mh_product_share'             => [ 'file' => 'mh-product-share-widget.php',              'class' => 'MH_Product_Share_Widget' ],
                 'mh_product_data_accordion'    => [ 'file' => 'mh-product-data-accordion-widget.php',     'class' => 'MH_Product_Data_Accordion_Widget' ],
-                'mh_nav_menu'            => ['file' => 'mh-nav-menu-widget.php', 'class' => 'MH_Nav_Menu_Widget' ],
-            ];
+                ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
 

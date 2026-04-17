@@ -55,6 +55,8 @@ class MH_Admin_Menu {
         'mh_product_share'             => 'Product Share',
         'mh_product_data_accordion'    => 'Product Data (Tabs & Accordion)',
         'mh_nav_menu'       => 'Nav Menu',
+        // 🚀 NEW: Add the toggle switch
+        'mh_copyright'      => 'Copyright',
         
     ];
 
@@ -231,6 +233,7 @@ class MH_Admin_Menu {
                 'mh_product_share',
                 'mh_product_data_accordion', 
                 'mh_nav_menu' ,
+                'mh_copyright',
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
             }
