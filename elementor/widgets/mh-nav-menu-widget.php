@@ -23,7 +23,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'menu', 'nav', 'header', 'hamburger', 'dropdown' ]; }
 
-    // 🚀 THE FIX: Foolproof Menu Fetcher with a default "Select" option
     private function get_available_menus() {
         $menus = wp_get_nav_menus();
         $options = [ '' => __( '— Select a Menu —', 'mh-plug' ) ]; 
@@ -42,10 +41,8 @@ class MH_Nav_Menu_Widget extends Widget_Base {
          * CONTENT TAB
          * ========================================== */
 
-        // --- 1. Menu Layout ---
         $this->start_controls_section( 'section_layout', [ 'label' => __( 'Menu Settings', 'mh-plug' ) ] );
 
-        // 🚀 THE FIX: The explicit Select Menu dropdown
         $this->add_control( 'menu', [
             'label'   => __( 'Select Menu', 'mh-plug' ),
             'type'    => Controls_Manager::SELECT,
@@ -91,7 +88,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->end_controls_section();
 
-        // --- 2. Menu Items (Animations) ---
         $this->start_controls_section( 'section_menu_items', [ 'label' => __( 'Item Options', 'mh-plug' ) ] );
 
         $this->add_control( 'hover_effect', [
@@ -117,7 +113,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->end_controls_section();
 
-        // --- 3. Mobile Menu ---
         $this->start_controls_section( 'section_mobile_menu', [ 'label' => __( 'Mobile Menu', 'mh-plug' ) ] );
 
         $this->add_control( 'mobile_breakpoint', [
@@ -152,7 +147,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
          * STYLE TAB
          * ========================================== */
 
-        // --- 1. Main Menu Items ---
         $this->start_controls_section( 'style_main_menu', [ 'label' => __( 'Main Menu', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
@@ -212,7 +206,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->end_controls_section();
 
-        // --- 2. Sub Menu ---
         $this->start_controls_section( 'style_sub_menu', [ 'label' => __( 'Sub Menu', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
 
         $this->add_control( 'sub_offset', [
@@ -255,7 +248,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->end_controls_section();
 
-        // --- 3. Toggle Button ---
         $this->start_controls_section( 'style_toggle', [ 'label' => __( 'Toggle Button', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
 
         $this->add_control( 'toggle_color', [
@@ -295,7 +287,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $display    = $settings['submenu_display'];
         $widget_id  = $this->get_id();
 
-        // Output message if no menu is selected
         if ( ! $menu_slug || $menu_slug === '' ) {
             echo '<div style="padding:15px; border:1px dashed #d63638; text-align:center; color: #d63638;"><strong>' . __( 'Please select a menu from the Elementor Panel.', 'mh-plug' ) . '</strong></div>';
             return;
@@ -312,6 +303,10 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu a { display: flex; align-items: center; text-decoration: none; transition: all 0.3s ease; position: relative; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu li { position: relative; }
+            
+            /* 🚀 THE FIX: Hide Mobile Toggle and Mobile Panel on Desktop by Default */
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: none; width: 100%; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { display: none; }
             
             /* Submenu Icon */
             <?php if ( $icon !== 'none' ) : ?>
@@ -342,8 +337,8 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             <?php endif; ?>
 
             /* Dropdowns */
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu .sub-menu { position: absolute; top: 100%; left: 0; min-width: 220px; display: none; flex-direction: column; list-style: none; padding: 0; margin: 0; z-index: 999; }
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu .sub-menu a { padding: 12px 20px; font-size: 14px; width: 100%; box-sizing: border-box; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu { position: absolute; top: 100%; left: 0; min-width: 220px; display: none; flex-direction: column; list-style: none; padding: 0; margin: 0; z-index: 999; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu a { padding: 12px 20px; font-size: 14px; width: 100%; box-sizing: border-box; }
             
             <?php if ( $display === 'hover' ) : ?>
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li:hover > .sub-menu { display: flex; animation: mhFadeIn 0.3s ease; }
@@ -351,8 +346,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             
             @keyframes mhFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-            /* Mobile Toggle */
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: none; width: 100%; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle { cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.3s; }
             
             /* Breakpoint Logic */
@@ -360,7 +353,9 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 @media (max-width: <?php echo esc_attr( $breakpoint ); ?>px) {
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop { display: none !important; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: flex; }
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { display: none; width: 100%; position: absolute; top: 100%; left: 0; z-index: 9999; background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+                    
+                    /* Mobile Panel overrides */
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { width: 100%; position: absolute; top: 100%; left: 0; z-index: 9999; background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu { flex-direction: column; width: 100%; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu li { width: 100%; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { padding: 15px 20px; border-bottom: 1px solid #eee; }
