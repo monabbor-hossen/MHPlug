@@ -53,7 +53,8 @@ class MH_Admin_Menu {
         'mh_product_rating'            => 'Product Rating',
         'mh_product_gallery'           => 'Product Gallery',
         'mh_product_share'             => 'Product Share',
-        'mh_product_data_accordion'    => 'Product Data (Tabs & Accordion)'
+        'mh_product_data_accordion'    => 'Product Data (Tabs & Accordion)',,
+        'mh_nav_menu'       => 'Nav Menu',
         
     ];
 
@@ -229,6 +230,7 @@ class MH_Admin_Menu {
                 'mh_product_gallery',
                 'mh_product_share',
                 'mh_product_data_accordion', 
+                'mh_nav_menu' 
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
             }
