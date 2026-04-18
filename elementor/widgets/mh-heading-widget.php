@@ -4,159 +4,137 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// These 'use' statements import all necessary Elementor classes.
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Text_Shadow;
-use Elementor\Group_Control_Background; // <-- ADD THIS LINE
+use Elementor\Group_Control_Background;
 use Elementor\Repeater;
 
 /**
  * MH Advanced Heading Widget Class
- * Final Corrected Version with Full Interactivity and Advanced Underline
+ * Final Version with Gradients, Strokes, Typing Animations, and Fixed Underlines
  */
 class MH_Heading_Widget extends Widget_Base {
 
-    public function get_name() {
-        return 'mh-heading';
-    }
+    public function get_name() { return 'mh-heading'; }
+    public function get_title() { return esc_html__('MH Heading', 'mh-plug'); }
+    public function get_icon() { return 'eicon-t-letter'; }
+    public function get_categories() { return ['mh-plug-widgets']; }
+    public function get_keywords() { return ['heading', 'title', 'text', 'gradient', 'stroke', 'typing', 'animated']; }
 
-    public function get_title() {
-        return esc_html__('MH Heading', 'mh-plug');
-    }
+    protected function register_controls() {
 
-    public function get_icon() {
-        return 'mhi-text';
-    }
-
-    public function get_categories() {
-        return ['mh-plug-widgets'];
-    }
-
-    protected function _register_controls() {
-
-        // --- Content Tab: Heading Parts (Repeater) ---
+        /* ==========================================
+         * CONTENT TAB: HEADING PARTS (REPEATER)
+         * ========================================== */
         $this->start_controls_section(
             'section_heading_parts',
-            [
-                'label' => esc_html__('Heading Parts', 'mh-plug'),
-                'tab'   => Controls_Manager::TAB_CONTENT,
-            ]
+            [ 'label' => esc_html__('Heading Parts', 'mh-plug'), 'tab' => Controls_Manager::TAB_CONTENT ]
         );
 
         $repeater = new Repeater();
 
-        // Content Control inside Repeater
         $repeater->add_control(
             'part_text',
             [
                 'label'   => esc_html__('Text', 'mh-plug'),
                 'type'    => Controls_Manager::TEXT,
-                'default' => esc_html__('Text Part', 'mh-plug'),
+                'default' => esc_html__('Heading', 'mh-plug'),
                 'label_block' => true,
                 'dynamic' => ['active' => true],
             ]
         );
 
-        // --- Start of Style Tab inside Repeater ---
+        // --- REPEATER: STYLING ---
+        $repeater->add_control( 'part_styles_heading', [ 'label' => esc_html__('Styling', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+
+        // Solid Color vs Gradient
         $repeater->add_control(
-            'part_styles_heading',
-            [
-                'label' => esc_html__('Styling', 'mh-plug'),
-                'type' => Controls_Manager::HEADING,
-                'separator' => 'before',
-            ]
+            'part_use_gradient',
+            [ 'label' => esc_html__('Use Gradient Text?', 'mh-plug'), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no' ]
         );
 
-        // Style Controls inside Repeater
         $repeater->add_control(
             'part_color',
             [
                 'label'     => esc_html__('Text Color', 'mh-plug'),
                 'type'      => Controls_Manager::COLOR,
-                'selectors' => [
-                    // CORRECTED SELECTOR: {{CURRENT_ITEM}} makes it interactive.
-                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'color: {{VALUE}};',
-                ],
+                'condition' => [ 'part_use_gradient' => '' ],
+                'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'color: {{VALUE}};' ],
             ]
         );
-        
+
+        $repeater->add_control( 'part_grad_color_1', [ 'label' => esc_html__('Gradient Color 1', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#2293e9', 'condition' => [ 'part_use_gradient' => 'yes' ] ] );
+        $repeater->add_control( 'part_grad_color_2', [ 'label' => esc_html__('Gradient Color 2', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#8e44ad', 'condition' => [ 'part_use_gradient' => 'yes' ] ] );
         $repeater->add_control(
-            'part_background_color',
+            'part_grad_angle',
             [
-                'label'     => esc_html__('Background Color', 'mh-plug'),
-                'type'      => Controls_Manager::COLOR,
+                'label' => esc_html__('Gradient Angle', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'range' => ['px' => ['min' => 0, 'max' => 360]], 'default' => ['size' => 90], 'condition' => [ 'part_use_gradient' => 'yes' ],
                 'selectors' => [
-                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'background: linear-gradient({{SIZE}}deg, {{part_grad_color_1.VALUE}} 0%, {{part_grad_color_2.VALUE}} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;',
                 ],
             ]
         );
+
+        // Text Stroke (Outline)
+        $repeater->add_control(
+            'part_use_stroke',
+            [ 'label' => esc_html__('Add Text Stroke (Outline)?', 'mh-plug'), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no', 'separator' => 'before' ]
+        );
+        $repeater->add_control(
+            'part_stroke_width',
+            [ 'label' => esc_html__('Stroke Width', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'range' => ['px' => ['min' => 1, 'max' => 10]], 'default' => ['size' => 1], 'condition' => [ 'part_use_stroke' => 'yes' ] ]
+        );
+        $repeater->add_control(
+            'part_stroke_color',
+            [
+                'label' => esc_html__('Stroke Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#000000', 'condition' => [ 'part_use_stroke' => 'yes' ],
+                'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => '-webkit-text-stroke: {{part_stroke_width.SIZE}}px {{VALUE}};' ],
+            ]
+        );
+
+        $repeater->add_control( 'part_background_color', [ 'label' => esc_html__('Background Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'background-color: {{VALUE}};' ], 'separator' => 'before' ] );
         
-        $repeater->add_group_control(
-            Group_Control_Typography::get_type(),
-            [
-                'name'     => 'part_typography',
-                'selector' => '{{WRAPPER}} {{CURRENT_ITEM}}',
+        $repeater->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'part_typography', 'selector' => '{{WRAPPER}} {{CURRENT_ITEM}}' ] );
+        $repeater->add_group_control( Group_Control_Text_Shadow::get_type(), [ 'name' => 'part_text_shadow', 'selector' => '{{WRAPPER}} {{CURRENT_ITEM}}' ] );
+
+        // --- REPEATER: ANIMATION ---
+        $repeater->add_control( 'part_animation_heading', [ 'label' => esc_html__('Animation', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $repeater->add_control(
+            'part_typing_effect',
+            [ 
+                'label' => esc_html__('Typewriter Effect', 'mh-plug'), 
+                'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no',
+                'description' => esc_html__('Applies a CSS typing animation to this specific word.', 'mh-plug'),
             ]
         );
 
-        $repeater->add_group_control(
-            Group_Control_Text_Shadow::get_type(),
-            [
-                'name'     => 'part_text_shadow',
-                'selector' => '{{WRAPPER}} {{CURRENT_ITEM}}',
-            ]
-        );
+        $repeater->add_responsive_control( 'part_margin', [ 'label' => esc_html__('Margin', 'mh-plug'), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%', 'em'], 'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], 'separator' => 'before' ] );
 
-        // Responsive Margin Control for each part
-        $repeater->add_responsive_control(
-            'part_margin', // Unique ID for the margin control within the repeater
-            [
-                'label'      => esc_html__('Margin', 'mh-plug'),
-                'type'       => Controls_Manager::DIMENSIONS,
-                'size_units' => ['px', '%', 'em'],
-                'selectors'  => [
-                    // This targets the specific span element for the current repeater item
-                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-                ],
-                'separator' => 'before', // Optional: Adds a line above this control in the panel
-            ]
-        );
-        // --- End of Style Tab inside Repeater ---
-
-        // Add the repeater control to the section
         $this->add_control(
             'heading_parts',
             [
                 'label'   => esc_html__('Text Parts', 'mh-plug'),
                 'type'    => Controls_Manager::REPEATER,
                 'fields'  => $repeater->get_controls(),
-                'default' => [
-                    ['part_text' => esc_html__('Advanced', 'mh-plug')],
-                    ['part_text' => esc_html__('Heading', 'mh-plug')],
-                ],
+                'default' => [ ['part_text' => 'Advanced'], ['part_text' => 'Heading'] ],
                 'title_field' => '{{{ part_text }}}',
             ]
         );
         
         $this->end_controls_section();
 
-        // --- Content Tab: General Settings ---
-        $this->start_controls_section(
-            'section_general_settings',
-            [
-                'label' => esc_html__('General Settings', 'mh-plug'),
-                'tab'   => Controls_Manager::TAB_CONTENT,
-            ]
-        );
+        /* ==========================================
+         * CONTENT TAB: GENERAL SETTINGS
+         * ========================================== */
+        $this->start_controls_section( 'section_general_settings', [ 'label' => esc_html__('General Settings', 'mh-plug'), 'tab' => Controls_Manager::TAB_CONTENT ] );
 
         $this->add_responsive_control(
             'heading_alignment',
             [
-                'label'   => esc_html__('Alignment', 'mh-plug'),
-                'type'    => Controls_Manager::CHOOSE,
-                'options' => [ 'left' => ['title' => esc_html__('Left', 'mh-plug'), 'icon' => 'eicon-text-align-left'], 'center' => ['title' => esc_html__('Center', 'mh-plug'), 'icon' => 'eicon-text-align-center'], 'right' => ['title' => esc_html__('Right', 'mh-plug'), 'icon' => 'eicon-text-align-right'], ],
+                'label'   => esc_html__('Alignment', 'mh-plug'), 'type' => Controls_Manager::CHOOSE,
+                'options' => [ 'left' => ['title' => 'Left', 'icon' => 'eicon-text-align-left'], 'center' => ['title' => 'Center', 'icon' => 'eicon-text-align-center'], 'right' => ['title' => 'Right', 'icon' => 'eicon-text-align-right'], ],
                 'default'   => 'left',
                 'selectors' => [ '{{WRAPPER}}' => 'text-align: {{VALUE}};' ],
             ]
@@ -164,187 +142,182 @@ class MH_Heading_Widget extends Widget_Base {
         
         $this->add_control(
             'heading_html_tag',
-            [ 'label' => esc_html__('HTML Tag', 'mh-plug'), 
-            'type' => Controls_Manager::SELECT, 
-            'options' => [ 'h1'=>'H1', 'h2'=>'H2', 'h3'=>'H3', 'h4'=>'H4', 'h5'=>'H5', 'h6'=>'H6', 'p'=>'P', 'div'=>'DIV' ], 'default' => 'h2' ]
+            [ 'label' => esc_html__('HTML Tag', 'mh-plug'), 'type' => Controls_Manager::SELECT, 'options' => [ 'h1'=>'H1', 'h2'=>'H2', 'h3'=>'H3', 'h4'=>'H4', 'h5'=>'H5', 'h6'=>'H6', 'p'=>'P', 'div'=>'DIV' ], 'default' => 'h2' ]
         );
 
         $this->end_controls_section();
 
-        // --- Style Tab: Underline (Completely Reworked) ---
-        
-// --- Style Tab: Underline (Corrected Logic) ---
-        $this->start_controls_section(
-            'section_underline_style',
-            [ 'label' => esc_html__('Underline', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE ]
-        );
+        /* ==========================================
+         * STYLE TAB: UNDERLINE
+         * ========================================== */
+        $this->start_controls_section( 'section_underline_style', [ 'label' => esc_html__('Underline', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE ] );
 
         $this->add_control(
             'underline_apply_to',
             [
-                'label' => esc_html__('Apply Underline To', 'mh-plug'),
-                'type' => Controls_Manager::SELECT,
-                'options' => [
-                    'all' => esc_html__('All Parts', 'mh-plug'),
-                    'last' => esc_html__('Last Part Only', 'mh-plug'),
-                ],
+                'label' => esc_html__('Apply Underline To', 'mh-plug'), 'type' => Controls_Manager::SELECT,
+                'options' => [ 'all' => esc_html__('All Parts (Wrapper)', 'mh-plug'), 'last' => esc_html__('Last Part Only', 'mh-plug') ],
                 'default' => 'all',
-                'condition' => [ 'underline_style!' => 'none' ],
             ]
         );
 
         $this->add_control(
             'underline_style',
             [
-                'label' => esc_html__('Style', 'mh-plug'),
-                'type' => Controls_Manager::SELECT,
-                'options' => [ 
-                    'none' => esc_html__('None', 'mh-plug'), 
-                    'solid' => esc_html__('Solid', 'mh-plug'), 
-                    'dotted' => esc_html__('Dotted', 'mh-plug'), 
-                    'dashed' => esc_html__('Dashed', 'mh-plug'), 
-                    'double' => esc_html__('Double', 'mh-plug'), 
-                    'wavy' => esc_html__('Wavy (SVG)', 'mh-plug'), 
-                    'jagged' => esc_html__('Jagged (SVG)', 'mh-plug'),
-                ],
+                'label' => esc_html__('Style', 'mh-plug'), 'type' => Controls_Manager::SELECT,
+                'options' => [ 'none' => 'None', 'solid' => 'Solid', 'dotted' => 'Dotted', 'dashed' => 'Dashed', 'double' => 'Double', 'wavy' => 'Wavy (SVG)', 'jagged' => 'Jagged (SVG)' ],
                 'default' => 'none',
             ]
         );
         
-        // Use a Group Control for Background for SVG-based styles that use a background image.
         $this->add_group_control(
             Group_Control_Background::get_type(),
             [
-                'name' => 'underline_background',
-                'label' => esc_html__( 'Color', 'mh-plug' ),
-                'types' => [ 'classic', 'gradient' ],
-                'selector' => '{{WRAPPER}} .mh-underline-wrapper.mh-underline--solid::after', // Only for solid style now
+                'name' => 'underline_background', 'label' => esc_html__( 'Solid Background Color', 'mh-plug' ), 'types' => [ 'classic', 'gradient' ],
+                'selector' => '{{WRAPPER}} .mh-underline-wrapper.mh-underline--solid::after, {{WRAPPER}} .mh-has-underline.mh-underline--solid::after',
                 'condition' => [ 'underline_style' => 'solid' ],
             ]
         );
 
-        // A single color picker for ALL other styles (dotted, dashed, double, wavy, jagged).
         $this->add_control(
             'underline_simple_color',
             [
-                'label' => esc_html__('Color', 'mh-plug'),
-                'type' => Controls_Manager::COLOR,
-                'default' => '#000000',
+                'label' => esc_html__('Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#d63638',
                 'condition' => [ 'underline_style' => ['dotted', 'dashed', 'double', 'wavy', 'jagged'] ],
             ]
         );
 
-        $this->add_responsive_control( 'underline_width', [ 'label' => esc_html__('Width', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['%', 'px'], 'range' => ['%' => ['min' => 0, 'max' => 200], 'px' => ['min' => 0, 'max' => 1000]], 'default' => ['unit' => '%', 'size' => 100], 'condition' => [ 'underline_style!' => 'none' ], 'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => 'width: {{SIZE}}{{UNIT}};' ] ] );
-        $this->add_responsive_control( 'underline_height', [ 'label' => esc_html__('Height (Thickness)', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => 1, 'max' => 50]], 'default' => ['unit' => 'px', 'size' => 3], 'condition' => [ 'underline_style!' => 'none' ], 'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => '--underline-height: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline' => 'text-decoration-thickness: {{SIZE}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'underline_width', [ 'label' => esc_html__('Width', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['%', 'px'], 'range' => ['%' => ['min' => 0, 'max' => 200], 'px' => ['min' => 0, 'max' => 1000]], 'default' => ['unit' => '%', 'size' => 100], 'condition' => [ 'underline_style!' => 'none' ], 'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => 'width: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline::after' => 'width: {{SIZE}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'underline_height', [ 'label' => esc_html__('Height (Thickness)', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => 1, 'max' => 50]], 'default' => ['unit' => 'px', 'size' => 3], 'condition' => [ 'underline_style!' => 'none' ], 'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => '--underline-height: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline' => 'text-decoration-thickness: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline::after' => '--underline-height: {{SIZE}}{{UNIT}};' ] ] );
         
         $this->add_control(
             'underline_position',
-            [
-                'label' => esc_html__('Position', 'mh-plug'),
-                'type' => Controls_Manager::CHOOSE,
-                'options' => [ 'top' => [ 'title' => esc_html__('Top', 'mh-plug'), 'icon' => 'eicon-v-align-top' ], 'bottom' => [ 'title' => esc_html__('Bottom', 'mh-plug'), 'icon' => 'eicon-v-align-bottom' ], ],
-                'default' => 'bottom', 'toggle' => false, 'condition' => [ 'underline_style!' => 'none' ],
-            ]
+            [ 'label' => esc_html__('Position', 'mh-plug'), 'type' => Controls_Manager::CHOOSE, 'options' => [ 'top' => [ 'title' => 'Top', 'icon' => 'eicon-v-align-top' ], 'bottom' => [ 'title' => 'Bottom', 'icon' => 'eicon-v-align-bottom' ] ], 'default' => 'bottom', 'toggle' => false, 'condition' => [ 'underline_style!' => 'none' ] ]
         );
 
        $this->add_responsive_control( 
-        'underline_y_offset', [ 'label' => esc_html__('Y Offset', 'mh-plug'), 
-        'type' => Controls_Manager::SLIDER, 
-        'size_units' => ['px'], 'range' => ['px' => ['min' => -100, 'max' => 100]],
-        'default' => ['unit' => 'px', 'size' => 0], 
-        'condition' => [ 'underline_style' => ['solid', 'wavy', 'jagged'] ], 
-        'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => '--underline-offset: {{SIZE}}{{UNIT}};' ] ] 
-    );
+        'underline_y_offset', [ 'label' => esc_html__('Y Offset', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => -100, 'max' => 100]], 'default' => ['unit' => 'px', 'size' => 0], 'condition' => [ 'underline_style' => ['solid', 'wavy', 'jagged'] ], 'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => '--underline-offset: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline::after' => '--underline-offset: {{SIZE}}{{UNIT}};' ] ] 
+        );
         
-        // A separate offset control for native text-decoration underlines.
         $this->add_responsive_control(
-             'underline_native_y_offset', [ 'label' => esc_html__('Y Offset', 'mh-plug'), 
-             'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 
-             'range' => ['px' => ['min' => -50, 'max' => 50]], 'default' => ['unit' => 'px', 'size' => 0],
-              'condition' => [ 'underline_style' => ['dotted', 'dashed', 'double'] ], 
-              'selectors' => [ '{{WRAPPER}} .mh-has-underline' => 'text-underline-offset: {{SIZE}}{{UNIT}};' ] ] );
+             'underline_native_y_offset', [ 'label' => esc_html__('Y Offset', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => -50, 'max' => 50]], 'default' => ['unit' => 'px', 'size' => 0], 'condition' => [ 'underline_style' => ['dotted', 'dashed', 'double'] ], 'selectors' => [ '{{WRAPPER}} .mh-has-underline' => 'text-underline-offset: {{SIZE}}{{UNIT}};' ] ] 
+        );
 
         $this->end_controls_section();
-
-
-
-
     }
 
     protected function render() {
-    $settings = $this->get_settings_for_display();
-    $tag = esc_attr($settings['heading_html_tag']);
-    
+        $settings = $this->get_settings_for_display();
+        $tag      = esc_attr($settings['heading_html_tag']);
+        $apply_to = $settings['underline_apply_to'];
+        $u_style  = $settings['underline_style'];
 
-    // Determine if the selected style uses native text-decoration or a pseudo-element
-    $is_native_underline = in_array($settings['underline_style'], ['dotted', 'dashed', 'double']);
-    $is_pseudo_underline = in_array($settings['underline_style'], ['solid', 'wavy', 'jagged']);
+        $is_native_underline = in_array($u_style, ['dotted', 'dashed', 'double']);
+        $is_pseudo_underline = in_array($u_style, ['solid', 'wavy', 'jagged']);
 
-    // --- HTML Rendering ---
-    $this->add_render_attribute('wrapper', 'class', 'mh-underline-wrapper');
-    if ($is_pseudo_underline) {
-        $this->add_render_attribute('wrapper', 'class', 'mh-underline--' . $settings['underline_style']);
-        $this->add_render_attribute('wrapper', 'class', 'mh-underline-pos--' . $settings['underline_position']);
-    }
-    ?>
-    <div <?php echo $this->get_render_attribute_string('wrapper'); ?>>
-        <<?php echo $tag; ?> class="mh-advanced-heading-wrapper">
-            <?php foreach ($settings['heading_parts'] as $item) :
-                $part_classes = ['elementor-repeater-item-' . esc_attr($item['_id']), 'mh-heading-part'];
+        $wrapper_classes = ['mh-advanced-heading-wrapper'];
+        
+        // 🚀 THE FIX: If "All Parts", apply classes to the wrapper
+        if ($apply_to === 'all') {
+            $wrapper_classes[] = 'mh-underline-wrapper';
+            if ($is_pseudo_underline) {
+                $wrapper_classes[] = 'mh-underline--' . $u_style;
+                $wrapper_classes[] = 'mh-underline-pos--' . $settings['underline_position'];
+            }
+            if ($is_native_underline) {
+                $wrapper_classes[] = 'mh-has-underline';
+            }
+        }
+
+        echo '<' . $tag . ' class="' . implode(' ', $wrapper_classes) . '">';
+
+        $parts_count = count($settings['heading_parts']);
+
+        foreach ($settings['heading_parts'] as $index => $item) {
+            $part_classes = ['elementor-repeater-item-' . esc_attr($item['_id']), 'mh-heading-part'];
+            
+            // 🚀 THE FIX: If "Last Part Only", apply classes ONLY to the final span
+            if ($apply_to === 'last' && $index === ($parts_count - 1)) {
+                if ($is_pseudo_underline) {
+                    $part_classes[] = 'mh-has-underline'; // Acts as the wrapper for the pseudo element
+                    $part_classes[] = 'mh-underline--' . $u_style;
+                    $part_classes[] = 'mh-underline-pos--' . $settings['underline_position'];
+                }
                 if ($is_native_underline) {
                     $part_classes[] = 'mh-has-underline';
                 }
-            ?>
-                <span class="<?php echo implode(' ', $part_classes); ?>">
-                    <?php echo esc_html($item['part_text']); ?>
-                </span>
-            <?php endforeach; ?>
-        </<?php echo $tag; ?>>
-    </div>
-
-    <?php // --- Inline CSS for Alignment and Underline --- ?>
-    <style>
-        .elementor-element-<?php echo $this->get_id(); ?> .mh-advanced-heading-wrapper {
-            display: flex; flex-wrap: wrap; align-items: baseline;
-        }
-        .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper {
-            position: relative; display: inline-block; line-height: 1;
-        }
-        
-        <?php // --- NATIVE UNDERLINE STYLES (Dotted, Dashed, Double) ---
-        if ($is_native_underline): ?>
-        .elementor-element-<?php echo $this->get_id(); ?> .mh-has-underline {
-            text-decoration-line: <?php echo $settings['underline_position'] === 'top' ? 'overline' : 'underline'; ?>;
-            text-decoration-style: <?php echo esc_attr($settings['underline_style']); ?>;
-            text-decoration-color: <?php echo esc_attr($settings['underline_simple_color']); ?>;
-        }
-        <?php endif; ?>
-
-        <?php // --- PSEUDO-ELEMENT UNDERLINE STYLES (Solid, Wavy, Jagged) ---
-        if ($is_pseudo_underline): ?>
-        .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper::after {
-            content: ''; position: absolute; left: 50%; transform: translateX(-50%);
-            background-repeat: no-repeat; height: var(--underline-height, 3px);
-        }
-        .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper.mh-underline-pos--bottom::after {
-            bottom: var(--underline-offset, -5px);
-        }
-        .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper.mh-underline-pos--top::after {
-            top: var(--underline-offset, -5px);
-        }
-        <?php // SVG styles
-            $color = !empty($settings['underline_background_color']) ? $settings['underline_background_color'] : $settings['underline_simple_color'];
-            if ($settings['underline_style'] === 'wavy') {
-                $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q25,-1 50,5 T100,5' stroke='" . str_replace('#', '%23', $color) . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
-                echo '.elementor-element-' . $this->get_id() . ' .mh-underline-wrapper.mh-underline--wavy::after { background-image: url("' . $svg . '"); background-size: cover; }';
             }
-            if ($settings['underline_style'] === 'jagged') {
-                 $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpolyline points='0,5 15,0 30,5 45,0 60,5 75,0 90,5' stroke='" . str_replace('#', '%23', $color) . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
-                 echo '.elementor-element-' . $this->get_id() . ' .mh-underline-wrapper.mh-underline--jagged::after { background-image: url("' . $svg . '"); background-size: cover; }';
+
+            // 🚀 FEATURE: Typing Animation Class
+            if ( isset($item['part_typing_effect']) && $item['part_typing_effect'] === 'yes' ) {
+                $part_classes[] = 'mh-typing-effect';
             }
+
+            echo '<span class="' . implode(' ', $part_classes) . '">' . wp_kses_post($item['part_text']) . '</span> ';
+        }
+
+        echo '</' . $tag . '>';
+
+        // 🚀 FEATURE & FIXES: Inline CSS for Animations, Alignment, and Fixed SVGs
         ?>
-        <?php endif; ?>
-    </style>
-    <?php
-}
+        <style>
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-advanced-heading-wrapper {
+                display: flex; flex-wrap: wrap; align-items: baseline; justify-content: <?php echo esc_attr($settings['heading_alignment']); ?>;
+            }
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper,
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part.mh-has-underline {
+                position: relative; display: inline-block; line-height: 1;
+            }
+            
+            /* TYPEWRITER ANIMATION CSS */
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-typing-effect {
+                display: inline-block;
+                overflow: hidden;
+                white-space: nowrap;
+                border-right: 2px solid;
+                width: 0;
+                animation: mh-typing-<?php echo $this->get_id(); ?> 2s forwards steps(30, end), mh-blink-<?php echo $this->get_id(); ?> .75s step-end infinite;
+            }
+            @keyframes mh-typing-<?php echo $this->get_id(); ?> { from { width: 0; } to { width: 100%; } }
+            @keyframes mh-blink-<?php echo $this->get_id(); ?> { from, to { border-color: transparent; } 50% { border-color: inherit; } }
+
+            <?php if ($is_native_underline): ?>
+                .elementor-element-<?php echo $this->get_id(); ?> .mh-has-underline {
+                    text-decoration-line: <?php echo $settings['underline_position'] === 'top' ? 'overline' : 'underline'; ?>;
+                    text-decoration-style: <?php echo esc_attr($u_style); ?>;
+                    text-decoration-color: <?php echo esc_attr($settings['underline_simple_color']); ?>;
+                }
+            <?php endif; ?>
+
+            <?php if ($is_pseudo_underline): ?>
+                .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper::after,
+                .elementor-element-<?php echo $this->get_id(); ?> .mh-has-underline::after {
+                    content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+                    background-repeat: no-repeat; height: var(--underline-height, 3px);
+                }
+                .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-pos--bottom::after {
+                    bottom: var(--underline-offset, -5px);
+                }
+                .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-pos--top::after {
+                    top: var(--underline-offset, -5px);
+                }
+
+                <?php 
+                    // 🚀 THE FIX: Safely parse the color for the SVG, converting # to %23 so it doesn't break the browser render
+                    $svg_color = !empty($settings['underline_simple_color']) ? $settings['underline_simple_color'] : '#000000';
+                    $svg_color_safe = str_replace('#', '%23', $svg_color);
+
+                    if ($u_style === 'wavy') {
+                        $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q25,-1 50,5 T100,5' stroke='" . $svg_color_safe . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
+                        echo '.elementor-element-' . $this->get_id() . ' .mh-underline--wavy::after { background-image: url("' . $svg . '"); background-size: cover; }';
+                    }
+                    if ($u_style === 'jagged') {
+                         $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpolyline points='0,5 15,0 30,5 45,0 60,5 75,0 90,5' stroke='" . $svg_color_safe . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
+                         echo '.elementor-element-' . $this->get_id() . ' .mh-underline--jagged::after { background-image: url("' . $svg . '"); background-size: cover; }';
+                    }
+                ?>
+            <?php endif; ?>
+        </style>
+        <?php
+    }
 }
