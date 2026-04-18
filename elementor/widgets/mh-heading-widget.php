@@ -13,7 +13,7 @@ use Elementor\Repeater;
 
 /**
  * MH Advanced Heading Widget Class
- * Final Version with Z-Index, Vertical Layouts, Gradients, and Typing Animations
+ * Final Version with Y-Offset, X-Offset, Wrapping Underlines, and Z-Index
  */
 class MH_Heading_Widget extends Widget_Base {
 
@@ -21,7 +21,7 @@ class MH_Heading_Widget extends Widget_Base {
     public function get_title() { return esc_html__('MH Heading', 'mh-plug'); }
     public function get_icon() { return 'eicon-t-letter'; }
     public function get_categories() { return ['mh-plug-widgets']; }
-    public function get_keywords() { return ['heading', 'title', 'text', 'gradient', 'stroke', 'typing', 'animated', 'z-index', 'vertical']; }
+    public function get_keywords() { return ['heading', 'title', 'text', 'offset', 'z-index', 'wrap', 'underline']; }
 
     protected function register_controls() {
 
@@ -49,7 +49,6 @@ class MH_Heading_Widget extends Widget_Base {
         // --- REPEATER: STYLING ---
         $repeater->add_control( 'part_styles_heading', [ 'label' => esc_html__('Styling & Colors', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
 
-        // Solid Color vs Gradient
         $repeater->add_control(
             'part_use_gradient',
             [ 'label' => esc_html__('Use Gradient Text?', 'mh-plug'), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no' ]
@@ -77,7 +76,6 @@ class MH_Heading_Widget extends Widget_Base {
             ]
         );
 
-        // Text Stroke (Outline)
         $repeater->add_control(
             'part_use_stroke',
             [ 'label' => esc_html__('Add Text Stroke (Outline)?', 'mh-plug'), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no', 'separator' => 'before' ]
@@ -99,18 +97,37 @@ class MH_Heading_Widget extends Widget_Base {
         $repeater->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'part_typography', 'selector' => '{{WRAPPER}} {{CURRENT_ITEM}}' ] );
         $repeater->add_group_control( Group_Control_Text_Shadow::get_type(), [ 'name' => 'part_text_shadow', 'selector' => '{{WRAPPER}} {{CURRENT_ITEM}}' ] );
 
-        // --- 🚀 NEW: REPEATER: LAYOUT & Z-INDEX ---
-        $repeater->add_control( 'part_layout_heading', [ 'label' => esc_html__('Layout & Z-Index', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        // --- 🚀 NEW: REPEATER: POSITIONING & OFFSETS ---
+        $repeater->add_control( 'part_layout_heading', [ 'label' => esc_html__('Layout & Positioning', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
         
+        $repeater->add_responsive_control(
+            'part_y_offset',
+            [
+                'label' => esc_html__('Y Offset (Vertical Shift)', 'mh-plug'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px', 'em'],
+                'range' => ['px' => ['min' => -200, 'max' => 200]],
+                'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'top: {{SIZE}}{{UNIT}};' ],
+            ]
+        );
+
+        $repeater->add_responsive_control(
+            'part_x_offset',
+            [
+                'label' => esc_html__('X Offset (Horizontal Shift)', 'mh-plug'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px', 'em'],
+                'range' => ['px' => ['min' => -200, 'max' => 200]],
+                'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'left: {{SIZE}}{{UNIT}};' ],
+            ]
+        );
+
         $repeater->add_control(
             'part_z_index',
             [
-                'label' => esc_html__('Z-Index (Overlap)', 'mh-plug'),
+                'label' => esc_html__('Z-Index (Overlap Order)', 'mh-plug'),
                 'type' => Controls_Manager::NUMBER,
-                'description' => esc_html__('Increase this number to bring this word in front of others when using negative margins.', 'mh-plug'),
-                'selectors' => [
-                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'z-index: {{VALUE}}; position: relative;',
-                ],
+                'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'z-index: {{VALUE}};' ],
             ]
         );
 
@@ -125,9 +142,7 @@ class MH_Heading_Widget extends Widget_Base {
                     'vertical' => esc_html__('Vertical Text (Rotated)', 'mh-plug'),
                 ],
                 'default' => 'inline-block',
-                'selectors' => [
-                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'display: {{VALUE}};',
-                ]
+                'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'display: {{VALUE}};' ],
             ]
         );
 
@@ -136,14 +151,7 @@ class MH_Heading_Widget extends Widget_Base {
 
         // --- REPEATER: ANIMATION ---
         $repeater->add_control( 'part_animation_heading', [ 'label' => esc_html__('Animation', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
-        $repeater->add_control(
-            'part_typing_effect',
-            [ 
-                'label' => esc_html__('Typewriter Effect', 'mh-plug'), 
-                'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no',
-                'description' => esc_html__('Applies a CSS typing animation to this specific word.', 'mh-plug'),
-            ]
-        );
+        $repeater->add_control( 'part_typing_effect', [ 'label' => esc_html__('Typewriter Effect', 'mh-plug'), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'no' ] );
 
         $this->add_control(
             'heading_parts',
@@ -173,10 +181,7 @@ class MH_Heading_Widget extends Widget_Base {
             ]
         );
         
-        $this->add_control(
-            'heading_html_tag',
-            [ 'label' => esc_html__('HTML Tag', 'mh-plug'), 'type' => Controls_Manager::SELECT, 'options' => [ 'h1'=>'H1', 'h2'=>'H2', 'h3'=>'H3', 'h4'=>'H4', 'h5'=>'H5', 'h6'=>'H6', 'p'=>'P', 'div'=>'DIV' ], 'default' => 'h2' ]
-        );
+        $this->add_control( 'heading_html_tag', [ 'label' => esc_html__('HTML Tag', 'mh-plug'), 'type' => Controls_Manager::SELECT, 'options' => [ 'h1'=>'H1', 'h2'=>'H2', 'h3'=>'H3', 'h4'=>'H4', 'h5'=>'H5', 'h6'=>'H6', 'p'=>'P', 'div'=>'DIV' ], 'default' => 'h2' ] );
 
         $this->end_controls_section();
 
@@ -185,12 +190,17 @@ class MH_Heading_Widget extends Widget_Base {
          * ========================================== */
         $this->start_controls_section( 'section_underline_style', [ 'label' => esc_html__('Underline', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE ] );
 
+        // 🚀 THE FIX: New Options for Wrapping Underlines
         $this->add_control(
             'underline_apply_to',
             [
                 'label' => esc_html__('Apply Underline To', 'mh-plug'), 'type' => Controls_Manager::SELECT,
-                'options' => [ 'all' => esc_html__('All Parts (Wrapper)', 'mh-plug'), 'last' => esc_html__('Last Part Only', 'mh-plug') ],
-                'default' => 'all',
+                'options' => [ 
+                    'each' => esc_html__('Every Part Individually (Wraps perfectly)', 'mh-plug'),
+                    'all'  => esc_html__('Entire Heading Box (1 Continuous line)', 'mh-plug'), 
+                    'last' => esc_html__('Last Part Only', 'mh-plug') 
+                ],
+                'default' => 'each',
             ]
         );
 
@@ -212,29 +222,16 @@ class MH_Heading_Widget extends Widget_Base {
             ]
         );
 
-        $this->add_control(
-            'underline_simple_color',
-            [
-                'label' => esc_html__('Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#d63638',
-                'condition' => [ 'underline_style' => ['dotted', 'dashed', 'double', 'wavy', 'jagged'] ],
-            ]
-        );
+        $this->add_control( 'underline_simple_color', [ 'label' => esc_html__('Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'condition' => [ 'underline_style' => ['dotted', 'dashed', 'double', 'wavy', 'jagged'] ] ] );
 
         $this->add_responsive_control( 'underline_width', [ 'label' => esc_html__('Width', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['%', 'px'], 'range' => ['%' => ['min' => 0, 'max' => 200], 'px' => ['min' => 0, 'max' => 1000]], 'default' => ['unit' => '%', 'size' => 100], 'condition' => [ 'underline_style!' => 'none' ], 'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => 'width: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline::after' => 'width: {{SIZE}}{{UNIT}};' ] ] );
         $this->add_responsive_control( 'underline_height', [ 'label' => esc_html__('Height (Thickness)', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => 1, 'max' => 50]], 'default' => ['unit' => 'px', 'size' => 3], 'condition' => [ 'underline_style!' => 'none' ], 'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => '--underline-height: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline' => 'text-decoration-thickness: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline::after' => '--underline-height: {{SIZE}}{{UNIT}};' ] ] );
         
-        $this->add_control(
-            'underline_position',
-            [ 'label' => esc_html__('Position', 'mh-plug'), 'type' => Controls_Manager::CHOOSE, 'options' => [ 'top' => [ 'title' => 'Top', 'icon' => 'eicon-v-align-top' ], 'bottom' => [ 'title' => 'Bottom', 'icon' => 'eicon-v-align-bottom' ] ], 'default' => 'bottom', 'toggle' => false, 'condition' => [ 'underline_style!' => 'none' ] ]
-        );
+        $this->add_control( 'underline_position', [ 'label' => esc_html__('Position', 'mh-plug'), 'type' => Controls_Manager::CHOOSE, 'options' => [ 'top' => [ 'title' => 'Top', 'icon' => 'eicon-v-align-top' ], 'bottom' => [ 'title' => 'Bottom', 'icon' => 'eicon-v-align-bottom' ] ], 'default' => 'bottom', 'toggle' => false, 'condition' => [ 'underline_style!' => 'none' ] ] );
 
-       $this->add_responsive_control( 
-        'underline_y_offset', [ 'label' => esc_html__('Y Offset', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => -100, 'max' => 100]], 'default' => ['unit' => 'px', 'size' => 0], 'condition' => [ 'underline_style' => ['solid', 'wavy', 'jagged'] ], 'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => '--underline-offset: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline::after' => '--underline-offset: {{SIZE}}{{UNIT}};' ] ] 
-        );
+       $this->add_responsive_control( 'underline_y_offset', [ 'label' => esc_html__('Y Offset', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => -100, 'max' => 100]], 'default' => ['unit' => 'px', 'size' => 0], 'condition' => [ 'underline_style' => ['solid', 'wavy', 'jagged'] ], 'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => '--underline-offset: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline::after' => '--underline-offset: {{SIZE}}{{UNIT}};' ] ] );
         
-        $this->add_responsive_control(
-             'underline_native_y_offset', [ 'label' => esc_html__('Y Offset', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => -50, 'max' => 50]], 'default' => ['unit' => 'px', 'size' => 0], 'condition' => [ 'underline_style' => ['dotted', 'dashed', 'double'] ], 'selectors' => [ '{{WRAPPER}} .mh-has-underline' => 'text-underline-offset: {{SIZE}}{{UNIT}};' ] ] 
-        );
+        $this->add_responsive_control( 'underline_native_y_offset', [ 'label' => esc_html__('Y Offset', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => -50, 'max' => 50]], 'default' => ['unit' => 'px', 'size' => 0], 'condition' => [ 'underline_style' => ['dotted', 'dashed', 'double'] ], 'selectors' => [ '{{WRAPPER}} .mh-has-underline' => 'text-underline-offset: {{SIZE}}{{UNIT}};' ] ] );
 
         $this->end_controls_section();
     }
@@ -250,6 +247,7 @@ class MH_Heading_Widget extends Widget_Base {
 
         $wrapper_classes = ['mh-advanced-heading-wrapper'];
         
+        // Only apply to wrapper if "Entire Heading Box" is selected
         if ($apply_to === 'all') {
             $wrapper_classes[] = 'mh-underline-wrapper';
             if ($is_pseudo_underline) {
@@ -277,7 +275,8 @@ class MH_Heading_Widget extends Widget_Base {
                 }
             }
 
-            if ($apply_to === 'last' && $index === ($parts_count - 1)) {
+            // 🚀 THE FIX: If "Every Part Individually" is selected, apply underline to each part!
+            if ($apply_to === 'each' || ($apply_to === 'last' && $index === ($parts_count - 1))) {
                 if ($is_pseudo_underline) {
                     $part_classes[] = 'mh-has-underline'; 
                     $part_classes[] = 'mh-underline--' . $u_style;
@@ -292,6 +291,7 @@ class MH_Heading_Widget extends Widget_Base {
                 $part_classes[] = 'mh-typing-effect';
             }
 
+            // Leave space outside the span so the underline wraps the exact word length perfectly
             echo '<span class="' . implode(' ', $part_classes) . '">' . wp_kses_post($item['part_text']) . '</span> ';
         }
 
@@ -303,25 +303,17 @@ class MH_Heading_Widget extends Widget_Base {
                 display: flex; flex-wrap: wrap; align-items: baseline; justify-content: <?php echo esc_attr($settings['heading_alignment']); ?>;
             }
             
-            /* 🚀 THE FIX: Give every part position:relative so Z-Index works! */
+            /* Give every part position:relative so offsets and Z-Index work perfectly */
             .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part {
-                position: relative;
-                display: inline-block;
+                position: relative; display: inline-block;
             }
             
-            /* 🚀 THE FIX: Vertical / Block Classes */
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-block {
-                display: block;
-                width: 100%;
-            }
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-vertical {
-                writing-mode: vertical-rl;
-                transform: rotate(180deg);
-            }
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-block { display: block; width: 100%; }
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-vertical { writing-mode: vertical-rl; transform: rotate(180deg); }
 
             .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper,
             .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part.mh-has-underline {
-                position: relative; display: inline-block; line-height: 1;
+                position: relative; line-height: 1;
             }
             
             .elementor-element-<?php echo $this->get_id(); ?> .mh-typing-effect {
