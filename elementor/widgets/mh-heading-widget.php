@@ -13,7 +13,7 @@ use Elementor\Repeater;
 
 /**
  * MH Advanced Heading Widget Class
- * Final Version with Double-Wrapper Architecture to fix Underline Stretching
+ * Final Version with Repeating Tileable SVGs to prevent stretching!
  */
 class MH_Heading_Widget extends Widget_Base {
 
@@ -246,7 +246,6 @@ class MH_Heading_Widget extends Widget_Base {
 
         $wrapper_classes = ['mh-advanced-heading-wrapper'];
         
-        // Only apply to wrapper if "Entire Heading Box" is selected
         if ($apply_to === 'all') {
             $wrapper_classes[] = 'mh-underline-wrapper';
             if ($is_pseudo_underline) {
@@ -264,10 +263,7 @@ class MH_Heading_Widget extends Widget_Base {
 
         foreach ($settings['heading_parts'] as $index => $item) {
             
-            // 🚀 THE FIX: Outer Box handles positioning/layout
             $outer_classes = ['elementor-repeater-item-' . esc_attr($item['_id']), 'mh-heading-part-outer'];
-            
-            // 🚀 THE FIX: Inner Box handles underlines, gradients, and typing
             $inner_classes = ['mh-heading-part-inner'];
             
             if ( isset($item['part_display_mode']) ) {
@@ -297,7 +293,6 @@ class MH_Heading_Widget extends Widget_Base {
                 $inner_classes[] = 'mh-typing-effect';
             }
 
-            // Output the double wrapper
             echo '<span class="' . implode(' ', $outer_classes) . '">';
             echo '<span class="' . implode(' ', $inner_classes) . '">' . wp_kses_post($item['part_text']) . '</span>';
             echo '</span> ';
@@ -310,21 +305,19 @@ class MH_Heading_Widget extends Widget_Base {
             .elementor-element-<?php echo $this->get_id(); ?> .mh-advanced-heading-wrapper {
                 display: flex; flex-wrap: wrap; align-items: baseline; 
                 justify-content: <?php echo esc_attr($settings['heading_alignment']); ?>;
-                text-align: <?php echo esc_attr($settings['heading_alignment']); ?>; /* Forces blocks to respect alignment */
+                text-align: <?php echo esc_attr($settings['heading_alignment']); ?>;
             }
             
-            /* OUTER WRAPPER CLASSES */
             .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part-outer { position: relative; }
             .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-inline { display: inline-block; }
             .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-block { display: block; flex-basis: 100%; width: 100%; }
             .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-vertical { display: inline-block; writing-mode: vertical-rl; transform: rotate(180deg); }
 
-            /* INNER WRAPPER CLASSES */
             .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part-inner {
                 position: relative; display: inline-block; line-height: 1; 
             }
 
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper { position: relative; line-height: 1; }
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper { position: relative; line-height: 1; width: 100%; }
             
             .elementor-element-<?php echo $this->get_id(); ?> .mh-typing-effect {
                 display: inline-block; overflow: hidden; white-space: nowrap; border-right: 2px solid; width: 0;
@@ -345,7 +338,9 @@ class MH_Heading_Widget extends Widget_Base {
                 .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper::after,
                 .elementor-element-<?php echo $this->get_id(); ?> .mh-has-underline::after {
                     content: ''; position: absolute; left: 50%; transform: translateX(-50%);
-                    background-repeat: no-repeat; height: var(--underline-height, 3px); z-index: -1;
+                    height: var(--underline-height, 3px); z-index: -1;
+                    /* 🚀 THE FIX: Tell the background to Repeat instead of Stretch */
+                    background-repeat: repeat-x;
                 }
                 .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-pos--bottom::after {
                     bottom: var(--underline-offset, -5px);
@@ -358,13 +353,17 @@ class MH_Heading_Widget extends Widget_Base {
                     $svg_color = !empty($settings['underline_simple_color']) ? $settings['underline_simple_color'] : '#000000';
                     $svg_color_safe = str_replace('#', '%23', $svg_color);
 
+                    // 🚀 THE FIX: Updated the SVG code to be a perfectly repeating, tileable pattern!
                     if ($u_style === 'wavy') {
-                        $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q25,-1 50,5 T100,5' stroke='" . $svg_color_safe . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
-                        echo '.elementor-element-' . $this->get_id() . ' .mh-underline--wavy::after { background-image: url("' . $svg . '"); background-size: cover; }';
+                        $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10'%3E%3Cpath d='M0,5 Q5,0 10,5 T20,5' stroke='" . $svg_color_safe . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
+                        echo '.elementor-element-' . $this->get_id() . ' .mh-underline--wavy::after { background-image: url("' . $svg . '"); background-size: 20px 100%; }';
                     }
                     if ($u_style === 'jagged') {
-                         $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpolyline points='0,5 15,0 30,5 45,0 60,5 75,0 90,5' stroke='" . $svg_color_safe . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
-                         echo '.elementor-element-' . $this->get_id() . ' .mh-underline--jagged::after { background-image: url("' . $svg . '"); background-size: cover; }';
+                         $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10'%3E%3Cpolyline points='0,5 5,0 10,5 15,0 20,5' stroke='" . $svg_color_safe . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
+                         echo '.elementor-element-' . $this->get_id() . ' .mh-underline--jagged::after { background-image: url("' . $svg . '"); background-size: 20px 100%; }';
+                    }
+                    if ($u_style === 'solid') {
+                        echo '.elementor-element-' . $this->get_id() . ' .mh-underline--solid::after { background-size: cover; }';
                     }
                 ?>
             <?php endif; ?>
