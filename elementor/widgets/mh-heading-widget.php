@@ -13,7 +13,7 @@ use Elementor\Repeater;
 
 /**
  * MH Advanced Heading Widget Class
- * Final Version with Y-Offset, X-Offset, Wrapping Underlines, and Z-Index
+ * Final Version with Double-Wrapper Architecture to fix Underline Stretching
  */
 class MH_Heading_Widget extends Widget_Base {
 
@@ -46,7 +46,7 @@ class MH_Heading_Widget extends Widget_Base {
             ]
         );
 
-        // --- REPEATER: STYLING ---
+        // --- REPEATER: STYLING (Applies to INNER WRAPPER) ---
         $repeater->add_control( 'part_styles_heading', [ 'label' => esc_html__('Styling & Colors', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
 
         $repeater->add_control(
@@ -60,7 +60,7 @@ class MH_Heading_Widget extends Widget_Base {
                 'label'     => esc_html__('Text Color', 'mh-plug'),
                 'type'      => Controls_Manager::COLOR,
                 'condition' => [ 'part_use_gradient' => '' ],
-                'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'color: {{VALUE}};' ],
+                'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}} .mh-heading-part-inner' => 'color: {{VALUE}};' ],
             ]
         );
 
@@ -71,7 +71,7 @@ class MH_Heading_Widget extends Widget_Base {
             [
                 'label' => esc_html__('Gradient Angle', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'range' => ['px' => ['min' => 0, 'max' => 360]], 'default' => ['size' => 90], 'condition' => [ 'part_use_gradient' => 'yes' ],
                 'selectors' => [
-                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'background: linear-gradient({{SIZE}}deg, {{part_grad_color_1.VALUE}} 0%, {{part_grad_color_2.VALUE}} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;',
+                    '{{WRAPPER}} {{CURRENT_ITEM}} .mh-heading-part-inner' => 'background: linear-gradient({{SIZE}}deg, {{part_grad_color_1.VALUE}} 0%, {{part_grad_color_2.VALUE}} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;',
                 ],
             ]
         );
@@ -88,16 +88,17 @@ class MH_Heading_Widget extends Widget_Base {
             'part_stroke_color',
             [
                 'label' => esc_html__('Stroke Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#000000', 'condition' => [ 'part_use_stroke' => 'yes' ],
-                'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => '-webkit-text-stroke: {{part_stroke_width.SIZE}}px {{VALUE}};' ],
+                'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}} .mh-heading-part-inner' => '-webkit-text-stroke: {{part_stroke_width.SIZE}}px {{VALUE}};' ],
             ]
         );
 
-        $repeater->add_control( 'part_background_color', [ 'label' => esc_html__('Background Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'background-color: {{VALUE}};' ], 'separator' => 'before' ] );
+        $repeater->add_control( 'part_background_color', [ 'label' => esc_html__('Background Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}} .mh-heading-part-inner' => 'background-color: {{VALUE}};' ], 'separator' => 'before' ] );
         
-        $repeater->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'part_typography', 'selector' => '{{WRAPPER}} {{CURRENT_ITEM}}' ] );
-        $repeater->add_group_control( Group_Control_Text_Shadow::get_type(), [ 'name' => 'part_text_shadow', 'selector' => '{{WRAPPER}} {{CURRENT_ITEM}}' ] );
+        $repeater->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'part_typography', 'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} .mh-heading-part-inner' ] );
+        $repeater->add_group_control( Group_Control_Text_Shadow::get_type(), [ 'name' => 'part_text_shadow', 'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} .mh-heading-part-inner' ] );
 
-        // --- 🚀 NEW: REPEATER: POSITIONING & OFFSETS ---
+
+        // --- REPEATER: POSITIONING & OFFSETS (Applies to OUTER WRAPPER) ---
         $repeater->add_control( 'part_layout_heading', [ 'label' => esc_html__('Layout & Positioning', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
         
         $repeater->add_responsive_control(
@@ -142,7 +143,6 @@ class MH_Heading_Widget extends Widget_Base {
                     'vertical' => esc_html__('Vertical Text (Rotated)', 'mh-plug'),
                 ],
                 'default' => 'inline-block',
-                'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'display: {{VALUE}};' ],
             ]
         );
 
@@ -190,7 +190,6 @@ class MH_Heading_Widget extends Widget_Base {
          * ========================================== */
         $this->start_controls_section( 'section_underline_style', [ 'label' => esc_html__('Underline', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE ] );
 
-        // 🚀 THE FIX: New Options for Wrapping Underlines
         $this->add_control(
             'underline_apply_to',
             [
@@ -229,7 +228,7 @@ class MH_Heading_Widget extends Widget_Base {
         
         $this->add_control( 'underline_position', [ 'label' => esc_html__('Position', 'mh-plug'), 'type' => Controls_Manager::CHOOSE, 'options' => [ 'top' => [ 'title' => 'Top', 'icon' => 'eicon-v-align-top' ], 'bottom' => [ 'title' => 'Bottom', 'icon' => 'eicon-v-align-bottom' ] ], 'default' => 'bottom', 'toggle' => false, 'condition' => [ 'underline_style!' => 'none' ] ] );
 
-       $this->add_responsive_control( 'underline_y_offset', [ 'label' => esc_html__('Y Offset', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => -100, 'max' => 100]], 'default' => ['unit' => 'px', 'size' => 0], 'condition' => [ 'underline_style' => ['solid', 'wavy', 'jagged'] ], 'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => '--underline-offset: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline::after' => '--underline-offset: {{SIZE}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'underline_y_offset', [ 'label' => esc_html__('Y Offset', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => -100, 'max' => 100]], 'default' => ['unit' => 'px', 'size' => 0], 'condition' => [ 'underline_style' => ['solid', 'wavy', 'jagged'] ], 'selectors' => [ '{{WRAPPER}} .mh-underline-wrapper::after' => '--underline-offset: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-has-underline::after' => '--underline-offset: {{SIZE}}{{UNIT}};' ] ] );
         
         $this->add_responsive_control( 'underline_native_y_offset', [ 'label' => esc_html__('Y Offset', 'mh-plug'), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px'], 'range' => ['px' => ['min' => -50, 'max' => 50]], 'default' => ['unit' => 'px', 'size' => 0], 'condition' => [ 'underline_style' => ['dotted', 'dashed', 'double'] ], 'selectors' => [ '{{WRAPPER}} .mh-has-underline' => 'text-underline-offset: {{SIZE}}{{UNIT}};' ] ] );
 
@@ -264,35 +263,44 @@ class MH_Heading_Widget extends Widget_Base {
         $parts_count = count($settings['heading_parts']);
 
         foreach ($settings['heading_parts'] as $index => $item) {
-            $part_classes = ['elementor-repeater-item-' . esc_attr($item['_id']), 'mh-heading-part'];
             
-            // Apply Layout classes
+            // 🚀 THE FIX: Outer Box handles positioning/layout
+            $outer_classes = ['elementor-repeater-item-' . esc_attr($item['_id']), 'mh-heading-part-outer'];
+            
+            // 🚀 THE FIX: Inner Box handles underlines, gradients, and typing
+            $inner_classes = ['mh-heading-part-inner'];
+            
             if ( isset($item['part_display_mode']) ) {
                 if ($item['part_display_mode'] === 'block') {
-                    $part_classes[] = 'mh-layout-block';
+                    $outer_classes[] = 'mh-layout-block';
                 } elseif ($item['part_display_mode'] === 'vertical') {
-                    $part_classes[] = 'mh-layout-vertical';
+                    $outer_classes[] = 'mh-layout-vertical';
+                } else {
+                    $outer_classes[] = 'mh-layout-inline';
                 }
+            } else {
+                $outer_classes[] = 'mh-layout-inline';
             }
 
-            // 🚀 THE FIX: If "Every Part Individually" is selected, apply underline to each part!
             if ($apply_to === 'each' || ($apply_to === 'last' && $index === ($parts_count - 1))) {
                 if ($is_pseudo_underline) {
-                    $part_classes[] = 'mh-has-underline'; 
-                    $part_classes[] = 'mh-underline--' . $u_style;
-                    $part_classes[] = 'mh-underline-pos--' . $settings['underline_position'];
+                    $inner_classes[] = 'mh-has-underline'; 
+                    $inner_classes[] = 'mh-underline--' . $u_style;
+                    $inner_classes[] = 'mh-underline-pos--' . $settings['underline_position'];
                 }
                 if ($is_native_underline) {
-                    $part_classes[] = 'mh-has-underline';
+                    $inner_classes[] = 'mh-has-underline';
                 }
             }
 
             if ( isset($item['part_typing_effect']) && $item['part_typing_effect'] === 'yes' ) {
-                $part_classes[] = 'mh-typing-effect';
+                $inner_classes[] = 'mh-typing-effect';
             }
 
-            // Leave space outside the span so the underline wraps the exact word length perfectly
-            echo '<span class="' . implode(' ', $part_classes) . '">' . wp_kses_post($item['part_text']) . '</span> ';
+            // Output the double wrapper
+            echo '<span class="' . implode(' ', $outer_classes) . '">';
+            echo '<span class="' . implode(' ', $inner_classes) . '">' . wp_kses_post($item['part_text']) . '</span>';
+            echo '</span> ';
         }
 
         echo '</' . $tag . '>';
@@ -300,21 +308,23 @@ class MH_Heading_Widget extends Widget_Base {
         ?>
         <style>
             .elementor-element-<?php echo $this->get_id(); ?> .mh-advanced-heading-wrapper {
-                display: flex; flex-wrap: wrap; align-items: baseline; justify-content: <?php echo esc_attr($settings['heading_alignment']); ?>;
+                display: flex; flex-wrap: wrap; align-items: baseline; 
+                justify-content: <?php echo esc_attr($settings['heading_alignment']); ?>;
+                text-align: <?php echo esc_attr($settings['heading_alignment']); ?>; /* Forces blocks to respect alignment */
             }
             
-            /* Give every part position:relative so offsets and Z-Index work perfectly */
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part {
-                position: relative; display: inline-block;
-            }
-            
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-block { display: block; width: 100%; }
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-vertical { writing-mode: vertical-rl; transform: rotate(180deg); }
+            /* OUTER WRAPPER CLASSES */
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part-outer { position: relative; }
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-inline { display: inline-block; }
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-block { display: block; flex-basis: 100%; width: 100%; }
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-vertical { display: inline-block; writing-mode: vertical-rl; transform: rotate(180deg); }
 
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper,
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part.mh-has-underline {
-                position: relative; line-height: 1;
+            /* INNER WRAPPER CLASSES */
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part-inner {
+                position: relative; display: inline-block; line-height: 1; 
             }
+
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper { position: relative; line-height: 1; }
             
             .elementor-element-<?php echo $this->get_id(); ?> .mh-typing-effect {
                 display: inline-block; overflow: hidden; white-space: nowrap; border-right: 2px solid; width: 0;
