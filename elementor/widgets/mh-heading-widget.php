@@ -13,7 +13,7 @@ use Elementor\Repeater;
 
 /**
  * MH Advanced Heading Widget Class
- * Final Version with Gradients, Strokes, Typing Animations, and Fixed Underlines
+ * Final Version with Z-Index, Vertical Layouts, Gradients, and Typing Animations
  */
 class MH_Heading_Widget extends Widget_Base {
 
@@ -21,7 +21,7 @@ class MH_Heading_Widget extends Widget_Base {
     public function get_title() { return esc_html__('MH Heading', 'mh-plug'); }
     public function get_icon() { return 'eicon-t-letter'; }
     public function get_categories() { return ['mh-plug-widgets']; }
-    public function get_keywords() { return ['heading', 'title', 'text', 'gradient', 'stroke', 'typing', 'animated']; }
+    public function get_keywords() { return ['heading', 'title', 'text', 'gradient', 'stroke', 'typing', 'animated', 'z-index', 'vertical']; }
 
     protected function register_controls() {
 
@@ -47,7 +47,7 @@ class MH_Heading_Widget extends Widget_Base {
         );
 
         // --- REPEATER: STYLING ---
-        $repeater->add_control( 'part_styles_heading', [ 'label' => esc_html__('Styling', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $repeater->add_control( 'part_styles_heading', [ 'label' => esc_html__('Styling & Colors', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
 
         // Solid Color vs Gradient
         $repeater->add_control(
@@ -99,6 +99,41 @@ class MH_Heading_Widget extends Widget_Base {
         $repeater->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'part_typography', 'selector' => '{{WRAPPER}} {{CURRENT_ITEM}}' ] );
         $repeater->add_group_control( Group_Control_Text_Shadow::get_type(), [ 'name' => 'part_text_shadow', 'selector' => '{{WRAPPER}} {{CURRENT_ITEM}}' ] );
 
+        // --- 🚀 NEW: REPEATER: LAYOUT & Z-INDEX ---
+        $repeater->add_control( 'part_layout_heading', [ 'label' => esc_html__('Layout & Z-Index', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        
+        $repeater->add_control(
+            'part_z_index',
+            [
+                'label' => esc_html__('Z-Index (Overlap)', 'mh-plug'),
+                'type' => Controls_Manager::NUMBER,
+                'description' => esc_html__('Increase this number to bring this word in front of others when using negative margins.', 'mh-plug'),
+                'selectors' => [
+                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'z-index: {{VALUE}}; position: relative;',
+                ],
+            ]
+        );
+
+        $repeater->add_control(
+            'part_display_mode',
+            [
+                'label' => esc_html__('Text Layout', 'mh-plug'),
+                'type' => Controls_Manager::SELECT,
+                'options' => [
+                    'inline-block' => esc_html__('Inline (Next to each other)', 'mh-plug'),
+                    'block' => esc_html__('Block (Force New Line)', 'mh-plug'),
+                    'vertical' => esc_html__('Vertical Text (Rotated)', 'mh-plug'),
+                ],
+                'default' => 'inline-block',
+                'selectors' => [
+                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'display: {{VALUE}};',
+                ]
+            ]
+        );
+
+        $repeater->add_responsive_control( 'part_margin', [ 'label' => esc_html__('Margin', 'mh-plug'), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%', 'em'], 'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+
+
         // --- REPEATER: ANIMATION ---
         $repeater->add_control( 'part_animation_heading', [ 'label' => esc_html__('Animation', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
         $repeater->add_control(
@@ -109,8 +144,6 @@ class MH_Heading_Widget extends Widget_Base {
                 'description' => esc_html__('Applies a CSS typing animation to this specific word.', 'mh-plug'),
             ]
         );
-
-        $repeater->add_responsive_control( 'part_margin', [ 'label' => esc_html__('Margin', 'mh-plug'), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%', 'em'], 'selectors' => [ '{{WRAPPER}} {{CURRENT_ITEM}}' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], 'separator' => 'before' ] );
 
         $this->add_control(
             'heading_parts',
@@ -217,7 +250,6 @@ class MH_Heading_Widget extends Widget_Base {
 
         $wrapper_classes = ['mh-advanced-heading-wrapper'];
         
-        // 🚀 THE FIX: If "All Parts", apply classes to the wrapper
         if ($apply_to === 'all') {
             $wrapper_classes[] = 'mh-underline-wrapper';
             if ($is_pseudo_underline) {
@@ -236,10 +268,18 @@ class MH_Heading_Widget extends Widget_Base {
         foreach ($settings['heading_parts'] as $index => $item) {
             $part_classes = ['elementor-repeater-item-' . esc_attr($item['_id']), 'mh-heading-part'];
             
-            // 🚀 THE FIX: If "Last Part Only", apply classes ONLY to the final span
+            // Apply Layout classes
+            if ( isset($item['part_display_mode']) ) {
+                if ($item['part_display_mode'] === 'block') {
+                    $part_classes[] = 'mh-layout-block';
+                } elseif ($item['part_display_mode'] === 'vertical') {
+                    $part_classes[] = 'mh-layout-vertical';
+                }
+            }
+
             if ($apply_to === 'last' && $index === ($parts_count - 1)) {
                 if ($is_pseudo_underline) {
-                    $part_classes[] = 'mh-has-underline'; // Acts as the wrapper for the pseudo element
+                    $part_classes[] = 'mh-has-underline'; 
                     $part_classes[] = 'mh-underline--' . $u_style;
                     $part_classes[] = 'mh-underline-pos--' . $settings['underline_position'];
                 }
@@ -248,7 +288,6 @@ class MH_Heading_Widget extends Widget_Base {
                 }
             }
 
-            // 🚀 FEATURE: Typing Animation Class
             if ( isset($item['part_typing_effect']) && $item['part_typing_effect'] === 'yes' ) {
                 $part_classes[] = 'mh-typing-effect';
             }
@@ -258,24 +297,35 @@ class MH_Heading_Widget extends Widget_Base {
 
         echo '</' . $tag . '>';
 
-        // 🚀 FEATURE & FIXES: Inline CSS for Animations, Alignment, and Fixed SVGs
         ?>
         <style>
             .elementor-element-<?php echo $this->get_id(); ?> .mh-advanced-heading-wrapper {
                 display: flex; flex-wrap: wrap; align-items: baseline; justify-content: <?php echo esc_attr($settings['heading_alignment']); ?>;
             }
+            
+            /* 🚀 THE FIX: Give every part position:relative so Z-Index works! */
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part {
+                position: relative;
+                display: inline-block;
+            }
+            
+            /* 🚀 THE FIX: Vertical / Block Classes */
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-block {
+                display: block;
+                width: 100%;
+            }
+            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-vertical {
+                writing-mode: vertical-rl;
+                transform: rotate(180deg);
+            }
+
             .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper,
             .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part.mh-has-underline {
                 position: relative; display: inline-block; line-height: 1;
             }
             
-            /* TYPEWRITER ANIMATION CSS */
             .elementor-element-<?php echo $this->get_id(); ?> .mh-typing-effect {
-                display: inline-block;
-                overflow: hidden;
-                white-space: nowrap;
-                border-right: 2px solid;
-                width: 0;
+                display: inline-block; overflow: hidden; white-space: nowrap; border-right: 2px solid; width: 0;
                 animation: mh-typing-<?php echo $this->get_id(); ?> 2s forwards steps(30, end), mh-blink-<?php echo $this->get_id(); ?> .75s step-end infinite;
             }
             @keyframes mh-typing-<?php echo $this->get_id(); ?> { from { width: 0; } to { width: 100%; } }
@@ -293,7 +343,7 @@ class MH_Heading_Widget extends Widget_Base {
                 .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper::after,
                 .elementor-element-<?php echo $this->get_id(); ?> .mh-has-underline::after {
                     content: ''; position: absolute; left: 50%; transform: translateX(-50%);
-                    background-repeat: no-repeat; height: var(--underline-height, 3px);
+                    background-repeat: no-repeat; height: var(--underline-height, 3px); z-index: -1;
                 }
                 .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-pos--bottom::after {
                     bottom: var(--underline-offset, -5px);
@@ -303,7 +353,6 @@ class MH_Heading_Widget extends Widget_Base {
                 }
 
                 <?php 
-                    // 🚀 THE FIX: Safely parse the color for the SVG, converting # to %23 so it doesn't break the browser render
                     $svg_color = !empty($settings['underline_simple_color']) ? $settings['underline_simple_color'] : '#000000';
                     $svg_color_safe = str_replace('#', '%23', $svg_color);
 
