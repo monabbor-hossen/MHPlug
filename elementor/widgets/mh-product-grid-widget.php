@@ -355,33 +355,49 @@ class MH_Product_Grid_Widget extends Widget_Base {
                 });
 
                 // Custom AJAX Add to Cart (Stops Page Reload)
+                // Custom AJAX Add to Cart (Stops Page Reload)
                 $(document).on('submit', '.mh-qv-add-to-cart-wrap form.cart', function(e) {
                     e.preventDefault();
                     var $form = $(this);
                     var $btn = $form.find('button[type="submit"]');
                     
-                    // Fallback to find product ID if hidden input is missing
-                    var productId = $form.find('input[name="product_id"]').val() || $form.find('button[name="add-to-cart"]').val();
+                    // Grab product ID safely
+                    var productId = $form.find('input[name="product_id"]').val() || $btn.val() || $btn.data('product_id');
                     
+                    // Serialize form and explicitly add standard Woo params
                     var formData = $form.serialize();
                     formData += '&action=mh_qv_add_to_cart';
                     formData += '&product_id=' + productId;
+                    formData += '&add-to-cart=' + productId;
+
+                    // Basic frontend validation for custom dropdowns
+                    var missingAttributes = false;
+                    $form.find('.mh-qv-attr-select').each(function() {
+                        if ($(this).val() === '') { missingAttributes = true; }
+                    });
+
+                    if (missingAttributes) {
+                        $btn.text('Please select options');
+                        setTimeout(function(){ $btn.text('Add to cart'); }, 2000);
+                        return;
+                    }
 
                     $btn.addClass('loading').text('Adding...');
 
                     $.post(mhAjaxUrl, formData, function(response) {
                         if (response.success) {
-                            // Update fragments (Cart counters in header)
                             $(document.body).trigger('added_to_cart', [response.data.fragments, response.data.cart_hash, $btn]);
                             $btn.text('Added to Cart!');
                             
-                            // Automatically close modal after 1.5s
                             setTimeout(function() {
                                 $('#mh-quick-view-modal').removeClass('mh-open');
-                                $btn.removeClass('loading').text('Add to cart'); // Reset button
+                                $btn.removeClass('loading').text('Add to cart'); 
                             }, 1500);
                         } else {
-                            $btn.removeClass('loading').text('Error Adding');
+                            // Display the error message returned from our PHP logic
+                            var errorMsg = response.data && response.data.message ? response.data.message : 'Error Adding';
+                            $btn.removeClass('loading').text(errorMsg);
+                            setTimeout(function(){ $btn.text('Add to cart'); }, 2500);
                         }
                     });
                 });
