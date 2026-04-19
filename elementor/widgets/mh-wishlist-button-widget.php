@@ -47,8 +47,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         $this->add_control( 'show_label', [
             'label'        => __( 'Show Text Label', 'mh-plug' ),
             'type'         => Controls_Manager::SWITCHER,
-            'label_on'     => __( 'Show', 'mh-plug' ),
-            'label_off'    => __( 'Hide', 'mh-plug' ),
             'return_value' => 'yes',
             'default'      => 'yes',
             'separator'    => 'before',
@@ -79,9 +77,9 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             'label'     => __( 'Alignment', 'mh-plug' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
-                'left'   => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center' => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'right'  => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+                'left'   => [ 'title' => 'Left', 'icon' => 'eicon-text-align-left' ],
+                'center' => [ 'title' => 'Center', 'icon' => 'eicon-text-align-center' ],
+                'right'  => [ 'title' => 'Right', 'icon' => 'eicon-text-align-right' ],
             ],
             'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-wrap' => 'text-align: {{VALUE}};', ],
         ] );
@@ -133,7 +131,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
             'name'      => 'typography',
-            'selector'  => '{{WRAPPER}} .mh-wishlist-label',
+            'selector'  => '{{WRAPPER}} .mh-advanced-wishlist-btn', // Applied to the whole button so text inherits properly
             'condition' => [ 'show_label' => 'yes' ],
             'separator' => 'before',
         ] );
@@ -144,7 +142,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         $this->add_control( 'color_normal', [
             'label'     => __( 'Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
-            'default'   => '#333333',
+            'default'   => '#777777',
             'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn' => 'color: {{VALUE}}; text-decoration: none;' ],
         ] );
         $this->add_control( 'svg_fill_normal', [
@@ -183,7 +181,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
 
         if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) {
             if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-                echo '<div style="padding: 10px; color: #d63638;">Please create a product to preview the wishlist button.</div>';
+                echo '<div style="padding: 10px; color: #d63638;">Please assign this template to a Product to preview.</div>';
             }
             return;
         }
@@ -213,17 +211,39 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         $ajax_url = admin_url( 'admin-ajax.php' );
         $nonce    = wp_create_nonce( 'mh_wishlist_nonce' );
 
+        // 🚀 THE FIX: Fallback manual Icon Rendering in case Elementor fails to render the array
+        $icon_normal_html = '';
+        if ( ! empty( $settings['icon_normal']['value'] ) ) {
+            $icon_normal_html = '<i class="' . esc_attr( $settings['icon_normal']['value'] ) . '"></i>';
+        }
+        
+        $icon_added_html = '';
+        if ( ! empty( $settings['icon_added']['value'] ) ) {
+            $icon_added_html = '<i class="' . esc_attr( $settings['icon_added']['value'] ) . '"></i>';
+        }
+
         ?>
         <style>
-            .mh-advanced-wishlist-btn { display: inline-flex; align-items: center; cursor: pointer; transition: 0.3s ease; }
-            .mh-icon-wrap { display: inline-flex; align-items: center; justify-content: center; }
-            .mh-icon-wrap i, .mh-icon-wrap svg { transition: 0.3s ease; }
+            .mh-advanced-wishlist-btn { 
+                display: inline-flex; 
+                align-items: center; 
+                cursor: pointer; 
+                transition: color 0.3s ease; 
+            }
+            .mh-icon-wrap { 
+                display: inline-flex; 
+                align-items: center; 
+                justify-content: center; 
+            }
+            .mh-icon-wrap i { transition: transform 0.3s ease; }
             
-            /* Default State (Empty) */
+            /* Active Animation */
+            .mh-advanced-wishlist-btn:hover .mh-icon-wrap i { transform: scale(1.1); }
+            
+            /* Toggle Logic */
             .mh-advanced-wishlist-btn .mh-icon-added { display: none; }
             .mh-advanced-wishlist-btn .mh-icon-normal { display: inline-flex; }
             
-            /* Active State (Added) */
             .mh-advanced-wishlist-btn.added .mh-icon-normal { display: none !important; }
             .mh-advanced-wishlist-btn.added .mh-icon-added { display: inline-flex !important; }
         </style>
@@ -239,11 +259,24 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                data-wishlist-url="<?php echo esc_url( $browse_url ); ?>">
                 
                 <span class="mh-icon-wrap mh-icon-normal">
-                    <?php Icons_Manager::render_icon( $settings['icon_normal'], [ 'aria-hidden' => 'true' ] ); ?>
+                    <?php 
+                        // Try Elementor renderer first, fallback to standard HTML
+                        if ( \Elementor\Icons_Manager::is_migration_allowed() ) {
+                            \Elementor\Icons_Manager::render_icon( $settings['icon_normal'], [ 'aria-hidden' => 'true' ] );
+                        } else {
+                            echo $icon_normal_html;
+                        }
+                    ?>
                 </span>
                 
                 <span class="mh-icon-wrap mh-icon-added">
-                    <?php Icons_Manager::render_icon( $settings['icon_added'], [ 'aria-hidden' => 'true' ] ); ?>
+                    <?php 
+                        if ( \Elementor\Icons_Manager::is_migration_allowed() ) {
+                            \Elementor\Icons_Manager::render_icon( $settings['icon_added'], [ 'aria-hidden' => 'true' ] );
+                        } else {
+                            echo $icon_added_html;
+                        }
+                    ?>
                 </span>
 
                 <?php if ( $show_label ) : ?>
@@ -262,7 +295,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                     var behavior = $btn.data('behavior');
                     
                     if( behavior === 'browse' && $btn.hasClass('added') ) {
-                        return; 
+                        return; // Allow standard link click to happen
                     }
                     
                     e.preventDefault(); 
@@ -295,6 +328,10 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                                 if($label.length) $label.text($btn.data('add-text'));
                                 $btn.attr('href', '#');
                             }
+                            
+                            // Trigger event for header badge counters!
+                            $(document).trigger('mh_wishlist_updated', [status]);
+
                         } else {
                             alert(response.data.message || 'Please log in to add to wishlist.');
                         }
