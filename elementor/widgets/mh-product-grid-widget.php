@@ -1,7 +1,7 @@
 <?php
 /**
  * MH Product Grid Widget
- * Fixed Hover CSS overrides & Added Quick View trigger.
+ * Fully Customizable version: Controls for every element, spacing, and color.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,6 +12,7 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Box_Shadow;
+use Elementor\Group_Control_Border;
 
 class MH_Product_Grid_Widget extends Widget_Base {
 
@@ -25,39 +26,158 @@ class MH_Product_Grid_Widget extends Widget_Base {
          * CONTENT: QUERY SETTINGS
          * ========================================== */
         $this->start_controls_section( 'section_query', [ 'label' => __( 'Query Settings', 'mh-plug' ), 'tab' => Controls_Manager::TAB_CONTENT ] );
-        $this->add_control( 'query_type', [ 'label' => __( 'Filter By', 'mh-plug' ), 'type' => Controls_Manager::SELECT, 'default' => 'latest', 'options' => [ 'latest' => __( 'Latest', 'mh-plug' ), 'best_sellers' => __( 'Best Sellers', 'mh-plug' ), 'top_rated' => __( 'Top Rated', 'mh-plug' ), 'sale' => __( 'On Sale', 'mh-plug' ), 'featured' => __( 'Featured', 'mh-plug' ), ], ] );
+        
+        $this->add_control( 'query_type', [ 
+            'label' => __( 'Filter By', 'mh-plug' ), 'type' => Controls_Manager::SELECT, 'default' => 'latest', 
+            'options' => [ 'latest' => __( 'Latest', 'mh-plug' ), 'best_sellers' => __( 'Best Sellers', 'mh-plug' ), 'top_rated' => __( 'Top Rated', 'mh-plug' ), 'sale' => __( 'On Sale', 'mh-plug' ), 'featured' => __( 'Featured', 'mh-plug' ), ], 
+        ] );
+        
         $this->add_control( 'posts_per_page', [ 'label' => __( 'Number of Products', 'mh-plug' ), 'type' => Controls_Manager::NUMBER, 'default' => 8, 'min' => 1, 'max' => 50, ] );
-        $this->add_responsive_control( 'columns', [ 'label' => __( 'Columns', 'mh-plug' ), 'type' => Controls_Manager::SELECT, 'default' => '4', 'tablet_default' => '2', 'mobile_default' => '1', 'options' => [ '1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6' ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid' => 'grid-template-columns: repeat({{VALUE}}, 1fr);' ], ] );
+        
+        $this->add_responsive_control( 'columns', [ 
+            'label' => __( 'Columns', 'mh-plug' ), 'type' => Controls_Manager::SELECT, 'default' => '4', 'tablet_default' => '2', 'mobile_default' => '1', 
+            'options' => [ '1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6' ], 
+            'selectors' => [ '{{WRAPPER}} .mh-product-grid' => 'grid-template-columns: repeat({{VALUE}}, 1fr);' ], 
+        ] );
+        
         $this->end_controls_section();
 
         /* ==========================================
          * CONTENT: CARD ELEMENTS
          * ========================================== */
-        $this->start_controls_section( 'section_elements', [ 'label' => __( 'Card Elements', 'mh-plug' ), 'tab' => Controls_Manager::TAB_CONTENT ] );
+        $this->start_controls_section( 'section_elements', [ 'label' => __( 'Show/Hide Elements', 'mh-plug' ), 'tab' => Controls_Manager::TAB_CONTENT ] );
         $this->add_control( 'show_category', [ 'label' => __( 'Show Category', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
         $this->add_control( 'show_rating', [ 'label' => __( 'Show Star Rating', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
         $this->add_control( 'show_badge', [ 'label' => __( 'Show Sale Badge', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
         $this->end_controls_section();
 
         /* ==========================================
-         * STYLE: GRID & CARD
+         * STYLE: GRID & CARD CONTAINER
          * ========================================== */
-        $this->start_controls_section( 'section_style_grid', [ 'label' => __( 'Grid & Card Style', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
-        $this->add_responsive_control( 'grid_gap', [ 'label' => __( 'Grid Gap', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 20 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid' => 'gap: {{SIZE}}px;' ], ] );
-        $this->add_control( 'card_bg', [ 'label' => __( 'Card Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-card' => 'background-color: {{VALUE}};' ], ] );
-        $this->add_control( 'card_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 10 ], 'selectors' => [ '{{WRAPPER}} .mh-product-card' => 'border-radius: {{SIZE}}px;' ], ] );
+        $this->start_controls_section( 'section_style_card', [ 'label' => __( 'Grid & Card Container', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
+        
+        $this->add_responsive_control( 'grid_gap', [ 
+            'label' => __( 'Grid Gap', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 20 ], 
+            'selectors' => [ '{{WRAPPER}} .mh-product-grid' => 'gap: {{SIZE}}px;' ], 
+        ] );
+        
+        $this->add_control( 'card_bg', [ 
+            'label' => __( 'Card Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 
+            'selectors' => [ '{{WRAPPER}} .mh-product-card' => 'background-color: {{VALUE}};' ], 
+        ] );
+        
+        $this->add_responsive_control( 'card_radius', [ 
+            'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 
+            'default' => [ 'top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10, 'isLinked' => true ],
+            'selectors' => [ '{{WRAPPER}} .mh-product-card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], 
+        ] );
+
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'card_border', 'selector' => '{{WRAPPER}} .mh-product-card' ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'card_shadow', 'selector' => '{{WRAPPER}} .mh-product-card' ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'card_shadow_hover', 'label' => __( 'Hover Box Shadow', 'mh-plug' ), 'selector' => '{{WRAPPER}} .mh-product-card:hover' ] );
+        
         $this->end_controls_section();
 
         /* ==========================================
-         * STYLE: TYPOGRAPHY & COLORS
+         * STYLE: IMAGE & SALE BADGE
          * ========================================== */
-        $this->start_controls_section( 'section_style_typography', [ 'label' => __( 'Typography & Colors', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
-        $this->add_control( 'color_title', [ 'label' => __( 'Title Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#111111', 'selectors' => [ '{{WRAPPER}} .mh-product-title a' => 'color: {{VALUE}};' ] ] );
-        $this->add_control( 'color_title_hover', [ 'label' => __( 'Title Hover', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-title a:hover' => 'color: {{VALUE}};' ] ] );
-        $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'typo_title', 'selector' => '{{WRAPPER}} .mh-product-title a' ] );
-        $this->add_control( 'color_price', [ 'label' => __( 'Price Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'separator' => 'before', 'selectors' => [ '{{WRAPPER}} .mh-product-price' => 'color: {{VALUE}};' ] ] );
-        $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'typo_price', 'selector' => '{{WRAPPER}} .mh-product-price' ] );
+        $this->start_controls_section( 'section_style_image', [ 'label' => __( 'Image & Sale Badge', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
+        
+        $this->add_control( 'image_bg', [ 
+            'label' => __( 'Image Wrapper Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#f7f7f7', 
+            'selectors' => [ '{{WRAPPER}} .mh-product-image-wrap' => 'background-color: {{VALUE}};' ], 
+        ] );
+
+        $this->add_responsive_control( 'image_padding', [ 
+            'label' => __( 'Image Padding', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 
+            'selectors' => [ '{{WRAPPER}} .mh-product-image-wrap' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], 
+        ] );
+
+        $this->add_control( 'heading_badge_style', [ 'label' => __( 'Sale Badge', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        
+        $this->add_control( 'badge_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-badge' => 'background-color: {{VALUE}};' ] ] );
+        $this->add_control( 'badge_color', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-badge' => 'color: {{VALUE}};' ] ] );
+        $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'badge_typo', 'selector' => '{{WRAPPER}} .mh-badge' ] );
+        $this->add_responsive_control( 'badge_padding', [ 'label' => __( 'Padding', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-badge' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'badge_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'selectors' => [ '{{WRAPPER}} .mh-badge' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+
+        $this->end_controls_section();
+
+        /* ==========================================
+         * STYLE: CONTENT AREA
+         * ========================================== */
+        $this->start_controls_section( 'section_style_content', [ 'label' => __( 'Content Area (Text)', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
+        
+        $this->add_responsive_control( 'content_padding', [ 
+            'label' => __( 'Content Padding', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', 'em', '%' ], 
+            'default' => [ 'top' => 20, 'right' => 20, 'bottom' => 20, 'left' => 20, 'isLinked' => true ],
+            'selectors' => [ '{{WRAPPER}} .mh-product-info' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], 
+        ] );
+
+        $this->add_responsive_control( 'content_align', [ 
+            'label' => __( 'Alignment', 'mh-plug' ), 'type' => Controls_Manager::CHOOSE, 
+            'options' => [ 'left' => [ 'title' => 'Left', 'icon' => 'eicon-text-align-left' ], 'center' => [ 'title' => 'Center', 'icon' => 'eicon-text-align-center' ], 'right' => [ 'title' => 'Right', 'icon' => 'eicon-text-align-right' ] ], 
+            'default' => 'left', 'selectors' => [ '{{WRAPPER}} .mh-product-info' => 'text-align: {{VALUE}};' ], 
+        ] );
+
+        // Category
+        $this->add_control( 'heading_cat_style', [ 'label' => __( 'Category', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $this->add_control( 'cat_color', [ 'label' => __( 'Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#888888', 'selectors' => [ '{{WRAPPER}} .mh-product-cat, {{WRAPPER}} .mh-product-cat a' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'cat_hover_color', [ 'label' => __( 'Hover Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-cat a:hover' => 'color: {{VALUE}};' ] ] );
+        $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'cat_typo', 'selector' => '{{WRAPPER}} .mh-product-cat' ] );
+        $this->add_responsive_control( 'cat_margin', [ 'label' => __( 'Margin Bottom', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-product-cat' => 'margin-bottom: {{SIZE}}{{UNIT}};' ] ] );
+
+        // Title
+        $this->add_control( 'heading_title_style', [ 'label' => __( 'Title', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $this->add_control( 'title_color', [ 'label' => __( 'Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#111111', 'selectors' => [ '{{WRAPPER}} .mh-product-title a' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'title_hover_color', [ 'label' => __( 'Hover Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-title a:hover' => 'color: {{VALUE}};' ] ] );
+        $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'title_typo', 'selector' => '{{WRAPPER}} .mh-product-title' ] );
+        $this->add_responsive_control( 'title_margin', [ 'label' => __( 'Margin Bottom', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-product-title' => 'margin-bottom: {{SIZE}}{{UNIT}};' ] ] );
+
+        // Rating
+        $this->add_control( 'heading_rating_style', [ 'label' => __( 'Rating Stars', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $this->add_control( 'star_color', [ 'label' => __( 'Star Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#f5b223', 'selectors' => [ '{{WRAPPER}} .mh-product-rating .star-rating' => 'color: {{VALUE}};' ] ] );
+        $this->add_responsive_control( 'star_size', [ 'label' => __( 'Star Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-product-rating .star-rating' => 'font-size: {{SIZE}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'rating_margin', [ 'label' => __( 'Margin Bottom', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-product-rating' => 'margin-bottom: {{SIZE}}{{UNIT}};' ] ] );
+
+        // Price
+        $this->add_control( 'heading_price_style', [ 'label' => __( 'Price', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $this->add_control( 'price_color', [ 'label' => __( 'Regular/Sale Price Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-price' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'old_price_color', [ 'label' => __( 'Old Price Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#aaaaaa', 'selectors' => [ '{{WRAPPER}} .mh-product-price del' => 'color: {{VALUE}};' ] ] );
+        $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'price_typo', 'selector' => '{{WRAPPER}} .mh-product-price' ] );
+
+        $this->end_controls_section();
+
+        /* ==========================================
+         * STYLE: ACTION BUTTONS (HOVER REVEAL)
+         * ========================================== */
+        $this->start_controls_section( 'section_style_buttons', [ 'label' => __( 'Action Buttons (Hover)', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
+        
+        $this->add_responsive_control( 'btn_width', [ 'label' => __( 'Button Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn' => 'width: {{SIZE}}px !important; min-width: {{SIZE}}px !important;' ] ] );
+        $this->add_responsive_control( 'btn_height', [ 'label' => __( 'Button Height', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn' => 'height: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' ] ] );
+        $this->add_responsive_control( 'btn_icon_size', [ 'label' => __( 'Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 16 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn i' => 'font-size: {{SIZE}}px !important;', '{{WRAPPER}} .mh-product-grid .mh-action-btn svg' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important;' ] ] );
+        $this->add_responsive_control( 'btn_gap', [ 'label' => __( 'Gap Between Buttons', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 8 ], 'selectors' => [ '{{WRAPPER}} .mh-product-actions' => 'gap: {{SIZE}}px;' ] ] );
+        $this->add_responsive_control( 'btn_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'default' => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => '%' ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ] ] );
+
+        $this->start_controls_tabs( 'tabs_btn_style' );
+        
+        // NORMAL
+        $this->start_controls_tab( 'tab_btn_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->add_control( 'btn_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn' => 'color: {{VALUE}} !important;' ] ] );
+        $this->add_control( 'btn_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn' => 'background-color: {{VALUE}} !important;' ] ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_border', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn' ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_shadow', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn' ] );
+        $this->end_controls_tab();
+
+        // HOVER / ACTIVE
+        $this->start_controls_tab( 'tab_btn_hover', [ 'label' => __( 'Hover & Active', 'mh-plug' ) ] );
+        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' => 'color: {{VALUE}} !important;' ] ] );
+        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' => 'background-color: {{VALUE}} !important;' ] ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn:hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn:hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' ] );
+        $this->end_controls_tab();
+
+        $this->end_controls_tabs();
         $this->end_controls_section();
     }
 
@@ -78,50 +198,40 @@ class MH_Product_Grid_Widget extends Widget_Base {
         if ( ! $loop->have_posts() ) { echo '<p>' . esc_html__( 'No products found.', 'mh-plug' ) . '</p>'; return; }
         ?>
         <style>
+            /* Structural Grid CSS (Colors/Spacing handled by Elementor Controls now) */
             .mh-product-grid { display: grid; }
-            .mh-product-card { background: #fff; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; }
-            .mh-product-card:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.08); transform: translateY(-3px); z-index: 5; }
+            .mh-product-card { position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; overflow: hidden; }
+            .mh-product-card:hover { transform: translateY(-3px); z-index: 5; }
             
-            .mh-product-image-wrap { position: relative; overflow: hidden; background: #f7f7f7; display: flex; align-items: center; justify-content: center; aspect-ratio: 1/1; }
+            .mh-product-image-wrap { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; aspect-ratio: 1/1; }
             .mh-product-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
             .mh-product-card:hover .mh-product-image-wrap img { transform: scale(1.05); }
 
             .mh-product-badges { position: absolute; top: 15px; left: 15px; z-index: 2; display: flex; flex-direction: column; gap: 5px; }
-            .mh-badge { background: #d63638; color: #fff; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 3px; text-transform: uppercase; }
+            .mh-badge { font-size: 11px; font-weight: 600; text-transform: uppercase; line-height: 1; }
 
-            /* 🚀 THE FIX: Bulletproof Action Buttons */
             .mh-product-actions { 
-                position: absolute; bottom: -60px; left: 0; width: 100%; display: flex; justify-content: center; gap: 8px; 
-                opacity: 0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 10; padding-bottom: 15px;
+                position: absolute; bottom: -80px; left: 0; width: 100%; display: flex; justify-content: center; 
+                opacity: 0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 10; padding-bottom: 20px;
             }
             .mh-product-card:hover .mh-product-actions { bottom: 0; opacity: 1; }
             
-            /* Using !important to brutally override Astra/Elementor default button styles */
-            .mh-product-grid .mh-action-btn,
-            .mh-product-grid .mh-action-btn:visited { 
-                width: 40px !important; height: 40px !important; min-height: 40px !important;
-                background: #ffffff !important; border-radius: 50% !important; 
+            .mh-product-grid .mh-action-btn { 
                 display: flex !important; align-items: center !important; justify-content: center !important; 
-                color: #333333 !important; font-size: 16px !important; padding: 0 !important; margin: 0 !important;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; text-decoration: none !important; border: none !important; cursor: pointer !important;
-                line-height: 1 !important;
+                padding: 0 !important; margin: 0 !important; text-decoration: none !important; cursor: pointer !important;
+                line-height: 1 !important; transition: all 0.3s ease !important;
             }
-            .mh-product-grid .mh-action-btn:hover,
-            .mh-product-grid .mh-action-btn.added { 
-                background: #d63638 !important; color: #ffffff !important; 
-            }
-            .mh-product-grid .mh-action-btn svg { width: 16px; height: 16px; fill: currentColor; }
+            .mh-product-grid .mh-action-btn svg { fill: currentColor; }
 
-            /* Content Area */
-            .mh-product-info { padding: 20px; text-align: left; display: flex; flex-direction: column; flex-grow: 1; }
-            .mh-product-cat { font-size: 12px; color: #888; text-transform: uppercase; margin-bottom: 5px; font-weight: 500; }
-            .mh-product-title { margin: 0 0 10px 0; font-size: 16px; font-weight: 600; line-height: 1.4; }
-            .mh-product-title a { color: inherit; text-decoration: none; transition: color 0.3s; }
-            .mh-product-rating { margin-bottom: 10px; font-size: 12px; }
-            .mh-product-rating .star-rating { font-size: 13px; color: #f5b223; }
-            .mh-product-price { font-weight: 700; font-size: 16px; margin-top: auto; }
-            .mh-product-price del { color: #aaa; font-weight: 400; font-size: 14px; margin-right: 5px; }
-            .mh-product-price ins { text-decoration: none; }
+            .mh-product-info { display: flex; flex-direction: column; flex-grow: 1; }
+            .mh-product-cat { text-transform: uppercase; font-weight: 500; }
+            .mh-product-cat a { text-decoration: none; transition: color 0.3s; }
+            .mh-product-title { font-weight: 600; line-height: 1.4; }
+            .mh-product-title a { text-decoration: none; transition: color 0.3s; }
+            .mh-product-rating .star-rating { font-size: 13px; }
+            .mh-product-price { font-weight: 700; margin-top: auto; }
+            .mh-product-price del { font-weight: 400; margin-right: 5px; }
+            .mh-product-price ins { text-decoration: none; background: transparent; }
         </style>
 
         <div class="mh-product-grid">
@@ -201,7 +311,6 @@ class MH_Product_Grid_Widget extends Widget_Base {
                     $.post(mhAjaxUrl, { action: 'mh_quick_view_load', product_id: product_id }, function(response) {
                         if (response.success) {
                             $body.html(response.data);
-                            // Initialize WooCommerce variation scripts for the newly loaded form
                             if (typeof $.fn.wc_variation_form !== 'undefined') {
                                 $body.find('.variations_form').each(function() { $(this).wc_variation_form(); });
                             }
