@@ -255,3 +255,54 @@ if ( ! function_exists( 'mh_wishlist_get_items' ) ) {
         return is_array( $wishlist ) ? array_filter( array_map( 'intval', $wishlist ) ) : [];
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FORCE WOOCOMMERCE TO SAVE CUSTOM ATTRIBUTES ON SIMPLE PRODUCTS
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 1. Catch the data from the widget and save it to the Cart Session
+add_filter( 'woocommerce_add_cart_item_data', 'mh_save_custom_attributes_to_cart', 10, 3 );
+function mh_save_custom_attributes_to_cart( $cart_item_data, $product_id, $variation_id ) {
+    $product = wc_get_product( $product_id );
+    if ( ! $product ) return $cart_item_data;
+
+    $attributes = $product->get_attributes();
+    
+    foreach ( $attributes as $attribute ) {
+        $attr_name = 'attribute_' . sanitize_title( $attribute->get_name() );
+        
+        // If our widget sent this data, save it!
+        if ( isset( $_POST[$attr_name] ) && ! empty( $_POST[$attr_name] ) ) {
+            $cart_item_data['mh_custom_attributes'][$attr_name] = [
+                'label' => wc_attribute_label( $attribute->get_name() ),
+                'value' => sanitize_text_field( wp_unslash( $_POST[$attr_name] ) )
+            ];
+        }
+    }
+    return $cart_item_data;
+}
+
+// 2. Display the selected attributes in the Cart & Checkout pages
+add_filter( 'woocommerce_get_item_data', 'mh_display_custom_attributes_in_cart', 10, 2 );
+function mh_display_custom_attributes_in_cart( $item_data, $cart_item ) {
+    if ( isset( $cart_item['mh_custom_attributes'] ) ) {
+        foreach ( $cart_item['mh_custom_attributes'] as $attr ) {
+            $item_data[] = [
+                'key'   => $attr['label'],
+                'value' => $attr['value']
+            ];
+        }
+    }
+    return $item_data;
+}
+
+// 3. Save the attributes permanently to the Order Dashboard! (What you see in wp-admin)
+add_action( 'woocommerce_checkout_create_order_line_item', 'mh_save_custom_attributes_to_order', 10, 4 );
+function mh_save_custom_attributes_to_order( $item, $cart_item_key, $values, $order ) {
+    if ( isset( $values['mh_custom_attributes'] ) ) {
+        foreach ( $values['mh_custom_attributes'] as $attr ) {
+            // This adds it right under the product name in the order details
+            $item->add_meta_data( $attr['label'], $attr['value'], true );
+        }
+    }
+}

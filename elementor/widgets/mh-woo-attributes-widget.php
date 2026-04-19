@@ -109,39 +109,32 @@ class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base
         <script>
             jQuery(document).ready(function($) {
                 
-                function syncWooAttributes() {
+                // 1. If it's a Variable Product, sync the native WooCommerce dropdowns when user makes a choice
+                $('.mh-woo-attribute-select').on('change', function() {
+                    var name = $(this).attr('name');
+                    var val = $(this).val();
+                    var $nativeSelect = $('form.cart').find('select[name="' + name + '"]');
+                    
+                    if ($nativeSelect.length) {
+                        $nativeSelect.val(val).trigger('change'); // Forces WooCommerce to calculate variation_id
+                    }
+                });
+
+                // 2. If it's a Simple Product, forcefully inject the data into the form right as it submits!
+                $('body').on('submit', 'form.cart', function() {
+                    var $form = $(this);
+                    
                     $('.mh-woo-attribute-select').each(function() {
                         var name = $(this).attr('name');
                         var val = $(this).val();
-                        var $form = $('form.cart'); // Find the official WooCommerce Add to Cart form
 
-                        if ($form.length) {
-                            // Check if this is a Variable Product (WooCommerce generates hidden selects for these)
-                            var $nativeSelect = $form.find('select[name="' + name + '"]');
-                            
-                            if ($nativeSelect.length) {
-                                // Variable product: Update WooCommerce's native dropdown and trigger the change event to calculate price
-                                $nativeSelect.val(val).trigger('change');
-                            } else {
-                                // Simple product with custom attributes: Inject hidden inputs directly into the form!
-                                var $hiddenInput = $form.find('input[name="' + name + '"]');
-                                
-                                if ($hiddenInput.length) {
-                                    $hiddenInput.val(val); // Update existing hidden input
-                                } else if (val !== '') {
-                                    $form.append('<input type="hidden" name="' + name + '" value="' + val + '">'); // Create new hidden input
-                                }
-                            }
+                        // Only inject if it has a value, and it's NOT a native variable select
+                        if (val !== '' && !$form.find('select[name="' + name + '"]').length) {
+                            // Remove old hidden input to prevent duplicates, then add the new one
+                            $form.find('input[name="' + name + '"]').remove();
+                            $form.append('<input type="hidden" name="' + name + '" value="' + val + '">');
                         }
                     });
-                }
-
-                // Run it once immediately in case there are default options selected
-                syncWooAttributes();
-
-                // Run it every time the customer changes a dropdown
-                $('.mh-woo-attribute-select').on('change', function() {
-                    syncWooAttributes();
                 });
                 
             });
