@@ -198,7 +198,6 @@ class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base
 
         global $product;
 
-        // Ensure we have a valid product object, falling back to ID if necessary
         if (!is_a($product, 'WC_Product')) {
             $product = wc_get_product(get_the_ID());
         }
@@ -214,16 +213,22 @@ class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base
 
         echo '<div class="mh-woo-attributes-container" style="display:flex; flex-direction:column;">';
 
-        // Neumorphic default styles that can be partially overridden by controls
-        // box-shadow matches the MH-Plug Neumorphic style palette
         $default_select_css = 'border: none; outline: none; height: 45px; appearance: none; box-shadow: inset 3px 3px 7px #bec8d4, inset -3px -3px 7px #ffffff; cursor: pointer;';
 
         foreach ($attributes as $attribute) {
-            $label = wc_attribute_label($attribute->get_name());
+            
+            // 🚀 THE FIX: Calculate exactly what WooCommerce expects for the name attribute
+            $attribute_name = $attribute->get_name();
+            $label          = wc_attribute_label($attribute_name);
+            $select_id      = sanitize_title($attribute_name);
+            $select_name    = 'attribute_' . $select_id;
 
             echo '<div class="mh-woo-attribute-wrapper">';
-            echo '<label class="mh-woo-attribute-label" style="font-weight:600;">' . esc_html($label) . '</label>';
-            echo '<select class="mh-woo-attribute-select" style="' . esc_attr($default_select_css) . '">';
+            echo '<label class="mh-woo-attribute-label" for="' . esc_attr($select_id) . '" style="font-weight:600;">' . esc_html($label) . '</label>';
+            
+            // 🚀 THE FIX: Add the ID, NAME, and DATA-ATTRIBUTE_NAME to the select tag
+            echo '<select id="' . esc_attr($select_id) . '" name="' . esc_attr($select_name) . '" class="mh-woo-attribute-select" style="' . esc_attr($default_select_css) . '" data-attribute_name="' . esc_attr($select_name) . '">';
+            
             echo '<option value="">' . esc_html(sprintf(__('Choose %s', 'mh-plug'), $label)) . '</option>';
 
             if ($attribute->is_taxonomy()) {
