@@ -294,11 +294,12 @@ class MH_Product_Grid_Widget extends Widget_Base {
                     });
                 });
 
-                // Quick View Trigger Logic
+                // Quick View Initialization
                 if ($('#mh-quick-view-modal').length === 0) {
                     $('body').append('<div id="mh-quick-view-modal" class="mh-qv-overlay"><div class="mh-qv-content"><span class="mh-qv-close"><i class="fas fa-times"></i></span><div class="mh-qv-body"></div></div></div>');
                 }
 
+                // Open Quick View
                 $('.mh-quick-view-trigger').on('click', function(e) {
                     e.preventDefault();
                     var product_id = $(this).data('product-id');
@@ -311,16 +312,78 @@ class MH_Product_Grid_Widget extends Widget_Base {
                     $.post(mhAjaxUrl, { action: 'mh_quick_view_load', product_id: product_id }, function(response) {
                         if (response.success) {
                             $body.html(response.data);
+                            
+                            // Initialize WooCommerce variables
                             if (typeof $.fn.wc_variation_form !== 'undefined') {
                                 $body.find('.variations_form').each(function() { $(this).wc_variation_form(); });
                             }
+
+                            // Inject + / - QTY Buttons dynamically
+                            $body.find('.quantity').each(function() {
+                                var $qtyWrapper = $(this);
+                                if ($qtyWrapper.find('.mh-qty-btn').length === 0) {
+                                    $qtyWrapper.prepend('<span class="mh-qty-btn mh-minus">-</span>');
+                                    $qtyWrapper.append('<span class="mh-qty-btn mh-plus">+</span>');
+                                }
+                            });
                         }
                     });
                 });
 
-                $(document).on('click', '.mh-qv-close, .mh-qv-overlay', function(e) {
-                    if (e.target !== this) return;
+                // Close Button Logic (Fixed Target Bug)
+                $(document).on('click', '.mh-qv-close, .mh-qv-close *', function(e) {
                     $('#mh-quick-view-modal').removeClass('mh-open');
+                });
+                
+                // Close when clicking outside the box
+                $(document).on('click', '.mh-qv-overlay', function(e) {
+                    if ($(e.target).hasClass('mh-qv-overlay')) {
+                        $('#mh-quick-view-modal').removeClass('mh-open');
+                    }
+                });
+
+                // +/- Quantity Logic
+                $(document).on('click', '.mh-qty-btn', function() {
+                    var $qtyInput = $(this).siblings('.qty');
+                    var currentVal = parseFloat($qtyInput.val()) || 0;
+                    if ($(this).hasClass('mh-plus')) {
+                        $qtyInput.val(currentVal + 1);
+                    } else {
+                        if (currentVal > 1) { $qtyInput.val(currentVal - 1); }
+                    }
+                    $qtyInput.trigger('change');
+                });
+
+                // Custom AJAX Add to Cart (Stops Page Reload)
+                $(document).on('submit', '.mh-qv-add-to-cart-wrap form.cart', function(e) {
+                    e.preventDefault();
+                    var $form = $(this);
+                    var $btn = $form.find('button[type="submit"]');
+                    
+                    // Fallback to find product ID if hidden input is missing
+                    var productId = $form.find('input[name="product_id"]').val() || $form.find('button[name="add-to-cart"]').val();
+                    
+                    var formData = $form.serialize();
+                    formData += '&action=mh_qv_add_to_cart';
+                    formData += '&product_id=' + productId;
+
+                    $btn.addClass('loading').text('Adding...');
+
+                    $.post(mhAjaxUrl, formData, function(response) {
+                        if (response.success) {
+                            // Update fragments (Cart counters in header)
+                            $(document.body).trigger('added_to_cart', [response.data.fragments, response.data.cart_hash, $btn]);
+                            $btn.text('Added to Cart!');
+                            
+                            // Automatically close modal after 1.5s
+                            setTimeout(function() {
+                                $('#mh-quick-view-modal').removeClass('mh-open');
+                                $btn.removeClass('loading').text('Add to cart'); // Reset button
+                            }, 1500);
+                        } else {
+                            $btn.removeClass('loading').text('Error Adding');
+                        }
+                    });
                 });
             });
         </script>

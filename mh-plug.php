@@ -335,10 +335,11 @@ function mh_make_order_attributes_bigger() {
         }
     </style>';
 }
+// ─────────────────────────────────────────────────────────────────────────────
+// WOOCOMMERCE QUICK VIEW AJAX HANDLER & CUSTOM ADD TO CART
+// ─────────────────────────────────────────────────────────────────────────────
 
-// ─────────────────────────────────────────────────────────────────────────────
-// WOOCOMMERCE QUICK VIEW AJAX HANDLER
-// ─────────────────────────────────────────────────────────────────────────────
+// 1. Load the Quick View HTML
 add_action( 'wp_ajax_mh_quick_view_load', 'mh_quick_view_ajax_handler' );
 add_action( 'wp_ajax_nopriv_mh_quick_view_load', 'mh_quick_view_ajax_handler' );
 
@@ -363,7 +364,10 @@ function mh_quick_view_ajax_handler() {
             <div class="mh-qv-excerpt"><?php echo apply_filters( 'woocommerce_short_description', $post->post_excerpt ); ?></div>
             
             <div class="mh-qv-add-to-cart-wrap">
-                <?php woocommerce_template_single_add_to_cart(); ?>
+                <?php 
+                // This native Woo function loads variations, attributes, and the Add to Cart button!
+                woocommerce_template_single_add_to_cart(); 
+                ?>
             </div>
         </div>
     </div>
@@ -371,7 +375,34 @@ function mh_quick_view_ajax_handler() {
     wp_send_json_success( ob_get_clean() );
 }
 
-// Quick View Global CSS
+// 2. Custom AJAX Add to Cart Handler (Prevents Page Reloads!)
+add_action('wp_ajax_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
+add_action('wp_ajax_nopriv_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
+
+function mh_qv_ajax_add_to_cart() {
+    ob_start();
+    $product_id   = apply_filters('woocommerce_add_to_cart_product_id', absint($_POST['product_id']));
+    $quantity     = empty($_POST['quantity']) ? 1 : wc_stock_amount($_POST['quantity']);
+    $variation_id = isset($_POST['variation_id']) ? absint($_POST['variation_id']) : 0;
+    $variation    = [];
+    
+    // Grab any variable attributes selected
+    foreach ($_POST as $key => $value) {
+        if (strpos($key, 'attribute_') === 0) { $variation[$key] = $value; }
+    }
+    
+    $passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $product_id, $quantity, $variation_id, $variation);
+
+    if ($passed_validation && WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation)) {
+        do_action('woocommerce_ajax_added_to_cart', $product_id);
+        WC_AJAX::get_refreshed_fragments(); // Returns the updated Cart numbers natively!
+    } else {
+        wp_send_json_error();
+    }
+    wp_die();
+}
+
+// 3. Quick View Global CSS (Now includes + / - button styling)
 add_action('wp_footer', function() {
     ?>
     <style>
@@ -389,14 +420,19 @@ add_action('wp_footer', function() {
         .mh-qv-price del { color: #aaa; font-weight: 400; font-size: 18px; margin-right: 10px; }
         .mh-qv-excerpt { color: #555; line-height: 1.6; margin-bottom: 30px; }
         
-        /* Ensures standard Woo forms look nice in popup */
+        /* Form & + / - Quantity Styling */
         .mh-qv-add-to-cart-wrap form.cart { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
+        .mh-qv-add-to-cart-wrap .quantity { display: flex; align-items: center; background: #f7f7f7; border-radius: 5px; border: 1px solid #ddd; }
+        .mh-qv-add-to-cart-wrap .quantity input.qty { width: 50px; text-align: center; border: none; background: transparent; font-size: 16px; font-weight: 600; padding: 10px 0; -moz-appearance: textfield; }
+        .mh-qv-add-to-cart-wrap .quantity input::-webkit-outer-spin-button, .mh-qv-add-to-cart-wrap .quantity input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .mh-qty-btn { width: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; font-weight: bold; color: #555; user-select: none; transition: 0.2s; }
+        .mh-qty-btn:hover { color: #d63638; }
+        
         .mh-qv-add-to-cart-wrap button.button { background: #111; color: #fff; padding: 12px 30px; border-radius: 5px; border: none; cursor: pointer; transition: 0.3s; font-weight: 600; font-size: 16px; }
         .mh-qv-add-to-cart-wrap button.button:hover { background: #d63638; }
+        .mh-qv-add-to-cart-wrap button.button.loading { opacity: 0.5; pointer-events: none; }
 
-        @media (max-width: 768px) {
-            .mh-qv-grid { grid-template-columns: 1fr; padding: 25px; gap: 20px; }
-        }
+        @media (max-width: 768px) { .mh-qv-grid { grid-template-columns: 1fr; padding: 25px; gap: 20px; } }
     </style>
     <?php
 });
