@@ -335,3 +335,68 @@ function mh_make_order_attributes_bigger() {
         }
     </style>';
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WOOCOMMERCE QUICK VIEW AJAX HANDLER
+// ─────────────────────────────────────────────────────────────────────────────
+add_action( 'wp_ajax_mh_quick_view_load', 'mh_quick_view_ajax_handler' );
+add_action( 'wp_ajax_nopriv_mh_quick_view_load', 'mh_quick_view_ajax_handler' );
+
+function mh_quick_view_ajax_handler() {
+    $product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
+    if ( ! $product_id ) wp_send_json_error();
+
+    global $post, $product;
+    $post = get_post( $product_id );
+    setup_postdata( $post );
+    $product = wc_get_product( $product_id );
+
+    ob_start();
+    ?>
+    <div class="mh-qv-grid">
+        <div class="mh-qv-image">
+            <?php echo $product->get_image('woocommerce_single'); ?>
+        </div>
+        <div class="mh-qv-details">
+            <h2 class="mh-qv-title"><?php echo $product->get_name(); ?></h2>
+            <div class="mh-qv-price"><?php echo $product->get_price_html(); ?></div>
+            <div class="mh-qv-excerpt"><?php echo apply_filters( 'woocommerce_short_description', $post->post_excerpt ); ?></div>
+            
+            <div class="mh-qv-add-to-cart-wrap">
+                <?php woocommerce_template_single_add_to_cart(); ?>
+            </div>
+        </div>
+    </div>
+    <?php
+    wp_send_json_success( ob_get_clean() );
+}
+
+// Quick View Global CSS
+add_action('wp_footer', function() {
+    ?>
+    <style>
+        .mh-qv-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999999; opacity: 0; visibility: hidden; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .mh-qv-overlay.mh-open { opacity: 1; visibility: visible; }
+        .mh-qv-content { background: #fff; width: 900px; max-width: 95%; max-height: 90vh; overflow-y: auto; border-radius: 10px; position: relative; transform: translateY(30px); transition: 0.3s; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+        .mh-qv-overlay.mh-open .mh-qv-content { transform: translateY(0); }
+        .mh-qv-close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #888; z-index: 10; transition: 0.2s; }
+        .mh-qv-close:hover { color: #d63638; transform: rotate(90deg); }
+        
+        .mh-qv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 40px; }
+        .mh-qv-image img { width: 100%; height: auto; border-radius: 8px; }
+        .mh-qv-title { margin: 0 0 15px; font-size: 26px; font-weight: 700; color: #111; }
+        .mh-qv-price { font-size: 22px; color: #d63638; font-weight: 700; margin-bottom: 20px; }
+        .mh-qv-price del { color: #aaa; font-weight: 400; font-size: 18px; margin-right: 10px; }
+        .mh-qv-excerpt { color: #555; line-height: 1.6; margin-bottom: 30px; }
+        
+        /* Ensures standard Woo forms look nice in popup */
+        .mh-qv-add-to-cart-wrap form.cart { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
+        .mh-qv-add-to-cart-wrap button.button { background: #111; color: #fff; padding: 12px 30px; border-radius: 5px; border: none; cursor: pointer; transition: 0.3s; font-weight: 600; font-size: 16px; }
+        .mh-qv-add-to-cart-wrap button.button:hover { background: #d63638; }
+
+        @media (max-width: 768px) {
+            .mh-qv-grid { grid-template-columns: 1fr; padding: 25px; gap: 20px; }
+        }
+    </style>
+    <?php
+});
