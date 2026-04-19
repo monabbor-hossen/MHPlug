@@ -335,7 +335,6 @@ function mh_make_order_attributes_bigger() {
         }
     </style>';
 }
-
 // ─────────────────────────────────────────────────────────────────────────────
 // WOOCOMMERCE QUICK VIEW AJAX HANDLER & CUSTOM ADD TO CART
 // ─────────────────────────────────────────────────────────────────────────────
@@ -399,13 +398,10 @@ function mh_quick_view_ajax_handler() {
             <div class="mh-qv-price"><?php echo $product->get_price_html(); ?></div>
             <div class="mh-qv-excerpt"><?php echo apply_filters( 'woocommerce_short_description', $post->post_excerpt ); ?></div>
             
-            <div class="mh-qv-add-to-cart-wrap">
+            <div class="mh-qv-add-to-cart-wrap" data-product-id="<?php echo esc_attr($product_id); ?>">
                 <?php 
-                // Temporarily hook our custom attributes into the form
                 add_action( 'woocommerce_before_add_to_cart_button', 'mh_qv_output_simple_attributes' );
-                
                 woocommerce_template_single_add_to_cart(); 
-                
                 remove_action( 'woocommerce_before_add_to_cart_button', 'mh_qv_output_simple_attributes' );
                 ?>
             </div>
@@ -415,7 +411,7 @@ function mh_quick_view_ajax_handler() {
     wp_send_json_success( ob_get_clean() );
 }
 
-// 3. Custom AJAX Add to Cart Handler (Prevents Page Reloads & Fixes Errors!)
+// 3. Custom AJAX Add to Cart Handler (Fixes Simple Product Rejection!)
 add_action('wp_ajax_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
 add_action('wp_ajax_nopriv_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
 
@@ -425,25 +421,38 @@ function mh_qv_ajax_add_to_cart() {
     $variation_id = isset($_POST['variation_id']) ? absint($_POST['variation_id']) : 0;
     $variation    = [];
     
-    // Grab any variable attributes selected
-    foreach ($_POST as $key => $value) {
-        if (strpos($key, 'attribute_') === 0) { $variation[$key] = sanitize_text_field($value); }
-    }
-    
     $product = wc_get_product($product_id);
-    if ( $product && $product->is_type('variable') && empty($variation_id) ) {
-        wp_send_json_error(['message' => 'Please select product options.']);
+    if ( ! $product ) {
+        wp_send_json_error(['message' => 'Product not found.']);
         wp_die();
+    }
+
+    // 🚀 THE FIX: ONLY pass variations natively if it is actually a Variable Product.
+    // Our custom hook higher up in this file will handle the Simple product attributes!
+    if ( $product->is_type('variable') ) {
+        foreach ($_POST as $key => $value) {
+            if (strpos($key, 'attribute_') === 0) { $variation[$key] = sanitize_text_field($value); }
+        }
+        if ( empty($variation_id) ) {
+            wp_send_json_error(['message' => 'Please select product options.']);
+            wp_die();
+        }
     }
 
     $passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $product_id, $quantity, $variation_id, $variation);
 
-    if ($passed_validation && WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation)) {
-        do_action('woocommerce_ajax_added_to_cart', $product_id);
-        WC_AJAX::get_refreshed_fragments(); 
-    } else {
-        wp_send_json_error(['message' => 'Please select all attributes.']);
+    if ( $passed_validation ) {
+        // Pass empty array for simple products, Woo will accept it, and our custom hook will catch the $_POST!
+        $cart_item_key = WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation);
+        
+        if ( $cart_item_key ) {
+            do_action('woocommerce_ajax_added_to_cart', $product_id);
+            WC_AJAX::get_refreshed_fragments(); 
+            wp_die();
+        }
     }
+    
+    wp_send_json_error(['message' => 'Failed to add to cart.']);
     wp_die();
 }
 

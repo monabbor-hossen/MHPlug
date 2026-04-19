@@ -354,17 +354,16 @@ class MH_Product_Grid_Widget extends Widget_Base {
                     $qtyInput.trigger('change');
                 });
 
-                // Custom AJAX Add to Cart (Stops Page Reload)
-                // Custom AJAX Add to Cart (Stops Page Reload)
+                // Custom AJAX Add to Cart (Stops Page Reload & Fixed ID Fetching)
                 $(document).on('submit', '.mh-qv-add-to-cart-wrap form.cart', function(e) {
                     e.preventDefault();
                     var $form = $(this);
                     var $btn = $form.find('button[type="submit"]');
+                    var $wrap = $form.closest('.mh-qv-add-to-cart-wrap');
                     
-                    // Grab product ID safely
-                    var productId = $form.find('input[name="product_id"]').val() || $btn.val() || $btn.data('product_id');
+                    // 🚀 THE FIX: Grab product ID safely from our wrapper fallback
+                    var productId = $wrap.data('product-id') || $form.find('input[name="product_id"]').val() || $btn.val() || $btn.data('product_id');
                     
-                    // Serialize form and explicitly add standard Woo params
                     var formData = $form.serialize();
                     formData += '&action=mh_qv_add_to_cart';
                     formData += '&product_id=' + productId;
@@ -394,8 +393,7 @@ class MH_Product_Grid_Widget extends Widget_Base {
                                 $btn.removeClass('loading').text('Add to cart'); 
                             }, 1500);
                         } else {
-                            // Display the error message returned from our PHP logic
-                            var errorMsg = response.data && response.data.message ? response.data.message : 'Error Adding';
+                            var errorMsg = response.data && response.data.message ? response.data.message : 'Failed to add';
                             $btn.removeClass('loading').text(errorMsg);
                             setTimeout(function(){ $btn.text('Add to cart'); }, 2500);
                         }
