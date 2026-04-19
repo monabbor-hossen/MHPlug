@@ -57,6 +57,7 @@ class MH_Admin_Menu {
         'mh_nav_menu'       => 'Nav Menu',
         // 🚀 NEW: Add the toggle switch
         'mh_copyright'      => 'Copyright',
+        'mh_header_wishlist' => 'Header Wishlist Icon',
         
     ];
 
@@ -234,6 +235,9 @@ class MH_Admin_Menu {
                 'mh_product_data_accordion', 
                 'mh_nav_menu' ,
                 'mh_copyright',
+                'mh_header_wishlist', 
+                'mh_header_cart', // <-- Add them here!
+                
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
             }
