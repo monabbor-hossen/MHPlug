@@ -231,113 +231,149 @@ class MH_Wishlist_Table_Widget extends Widget_Base {
         $show_price   = 'yes' === $settings['show_price'];
         $show_stock   = 'yes' === $settings['show_stock'];
         $show_cart    = 'yes' === $settings['show_add_to_cart'];
-        $empty_msg    = $settings['empty_message'] ?: __( 'Your wishlist is empty.', 'mh-plug' );
+        $empty_msg    = ! empty($settings['empty_message']) ? $settings['empty_message'] : __( 'Your wishlist is empty.', 'mh-plug' );
 
-        if ( empty( $product_ids ) ) {
-            ?>
-            <div class="mh-wishlist-empty">
-                <i class="fa-regular fa-heart"></i>
-                <p><?php echo esc_html( $empty_msg ); ?></p>
-            </div>
-            <?php
-            return;
-        }
         ?>
         <div class="mh-wishlist-table-wrapper">
-            <table class="mh-wishlist-table">
-                <thead>
-                    <tr>
-                        <th class="mh-wl-col-remove"></th>
-                        <?php if ( $show_image ) : ?>
-                            <th class="mh-wl-col-image"><?php esc_html_e( 'Product', 'mh-plug' ); ?></th>
-                        <?php endif; ?>
-                        <th class="mh-wl-col-name"><?php esc_html_e( 'Name', 'mh-plug' ); ?></th>
-                        <?php if ( $show_price ) : ?>
-                            <th class="mh-wl-col-price"><?php esc_html_e( 'Price', 'mh-plug' ); ?></th>
-                        <?php endif; ?>
-                        <?php if ( $show_stock ) : ?>
-                            <th class="mh-wl-col-stock"><?php esc_html_e( 'Stock', 'mh-plug' ); ?></th>
-                        <?php endif; ?>
-                        <?php if ( $show_cart ) : ?>
-                            <th class="mh-wl-col-cart"><?php esc_html_e( 'Action', 'mh-plug' ); ?></th>
-                        <?php endif; ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ( $product_ids as $product_id ) :
-                        $product = wc_get_product( $product_id );
-                        if ( ! $product ) continue;
+            
+            <div class="mh-wishlist-empty" style="<?php echo empty( $product_ids ) ? 'display:block;' : 'display:none;'; ?> text-align: center; padding: 40px;">
+                <i class="far fa-heart" style="font-size: 40px; color: #ccc; margin-bottom: 15px;"></i>
+                <p style="font-size: 18px; color: #777;"><?php echo esc_html( $empty_msg ); ?></p>
+            </div>
 
-                        $stock      = $product->get_stock_status();
-                        $badge_map  = [
-                            'instock'    => [ 'class' => 'mh-wl-stock-instock',    'label' => __( 'In Stock', 'mh-plug' ) ],
-                            'outofstock' => [ 'class' => 'mh-wl-stock-outofstock', 'label' => __( 'Out of Stock', 'mh-plug' ) ],
-                            'onbackorder'=> [ 'class' => 'mh-wl-stock-onbackorder','label' => __( 'On Backorder', 'mh-plug' ) ],
-                        ];
-                        $badge = $badge_map[ $stock ] ?? $badge_map['instock'];
-                    ?>
-                    <tr data-product-id="<?php echo esc_attr( $product_id ); ?>">
-                        <td class="mh-wl-col-remove">
-                            <span
-                                class="mh-wl-remove-btn"
-                                data-product-id="<?php echo esc_attr( $product_id ); ?>"
-                                data-nonce="<?php echo esc_attr( $nonce ); ?>"
-                                title="<?php esc_attr_e( 'Remove', 'mh-plug' ); ?>"
-                                role="button"
-                                tabindex="0"
-                            >
-                                <i class="fa-solid fa-xmark"></i>
-                            </span>
-                        </td>
-                        <?php if ( $show_image ) : ?>
-                        <td class="mh-wl-col-image">
-                            <a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>">
-                                <?php echo $product->get_image( 'thumbnail' ); ?>
-                            </a>
-                        </td>
-                        <?php endif; ?>
-                        <td class="mh-wl-col-name">
-                            <a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>">
-                                <?php echo esc_html( $product->get_name() ); ?>
-                            </a>
-                        </td>
-                        <?php if ( $show_price ) : ?>
-                        <td class="mh-wl-col-price">
-                            <?php echo $product->get_price_html(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                        </td>
-                        <?php endif; ?>
-                        <?php if ( $show_stock ) : ?>
-                        <td class="mh-wl-col-stock">
-                            <span class="mh-wl-stock-badge <?php echo esc_attr( $badge['class'] ); ?>">
-                                <?php echo esc_html( $badge['label'] ); ?>
-                            </span>
-                        </td>
-                        <?php endif; ?>
-                        <?php if ( $show_cart ) : ?>
-                        <td class="mh-wl-col-cart">
-                            <?php
-                            if ( $product->is_in_stock() ) {
-                                echo apply_filters( 'woocommerce_loop_add_to_cart_link',
-                                    sprintf(
-                                        '<a href="%s" data-product_id="%d" data-product_sku="%s" class="button add_to_cart_button ajax_add_to_cart">%s</a>',
-                                        esc_url( $product->add_to_cart_url() ),
-                                        esc_attr( $product_id ),
-                                        esc_attr( $product->get_sku() ),
-                                        esc_html( $product->add_to_cart_text() )
-                                    ),
-                                    $product
-                                );
-                            } else {
-                                echo '<span class="mh-wl-stock-badge mh-wl-stock-outofstock">' . esc_html__( 'Out of Stock', 'mh-plug' ) . '</span>';
-                            }
-                            ?>
-                        </td>
-                        <?php endif; ?>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+            <?php if ( ! empty( $product_ids ) ) : ?>
+                <table class="mh-wishlist-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr>
+                            <th class="mh-wl-col-remove" style="padding: 15px;"></th>
+                            <?php if ( $show_image ) : ?>
+                                <th class="mh-wl-col-image" style="padding: 15px;"><?php esc_html_e( 'Product', 'mh-plug' ); ?></th>
+                            <?php endif; ?>
+                            <th class="mh-wl-col-name" style="padding: 15px;"><?php esc_html_e( 'Name', 'mh-plug' ); ?></th>
+                            <?php if ( $show_price ) : ?>
+                                <th class="mh-wl-col-price" style="padding: 15px;"><?php esc_html_e( 'Price', 'mh-plug' ); ?></th>
+                            <?php endif; ?>
+                            <?php if ( $show_stock ) : ?>
+                                <th class="mh-wl-col-stock" style="padding: 15px;"><?php esc_html_e( 'Stock', 'mh-plug' ); ?></th>
+                            <?php endif; ?>
+                            <?php if ( $show_cart ) : ?>
+                                <th class="mh-wl-col-cart" style="padding: 15px;"><?php esc_html_e( 'Action', 'mh-plug' ); ?></th>
+                            <?php endif; ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ( $product_ids as $product_id ) :
+                            $product = wc_get_product( $product_id );
+                            if ( ! $product ) continue;
+
+                            $stock      = $product->get_stock_status();
+                            $badge_map  = [
+                                'instock'    => [ 'class' => 'mh-wl-stock-instock',    'label' => __( 'In Stock', 'mh-plug' ), 'color' => '#0f834d' ],
+                                'outofstock' => [ 'class' => 'mh-wl-stock-outofstock', 'label' => __( 'Out of Stock', 'mh-plug' ), 'color' => '#d63638' ],
+                                'onbackorder'=> [ 'class' => 'mh-wl-stock-onbackorder','label' => __( 'On Backorder', 'mh-plug' ), 'color' => '#e27730' ],
+                            ];
+                            $badge = $badge_map[ $stock ] ?? $badge_map['instock'];
+                        ?>
+                        <tr data-product-id="<?php echo esc_attr( $product_id ); ?>" style="border-bottom: 1px solid #eee;">
+                            <td class="mh-wl-col-remove" style="padding: 15px;">
+                                <span class="mh-wl-remove-btn" data-product-id="<?php echo esc_attr( $product_id ); ?>" style="cursor: pointer; color: #d63638; font-size: 18px;">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </td>
+                            <?php if ( $show_image ) : ?>
+                            <td class="mh-wl-col-image" style="padding: 15px;">
+                                <a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>">
+                                    <?php echo $product->get_image( [ 60, 60 ] ); ?>
+                                </a>
+                            </td>
+                            <?php endif; ?>
+                            <td class="mh-wl-col-name" style="padding: 15px;">
+                                <a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>" style="text-decoration: none; color: inherit; font-weight: 500;">
+                                    <?php echo esc_html( $product->get_name() ); ?>
+                                </a>
+                            </td>
+                            <?php if ( $show_price ) : ?>
+                            <td class="mh-wl-col-price" style="padding: 15px;">
+                                <?php echo $product->get_price_html(); ?>
+                            </td>
+                            <?php endif; ?>
+                            <?php if ( $show_stock ) : ?>
+                            <td class="mh-wl-col-stock" style="padding: 15px;">
+                                <span style="color: <?php echo esc_attr($badge['color']); ?>; font-weight: 600;">
+                                    <?php echo esc_html( $badge['label'] ); ?>
+                                </span>
+                            </td>
+                            <?php endif; ?>
+                            <?php if ( $show_cart ) : ?>
+                            <td class="mh-wl-col-cart" style="padding: 15px;">
+                                <?php
+                                if ( $product->is_in_stock() ) {
+                                    echo apply_filters( 'woocommerce_loop_add_to_cart_link',
+                                        sprintf(
+                                            '<a href="%s" data-product_id="%d" data-product_sku="%s" class="button add_to_cart_button ajax_add_to_cart">%s</a>',
+                                            esc_url( $product->add_to_cart_url() ),
+                                            esc_attr( $product_id ),
+                                            esc_attr( $product->get_sku() ),
+                                            esc_html( $product->add_to_cart_text() )
+                                        ),
+                                        $product
+                                    );
+                                } else {
+                                    echo '<span style="color: #d63638;">' . esc_html__( 'Out of Stock', 'mh-plug' ) . '</span>';
+                                }
+                                ?>
+                            </td>
+                            <?php endif; ?>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
         </div>
+
+        <script>
+            jQuery(document).ready(function($) {
+                var mhAjaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
+                var mhNonce   = '<?php echo esc_attr( $nonce ); ?>';
+
+                $('.mh-wl-remove-btn').on('click', function(e) {
+                    e.preventDefault();
+                    var $btn = $(this);
+                    var $row = $btn.closest('tr');
+                    var productId = $btn.data('product-id');
+
+                    $btn.css({'opacity': '0.5', 'pointer-events': 'none'});
+
+                    // Send AJAX request to toggle (remove) the item
+                    $.post(mhAjaxUrl, {
+                        action: 'mh_wishlist_toggle',
+                        product_id: productId,
+                        security: mhNonce
+                    }, function(response) {
+                        if(response.success) {
+                            // Fade out and remove the row
+                            $row.fadeOut(300, function() {
+                                $(this).remove();
+                                
+                                // Check if table is empty now
+                                if ($('.mh-wishlist-table tbody tr').length === 0) {
+                                    $('.mh-wishlist-table').fadeOut(200, function() {
+                                        $('.mh-wishlist-empty').fadeIn(300);
+                                    });
+                                }
+                            });
+                            
+                            // Trigger event to update the header counters
+                            $(document).trigger('mh_wishlist_updated', ['removed']);
+                        } else {
+                            $btn.css({'opacity': '1', 'pointer-events': 'auto'});
+                            alert('Error removing item.');
+                        }
+                    });
+                });
+            });
+        </script>
         <?php
     }
+
 }
