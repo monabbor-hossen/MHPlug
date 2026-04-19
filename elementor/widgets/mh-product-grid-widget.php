@@ -353,21 +353,19 @@ class MH_Product_Grid_Widget extends Widget_Base {
                     }
                     $qtyInput.trigger('change');
                 });
-
-                // Custom AJAX Add to Cart (Stops Page Reload & Fixed ID Fetching)
+// Custom AJAX Add to Cart (Stops Page Reload & Fixed Double-Fire Conflict)
                 $(document).on('submit', '.mh-qv-add-to-cart-wrap form.cart', function(e) {
                     e.preventDefault();
                     var $form = $(this);
                     var $btn = $form.find('button[type="submit"]');
                     var $wrap = $form.closest('.mh-qv-add-to-cart-wrap');
                     
-                    // 🚀 THE FIX: Grab product ID safely from our wrapper fallback
                     var productId = $wrap.data('product-id') || $form.find('input[name="product_id"]').val() || $btn.val() || $btn.data('product_id');
                     
+                    // 🚀 THE FIX: Removed the conflicting 'add-to-cart' parameter that was causing WooCommerce to panic
                     var formData = $form.serialize();
                     formData += '&action=mh_qv_add_to_cart';
                     formData += '&product_id=' + productId;
-                    formData += '&add-to-cart=' + productId;
 
                     // Basic frontend validation for custom dropdowns
                     var missingAttributes = false;
@@ -393,9 +391,10 @@ class MH_Product_Grid_Widget extends Widget_Base {
                                 $btn.removeClass('loading').text('Add to cart'); 
                             }, 1500);
                         } else {
+                            // This will now display the EXACT error WooCommerce threw
                             var errorMsg = response.data && response.data.message ? response.data.message : 'Failed to add';
                             $btn.removeClass('loading').text(errorMsg);
-                            setTimeout(function(){ $btn.text('Add to cart'); }, 2500);
+                            setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
                         }
                     });
                 });

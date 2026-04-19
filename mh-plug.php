@@ -410,8 +410,7 @@ function mh_quick_view_ajax_handler() {
     <?php
     wp_send_json_success( ob_get_clean() );
 }
-
-// 3. Custom AJAX Add to Cart Handler (Fixes Simple Product Rejection!)
+// 3. Custom AJAX Add to Cart Handler (Fixes Conflicts & Catches Exact Errors!)
 add_action('wp_ajax_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
 add_action('wp_ajax_nopriv_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
 
@@ -427,8 +426,6 @@ function mh_qv_ajax_add_to_cart() {
         wp_die();
     }
 
-    // 🚀 THE FIX: ONLY pass variations natively if it is actually a Variable Product.
-    // Our custom hook higher up in this file will handle the Simple product attributes!
     if ( $product->is_type('variable') ) {
         foreach ($_POST as $key => $value) {
             if (strpos($key, 'attribute_') === 0) { $variation[$key] = sanitize_text_field($value); }
@@ -442,17 +439,26 @@ function mh_qv_ajax_add_to_cart() {
     $passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $product_id, $quantity, $variation_id, $variation);
 
     if ( $passed_validation ) {
-        // Pass empty array for simple products, Woo will accept it, and our custom hook will catch the $_POST!
+        // Attempt to add to cart
         $cart_item_key = WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation);
         
         if ( $cart_item_key ) {
             do_action('woocommerce_ajax_added_to_cart', $product_id);
             WC_AJAX::get_refreshed_fragments(); 
-            wp_die();
+            wp_die(); // WC_AJAX natively stops the script
         }
     }
     
-    wp_send_json_error(['message' => 'Failed to add to cart.']);
+    // 🚀 THE FIX: If WooCommerce rejects it, grab the EXACT reason why from the Woo Error system!
+    $error_message = 'Failed to add to cart.';
+    $notices = wc_get_notices( 'error' );
+    if ( ! empty( $notices ) ) {
+        // Grab the most recent error Woo threw and clean it up
+        $error_message = wp_strip_all_tags( $notices[0]['notice'] );
+        wc_clear_notices(); // Clear it so it doesn't show up randomly later
+    }
+
+    wp_send_json_error(['message' => $error_message]);
     wp_die();
 }
 
