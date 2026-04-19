@@ -306,3 +306,32 @@ function mh_save_custom_attributes_to_order( $item, $cart_item_key, $values, $or
         }
     }
 }
+// ─────────────────────────────────────────────────────────────────────────────
+// MAKE ORDER ATTRIBUTES BIGGER IN THE ADMIN DASHBOARD (Forced 20px Version)
+// ─────────────────────────────────────────────────────────────────────────────
+add_action('admin_head', 'mh_make_order_attributes_bigger');
+
+function mh_make_order_attributes_bigger() {
+    // We removed the strict Screen ID check so WooCommerce HPOS doesn't block it.
+    // Instead, we use highly specific CSS classes that only exist on the Order page.
+    echo '<style>
+        /* Target the order item metadata in both legacy and new WooCommerce orders */
+        .woocommerce_order_items table.display_meta th, 
+        .woocommerce_order_items table.display_meta td,
+        .woocommerce_order_items table.display_meta p,
+        .wc-item-meta, 
+        .wc-item-meta li, 
+        .wc-item-meta p,
+        .wc-item-meta strong {
+            font-size: 20px !important;
+            line-height: 1.6 !important;
+            color: #000000 !important; 
+            font-weight: 600 !important;
+        }
+        
+        /* Add some breathing room so the big text isn\'t cramped */
+        .woocommerce_order_items table.display_meta {
+            margin-top: 12px !important;
+        }
+    </style>';
+}
