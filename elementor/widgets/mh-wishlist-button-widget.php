@@ -1,6 +1,6 @@
 <?php
 /**
- * MH Wishlist Button Widget 
+ * MH Wishlist Button Widget (100% Bulletproof SVG Version)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
-use Elementor\Icons_Manager;
 
 class MH_Wishlist_Button_Widget extends Widget_Base {
 
@@ -86,37 +85,19 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
 
         $this->end_controls_section();
 
-        /* ── ICONS & STYLING ── */
+        /* ── STYLING ── */
         $this->start_controls_section( 'style_section', [
-            'label' => __( 'Icons & Styling', 'mh-plug' ),
+            'label' => __( 'Icon & Text Styling', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
-        ] );
-
-        $this->add_control( 'icon_normal', [
-            'label'   => __( 'Normal Icon (Empty)', 'mh-plug' ),
-            'type'    => Controls_Manager::ICONS,
-            'default' => [
-                'value'   => 'far fa-heart',
-                'library' => 'fa-regular',
-            ],
-        ] );
-
-        $this->add_control( 'icon_added', [
-            'label'   => __( 'Added Icon (Filled)', 'mh-plug' ),
-            'type'    => Controls_Manager::ICONS,
-            'default' => [
-                'value'   => 'fas fa-heart',
-                'library' => 'fa-solid',
-            ],
         ] );
 
         $this->add_responsive_control( 'icon_size', [
             'label'      => __( 'Icon Size', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em' ],
+            'default'    => [ 'size' => 16 ],
             'selectors'  => [ 
-                '{{WRAPPER}} .mh-advanced-wishlist-btn i' => 'font-size: {{SIZE}}{{UNIT}};', 
-                '{{WRAPPER}} .mh-advanced-wishlist-btn svg' => 'width: {{SIZE}}{{UNIT}}; height: auto;', 
+                '{{WRAPPER}} .mh-icon-wrap svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};', 
             ],
         ] );
 
@@ -140,29 +121,25 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
 
         $this->start_controls_tab( 'tab_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
         $this->add_control( 'color_normal', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Text & Icon Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#777777',
-            'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn' => 'color: {{VALUE}}; text-decoration: none;' ],
-        ] );
-        $this->add_control( 'svg_fill_normal', [
-            'label'     => __( 'SVG Fill', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn svg' => 'fill: {{VALUE}};' ],
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-advanced-wishlist-btn' => 'color: {{VALUE}}; text-decoration: none;',
+                '{{WRAPPER}} .mh-advanced-wishlist-btn svg' => 'fill: {{VALUE}};',
+            ],
         ] );
         $this->end_controls_tab();
 
         $this->start_controls_tab( 'tab_active', [ 'label' => __( 'Added', 'mh-plug' ) ] );
         $this->add_control( 'color_active', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Text & Icon Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#d63638',
-            'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn.added' => 'color: {{VALUE}}; text-decoration: none;' ],
-        ] );
-        $this->add_control( 'svg_fill_active', [
-            'label'     => __( 'SVG Fill', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'selectors' => [ '{{WRAPPER}} .mh-advanced-wishlist-btn.added svg' => 'fill: {{VALUE}};' ],
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-advanced-wishlist-btn.added' => 'color: {{VALUE}}; text-decoration: none;',
+                '{{WRAPPER}} .mh-advanced-wishlist-btn.added svg' => 'fill: {{VALUE}};',
+            ],
         ] );
         $this->end_controls_tab();
 
@@ -211,25 +188,20 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         $ajax_url = admin_url( 'admin-ajax.php' );
         $nonce    = wp_create_nonce( 'mh_wishlist_nonce' );
 
+        // 🚀 BULLETPROOF SVGs (No External Fonts Required)
+        $svg_empty = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 429.3l175.2-161.3c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z"/></svg>';
+        $svg_filled = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg>';
+
         ?>
         <style>
-            .mh-advanced-wishlist-btn { 
-                display: inline-flex; 
-                align-items: center; 
-                cursor: pointer; 
-                transition: color 0.3s ease; 
-            }
-            .mh-icon-wrap { 
-                display: inline-flex; 
-                align-items: center; 
-                justify-content: center; 
-            }
-            .mh-icon-wrap i { transition: transform 0.3s ease; }
+            .mh-advanced-wishlist-btn { display: inline-flex; align-items: center; cursor: pointer; transition: color 0.3s ease; }
+            .mh-icon-wrap { display: inline-flex; align-items: center; justify-content: center; }
+            .mh-icon-wrap svg { transition: transform 0.3s ease, fill 0.3s ease; }
             
-            /* Active Animation */
-            .mh-advanced-wishlist-btn:hover .mh-icon-wrap i { transform: scale(1.1); }
+            /* Hover Pop Animation */
+            .mh-advanced-wishlist-btn:hover .mh-icon-wrap svg { transform: scale(1.15); }
             
-            /* Toggle Logic */
+            /* Logic for showing Empty vs Filled Heart */
             .mh-advanced-wishlist-btn .mh-icon-added { display: none; }
             .mh-advanced-wishlist-btn .mh-icon-normal { display: inline-flex; }
             
@@ -247,17 +219,13 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                data-browse-text="<?php echo esc_attr( $browse_text ); ?>"
                data-wishlist-url="<?php echo esc_url( $browse_url ); ?>">
                 
-                <?php if ( ! empty( $settings['icon_normal']['value'] ) ) : ?>
-                    <span class="mh-icon-wrap mh-icon-normal">
-                        <?php Icons_Manager::render_icon( $settings['icon_normal'], [ 'aria-hidden' => 'true' ] ); ?>
-                    </span>
-                <?php endif; ?>
+                <span class="mh-icon-wrap mh-icon-normal">
+                    <?php echo $svg_empty; ?>
+                </span>
                 
-                <?php if ( ! empty( $settings['icon_added']['value'] ) ) : ?>
-                    <span class="mh-icon-wrap mh-icon-added">
-                        <?php Icons_Manager::render_icon( $settings['icon_added'], [ 'aria-hidden' => 'true' ] ); ?>
-                    </span>
-                <?php endif; ?>
+                <span class="mh-icon-wrap mh-icon-added">
+                    <?php echo $svg_filled; ?>
+                </span>
 
                 <?php if ( $show_label ) : ?>
                     <span class="mh-wishlist-label"><?php echo esc_html( $current_text ); ?></span>
@@ -274,9 +242,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                     var $btn = $(this);
                     var behavior = $btn.data('behavior');
                     
-                    if( behavior === 'browse' && $btn.hasClass('added') ) {
-                        return; // Allow standard link click to happen
-                    }
+                    if( behavior === 'browse' && $btn.hasClass('added') ) { return; }
                     
                     e.preventDefault(); 
                     
@@ -309,7 +275,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                                 $btn.attr('href', '#');
                             }
                             
-                            // Trigger event for header badge counters!
                             $(document).trigger('mh_wishlist_updated', [status]);
 
                         } else {
