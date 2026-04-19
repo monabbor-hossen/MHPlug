@@ -353,16 +353,21 @@ class MH_Product_Grid_Widget extends Widget_Base {
                     }
                     $qtyInput.trigger('change');
                 });
-// Custom AJAX Add to Cart (Stops Page Reload & Fixed Double-Fire Conflict)
-                $(document).on('submit', '.mh-qv-add-to-cart-wrap form.cart', function(e) {
+                // Custom AJAX Add to Cart (Bruteforce ID Fetching & Error Catching)
+                $(document).off('submit', '.mh-qv-add-to-cart-wrap form.cart').on('submit', '.mh-qv-add-to-cart-wrap form.cart', function(e) {
                     e.preventDefault();
                     var $form = $(this);
                     var $btn = $form.find('button[type="submit"]');
                     var $wrap = $form.closest('.mh-qv-add-to-cart-wrap');
                     
-                    var productId = $wrap.data('product-id') || $form.find('input[name="product_id"]').val() || $btn.val() || $btn.data('product_id');
+                    // Bruteforce finding the Product ID from multiple sources
+                    var productId = $wrap.attr('data-product-id') || $form.find('input[name="product_id"]').val() || $btn.attr('value') || $btn.val();
                     
-                    // 🚀 THE FIX: Removed the conflicting 'add-to-cart' parameter that was causing WooCommerce to panic
+                    if (!productId) {
+                        $btn.text('ID Error'); // If it says this, HTML is missing the ID!
+                        return;
+                    }
+
                     var formData = $form.serialize();
                     formData += '&action=mh_qv_add_to_cart';
                     formData += '&product_id=' + productId;
@@ -382,20 +387,21 @@ class MH_Product_Grid_Widget extends Widget_Base {
                     $btn.addClass('loading').text('Adding...');
 
                     $.post(mhAjaxUrl, formData, function(response) {
-                        if (response.success) {
+                        if (response && response.success) {
                             $(document.body).trigger('added_to_cart', [response.data.fragments, response.data.cart_hash, $btn]);
                             $btn.text('Added to Cart!');
-                            
                             setTimeout(function() {
                                 $('#mh-quick-view-modal').removeClass('mh-open');
                                 $btn.removeClass('loading').text('Add to cart'); 
                             }, 1500);
                         } else {
-                            // This will now display the EXACT error WooCommerce threw
-                            var errorMsg = response.data && response.data.message ? response.data.message : 'Failed to add';
+                            var errorMsg = (response && response.data && response.data.message) ? response.data.message : 'Cart Error';
                             $btn.removeClass('loading').text(errorMsg);
                             setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
                         }
+                    }).fail(function() {
+                        $btn.removeClass('loading').text('Server Error'); // Means PHP crashed!
+                        setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
                     });
                 });
             });

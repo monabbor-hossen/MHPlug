@@ -410,55 +410,61 @@ function mh_quick_view_ajax_handler() {
     <?php
     wp_send_json_success( ob_get_clean() );
 }
-// 3. Custom AJAX Add to Cart Handler (Fixes Conflicts & Catches Exact Errors!)
+
+// 3. Custom AJAX Add to Cart Handler
 add_action('wp_ajax_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
 add_action('wp_ajax_nopriv_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
 
 function mh_qv_ajax_add_to_cart() {
-    $product_id   = apply_filters('woocommerce_add_to_cart_product_id', absint($_POST['product_id']));
+    // 1. Bruteforce check for Product ID
+    if ( ! isset($_POST['product_id']) || empty($_POST['product_id']) ) {
+        wp_send_json_error(['message' => 'Missing Product ID']);
+    }
+
+    $product_id   = absint($_POST['product_id']);
     $quantity     = empty($_POST['quantity']) ? 1 : wc_stock_amount($_POST['quantity']);
     $variation_id = isset($_POST['variation_id']) ? absint($_POST['variation_id']) : 0;
-    $variation    = [];
     
     $product = wc_get_product($product_id);
     if ( ! $product ) {
-        wp_send_json_error(['message' => 'Product not found.']);
-        wp_die();
+        wp_send_json_error(['message' => 'Invalid Product']);
     }
 
+    $variation = [];
+    // 2. Only strictly enforce variations if WooCommerce says it's a Variable product
     if ( $product->is_type('variable') ) {
         foreach ($_POST as $key => $value) {
-            if (strpos($key, 'attribute_') === 0) { $variation[$key] = sanitize_text_field($value); }
+            if (strpos($key, 'attribute_') === 0) {
+                $variation[$key] = sanitize_text_field($value);
+            }
         }
         if ( empty($variation_id) ) {
             wp_send_json_error(['message' => 'Please select product options.']);
-            wp_die();
         }
     }
 
-    $passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $product_id, $quantity, $variation_id, $variation);
-
-    if ( $passed_validation ) {
-        // Attempt to add to cart
+    try {
+        // 3. Add to cart! (Simple products will automatically ignore the empty variation arrays)
         $cart_item_key = WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation);
-        
+
         if ( $cart_item_key ) {
             do_action('woocommerce_ajax_added_to_cart', $product_id);
-            WC_AJAX::get_refreshed_fragments(); 
-            wp_die(); // WC_AJAX natively stops the script
+            WC_AJAX::get_refreshed_fragments(); // Success!
+            wp_die();
+        } else {
+            // If WooCommerce rejects it, pull the exact error notice
+            $error_msg = 'Cannot add to cart.';
+            if ( wc_notice_count('error') > 0 ) {
+                $notices = wc_get_notices('error');
+                $error_msg = wp_strip_all_tags($notices[0]['notice']);
+                wc_clear_notices();
+            }
+            wp_send_json_error(['message' => $error_msg]);
         }
+    } catch ( Exception $e ) {
+        wp_send_json_error(['message' => $e->getMessage()]);
     }
     
-    // 🚀 THE FIX: If WooCommerce rejects it, grab the EXACT reason why from the Woo Error system!
-    $error_message = 'Failed to add to cart.';
-    $notices = wc_get_notices( 'error' );
-    if ( ! empty( $notices ) ) {
-        // Grab the most recent error Woo threw and clean it up
-        $error_message = wp_strip_all_tags( $notices[0]['notice'] );
-        wc_clear_notices(); // Clear it so it doesn't show up randomly later
-    }
-
-    wp_send_json_error(['message' => $error_message]);
     wp_die();
 }
 
