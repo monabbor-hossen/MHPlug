@@ -58,6 +58,7 @@ class MH_Admin_Menu {
         // 🚀 NEW: Add the toggle switch
         'mh_copyright'      => 'Copyright',
         'mh_header_wishlist' => 'Header Wishlist Icon',
+        'mh_header_cart'     => 'Header Cart Icon',
         
     ];
 

@@ -102,6 +102,7 @@ final class MH_Elementor_Loader {
                 'mh_product_share'             => [ 'file' => 'mh-product-share-widget.php',              'class' => 'MH_Product_Share_Widget' ],
                 'mh_product_data_accordion'    => [ 'file' => 'mh-product-data-accordion-widget.php',     'class' => 'MH_Product_Data_Accordion_Widget' ],
                 'mh_header_wishlist' => [ 'file' => 'mh-header-wishlist-widget.php', 'class' => 'MH_Header_Wishlist_Widget' ],
+                'mh_header_cart'     => [ 'file' => 'mh-header-cart-widget.php',     'class' => 'MH_Header_Cart_Widget' ],
                 ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
