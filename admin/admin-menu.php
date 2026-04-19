@@ -59,6 +59,7 @@ class MH_Admin_Menu {
         'mh_copyright'      => 'Copyright',
         'mh_header_wishlist' => 'Header Wishlist Icon',
         'mh_header_cart'     => 'Header Cart Icon',
+        'mh_product_grid'    => 'Product Grid',
         
     ];
 
@@ -238,6 +239,7 @@ class MH_Admin_Menu {
                 'mh_copyright',
                 'mh_header_wishlist', 
                 'mh_header_cart', // <-- Add them here!
+                'mh_product_grid',
                 
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
