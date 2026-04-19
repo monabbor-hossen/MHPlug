@@ -1,6 +1,6 @@
 <?php
 /**
- * MH Wishlist Button Widget (Smart Dual-Mode + Custom Icons + Bug Fix)
+ * MH Wishlist Button Widget 
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -131,7 +131,7 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
             'name'      => 'typography',
-            'selector'  => '{{WRAPPER}} .mh-advanced-wishlist-btn', // Applied to the whole button so text inherits properly
+            'selector'  => '{{WRAPPER}} .mh-advanced-wishlist-btn', 
             'condition' => [ 'show_label' => 'yes' ],
             'separator' => 'before',
         ] );
@@ -211,17 +211,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         $ajax_url = admin_url( 'admin-ajax.php' );
         $nonce    = wp_create_nonce( 'mh_wishlist_nonce' );
 
-        // 🚀 THE FIX: Fallback manual Icon Rendering in case Elementor fails to render the array
-        $icon_normal_html = '';
-        if ( ! empty( $settings['icon_normal']['value'] ) ) {
-            $icon_normal_html = '<i class="' . esc_attr( $settings['icon_normal']['value'] ) . '"></i>';
-        }
-        
-        $icon_added_html = '';
-        if ( ! empty( $settings['icon_added']['value'] ) ) {
-            $icon_added_html = '<i class="' . esc_attr( $settings['icon_added']['value'] ) . '"></i>';
-        }
-
         ?>
         <style>
             .mh-advanced-wishlist-btn { 
@@ -258,26 +247,17 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
                data-browse-text="<?php echo esc_attr( $browse_text ); ?>"
                data-wishlist-url="<?php echo esc_url( $browse_url ); ?>">
                 
-                <span class="mh-icon-wrap mh-icon-normal">
-                    <?php 
-                        // Try Elementor renderer first, fallback to standard HTML
-                        if ( \Elementor\Icons_Manager::is_migration_allowed() ) {
-                            \Elementor\Icons_Manager::render_icon( $settings['icon_normal'], [ 'aria-hidden' => 'true' ] );
-                        } else {
-                            echo $icon_normal_html;
-                        }
-                    ?>
-                </span>
+                <?php if ( ! empty( $settings['icon_normal']['value'] ) ) : ?>
+                    <span class="mh-icon-wrap mh-icon-normal">
+                        <?php Icons_Manager::render_icon( $settings['icon_normal'], [ 'aria-hidden' => 'true' ] ); ?>
+                    </span>
+                <?php endif; ?>
                 
-                <span class="mh-icon-wrap mh-icon-added">
-                    <?php 
-                        if ( \Elementor\Icons_Manager::is_migration_allowed() ) {
-                            \Elementor\Icons_Manager::render_icon( $settings['icon_added'], [ 'aria-hidden' => 'true' ] );
-                        } else {
-                            echo $icon_added_html;
-                        }
-                    ?>
-                </span>
+                <?php if ( ! empty( $settings['icon_added']['value'] ) ) : ?>
+                    <span class="mh-icon-wrap mh-icon-added">
+                        <?php Icons_Manager::render_icon( $settings['icon_added'], [ 'aria-hidden' => 'true' ] ); ?>
+                    </span>
+                <?php endif; ?>
 
                 <?php if ( $show_label ) : ?>
                     <span class="mh-wishlist-label"><?php echo esc_html( $current_text ); ?></span>
