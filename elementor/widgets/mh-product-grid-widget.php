@@ -293,26 +293,17 @@ class MH_Product_Grid_Widget extends Widget_Base {
                         if (response.success) {
                             $body.html(response.data);
                             
-                            // 🚀 THE FIX: RE-BOOT WOOCOMMERCE & ELEMENTOR JS IN THE POPUP
-                            
                             // 1. Re-init Variations
                             if (typeof $.fn.wc_variation_form !== 'undefined') {
                                 $body.find('.variations_form').each(function() { $(this).wc_variation_form(); });
                             }
 
-                            // 2. Re-init WooCommerce Native Gallery
-                            if (typeof $.fn.wc_product_gallery !== 'undefined') {
-                                $body.find('.woocommerce-product-gallery').each(function() {
-                                    $(this).wc_product_gallery();
-                                });
-                            }
-
-                            // 3. Re-init Elementor Custom Widgets (Sliders, Swiper, etc.)
+                            // 2. Elementor Native Handlers
                             if (typeof window.elementorFrontend !== 'undefined') {
                                 window.elementorFrontend.elementsHandler.runReadyTrigger($body);
                             }
 
-                            // Inject + / - Qty Buttons
+                            // 3. Inject + / - Qty Buttons
                             $body.find('.quantity').each(function() {
                                 var $qtyWrapper = $(this);
                                 if ($qtyWrapper.find('.mh-qty-btn').length === 0) {
@@ -321,14 +312,43 @@ class MH_Product_Grid_Widget extends Widget_Base {
                                 }
                             });
 
-                            // Remove the hidden loading state from the gallery
-                            setTimeout(function(){
-                                $body.find('.woocommerce-product-gallery').addClass('loaded');
-                            }, 100);
+                            // 🚀 THE FIX: MANUALLY BOOT UP THE SLICK SLIDER GALLERY IN THE POPUP!
+                            // We use a slight 150ms delay so the modal has time to animate open, allowing Slick to calculate the image widths perfectly.
+                            setTimeout(function() {
+                                if ($.fn.slick) {
+                                    var $mainSlider = $body.find('.mh-gallery-main-viewport');
+                                    var $thumbSlider = $body.find('.mh-gallery-thumb-slider');
+
+                                    if ($mainSlider.length && !$mainSlider.hasClass('slick-initialized')) {
+                                        $mainSlider.slick({
+                                            slidesToShow: 1,
+                                            slidesToScroll: 1,
+                                            arrows: true,
+                                            fade: true,
+                                            prevArrow: $body.find('.mh-main-prev'),
+                                            nextArrow: $body.find('.mh-main-next'),
+                                            asNavFor: $thumbSlider.length ? $thumbSlider : null
+                                        });
+                                    }
+
+                                    if ($thumbSlider.length && !$thumbSlider.hasClass('slick-initialized')) {
+                                        $thumbSlider.slick({
+                                            slidesToShow: 4,
+                                            slidesToScroll: 1,
+                                            asNavFor: $mainSlider.length ? $mainSlider : null,
+                                            arrows: true,
+                                            focusOnSelect: true,
+                                            prevArrow: $body.find('.mh-thumb-prev'),
+                                            nextArrow: $body.find('.mh-thumb-next')
+                                        });
+                                    }
+                                }
+                            }, 150);
                         }
                     });
                 });
 
+                // Close Modal Logic
                 $(document).on('click', '.mh-qv-close, .mh-qv-close *', function(e) {
                     $('#mh-quick-view-modal').removeClass('mh-open');
                 });
@@ -339,6 +359,7 @@ class MH_Product_Grid_Widget extends Widget_Base {
                     }
                 });
 
+                // QTY Buttons Logic
                 $(document).on('click', '.mh-qty-btn', function() {
                     var $qtyInput = $(this).siblings('.qty');
                     var currentVal = parseFloat($qtyInput.val()) || 0;
