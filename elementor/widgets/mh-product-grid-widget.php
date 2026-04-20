@@ -1,7 +1,7 @@
 <?php
 /**
  * MH Product Grid Widget
- * Fully Customizable version + Elementor Template Support for Quick View.
+ * Fully Customizable version + Theme Builder Template Support for Quick View.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,10 +21,15 @@ class MH_Product_Grid_Widget extends Widget_Base {
     public function get_icon() { return 'eicon-products'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
-    // Helper function to fetch Elementor Saved Templates
+    // 🚀 THE FIX: Now specifically queries YOUR custom Theme Builder templates!
     private function get_elementor_templates() {
         $templates = [ '' => __( 'Default (Built-in Layout)', 'mh-plug' ) ];
-        $query = new \WP_Query( [ 'post_type' => 'elementor_library', 'posts_per_page' => -1, 'post_status' => 'publish' ] );
+        $query = new \WP_Query( [ 
+            'post_type'      => 'mh_templates', 
+            'posts_per_page' => -1, 
+            'post_status'    => ['publish', 'draft'] 
+        ] );
+        
         if ( $query->have_posts() ) {
             foreach ( $query->posts as $post ) {
                 $templates[ $post->ID ] = $post->post_title;
@@ -264,15 +269,16 @@ class MH_Product_Grid_Widget extends Widget_Base {
 
                 $('.mh-quick-view-trigger').on('click', function(e) {
                     e.preventDefault();
-                    var product_id = $(this).data('product-id');
-                    var template_id = $(this).data('template-id'); // 🚀 Pulling Template ID
+                    // 🚀 THE FIX: Safely grab the template ID using jQuery .attr() to avoid caching bugs
+                    var product_id = $(this).attr('data-product-id');
+                    var template_id = $(this).attr('data-template-id'); 
+                    
                     var $modal = $('#mh-quick-view-modal');
                     var $body = $modal.find('.mh-qv-body');
                     
                     $body.html('<div style="text-align:center; padding: 50px;"><i class="fas fa-spinner fa-spin fa-3x"></i></div>');
                     $modal.addClass('mh-open');
                     
-                    // 🚀 Sending Template ID to PHP
                     $.post(mhAjaxUrl, { action: 'mh_quick_view_load', product_id: product_id, template_id: template_id }, function(response) {
                         if (response.success) {
                             $body.html(response.data);
