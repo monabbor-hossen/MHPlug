@@ -1,7 +1,7 @@
 <?php
 /**
  * MH Product Search Widget (Live AJAX Search)
- * Fully Responsive with Isolated CSS Variables, Padding Everywhere, and Fixed Morphing Logic.
+ * Fully Responsive with Isolated CSS Variables and Fluid Morphing Padding logic.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -198,20 +198,11 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         ] );
 
         $this->add_responsive_control( 'mor_expanded_width', [
-            'label'      => __( 'Expanded Search Width', 'mh-plug' ),
+            'label'      => __( 'Expanded Search Max Width', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', '%' ],
             'range'      => [ 'px' => [ 'min' => 150, 'max' => 600 ] ],
             'selectors'  => [ '{{WRAPPER}}' => '--mor-box-w: {{SIZE}}{{UNIT}};' ],
-        ] );
-
-        // 🚀 THE FIX: Changed from Size to Width
-        $this->add_responsive_control( 'mor_btn_width', [
-            'label'      => __( 'Closed Button Width', 'mh-plug' ),
-            'type'       => Controls_Manager::SLIDER,
-            'size_units' => [ 'px' ],
-            'range'      => [ 'px' => [ 'min' => 30, 'max' => 150 ] ],
-            'selectors'  => [ '{{WRAPPER}}' => '--mor-tr-w: {{SIZE}}{{UNIT}};' ],
         ] );
 
         $this->add_control( 'heading_mor_closed', [ 'label' => __( 'Closed State (Button)', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
@@ -222,12 +213,14 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         $this->add_control( 'mor_trig_bg_h', [ 'label' => __( 'Hover Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-hbg: {{VALUE}};' ] ] );
         $this->add_responsive_control( 'mor_trig_s', [ 'label' => __( 'Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-s: {{SIZE}}{{UNIT}};' ] ] );
         
-        // 🚀 THE FIX: Added padding control for Closed Morphing Button
+        // 🚀 THE FIX: Padding now dynamically extracts Left/Right spacing to calculate button width!
         $this->add_responsive_control( 'mor_trig_pad', [ 
             'label'      => __( 'Closed Button Padding', 'mh-plug' ), 
             'type'       => Controls_Manager::DIMENSIONS, 
             'size_units' => [ 'px', 'em' ],
-            'selectors'  => [ '{{WRAPPER}}' => '--mor-tr-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] 
+            'selectors'  => [ 
+                '{{WRAPPER}}' => '--mor-tr-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}; --mor-tr-pl: {{LEFT}}{{UNIT}}; --mor-tr-pr: {{RIGHT}}{{UNIT}};' 
+            ] 
         ] );
 
         $this->add_responsive_control( 'mor_trig_r', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-r: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
@@ -285,9 +278,11 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
 
     protected function render() {
         $settings  = $this->get_settings_for_display();
+        $design    = $settings['design_style'];
         $icon      = $settings['search_icon'];
         $not_found = esc_attr( $settings['not_found_text'] );
 
+        // Fetch Responsive Layout Choices safely
         $layout_desktop = isset($settings['search_layout']) ? $settings['search_layout'] : 'standard';
         $layout_tablet  = !empty($settings['search_layout_tablet']) ? $settings['search_layout_tablet'] : $layout_desktop;
         $layout_mobile  = !empty($settings['search_layout_mobile']) ? $settings['search_layout_mobile'] : $layout_tablet;
@@ -347,32 +342,28 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 echo "{$prefix}-expandable .mh-search-results { position: static !important; box-shadow: none !important; border-top: 1px solid #eee !important; margin-top: 10px !important; padding-top: 10px !important; border: none !important; max-height: 400px !important; overflow-y: auto !important; display: none; }\n";
 
                 // 3. MORPHING SLIDER
+                // 🚀 THE FIX: Form width is dynamically calculated from Icon Size + Left/Right Padding!
                 echo "{$prefix}-slide_out .mh-search-trigger { display: none !important; }\n";
                 echo "{$prefix}-slide_out .mh-search-expandable-container { position: relative !important; top: auto !important; right: auto !important; opacity: 1 !important; visibility: visible !important; transform: none !important; background: transparent !important; padding: 0 !important; border-radius: 0 !important; box-shadow: none !important; max-width: 100% !important; width: 100% !important; z-index: 1 !important; display: flex; justify-content: flex-end; }\n";
                 
-                // 🚀 THE FIX: Height is now auto so padding works! Width uses the new width var.
-                echo "{$prefix}-slide_out .mh-search-form { max-width: var(--mor-box-w, 320px) !important; width: var(--mor-tr-w, 50px) !important; height: auto !important; transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important; margin-left: auto !important; overflow: hidden !important; border: none !important; background: transparent !important; }\n";
+                echo "{$prefix}-slide_out .mh-search-form { width: 100% !important; max-width: calc(var(--mor-tr-s, 20px) + var(--mor-tr-pl, 15px) + var(--mor-tr-pr, 15px)) !important; transition: max-width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s ease, border-radius 0.4s ease !important; margin-left: auto !important; overflow: hidden !important; border: var(--mor-bd-w, 0px) solid transparent !important; background-color: var(--mor-tr-bg, #f1f1f1) !important; border-radius: var(--mor-tr-r, 50px) !important; }\n";
                 
-                // 🚀 THE FIX: Input uses padding now to build the box size!
-                echo "{$prefix}-slide_out .mh-search-input { cursor: pointer !important; color: transparent !important; padding: var(--mor-tr-p, 15px) !important; transition: all 0.4s ease !important; background-color: var(--mor-tr-bg, #f1f1f1) !important; border-radius: var(--mor-tr-r, 50px) !important; height: auto !important; border: none !important; }\n";
+                echo "{$prefix}-slide_out .mh-search-input { cursor: pointer !important; color: transparent !important; padding: var(--mor-tr-p, 15px) !important; transition: all 0.4s ease !important; background-color: transparent !important; height: auto !important; border: none !important; width: 100% !important; }\n";
                 echo "{$prefix}-slide_out .mh-search-input::placeholder { color: transparent !important; }\n";
                 
-                echo "{$prefix}-slide_out .mh-search-icon { pointer-events: auto !important; cursor: pointer !important; z-index: 5 !important; width: var(--mor-tr-w, 50px) !important; height: 100% !important; display: flex !important; justify-content: center !important; align-items: center !important; left: 0 !important; color: var(--mor-tr-c, #333333) !important; fill: var(--mor-tr-c, #333333) !important; }\n";
+                echo "{$prefix}-slide_out .mh-search-icon { pointer-events: auto !important; cursor: pointer !important; z-index: 5 !important; width: calc(var(--mor-tr-s, 20px) + var(--mor-tr-pl, 15px) + var(--mor-tr-pr, 15px)) !important; height: 100% !important; display: flex !important; justify-content: center !important; align-items: center !important; left: 0 !important; color: var(--mor-tr-c, #333333) !important; fill: var(--mor-tr-c, #333333) !important; transition: width 0.4s ease, color 0.3s ease; }\n";
                 echo "{$prefix}-slide_out .mh-search-icon i, {$prefix}-slide_out .mh-search-icon svg { font-size: var(--mor-tr-s, 20px) !important; }\n";
                 echo "{$prefix}-slide_out.mh-live-search-wrapper { justify-content: flex-end !important; }\n";
                 
                 // Hover Closed State (Morphing)
-                echo "{$prefix}-slide_out.mh-live-search-wrapper:not(.mh-search-is-open) .mh-search-input:hover { background-color: var(--mor-tr-hbg, #e1e1e1) !important; }\n";
-                echo "{$prefix}-slide_out.mh-live-search-wrapper:not(.mh-search-is-open) .mh-search-icon:hover { color: var(--mor-tr-hc, #d63638) !important; fill: var(--mor-tr-hc, #d63638) !important; }\n";
+                echo "{$prefix}-slide_out.mh-live-search-wrapper:not(.mh-search-is-open) .mh-search-form:hover { background-color: var(--mor-tr-hbg, #e1e1e1) !important; }\n";
+                echo "{$prefix}-slide_out.mh-live-search-wrapper:not(.mh-search-is-open) .mh-search-form:hover .mh-search-icon { color: var(--mor-tr-hc, #d63638) !important; fill: var(--mor-tr-hc, #d63638) !important; }\n";
                 
                 // Active Open State (Morphing)
-                echo "{$prefix}-slide_out.mh-search-is-open .mh-search-form { width: var(--mor-box-w, 320px) !important; }\n";
-                echo "{$prefix}-slide_out.mh-search-is-open .mh-search-input { cursor: text !important; background-color: var(--mor-in-bg, #ffffff) !important; color: var(--mor-in-c, #333333) !important; padding: var(--mor-in-p, 12px 15px 12px 45px) !important; border-radius: var(--mor-in-r, 50px) !important; border: var(--mor-bd-w, 0px) solid var(--mor-bd-c, transparent) !important; }\n";
-                
-                // 🚀 THE FIX: Show placeholder text when open!
+                echo "{$prefix}-slide_out.mh-search-is-open .mh-search-form { max-width: var(--mor-box-w, 320px) !important; background-color: var(--mor-in-bg, #ffffff) !important; border-radius: var(--mor-in-r, 50px) !important; border-color: var(--mor-bd-c, transparent) !important; }\n";
+                echo "{$prefix}-slide_out.mh-search-is-open .mh-search-input { cursor: text !important; color: var(--mor-in-c, #333333) !important; padding: var(--mor-in-p, 12px 15px 12px 45px) !important; }\n";
                 echo "{$prefix}-slide_out.mh-search-is-open .mh-search-input::placeholder { color: var(--mor-ph-c, #888888) !important; opacity: 1 !important; }\n";
-                
-                echo "{$prefix}-slide_out.mh-search-is-open .mh-search-icon { color: var(--mor-ic-c, #888888) !important; fill: var(--mor-ic-c, #888888) !important; pointer-events: none !important; }\n";
+                echo "{$prefix}-slide_out.mh-search-is-open .mh-search-icon { width: 45px !important; color: var(--mor-ic-c, #888888) !important; fill: var(--mor-ic-c, #888888) !important; pointer-events: none !important; }\n";
                 
                 echo "{$prefix}-slide_out .mh-search-results { position: absolute !important; top: calc(100% + 5px) !important; right: 0 !important; left: auto !important; width: var(--mor-box-w, 320px) !important; z-index: 99999 !important; border-radius: 4px !important; box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important; border: 1px solid #eee !important; margin: 0 !important; padding: 0 !important; max-height: 400px !important; overflow-y: auto !important; display: none; }\n";
                 
