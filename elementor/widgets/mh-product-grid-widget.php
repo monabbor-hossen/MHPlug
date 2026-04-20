@@ -354,25 +354,21 @@ class MH_Product_Grid_Widget extends Widget_Base {
                     $qtyInput.trigger('change');
                 });
                 // Custom AJAX Add to Cart (Bruteforce ID Fetching & Error Catching)
+                // Custom AJAX Add to Cart (Fixed WooCommerce JSON Response Parsing)
                 $(document).off('submit', '.mh-qv-add-to-cart-wrap form.cart').on('submit', '.mh-qv-add-to-cart-wrap form.cart', function(e) {
                     e.preventDefault();
                     var $form = $(this);
                     var $btn = $form.find('button[type="submit"]');
                     var $wrap = $form.closest('.mh-qv-add-to-cart-wrap');
                     
-                    // Bruteforce finding the Product ID from multiple sources
                     var productId = $wrap.attr('data-product-id') || $form.find('input[name="product_id"]').val() || $btn.attr('value') || $btn.val();
                     
-                    if (!productId) {
-                        $btn.text('ID Error'); // If it says this, HTML is missing the ID!
-                        return;
-                    }
+                    if (!productId) { $btn.text('ID Error'); return; }
 
                     var formData = $form.serialize();
                     formData += '&action=mh_qv_add_to_cart';
                     formData += '&product_id=' + productId;
 
-                    // Basic frontend validation for custom dropdowns
                     var missingAttributes = false;
                     $form.find('.mh-qv-attr-select').each(function() {
                         if ($(this).val() === '') { missingAttributes = true; }
@@ -387,20 +383,25 @@ class MH_Product_Grid_Widget extends Widget_Base {
                     $btn.addClass('loading').text('Adding...');
 
                     $.post(mhAjaxUrl, formData, function(response) {
-                        if (response && response.success) {
-                            $(document.body).trigger('added_to_cart', [response.data.fragments, response.data.cart_hash, $btn]);
+                        // 🚀 THE FIX: WooCommerce returns 'fragments' directly on success, not 'success: true'
+                        if (response && response.fragments) {
+                            $(document.body).trigger('added_to_cart', [response.fragments, response.cart_hash, $btn]);
                             $btn.text('Added to Cart!');
                             setTimeout(function() {
                                 $('#mh-quick-view-modal').removeClass('mh-open');
                                 $btn.removeClass('loading').text('Add to cart'); 
                             }, 1500);
-                        } else {
-                            var errorMsg = (response && response.data && response.data.message) ? response.data.message : 'Cart Error';
+                        } else if (response && response.success === false) {
+                            // If WooCommerce explicitly rejected it (e.g. Out of stock)
+                            var errorMsg = response.data && response.data.message ? response.data.message : 'Cart Error';
                             $btn.removeClass('loading').text(errorMsg);
+                            setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
+                        } else {
+                            $btn.removeClass('loading').text('Cart Error');
                             setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
                         }
                     }).fail(function() {
-                        $btn.removeClass('loading').text('Server Error'); // Means PHP crashed!
+                        $btn.removeClass('loading').text('Server Error');
                         setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
                     });
                 });
