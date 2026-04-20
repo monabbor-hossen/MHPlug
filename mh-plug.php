@@ -373,13 +373,14 @@ function mh_qv_output_simple_attributes() {
     }
     echo '</div>';
 }
-
-// 2. Load the Quick View HTML
+// 2. Load the Quick View HTML (Supports Default AND Custom Elementor Templates)
 add_action( 'wp_ajax_mh_quick_view_load', 'mh_quick_view_ajax_handler' );
 add_action( 'wp_ajax_nopriv_mh_quick_view_load', 'mh_quick_view_ajax_handler' );
 
 function mh_quick_view_ajax_handler() {
-    $product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
+    $product_id  = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
+    $template_id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
+    
     if ( ! $product_id ) wp_send_json_error();
 
     global $post, $product;
@@ -388,29 +389,46 @@ function mh_quick_view_ajax_handler() {
     $product = wc_get_product( $product_id );
 
     ob_start();
-    ?>
-    <div class="mh-qv-grid">
-        <div class="mh-qv-image">
-            <?php echo $product->get_image('woocommerce_single'); ?>
-        </div>
-        <div class="mh-qv-details">
-            <h2 class="mh-qv-title"><?php echo $product->get_name(); ?></h2>
-            <div class="mh-qv-price"><?php echo $product->get_price_html(); ?></div>
-            <div class="mh-qv-excerpt"><?php echo apply_filters( 'woocommerce_short_description', $post->post_excerpt ); ?></div>
-            
-            <div class="mh-qv-add-to-cart-wrap" data-product-id="<?php echo esc_attr($product_id); ?>">
-                <?php 
-                add_action( 'woocommerce_before_add_to_cart_button', 'mh_qv_output_simple_attributes' );
-                woocommerce_template_single_add_to_cart(); 
-                remove_action( 'woocommerce_before_add_to_cart_button', 'mh_qv_output_simple_attributes' );
-                ?>
+
+    // 🚀 IF A CUSTOM ELEMENTOR TEMPLATE IS SELECTED
+    if ( $template_id && class_exists( '\Elementor\Plugin' ) ) {
+        // Enqueue the custom template's CSS so it doesn't look broken
+        if ( class_exists( '\Elementor\Core\Files\CSS\Post' ) ) {
+            $css_file = new \Elementor\Core\Files\CSS\Post( $template_id );
+            $css_file->enqueue();
+        }
+        // Force Elementor to render the template
+        echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id );
+    } 
+    // 🚀 DEFAULT QUICK VIEW LAYOUT
+    else {
+        ?>
+        <div class="mh-qv-grid">
+            <div class="mh-qv-image">
+                <?php echo $product->get_image('woocommerce_single'); ?>
+            </div>
+            <div class="mh-qv-details">
+                <h2 class="mh-qv-title"><?php echo $product->get_name(); ?></h2>
+                <div class="mh-qv-price"><?php echo $product->get_price_html(); ?></div>
+                <div class="mh-qv-excerpt"><?php echo apply_filters( 'woocommerce_short_description', $post->post_excerpt ); ?></div>
+                
+                <div class="mh-qv-add-to-cart-wrap" data-product-id="<?php echo esc_attr($product_id); ?>">
+                    <?php 
+                    add_action( 'woocommerce_before_add_to_cart_button', 'mh_qv_output_simple_attributes' );
+                    woocommerce_template_single_add_to_cart(); 
+                    remove_action( 'woocommerce_before_add_to_cart_button', 'mh_qv_output_simple_attributes' );
+                    ?>
+                </div>
             </div>
         </div>
-    </div>
-    <?php
-    wp_send_json_success( ob_get_clean() );
-}
+        <?php
+    }
 
+    $html = ob_get_clean();
+    wp_reset_postdata(); // Important: Reset the global post data so we don't break the main page
+    
+    wp_send_json_success( $html );
+}
 // 3. Custom AJAX Add to Cart Handler
 add_action('wp_ajax_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
 add_action('wp_ajax_nopriv_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
