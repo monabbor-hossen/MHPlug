@@ -1,7 +1,7 @@
 <?php
 /**
  * MH Product Search Widget (Live AJAX Search)
- * Fully Responsive Layouts (Standard to Expandable per device)
+ * Fully Responsive: Standard, Expandable Dropdown, and Morphing Slider options.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,7 +21,7 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
     public function get_title() { return __( 'MH Product Search', 'mh-plug' ); }
     public function get_icon() { return 'eicon-search'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
-    public function get_keywords() { return [ 'search', 'product', 'ajax', 'live', 'expandable', 'responsive' ]; }
+    public function get_keywords() { return [ 'search', 'product', 'ajax', 'live', 'expandable', 'morphing' ]; }
 
     protected function register_controls() {
         
@@ -31,16 +31,17 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
-        // 🚀 THE FIX: This is now a fully Responsive Control!
+        // 🚀 NEW: Added the "Morphing" layout option!
         $this->add_responsive_control( 'search_layout', [
             'label'        => __( 'Layout', 'mh-plug' ),
             'type'         => Controls_Manager::SELECT,
             'default'      => 'standard',
             'options'      => [
                 'standard'   => __( 'Standard (Always Open)', 'mh-plug' ),
-                'expandable' => __( 'Expandable (Icon Click)', 'mh-plug' ),
+                'expandable' => __( 'Dropdown Box (Icon Click)', 'mh-plug' ),
+                'slide_out'  => __( 'Morphing (Sliding Animation)', 'mh-plug' ),
             ],
-            'prefix_class' => 'mh-layout%s-', // Automatically generates classes like mh-layout-mobile-expandable
+            'prefix_class' => 'mh-layout%s-', 
         ] );
 
         $this->add_control( 'design_style', [
@@ -73,9 +74,9 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
 
         $this->end_controls_section();
 
-        /* ── STYLE: TRIGGER ICON (Always accessible now) ── */
+        /* ── STYLE: TRIGGER ICON (Expandable Only) ── */
         $this->start_controls_section( 'style_trigger_section', [
-            'label' => __( 'Trigger Icon (Expandable Mode)', 'mh-plug' ),
+            'label' => __( 'Trigger Icon (Dropdown Box Mode)', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
@@ -145,12 +146,15 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         ] );
 
         $this->add_responsive_control( 'expandable_width', [
-            'label'      => __( 'Expandable Box Max Width', 'mh-plug' ),
+            'label'      => __( 'Expandable/Morphing Width', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', '%' ],
             'range'      => [ 'px' => [ 'min' => 200, 'max' => 800 ] ],
             'default'    => [ 'size' => 320, 'unit' => 'px' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-search-expandable-container' => 'width: {{SIZE}}{{UNIT}};' ],
+            'selectors'  => [ 
+                '{{WRAPPER}} .mh-search-expandable-container' => 'width: {{SIZE}}{{UNIT}};',
+                '{{WRAPPER}}' => '--mh-expand-width: {{SIZE}}{{UNIT}};' 
+            ],
         ] );
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
@@ -162,7 +166,7 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
             'label'     => __( 'Background Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#f1f1f1',
-            'selectors' => [ '{{WRAPPER}} .mh-search-input' => 'background-color: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-search-input, {{WRAPPER}}.mh-layout-slide_out .mh-search-form' => 'background-color: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'input_color', [
@@ -192,14 +196,14 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
 
         $this->add_group_control( Group_Control_Border::get_type(), [
             'name'      => 'input_border',
-            'selector'  => '{{WRAPPER}} .mh-search-input',
+            'selector'  => '{{WRAPPER}} .mh-search-input, {{WRAPPER}}.mh-layout-slide_out .mh-search-form',
         ] );
 
         $this->add_responsive_control( 'input_radius', [
             'label'      => __( 'Border Radius', 'mh-plug' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-search-input' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-search-input, {{WRAPPER}}.mh-layout-slide_out .mh-search-form' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
         $this->end_controls_section();
@@ -287,16 +291,14 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
             .mh-search-results a:hover { background: #f9f9f9; }
 
             /* =======================================
-               DYNAMIC RESPONSIVE LAYOUT GENERATOR 
+               1. STANDARD LAYOUT MIXIN
                ======================================= */
             <?php
-            // 1. STANDARD LAYOUT MIXIN (Forced Full Width)
             $standard_breakpoints = [
                 'desktop' => [ 'prefix' => '.mh-layout-standard', 'media' => '' ],
                 'tablet'  => [ 'prefix' => '.mh-layout-tablet-standard', 'media' => '@media (max-width: 1024px)' ],
                 'mobile'  => [ 'prefix' => '.mh-layout-mobile-standard', 'media' => '@media (max-width: 767px)' ],
             ];
-            
             foreach ( $standard_breakpoints as $bp ) {
                 if ( $bp['media'] ) echo $bp['media'] . " { \n";
                 echo "{$bp['prefix']} .mh-search-trigger { display: none !important; }\n";
@@ -306,20 +308,58 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 if ( $bp['media'] ) echo "} \n";
             }
 
-            // 2. EXPANDABLE LAYOUT MIXIN (Icon Click Dropdown)
+            /* =======================================
+               2. EXPANDABLE DROPDOWN LAYOUT MIXIN
+               ======================================= */
             $expandable_breakpoints = [
                 'desktop' => [ 'prefix' => '.mh-layout-expandable', 'media' => '' ],
                 'tablet'  => [ 'prefix' => '.mh-layout-tablet-expandable', 'media' => '@media (max-width: 1024px)' ],
                 'mobile'  => [ 'prefix' => '.mh-layout-mobile-expandable', 'media' => '@media (max-width: 767px)' ],
             ];
-
             foreach ( $expandable_breakpoints as $bp ) {
                 if ( $bp['media'] ) echo $bp['media'] . " { \n";
                 echo "{$bp['prefix']} .mh-search-trigger { display: flex !important; }\n";
                 echo "{$bp['prefix']} .mh-search-expandable-container { position: absolute !important; top: calc(100% + 15px) !important; right: 0 !important; opacity: 0 !important; visibility: hidden !important; transform: translateY(10px) !important; background: #fff !important; padding: 15px !important; border-radius: 8px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important; max-width: 90vw !important; z-index: 9999 !important; }\n";
-                echo "{$bp['prefix']} .mh-live-search-wrapper.mh-search-is-open .mh-search-expandable-container { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; }\n";
+                echo "{$bp['prefix']}.mh-search-is-open .mh-search-expandable-container { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; }\n";
                 echo "{$bp['prefix']} .mh-live-search-wrapper { justify-content: flex-end !important; }\n";
                 echo "{$bp['prefix']} .mh-search-results { position: static !important; box-shadow: none !important; border-top: 1px solid #eee !important; margin-top: 10px !important; padding-top: 10px !important; border: none !important; max-height: 400px !important; overflow-y: auto !important; display: none; }\n";
+                if ( $bp['media'] ) echo "} \n";
+            }
+
+            /* =======================================
+               3. NEW! MORPHING SLIDER LAYOUT MIXIN
+               ======================================= */
+            $slide_out_breakpoints = [
+                'desktop' => [ 'prefix' => '.mh-layout-slide_out', 'media' => '' ],
+                'tablet'  => [ 'prefix' => '.mh-layout-tablet-slide_out', 'media' => '@media (max-width: 1024px)' ],
+                'mobile'  => [ 'prefix' => '.mh-layout-mobile-slide_out', 'media' => '@media (max-width: 767px)' ],
+            ];
+            foreach ( $slide_out_breakpoints as $bp ) {
+                if ( $bp['media'] ) echo $bp['media'] . " { \n";
+                // Hide standard trigger button, we use the input as the trigger
+                echo "{$bp['prefix']} .mh-search-trigger { display: none !important; }\n";
+                
+                echo "{$bp['prefix']} .mh-search-expandable-container { position: relative !important; top: auto !important; right: auto !important; opacity: 1 !important; visibility: visible !important; transform: none !important; background: transparent !important; padding: 0 !important; border-radius: 0 !important; box-shadow: none !important; max-width: 100% !important; width: 100% !important; z-index: 1 !important; display: flex; justify-content: flex-end; }\n";
+                
+                // Form becomes the animated wrapper
+                echo "{$bp['prefix']} .mh-search-form { width: 50px; max-width: var(--mh-expand-width, 100%); transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); margin-left: auto; overflow: hidden; }\n";
+                
+                // Input is hidden visually but stays clickable
+                echo "{$bp['prefix']} .mh-search-input { cursor: pointer; color: transparent !important; padding-left: 0 !important; padding-right: 0 !important; transition: all 0.4s ease; border-radius: 50px !important; }\n";
+                echo "{$bp['prefix']} .mh-search-input::placeholder { color: transparent !important; }\n";
+                
+                // Icon acts as the visible button
+                echo "{$bp['prefix']} .mh-search-icon { pointer-events: auto !important; cursor: pointer; z-index: 5; width: 50px; height: 100%; display: flex; justify-content: center; align-items: center; left: 0; }\n";
+                echo "{$bp['prefix']} .mh-live-search-wrapper { justify-content: flex-end !important; }\n";
+                
+                // --- OPEN STATE ---
+                echo "{$bp['prefix']}.mh-search-is-open .mh-search-form { width: var(--mh-expand-width, 100%); }\n";
+                echo "{$bp['prefix']}.mh-search-is-open .mh-search-input { cursor: text; padding-left: 45px !important; padding-right: 15px !important; color: inherit !important; border-radius: inherit !important; }\n";
+                echo "{$bp['prefix']}.mh-search-is-open .mh-search-input::placeholder { color: inherit !important; }\n";
+                
+                // Results Dropdown pins to the right
+                echo "{$bp['prefix']} .mh-search-results { position: absolute !important; top: calc(100% + 5px) !important; right: 0 !important; left: auto !important; width: var(--mh-expand-width, 100%) !important; z-index: 99999 !important; border-radius: 4px !important; box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important; border: 1px solid #eee !important; margin: 0 !important; padding: 0 !important; max-height: 400px !important; overflow-y: auto !important; display: none; }\n";
+                
                 if ( $bp['media'] ) echo "} \n";
             }
             ?>
@@ -353,7 +393,9 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 </form>
                 
                 <div class="mh-search-results"></div>
-            </div> </div>
+            </div>
+            
+        </div>
 
         <script>
             jQuery(document).ready(function($) {
@@ -361,18 +403,21 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 var searchTimer;
                 var notFoundText = '<?php echo $not_found; ?>';
 
-                // 1. Expandable Trigger Logic (Only works if the button is visible via CSS)
-                $('.mh-search-trigger').on('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                // Handle Clicks on Icons and Inputs (Works for Dropdown AND Morphing layouts)
+                $('.mh-search-trigger, .mh-search-icon, .mh-search-input').on('click focus', function(e) {
                     var $wrapper = $(this).closest('.mh-live-search-wrapper');
-                    $wrapper.toggleClass('mh-search-is-open');
-                    if ($wrapper.hasClass('mh-search-is-open')) {
-                        setTimeout(function() { $wrapper.find('.mh-search-input').focus(); }, 100);
+                    
+                    if (!$wrapper.hasClass('mh-search-is-open')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $wrapper.addClass('mh-search-is-open');
+                        
+                        // Wait for animation to finish before focusing to avoid jitter
+                        setTimeout(function() { $wrapper.find('.mh-search-input').focus(); }, 150);
                     }
                 });
 
-                // 2. Close Expandable when clicking anywhere outside
+                // Close search when clicking anywhere outside
                 $(document).on('click', function(e) {
                     if (!$(e.target).closest('.mh-live-search-wrapper').length) {
                         $('.mh-live-search-wrapper').removeClass('mh-search-is-open');
@@ -385,7 +430,7 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                     e.stopPropagation();
                 });
 
-                // 3. Live AJAX Search Logic
+                // Live AJAX Search Logic
                 $('.mh-search-input').on('keyup', function() {
                     var keyword = $(this).val().trim();
                     var $wrapper = $(this).closest('.mh-live-search-wrapper');
