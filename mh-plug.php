@@ -339,183 +339,190 @@ function mh_make_order_attributes_bigger() {
 // WOOCOMMERCE QUICK VIEW AJAX HANDLER & CUSTOM ADD TO CART
 // ─────────────────────────────────────────────────────────────────────────────
 
-// 1. Inject Custom Attributes into Simple Products inside Quick View
-function mh_qv_output_simple_attributes() {
-    global $product;
-    if ( ! $product || ! $product->is_type('simple') ) return;
+// 1. Inject Custom Attributes into Simple Products
+if ( ! function_exists( 'mh_qv_output_simple_attributes' ) ) {
+    function mh_qv_output_simple_attributes() {
+        global $product;
+        if ( ! $product || ! $product->is_type('simple') ) return;
 
-    $attributes = $product->get_attributes();
-    if ( empty( $attributes ) ) return;
+        $attributes = $product->get_attributes();
+        if ( empty( $attributes ) ) return;
 
-    echo '<div class="mh-qv-attributes" style="margin-bottom: 20px; width: 100%;">';
-    foreach ( $attributes as $attribute ) {
-        $attribute_name = $attribute->get_name();
-        $label          = wc_attribute_label( $attribute_name );
-        $select_name    = 'attribute_' . sanitize_title( $attribute_name );
-        
-        echo '<div style="margin-bottom: 10px;">';
-        echo '<label style="display:block; font-weight:600; margin-bottom: 5px; color:#333;">' . esc_html( $label ) . '</label>';
-        echo '<select name="' . esc_attr( $select_name ) . '" class="mh-qv-attr-select" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9; color:#333; outline:none;">';
-        echo '<option value="">' . esc_html( sprintf( __( 'Choose %s', 'mh-plug' ), $label ) ) . '</option>';
+        echo '<div class="mh-qv-attributes" style="margin-bottom: 20px; width: 100%;">';
+        foreach ( $attributes as $attribute ) {
+            $attribute_name = $attribute->get_name();
+            $label          = wc_attribute_label( $attribute_name );
+            $select_name    = 'attribute_' . sanitize_title( $attribute_name );
+            
+            echo '<div style="margin-bottom: 10px;">';
+            echo '<label style="display:block; font-weight:600; margin-bottom: 5px; color:#333;">' . esc_html( $label ) . '</label>';
+            echo '<select name="' . esc_attr( $select_name ) . '" class="mh-qv-attr-select" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9; color:#333; outline:none;">';
+            echo '<option value="">' . esc_html( sprintf( __( 'Choose %s', 'mh-plug' ), $label ) ) . '</option>';
 
-        if ( $attribute->is_taxonomy() ) {
-            $terms = wc_get_product_terms( $product->get_id(), $attribute_name, ['fields' => 'all'] );
-            foreach ( $terms as $term ) {
-                echo '<option value="' . esc_attr( $term->slug ) . '">' . esc_html( $term->name ) . '</option>';
+            if ( $attribute->is_taxonomy() ) {
+                $terms = wc_get_product_terms( $product->get_id(), $attribute_name, ['fields' => 'all'] );
+                if ( ! is_wp_error( $terms ) ) {
+                    foreach ( $terms as $term ) {
+                        echo '<option value="' . esc_attr( $term->slug ) . '">' . esc_html( $term->name ) . '</option>';
+                    }
+                }
+            } else {
+                $options = $attribute->get_options();
+                foreach ( $options as $option ) {
+                    echo '<option value="' . esc_attr( trim( $option ) ) . '">' . esc_html( trim( $option ) ) . '</option>';
+                }
             }
-        } else {
-            $options = $attribute->get_options();
-            foreach ( $options as $option ) {
-                echo '<option value="' . esc_attr( trim( $option ) ) . '">' . esc_html( trim( $option ) ) . '</option>';
-            }
+            echo '</select></div>';
         }
-        echo '</select></div>';
+        echo '</div>';
     }
-    echo '</div>';
 }
-// 2. Load the Quick View HTML (Supports Default AND Custom Elementor Templates)
-add_action( 'wp_ajax_mh_quick_view_load', 'mh_quick_view_ajax_handler' );
-add_action( 'wp_ajax_nopriv_mh_quick_view_load', 'mh_quick_view_ajax_handler' );
 
-function mh_quick_view_ajax_handler() {
-    $product_id  = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
-    $template_id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
-    
-    if ( ! $product_id ) wp_send_json_error();
+// 2. Load Quick View HTML (Supports Default AND Elementor Templates)
+if ( ! function_exists( 'mh_quick_view_ajax_handler' ) ) {
+    add_action( 'wp_ajax_mh_quick_view_load', 'mh_quick_view_ajax_handler' );
+    add_action( 'wp_ajax_nopriv_mh_quick_view_load', 'mh_quick_view_ajax_handler' );
 
-    global $post, $product;
-    $post = get_post( $product_id );
-    setup_postdata( $post );
-    $product = wc_get_product( $product_id );
+    function mh_quick_view_ajax_handler() {
+        $product_id  = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
+        $template_id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
+        
+        if ( ! $product_id ) wp_send_json_error();
 
-    ob_start();
+        global $post, $product;
+        $post = get_post( $product_id );
+        setup_postdata( $post );
+        $product = wc_get_product( $product_id );
 
-    // 🚀 IF A CUSTOM ELEMENTOR TEMPLATE IS SELECTED
-    if ( $template_id && class_exists( '\Elementor\Plugin' ) ) {
-        // Enqueue the custom template's CSS so it doesn't look broken
-        if ( class_exists( '\Elementor\Core\Files\CSS\Post' ) ) {
-            $css_file = new \Elementor\Core\Files\CSS\Post( $template_id );
-            $css_file->enqueue();
-        }
-        // Force Elementor to render the template
-        echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id );
-    } 
-    // 🚀 DEFAULT QUICK VIEW LAYOUT
-    else {
-        ?>
-        <div class="mh-qv-grid">
-            <div class="mh-qv-image">
-                <?php echo $product->get_image('woocommerce_single'); ?>
-            </div>
-            <div class="mh-qv-details">
-                <h2 class="mh-qv-title"><?php echo $product->get_name(); ?></h2>
-                <div class="mh-qv-price"><?php echo $product->get_price_html(); ?></div>
-                <div class="mh-qv-excerpt"><?php echo apply_filters( 'woocommerce_short_description', $post->post_excerpt ); ?></div>
-                
-                <div class="mh-qv-add-to-cart-wrap" data-product-id="<?php echo esc_attr($product_id); ?>">
-                    <?php 
-                    add_action( 'woocommerce_before_add_to_cart_button', 'mh_qv_output_simple_attributes' );
-                    woocommerce_template_single_add_to_cart(); 
-                    remove_action( 'woocommerce_before_add_to_cart_button', 'mh_qv_output_simple_attributes' );
-                    ?>
+        ob_start();
+
+        if ( $template_id && class_exists( '\Elementor\Plugin' ) ) {
+            if ( class_exists( '\Elementor\Core\Files\CSS\Post' ) ) {
+                try {
+                    $css_file = new \Elementor\Core\Files\CSS\Post( $template_id );
+                    $css_file->enqueue();
+                } catch ( Exception $e ) {
+                    // Ignore CSS enqueue errors
+                }
+            }
+            echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id );
+        } else {
+            ?>
+            <div class="mh-qv-grid">
+                <div class="mh-qv-image">
+                    <?php echo $product->get_image('woocommerce_single'); ?>
+                </div>
+                <div class="mh-qv-details">
+                    <h2 class="mh-qv-title"><?php echo $product->get_name(); ?></h2>
+                    <div class="mh-qv-price"><?php echo $product->get_price_html(); ?></div>
+                    <div class="mh-qv-excerpt"><?php echo apply_filters( 'woocommerce_short_description', $post->post_excerpt ); ?></div>
+                    
+                    <div class="mh-qv-add-to-cart-wrap" data-product-id="<?php echo esc_attr($product_id); ?>">
+                        <?php 
+                        add_action( 'woocommerce_before_add_to_cart_button', 'mh_qv_output_simple_attributes' );
+                        woocommerce_template_single_add_to_cart(); 
+                        remove_action( 'woocommerce_before_add_to_cart_button', 'mh_qv_output_simple_attributes' );
+                        ?>
+                    </div>
                 </div>
             </div>
-        </div>
-        <?php
-    }
+            <?php
+        }
 
-    $html = ob_get_clean();
-    wp_reset_postdata(); // Important: Reset the global post data so we don't break the main page
-    
-    wp_send_json_success( $html );
+        $html = ob_get_clean();
+        wp_reset_postdata(); 
+        wp_send_json_success( $html );
+    }
 }
-// 3. Custom AJAX Add to Cart Handler
-add_action('wp_ajax_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
-add_action('wp_ajax_nopriv_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
 
-function mh_qv_ajax_add_to_cart() {
-    // 1. Bruteforce check for Product ID
-    if ( ! isset($_POST['product_id']) || empty($_POST['product_id']) ) {
-        wp_send_json_error(['message' => 'Missing Product ID']);
-    }
+// 3. Custom AJAX Add to Cart
+if ( ! function_exists( 'mh_qv_ajax_add_to_cart' ) ) {
+    add_action('wp_ajax_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
+    add_action('wp_ajax_nopriv_mh_qv_add_to_cart', 'mh_qv_ajax_add_to_cart');
 
-    $product_id   = absint($_POST['product_id']);
-    $quantity     = empty($_POST['quantity']) ? 1 : wc_stock_amount($_POST['quantity']);
-    $variation_id = isset($_POST['variation_id']) ? absint($_POST['variation_id']) : 0;
-    
-    $product = wc_get_product($product_id);
-    if ( ! $product ) {
-        wp_send_json_error(['message' => 'Invalid Product']);
-    }
+    function mh_qv_ajax_add_to_cart() {
+        if ( ! isset($_POST['product_id']) || empty($_POST['product_id']) ) {
+            wp_send_json_error(['message' => 'Missing Product ID']);
+        }
 
-    $variation = [];
-    // 2. Only strictly enforce variations if WooCommerce says it's a Variable product
-    if ( $product->is_type('variable') ) {
-        foreach ($_POST as $key => $value) {
-            if (strpos($key, 'attribute_') === 0) {
-                $variation[$key] = sanitize_text_field($value);
+        $product_id   = absint($_POST['product_id']);
+        $quantity     = empty($_POST['quantity']) ? 1 : wc_stock_amount($_POST['quantity']);
+        $variation_id = isset($_POST['variation_id']) ? absint($_POST['variation_id']) : 0;
+        
+        $product = wc_get_product($product_id);
+        if ( ! $product ) {
+            wp_send_json_error(['message' => 'Invalid Product']);
+        }
+
+        $variation = [];
+        if ( $product->is_type('variable') ) {
+            foreach ($_POST as $key => $value) {
+                if (strpos($key, 'attribute_') === 0) {
+                    $variation[$key] = sanitize_text_field($value);
+                }
+            }
+            if ( empty($variation_id) ) {
+                wp_send_json_error(['message' => 'Please select product options.']);
             }
         }
-        if ( empty($variation_id) ) {
-            wp_send_json_error(['message' => 'Please select product options.']);
-        }
-    }
 
-    try {
-        // 3. Add to cart! (Simple products will automatically ignore the empty variation arrays)
-        $cart_item_key = WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation);
+        try {
+            $cart_item_key = WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation);
 
-        if ( $cart_item_key ) {
-            do_action('woocommerce_ajax_added_to_cart', $product_id);
-            WC_AJAX::get_refreshed_fragments(); // Success!
-            wp_die();
-        } else {
-            // If WooCommerce rejects it, pull the exact error notice
-            $error_msg = 'Cannot add to cart.';
-            if ( wc_notice_count('error') > 0 ) {
-                $notices = wc_get_notices('error');
-                $error_msg = wp_strip_all_tags($notices[0]['notice']);
-                wc_clear_notices();
+            if ( $cart_item_key ) {
+                do_action('woocommerce_ajax_added_to_cart', $product_id);
+                WC_AJAX::get_refreshed_fragments(); 
+                wp_die();
+            } else {
+                $error_msg = 'Cannot add to cart.';
+                if ( wc_notice_count('error') > 0 ) {
+                    $notices = wc_get_notices('error');
+                    $error_msg = wp_strip_all_tags($notices[0]['notice']);
+                    wc_clear_notices();
+                }
+                wp_send_json_error(['message' => $error_msg]);
             }
-            wp_send_json_error(['message' => $error_msg]);
+        } catch ( Exception $e ) {
+            wp_send_json_error(['message' => $e->getMessage()]);
         }
-    } catch ( Exception $e ) {
-        wp_send_json_error(['message' => $e->getMessage()]);
+        
+        wp_die();
     }
-    
-    wp_die();
 }
 
 // 4. Quick View Global CSS
-add_action('wp_footer', function() {
-    ?>
-    <style>
-        .mh-qv-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999999; opacity: 0; visibility: hidden; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
-        .mh-qv-overlay.mh-open { opacity: 1; visibility: visible; }
-        .mh-qv-content { background: #fff; width: 900px; max-width: 95%; max-height: 90vh; overflow-y: auto; border-radius: 10px; position: relative; transform: translateY(30px); transition: 0.3s; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
-        .mh-qv-overlay.mh-open .mh-qv-content { transform: translateY(0); }
-        .mh-qv-close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #888; z-index: 10; transition: 0.2s; }
-        .mh-qv-close:hover { color: #d63638; transform: rotate(90deg); }
-        
-        .mh-qv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 40px; }
-        .mh-qv-image img { width: 100%; height: auto; border-radius: 8px; }
-        .mh-qv-title { margin: 0 0 15px; font-size: 26px; font-weight: 700; color: #111; }
-        .mh-qv-price { font-size: 22px; color: #d63638; font-weight: 700; margin-bottom: 20px; }
-        .mh-qv-price del { color: #aaa; font-weight: 400; font-size: 18px; margin-right: 10px; }
-        .mh-qv-excerpt { color: #555; line-height: 1.6; margin-bottom: 30px; }
-        
-        .mh-qv-add-to-cart-wrap form.cart { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
-        .mh-qv-add-to-cart-wrap .quantity { display: flex; align-items: center; background: #f7f7f7; border-radius: 5px; border: 1px solid #ddd; }
-        .mh-qv-add-to-cart-wrap .quantity input.qty { width: 50px; text-align: center; border: none; background: transparent; font-size: 16px; font-weight: 600; padding: 10px 0; -moz-appearance: textfield; }
-        .mh-qv-add-to-cart-wrap .quantity input::-webkit-outer-spin-button, .mh-qv-add-to-cart-wrap .quantity input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .mh-qty-btn { width: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; font-weight: bold; color: #555; user-select: none; transition: 0.2s; }
-        .mh-qty-btn:hover { color: #d63638; }
-        
-        .mh-qv-add-to-cart-wrap button.button { background: #111; color: #fff; padding: 12px 30px; border-radius: 5px; border: none; cursor: pointer; transition: 0.3s; font-weight: 600; font-size: 16px; flex-grow: 1; }
-        .mh-qv-add-to-cart-wrap button.button:hover { background: #d63638; }
-        .mh-qv-add-to-cart-wrap button.button.loading { opacity: 0.5; pointer-events: none; }
+if ( ! function_exists( 'mh_qv_global_css' ) ) {
+    add_action('wp_footer', 'mh_qv_global_css');
+    function mh_qv_global_css() {
+        ?>
+        <style>
+            .mh-qv-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999999; opacity: 0; visibility: hidden; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+            .mh-qv-overlay.mh-open { opacity: 1; visibility: visible; }
+            .mh-qv-content { background: #fff; width: 900px; max-width: 95%; max-height: 90vh; overflow-y: auto; border-radius: 10px; position: relative; transform: translateY(30px); transition: 0.3s; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+            .mh-qv-overlay.mh-open .mh-qv-content { transform: translateY(0); }
+            .mh-qv-close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #888; z-index: 10; transition: 0.2s; }
+            .mh-qv-close:hover { color: #d63638; transform: rotate(90deg); }
+            
+            .mh-qv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 40px; }
+            .mh-qv-image img { width: 100%; height: auto; border-radius: 8px; }
+            .mh-qv-title { margin: 0 0 15px; font-size: 26px; font-weight: 700; color: #111; }
+            .mh-qv-price { font-size: 22px; color: #d63638; font-weight: 700; margin-bottom: 20px; }
+            .mh-qv-price del { color: #aaa; font-weight: 400; font-size: 18px; margin-right: 10px; }
+            .mh-qv-excerpt { color: #555; line-height: 1.6; margin-bottom: 30px; }
+            
+            .mh-qv-add-to-cart-wrap form.cart { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
+            .mh-qv-add-to-cart-wrap .quantity { display: flex; align-items: center; background: #f7f7f7; border-radius: 5px; border: 1px solid #ddd; }
+            .mh-qv-add-to-cart-wrap .quantity input.qty { width: 50px; text-align: center; border: none; background: transparent; font-size: 16px; font-weight: 600; padding: 10px 0; -moz-appearance: textfield; }
+            .mh-qv-add-to-cart-wrap .quantity input::-webkit-outer-spin-button, .mh-qv-add-to-cart-wrap .quantity input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+            .mh-qty-btn { width: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; font-weight: bold; color: #555; user-select: none; transition: 0.2s; }
+            .mh-qty-btn:hover { color: #d63638; }
+            
+            .mh-qv-add-to-cart-wrap button.button { background: #111; color: #fff; padding: 12px 30px; border-radius: 5px; border: none; cursor: pointer; transition: 0.3s; font-weight: 600; font-size: 16px; flex-grow: 1; }
+            .mh-qv-add-to-cart-wrap button.button:hover { background: #d63638; }
+            .mh-qv-add-to-cart-wrap button.button.loading { opacity: 0.5; pointer-events: none; }
 
-        @media (max-width: 768px) { .mh-qv-grid { grid-template-columns: 1fr; padding: 25px; gap: 20px; } }
-    </style>
-    <?php
-});
+            @media (max-width: 768px) { .mh-qv-grid { grid-template-columns: 1fr; padding: 25px; gap: 20px; } }
+        </style>
+        <?php
+    }
+}

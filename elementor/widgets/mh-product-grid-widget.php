@@ -218,4 +218,152 @@ class MH_Product_Grid_Widget extends Widget_Base {
 
                             <a href="#" class="mh-action-btn mh-advanced-wishlist-btn <?php echo $in_wishlist ? 'added' : ''; ?>" data-product-id="<?php echo esc_attr($product_id); ?>" data-behavior="toggle" title="<?php esc_html_e('Wishlist', 'mh-plug'); ?>">
                                 <span class="mh-icon-normal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 429.3l175.2-161.3c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z"/></svg></span>
-                                <span class="mh-icon-added" style="display:none;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-2
+                                <span class="mh-icon-added" style="display:none;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg></span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="mh-product-info">
+                        <?php if ( $settings['show_category'] === 'yes' ) : ?><div class="mh-product-cat"><?php echo wc_get_product_category_list( $product_id, ', ' ); ?></div><?php endif; ?>
+                        <h3 class="mh-product-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                        <?php if ( $settings['show_rating'] === 'yes' ) : ?><div class="mh-product-rating"><?php echo wc_get_rating_html( $product->get_average_rating() ); ?></div><?php endif; ?>
+                        <div class="mh-product-price"><?php echo $product->get_price_html(); ?></div>
+                    </div>
+                </div>
+            <?php endwhile; wp_reset_postdata(); ?>
+        </div>
+
+        <script>
+            jQuery(document).ready(function($){
+                var mhAjaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
+                var mhNonce   = '<?php echo esc_attr( wp_create_nonce( 'mh_wishlist_nonce' ) ); ?>';
+
+                // Wishlist Toggle
+                $('.mh-product-grid .mh-advanced-wishlist-btn').off('click').on('click', function(e){
+                    e.preventDefault(); 
+                    var $btn = $(this);
+                    $btn.css({'opacity': '0.5', 'pointer-events': 'none'});
+                    $.post(mhAjaxUrl, { action: 'mh_wishlist_toggle', product_id: $btn.data('product-id'), security: mhNonce }, function(response) {
+                        $btn.css({'opacity': '1', 'pointer-events': 'auto'});
+                        if(response.success) {
+                            var status = response.data.status;
+                            if(status === 'added') {
+                                $btn.addClass('added').find('.mh-icon-normal').hide(); $btn.find('.mh-icon-added').show();
+                            } else {
+                                $btn.removeClass('added').find('.mh-icon-added').hide(); $btn.find('.mh-icon-normal').show();
+                            }
+                            $(document).trigger('mh_wishlist_updated', [status]);
+                        }
+                    });
+                });
+
+                // Quick View Load
+                if ($('#mh-quick-view-modal').length === 0) {
+                    $('body').append('<div id="mh-quick-view-modal" class="mh-qv-overlay"><div class="mh-qv-content"><span class="mh-qv-close"><i class="fas fa-times"></i></span><div class="mh-qv-body"></div></div></div>');
+                }
+
+                $('.mh-quick-view-trigger').on('click', function(e) {
+                    e.preventDefault();
+                    var product_id = $(this).data('product-id');
+                    var template_id = $(this).data('template-id'); // 🚀 Pulling Template ID
+                    var $modal = $('#mh-quick-view-modal');
+                    var $body = $modal.find('.mh-qv-body');
+                    
+                    $body.html('<div style="text-align:center; padding: 50px;"><i class="fas fa-spinner fa-spin fa-3x"></i></div>');
+                    $modal.addClass('mh-open');
+                    
+                    // 🚀 Sending Template ID to PHP
+                    $.post(mhAjaxUrl, { action: 'mh_quick_view_load', product_id: product_id, template_id: template_id }, function(response) {
+                        if (response.success) {
+                            $body.html(response.data);
+                            
+                            if (typeof $.fn.wc_variation_form !== 'undefined') {
+                                $body.find('.variations_form').each(function() { $(this).wc_variation_form(); });
+                            }
+
+                            $body.find('.quantity').each(function() {
+                                var $qtyWrapper = $(this);
+                                if ($qtyWrapper.find('.mh-qty-btn').length === 0) {
+                                    $qtyWrapper.prepend('<span class="mh-qty-btn mh-minus">-</span>');
+                                    $qtyWrapper.append('<span class="mh-qty-btn mh-plus">+</span>');
+                                }
+                            });
+                        }
+                    });
+                });
+
+                $(document).on('click', '.mh-qv-close, .mh-qv-close *', function(e) {
+                    $('#mh-quick-view-modal').removeClass('mh-open');
+                });
+                
+                $(document).on('click', '.mh-qv-overlay', function(e) {
+                    if ($(e.target).hasClass('mh-qv-overlay')) {
+                        $('#mh-quick-view-modal').removeClass('mh-open');
+                    }
+                });
+
+                $(document).on('click', '.mh-qty-btn', function() {
+                    var $qtyInput = $(this).siblings('.qty');
+                    var currentVal = parseFloat($qtyInput.val()) || 0;
+                    if ($(this).hasClass('mh-plus')) {
+                        $qtyInput.val(currentVal + 1);
+                    } else {
+                        if (currentVal > 1) { $qtyInput.val(currentVal - 1); }
+                    }
+                    $qtyInput.trigger('change');
+                });
+
+                // Custom AJAX Add to Cart
+                $(document).off('submit', '.mh-qv-add-to-cart-wrap form.cart').on('submit', '.mh-qv-add-to-cart-wrap form.cart', function(e) {
+                    e.preventDefault();
+                    var $form = $(this);
+                    var $btn = $form.find('button[type="submit"]');
+                    var $wrap = $form.closest('.mh-qv-add-to-cart-wrap');
+                    
+                    var productId = $wrap.attr('data-product-id') || $form.find('input[name="product_id"]').val() || $btn.attr('value') || $btn.val();
+                    
+                    if (!productId) { $btn.text('ID Error'); return; }
+
+                    var formData = $form.serialize();
+                    formData += '&action=mh_qv_add_to_cart';
+                    formData += '&product_id=' + productId;
+
+                    var missingAttributes = false;
+                    $form.find('.mh-qv-attr-select').each(function() {
+                        if ($(this).val() === '') { missingAttributes = true; }
+                    });
+
+                    if (missingAttributes) {
+                        $btn.text('Please select options');
+                        setTimeout(function(){ $btn.text('Add to cart'); }, 2000);
+                        return;
+                    }
+
+                    $btn.addClass('loading').text('Adding...');
+
+                    $.post(mhAjaxUrl, formData, function(response) {
+                        if (response && response.fragments) {
+                            $(document.body).trigger('added_to_cart', [response.fragments, response.cart_hash, $btn]);
+                            $btn.text('Added to Cart!');
+                            setTimeout(function() {
+                                $('#mh-quick-view-modal').removeClass('mh-open');
+                                $btn.removeClass('loading').text('Add to cart'); 
+                            }, 1500);
+                        } else if (response && response.success === false) {
+                            var errorMsg = response.data && response.data.message ? response.data.message : 'Cart Error';
+                            $btn.removeClass('loading').text(errorMsg);
+                            setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
+                        } else {
+                            $btn.removeClass('loading').text('Cart Error');
+                            setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
+                        }
+                    }).fail(function() {
+                        $btn.removeClass('loading').text('Server Error');
+                        setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
+                    });
+                });
+            });
+        </script>
+        <?php
+    }
+}
