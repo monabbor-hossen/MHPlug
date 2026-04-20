@@ -181,23 +181,49 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         $icon     = $settings['search_icon'];
         $not_found = esc_attr( $settings['not_found_text'] );
         ?>
-
-        <style>
+<style>
             .mh-live-search-wrapper { position: relative; width: 100%; display: block; }
-            .mh-search-form { position: relative; display: flex; align-items: center; margin: 0; width: 100%; }
+            /* Reset form margins/padding to stop theme conflicts */
+            .mh-search-form { position: relative; display: flex; align-items: center; margin: 0 !important; padding: 0 !important; width: 100%; box-sizing: border-box; }
             
             /* Input Base Styles */
-            .mh-search-input { width: 100%; outline: none; transition: 0.3s; }
+            .mh-search-input { 
+                width: 100%; 
+                outline: none; 
+                transition: 0.3s; 
+                margin: 0 !important; /* Force override theme margins */
+                box-sizing: border-box;
+                display: block;
+            }
             .mh-search-input::-webkit-search-cancel-button { cursor: pointer; }
             
             /* Modern Design specific overrides */
             <?php if ( $design === 'modern' ) : ?>
                 /* Fallback padding if Elementor control isn't set yet */
                 .mh-search-input { padding-left: 45px; } 
-                .mh-search-icon { position: absolute; left: 15px; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 2; }
+                .mh-search-icon { 
+                    position: absolute; 
+                    left: 15px; 
+                    top: 50%; /* 🚀 THE FIX: Lock to exact vertical center */
+                    transform: translateY(-50%); /* 🚀 THE FIX: Perfect pixel alignment */
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center; 
+                    pointer-events: none; 
+                    z-index: 2; 
+                    line-height: 1;
+                }
             <?php endif; ?>
             
-            .mh-search-spinner { position: absolute; right: 15px; display: none; z-index: 2; }
+            .mh-search-spinner { 
+                position: absolute; 
+                right: 15px; 
+                top: 50%; /* 🚀 THE FIX: Lock spinner to center */
+                transform: translateY(-50%);
+                display: none; 
+                z-index: 2; 
+                line-height: 1;
+            }
             
             /* Results Dropdown */
             .mh-search-results { 
