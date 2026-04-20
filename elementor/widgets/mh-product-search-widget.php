@@ -23,7 +23,10 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
 
     // Tell Elementor to load our scripts so the AJAX works
     public function get_script_depends() {
-        return [ 'mh-woo-scripts' ];
+        return [ 'mh-woo-scripts', 'mh-widgets-js' ];
+    }
+    public function get_style_depends() {
+        return [ 'mh-widgets-css' ];
     }
 
     protected function register_controls() {

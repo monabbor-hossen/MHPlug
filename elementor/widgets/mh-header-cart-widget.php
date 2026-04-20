@@ -18,6 +18,9 @@ class MH_Header_Cart_Widget extends Widget_Base {
     public function get_icon() { return 'eicon-cart-medium'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
+    public function get_style_depends() { return [ 'mh-widgets-css' ]; }
+    public function get_script_depends() { return [ 'mh-widgets-js' ]; }
+
     protected function register_controls() {
         $this->start_controls_section( 'section_layout', [ 'label' => __( 'Cart Behavior', 'mh-plug' ) ] );
 
@@ -86,22 +89,6 @@ class MH_Header_Cart_Widget extends Widget_Base {
         $is_offcanvas = $settings['cart_type'] === 'off-canvas';
 
         ?>
-        <style>
-            .mh-header-cart-wrapper .mh-cart-action { position: relative; display: inline-flex; cursor: pointer; text-decoration: none; transition: 0.3s; }
-            .mh-header-cart-wrapper .mh-action-badge { position: absolute; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 11px; font-weight: 600; z-index: 2; transition: all 0.3s; }
-            
-            /* Off-Canvas Cart */
-            .mh-offcanvas-cart { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: #fff; box-shadow: -5px 0 15px rgba(0,0,0,0.1); z-index: 999999; transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; }
-            .mh-offcanvas-cart.mh-open { right: 0; }
-            .mh-offcanvas-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999998; opacity: 0; visibility: hidden; transition: 0.3s; }
-            .mh-offcanvas-overlay.mh-open { opacity: 1; visibility: visible; }
-            .mh-offcanvas-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-            .mh-offcanvas-header h3 { margin: 0; font-size: 18px; font-weight: 600; }
-            .mh-offcanvas-close { cursor: pointer; font-size: 20px; color: #333; transition: 0.3s; }
-            .mh-offcanvas-close:hover { color: #d63638; transform: rotate(90deg); }
-            .mh-offcanvas-content { padding: 20px; overflow-y: auto; flex-grow: 1; }
-        </style>
-
         <div class="mh-header-cart-wrapper">
             <a href="<?php echo esc_url( $cart_url ); ?>" class="mh-cart-action <?php echo $is_offcanvas ? 'mh-open-mini-cart' : ''; ?>">
                 <i class="fas fa-shopping-bag"></i>
@@ -121,34 +108,7 @@ class MH_Header_Cart_Widget extends Widget_Base {
                 </div>
             </div>
 
-            <script>
-                jQuery(document).ready(function($) {
-                    var $panel = $('.mh-mini-cart-panel'), $overlay = $('.mh-cart-overlay');
-                    $('.mh-open-mini-cart').on('click', function(e) { e.preventDefault(); $panel.addClass('mh-open'); $overlay.addClass('mh-open'); $('body').css('overflow', 'hidden'); });
-                    $('.mh-cart-close, .mh-cart-overlay').on('click', function() { $panel.removeClass('mh-open'); $overlay.removeClass('mh-open'); $('body').css('overflow', 'auto'); });
-                    
-                    $('body').on('added_to_cart', function(event, fragments) {
-                        if (fragments && fragments['div.widget_shopping_cart_content']) {
-                            $('.mh-offcanvas-content .widget_shopping_cart_content').html(fragments['div.widget_shopping_cart_content']);
-                        }
-                        $panel.addClass('mh-open'); $overlay.addClass('mh-open'); $('body').css('overflow', 'hidden');
-                    });
-                });
-            </script>
         <?php endif; ?>
-
-        <script>
-            jQuery(document).ready(function($) {
-                $('body').on('added_to_cart removed_from_cart updated_cart_totals', function() {
-                    $.post(mh_plug_ajax.ajax_url, { action: 'mh_get_cart_count' }, function(response) {
-                        if(response.success) {
-                            $('.mh-cart-count').text(response.data).css('transform', 'scale(1.3)');
-                            setTimeout(function(){ $('.mh-cart-count').css('transform', 'scale(1)'); }, 200);
-                        }
-                    });
-                });
-            });
-        </script>
         <?php
     }
 }

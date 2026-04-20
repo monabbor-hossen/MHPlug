@@ -22,6 +22,9 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'product', 'accordion', 'tabs', 'description', 'shipping', 'reviews', 'woocommerce', 'mh' ]; }
 
+    public function get_style_depends() { return [ 'mh-widgets-css' ]; }
+    public function get_script_depends() { return [ 'mh-widgets-js' ]; }
+
     protected function register_controls() {
 
         /* ── CONTENT: LAYOUT & DATA ── */
@@ -458,26 +461,7 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
                 <?php endif; ?>
             </div>
 
-            <script>
-                jQuery(document).ready(function($) {
-                    $('.mh-accordion-<?php echo esc_attr( $widget_id ); ?> .mh-accordion-header').on('click', function() {
-                        var $this = $(this);
-                        var $item = $this.parent('.mh-accordion-item');
-                        var $content = $this.next('.mh-accordion-content');
-                        var $container = $this.closest('.mh-accordion-container');
 
-                        if ($item.hasClass('active')) {
-                            $item.removeClass('active');
-                            $content.slideUp(300);
-                        } else {
-                            $container.find('.mh-accordion-item').removeClass('active');
-                            $container.find('.mh-accordion-content').slideUp(300);
-                            $item.addClass('active');
-                            $content.slideDown(300);
-                        }
-                    });
-                });
-            </script>
             <?php
         } 
         
@@ -552,21 +536,7 @@ class MH_Product_Data_Accordion_Widget extends Widget_Base {
 
             </div>
 
-            <script>
-                jQuery(document).ready(function($) {
-                    var $container = $('.mh-tabs-container-<?php echo esc_attr( $widget_id ); ?>');
-                    $container.find('.mh-tab-btn').on('click', function() {
-                        var $this = $(this);
-                        var targetID = $this.data('target');
-                        
-                        $container.find('.mh-tab-btn').removeClass('mh-active-tab');
-                        $container.find('.mh-tab-content-panel').removeClass('mh-active-content');
-                        
-                        $this.addClass('mh-active-tab');
-                        $('#' + targetID).addClass('mh-active-content');
-                    });
-                });
-            </script>
+
             <?php
         }
     }

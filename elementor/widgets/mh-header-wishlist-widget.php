@@ -17,6 +17,9 @@ class MH_Header_Wishlist_Widget extends Widget_Base {
     public function get_title() { return __( 'MH Header Wishlist', 'mh-plug' ); }
     public function get_icon() { return 'eicon-heart'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
+    
+    public function get_style_depends() { return [ 'mh-widgets-css' ]; }
+    public function get_script_depends() { return [ 'mh-widgets-js' ]; }
 
     protected function register_controls() {
         $this->start_controls_section( 'section_style_icon', [ 'label' => __( 'Icon & Layout', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
@@ -86,10 +89,7 @@ class MH_Header_Wishlist_Widget extends Widget_Base {
         }
 
         ?>
-        <style>
-            .mh-header-wishlist-wrapper .mh-wishlist-action { position: relative; display: inline-flex; cursor: pointer; text-decoration: none; transition: 0.3s; }
-            .mh-header-wishlist-wrapper .mh-action-badge { position: absolute; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 11px; font-weight: 600; z-index: 2; transition: all 0.3s; }
-        </style>
+
         
         <div class="mh-header-wishlist-wrapper">
             <a href="<?php echo esc_url( home_url( '/wishlist/' ) ); ?>" class="mh-wishlist-action">
@@ -98,18 +98,7 @@ class MH_Header_Wishlist_Widget extends Widget_Base {
             </a>
         </div>
 
-        <script>
-            jQuery(document).ready(function($) {
-                $(document).on('mh_wishlist_updated', function(e, status) {
-                    var $counter = $('.mh-wishlist-count');
-                    var currentCount = parseInt($counter.text()) || 0;
-                    if(status === 'added') { currentCount++; } 
-                    else if(status === 'removed' && currentCount > 0) { currentCount--; }
-                    $counter.text(currentCount).css('transform', 'scale(1.3)');
-                    setTimeout(function(){ $counter.css('transform', 'scale(1)'); }, 200);
-                });
-            });
-        </script>
+
         <?php
     }
 }

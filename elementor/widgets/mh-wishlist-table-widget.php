@@ -26,6 +26,8 @@ class MH_Wishlist_Table_Widget extends Widget_Base {
     public function get_categories()  { return [ 'mh-plug-widgets' ]; }
     public function get_keywords()    { return [ 'wishlist', 'table', 'woocommerce', 'mh' ]; }
 
+    public function get_script_depends() { return [ 'mh-widgets-js' ]; }
+
     protected function register_controls() {
 
         /* ── CONTENT: Column Visibility ── */
@@ -331,48 +333,6 @@ class MH_Wishlist_Table_Widget extends Widget_Base {
             <?php endif; ?>
         </div>
 
-        <script>
-            jQuery(document).ready(function($) {
-                var mhAjaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
-                var mhNonce   = '<?php echo esc_attr( $nonce ); ?>';
-
-                $('.mh-wl-remove-btn').on('click', function(e) {
-                    e.preventDefault();
-                    var $btn = $(this);
-                    var $row = $btn.closest('tr');
-                    var productId = $btn.data('product-id');
-
-                    $btn.css({'opacity': '0.5', 'pointer-events': 'none'});
-
-                    // Send AJAX request to toggle (remove) the item
-                    $.post(mhAjaxUrl, {
-                        action: 'mh_wishlist_toggle',
-                        product_id: productId,
-                        security: mhNonce
-                    }, function(response) {
-                        if(response.success) {
-                            // Fade out and remove the row
-                            $row.fadeOut(300, function() {
-                                $(this).remove();
-                                
-                                // Check if table is empty now
-                                if ($('.mh-wishlist-table tbody tr').length === 0) {
-                                    $('.mh-wishlist-table').fadeOut(200, function() {
-                                        $('.mh-wishlist-empty').fadeIn(300);
-                                    });
-                                }
-                            });
-                            
-                            // Trigger event to update the header counters
-                            $(document).trigger('mh_wishlist_updated', ['removed']);
-                        } else {
-                            $btn.css({'opacity': '1', 'pointer-events': 'auto'});
-                            alert('Error removing item.');
-                        }
-                    });
-                });
-            });
-        </script>
         <?php
     }
 

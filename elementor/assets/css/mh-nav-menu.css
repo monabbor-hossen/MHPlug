@@ -1,0 +1,30 @@
+/**
+ * MH Nav Menu Widget - Static CSS
+ * Dynamic/widget-ID-scoped CSS remains inline in the widget render().
+ * Only truly static rules that don't depend on widget settings are here.
+ */
+
+/* Nav Menu - Mobile Toggle */
+.mh-nav-mobile-toggle {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+/* Nav Menu - Mobile Caret */
+.mh-mobile-caret {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-left: 1px solid #eee;
+    z-index: 10;
+    transition: transform 0.3s;
+}

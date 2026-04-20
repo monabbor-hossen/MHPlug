@@ -27,11 +27,11 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
     public function get_keywords()    { return [ 'add to cart', 'quantity', 'woocommerce', 'buy', 'buy now', 'mh' ]; }
 
     public function get_script_depends() {
-        return [ 'mh-woo-scripts' ];
+        return [ 'mh-woo-scripts', 'mh-widgets-js' ];
     }
 
     public function get_style_depends() {
-        return [ 'woocommerce-general', 'mh-woo-add-to-cart' ];
+        return [ 'woocommerce-general', 'mh-woo-add-to-cart', 'mh-widgets-css' ];
     }
 
     // =========================================================
@@ -381,11 +381,6 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
         $checkout_url = function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : '';
 
         ?>
-        <style>
-            .mh-atc-wrap { display: flex; flex-wrap: wrap; align-items: stretch; }
-            .mh-buy-now-btn { display: inline-flex; align-items: center; justify-content: center; cursor: pointer; border: none; transition: all 0.3s ease; text-decoration: none; }
-        </style>
-
         <div class="mh-atc-widget">
             <form class="cart mh-custom-cart-form mh-atc-form" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype="multipart/form-data">
 
@@ -428,61 +423,6 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
             </form>
         </div>
 
-        <script>
-            jQuery(document).ready(function($){
-                
-                // Plus / Minus Quantity Buttons Logic
-                $('.mh-atc-form').on('click', '.mh-qty-plus, .mh-qty-minus', function() {
-                    var $qty = $(this).closest('.mh-qty-wrapper').find('.qty');
-                    var currentVal = parseFloat($qty.val());
-                    var max = parseFloat($qty.attr('max'));
-                    var min = parseFloat($qty.attr('min'));
-                    var step = $qty.attr('step');
-
-                    if (!currentVal || currentVal === '' || currentVal === 'NaN') currentVal = 0;
-                    if (max === '' || max === 'NaN') max = '';
-                    if (min === '' || min === 'NaN') min = 0;
-                    if (step === 'any' || step === '' || step === undefined || parseFloat(step) === 'NaN') step = 1;
-
-                    if ($(this).is('.mh-qty-plus')) {
-                        if (max && (max == currentVal || currentVal > max)) {
-                            $qty.val(max);
-                        } else {
-                            $qty.val(currentVal + parseFloat(step));
-                        }
-                    } else {
-                        if (min && (min == currentVal || currentVal < min)) {
-                            $qty.val(min);
-                        } else if (currentVal > 0) {
-                            $qty.val(currentVal - parseFloat(step));
-                        }
-                    }
-                    $qty.trigger('change');
-                });
-
-                // Buy Now Direct-to-Checkout Logic
-                $('.mh-buy-now-btn').on('click', function(e) {
-                    e.preventDefault();
-                    var $btn = $(this);
-                    var $wrap = $btn.closest('.mh-atc-wrap');
-                    
-                    // Grab chosen quantity and URLs
-                    var qty = $wrap.find('.mh-qty-input').val() || 1;
-                    var pid = $btn.data('product-id');
-                    var checkoutUrl = $btn.data('checkout-url');
-                    
-                    // Build the direct buy link with exact quantity
-                    var separator = checkoutUrl.indexOf('?') !== -1 ? '&' : '?';
-                    var directBuyUrl = checkoutUrl + separator + 'add-to-cart=' + pid + '&quantity=' + qty;
-                    
-                    // Small loading visual
-                    $btn.css({'opacity': '0.6', 'pointer-events': 'none'}).text('Processing...');
-                    
-                    // Redirect directly to checkout
-                    window.location.href = directBuyUrl;
-                });
-            });
-        </script>
         <?php
     }
 }

@@ -21,6 +21,8 @@ class MH_Product_Rating_Widget extends Widget_Base {
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'product', 'rating', 'stars', 'reviews', 'woocommerce', 'mh' ]; }
 
+    public function get_style_depends() { return [ 'mh-widgets-css' ]; }
+
     protected function register_controls() {
 
         /* ── CONTENT: RATING ELEMENTS ── */
@@ -200,14 +202,6 @@ class MH_Product_Rating_Widget extends Widget_Base {
         $formatted_average = number_format( $average_rating, 1, '.', '' ); 
 
         ?>
-        <style>
-            .mh-rating-wrapper { display: flex; align-items: center; flex-wrap: wrap; }
-            .mh-stars-container { display: inline-flex; align-items: center; }
-            .mh-stars-container i { line-height: 1; }
-            .mh-numeric-rating { font-weight: bold; line-height: 1; }
-            .mh-rating-count { line-height: 1; }
-        </style>
-
         <div class="mh-rating-wrapper">
             
             <?php // 1. Numeric Rating (e.g., 4.8) ?>

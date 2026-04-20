@@ -21,6 +21,9 @@ class MH_Product_Grid_Widget extends Widget_Base {
     public function get_icon() { return 'eicon-products'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
+    public function get_style_depends() { return [ 'mh-widgets-css' ]; }
+    public function get_script_depends() { return [ 'mh-widgets-js' ]; }
+
     private function get_elementor_templates() {
         $templates = [ '' => __( 'Default (Built-in Layout)', 'mh-plug' ) ];
         $query = new \WP_Query( [ 
@@ -169,47 +172,6 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $loop = new \WP_Query( $args );
         if ( ! $loop->have_posts() ) { echo '<p>' . esc_html__( 'No products found.', 'mh-plug' ) . '</p>'; return; }
         ?>
-        <style>
-            .mh-product-grid { display: grid; }
-            .mh-product-card { position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; overflow: hidden; }
-            .mh-product-card:hover { transform: translateY(-3px); z-index: 5; }
-            
-            .mh-product-image-wrap { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; aspect-ratio: 1/1; }
-            .mh-product-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-            .mh-product-card:hover .mh-product-image-wrap img { transform: scale(1.05); }
-
-            .mh-product-badges { position: absolute; top: 15px; left: 15px; z-index: 2; display: flex; flex-direction: column; gap: 5px; }
-            .mh-badge { font-size: 11px; font-weight: 600; text-transform: uppercase; line-height: 1; }
-
-            .mh-product-actions { 
-                position: absolute; bottom: -80px; left: 0; width: 100%; display: flex; justify-content: center; 
-                opacity: 0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 10; padding-bottom: 20px;
-            }
-            .mh-product-card:hover .mh-product-actions { bottom: 0; opacity: 1; }
-            
-            .mh-product-grid .mh-action-btn { 
-                display: flex !important; align-items: center !important; justify-content: center !important; 
-                padding: 0 !important; margin: 0 !important; text-decoration: none !important; cursor: pointer !important;
-                line-height: 1 !important; transition: all 0.3s ease !important;
-            }
-            .mh-product-grid .mh-action-btn svg { fill: currentColor; }
-
-            .mh-product-info { display: flex; flex-direction: column; flex-grow: 1; }
-            .mh-product-cat { text-transform: uppercase; font-weight: 500; }
-            .mh-product-cat a { text-decoration: none; transition: color 0.3s; }
-            .mh-product-title { font-weight: 600; line-height: 1.4; }
-            .mh-product-title a { text-decoration: none; transition: color 0.3s; }
-            .mh-product-rating .star-rating { font-size: 13px; }
-            .mh-product-price { font-weight: 700; margin-top: auto; }
-            .mh-product-price del { font-weight: 400; margin-right: 5px; }
-            .mh-product-price ins { text-decoration: none; background: transparent; }
-            
-            /* Quick fix to prevent huge image stacks while gallery loads */
-            .mh-qv-body .woocommerce-product-gallery { opacity: 0; transition: opacity 0.3s; }
-            .mh-qv-body .woocommerce-product-gallery.loaded { opacity: 1; }
-            .mh-qv-body .woocommerce-product-gallery .woocommerce-product-gallery__image:not(:first-child) { display: none; }
-        </style>
-
         <div class="mh-product-grid">
             <?php
             while ( $loop->have_posts() ) : $loop->the_post();
@@ -249,179 +211,7 @@ class MH_Product_Grid_Widget extends Widget_Base {
             <?php endwhile; wp_reset_postdata(); ?>
         </div>
 
-        <script>
-            jQuery(document).ready(function($){
-                var mhAjaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
-                var mhNonce   = '<?php echo esc_attr( wp_create_nonce( 'mh_wishlist_nonce' ) ); ?>';
 
-                // Wishlist Toggle
-                $('.mh-product-grid .mh-advanced-wishlist-btn').off('click').on('click', function(e){
-                    e.preventDefault(); 
-                    var $btn = $(this);
-                    $btn.css({'opacity': '0.5', 'pointer-events': 'none'});
-                    $.post(mhAjaxUrl, { action: 'mh_wishlist_toggle', product_id: $btn.data('product-id'), security: mhNonce }, function(response) {
-                        $btn.css({'opacity': '1', 'pointer-events': 'auto'});
-                        if(response.success) {
-                            var status = response.data.status;
-                            if(status === 'added') {
-                                $btn.addClass('added').find('.mh-icon-normal').hide(); $btn.find('.mh-icon-added').show();
-                            } else {
-                                $btn.removeClass('added').find('.mh-icon-added').hide(); $btn.find('.mh-icon-normal').show();
-                            }
-                            $(document).trigger('mh_wishlist_updated', [status]);
-                        }
-                    });
-                });
-
-                // Quick View Load
-                if ($('#mh-quick-view-modal').length === 0) {
-                    $('body').append('<div id="mh-quick-view-modal" class="mh-qv-overlay"><div class="mh-qv-content"><span class="mh-qv-close"><i class="fas fa-times"></i></span><div class="mh-qv-body"></div></div></div>');
-                }
-
-                $('.mh-quick-view-trigger').on('click', function(e) {
-                    e.preventDefault();
-                    var product_id = $(this).attr('data-product-id');
-                    var template_id = $(this).attr('data-template-id'); 
-                    
-                    var $modal = $('#mh-quick-view-modal');
-                    var $body = $modal.find('.mh-qv-body');
-                    
-                    $body.html('<div style="text-align:center; padding: 50px;"><i class="fas fa-spinner fa-spin fa-3x"></i></div>');
-                    $modal.addClass('mh-open');
-                    
-                    $.post(mhAjaxUrl, { action: 'mh_quick_view_load', product_id: product_id, template_id: template_id }, function(response) {
-                        if (response.success) {
-                            $body.html(response.data);
-                            
-                            // 1. Re-init Variations
-                            if (typeof $.fn.wc_variation_form !== 'undefined') {
-                                $body.find('.variations_form').each(function() { $(this).wc_variation_form(); });
-                            }
-
-                            // 2. Elementor Native Handlers
-                            if (typeof window.elementorFrontend !== 'undefined') {
-                                window.elementorFrontend.elementsHandler.runReadyTrigger($body);
-                            }
-
-                            // 3. Inject + / - Qty Buttons
-                            $body.find('.quantity').each(function() {
-                                var $qtyWrapper = $(this);
-                                if ($qtyWrapper.find('.mh-qty-btn').length === 0) {
-                                    $qtyWrapper.prepend('<span class="mh-qty-btn mh-minus">-</span>');
-                                    $qtyWrapper.append('<span class="mh-qty-btn mh-plus">+</span>');
-                                }
-                            });
-
-                            // 🚀 THE FIX: MANUALLY BOOT UP THE SLICK SLIDER GALLERY IN THE POPUP!
-                            // We use a slight 150ms delay so the modal has time to animate open, allowing Slick to calculate the image widths perfectly.
-                            setTimeout(function() {
-                                if ($.fn.slick) {
-                                    var $mainSlider = $body.find('.mh-gallery-main-viewport');
-                                    var $thumbSlider = $body.find('.mh-gallery-thumb-slider');
-
-                                    if ($mainSlider.length && !$mainSlider.hasClass('slick-initialized')) {
-                                        $mainSlider.slick({
-                                            slidesToShow: 1,
-                                            slidesToScroll: 1,
-                                            arrows: true,
-                                            fade: true,
-                                            prevArrow: $body.find('.mh-main-prev'),
-                                            nextArrow: $body.find('.mh-main-next'),
-                                            asNavFor: $thumbSlider.length ? $thumbSlider : null
-                                        });
-                                    }
-
-                                    if ($thumbSlider.length && !$thumbSlider.hasClass('slick-initialized')) {
-                                        $thumbSlider.slick({
-                                            slidesToShow: 4,
-                                            slidesToScroll: 1,
-                                            asNavFor: $mainSlider.length ? $mainSlider : null,
-                                            arrows: true,
-                                            focusOnSelect: true,
-                                            prevArrow: $body.find('.mh-thumb-prev'),
-                                            nextArrow: $body.find('.mh-thumb-next')
-                                        });
-                                    }
-                                }
-                            }, 150);
-                        }
-                    });
-                });
-
-                // Close Modal Logic
-                $(document).on('click', '.mh-qv-close, .mh-qv-close *', function(e) {
-                    $('#mh-quick-view-modal').removeClass('mh-open');
-                });
-                
-                $(document).on('click', '.mh-qv-overlay', function(e) {
-                    if ($(e.target).hasClass('mh-qv-overlay')) {
-                        $('#mh-quick-view-modal').removeClass('mh-open');
-                    }
-                });
-
-                // QTY Buttons Logic
-                $(document).on('click', '.mh-qty-btn', function() {
-                    var $qtyInput = $(this).siblings('.qty');
-                    var currentVal = parseFloat($qtyInput.val()) || 0;
-                    if ($(this).hasClass('mh-plus')) {
-                        $qtyInput.val(currentVal + 1);
-                    } else {
-                        if (currentVal > 1) { $qtyInput.val(currentVal - 1); }
-                    }
-                    $qtyInput.trigger('change');
-                });
-
-                // Custom AJAX Add to Cart
-                $(document).off('submit', '.mh-qv-add-to-cart-wrap form.cart').on('submit', '.mh-qv-add-to-cart-wrap form.cart', function(e) {
-                    e.preventDefault();
-                    var $form = $(this);
-                    var $btn = $form.find('button[type="submit"]');
-                    var $wrap = $form.closest('.mh-qv-add-to-cart-wrap');
-                    
-                    var productId = $wrap.attr('data-product-id') || $form.find('input[name="product_id"]').val() || $btn.attr('value') || $btn.val();
-                    
-                    if (!productId) { $btn.text('ID Error'); return; }
-
-                    var formData = $form.serialize();
-                    formData += '&action=mh_qv_add_to_cart';
-                    formData += '&product_id=' + productId;
-
-                    var missingAttributes = false;
-                    $form.find('.mh-qv-attr-select').each(function() {
-                        if ($(this).val() === '') { missingAttributes = true; }
-                    });
-
-                    if (missingAttributes) {
-                        $btn.text('Please select options');
-                        setTimeout(function(){ $btn.text('Add to cart'); }, 2000);
-                        return;
-                    }
-
-                    $btn.addClass('loading').text('Adding...');
-
-                    $.post(mhAjaxUrl, formData, function(response) {
-                        if (response && response.fragments) {
-                            $(document.body).trigger('added_to_cart', [response.fragments, response.cart_hash, $btn]);
-                            $btn.text('Added to Cart!');
-                            setTimeout(function() {
-                                $('#mh-quick-view-modal').removeClass('mh-open');
-                                $btn.removeClass('loading').text('Add to cart'); 
-                            }, 1500);
-                        } else if (response && response.success === false) {
-                            var errorMsg = response.data && response.data.message ? response.data.message : 'Cart Error';
-                            $btn.removeClass('loading').text(errorMsg);
-                            setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
-                        } else {
-                            $btn.removeClass('loading').text('Cart Error');
-                            setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
-                        }
-                    }).fail(function() {
-                        $btn.removeClass('loading').text('Server Error');
-                        setTimeout(function(){ $btn.text('Add to cart'); }, 3000);
-                    });
-                });
-            });
-        </script>
         <?php
     }
 }

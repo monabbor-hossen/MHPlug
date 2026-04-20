@@ -23,6 +23,9 @@ class MH_Nav_Menu_Widget extends Widget_Base {
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'menu', 'nav', 'header', 'hamburger', 'dropdown', 'border', 'align' ]; }
 
+    public function get_style_depends() { return [ 'mh-nav-menu-css' ]; }
+    public function get_script_depends() { return [ 'mh-nav-menu-js' ]; }
+
     private function get_available_menus() {
         $menus = wp_get_nav_menus();
         $options = [ '' => __( '— Select a Menu —', 'mh-plug' ) ]; 
@@ -438,7 +441,13 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             </div>
 
             <div class="mh-nav-desktop">
-                <?php wp_nav_menu([ 'menu' => $menu_slug, 'menu_class' => 'mh-menu', 'container' => false ]); ?>
+                <?php 
+                $menu_classes = 'mh-menu';
+                if ( $display === 'click' ) {
+                    $menu_classes .= ' mh-submenu-click';
+                }
+                wp_nav_menu([ 'menu' => $menu_slug, 'menu_class' => $menu_classes, 'container' => false ]); 
+                ?>
             </div>
 
             <div class="mh-nav-mobile-panel">
@@ -447,56 +456,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         </div>
 
-        <script>
-            jQuery(document).ready(function($) {
-                var $wrapper = $('.mh-nav-wrapper-<?php echo esc_attr( $widget_id ); ?>');
-                
-                // 1. Mobile Menu Logic
-                $wrapper.find('.mh-nav-mobile-toggle').on('click', function() {
-                    $wrapper.find('.mh-nav-mobile-panel').slideToggle(300);
-                    $(this).find('i').toggleClass('fa-bars fa-times');
-                });
-
-                $wrapper.find('.mh-nav-mobile-panel .menu-item-has-children').each(function() {
-                    $(this).prepend('<div class="mh-mobile-caret"><i class="fas fa-chevron-down"></i></div>');
-                });
-
-                $wrapper.find('.mh-mobile-caret').on('click', function(e) {
-                    e.preventDefault();
-                    $(this).parent('li').children('.sub-menu').slideToggle(300);
-                    $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up'); // Ensure the caret rotates smoothly
-                });
-
-                // 2. Desktop Click Display Logic (Using new opacity/visibility classes)
-                <?php if ( $display === 'click' ) : ?>
-                    $wrapper.find('.mh-nav-desktop .menu-item-has-children > a').on('click', function(e) {
-                        if ($(this).attr('href') === '#' || $(this).attr('href') === '') {
-                            e.preventDefault();
-                        }
-                        var $submenu = $(this).siblings('.sub-menu');
-                        if($submenu.css('opacity') === '0') {
-                            $submenu.css({'opacity': '1', 'visibility': 'visible', 'pointer-events': 'auto', 'transform': 'translateY(0)'});
-                            $(this).find('.sub-icon').css('transform', 'rotate(180deg)');
-                        } else {
-                            $submenu.css({'opacity': '0', 'visibility': 'hidden', 'pointer-events': 'none', 'transform': 'translateY(15px)'});
-                            $(this).find('.sub-icon').css('transform', 'rotate(0deg)');
-                        }
-                    });
-                <?php endif; ?>
-
-                // 3. Smooth Scroll Logic
-                var scrollSpeed = parseInt($wrapper.data('speed')) || 500;
-                $wrapper.find('a[href^="#"]').not('[href="#"]').on('click', function(e) {
-                    var target = $(this.getAttribute('href'));
-                    if (target.length) {
-                        e.preventDefault();
-                        $wrapper.find('.mh-nav-mobile-panel').slideUp(300);
-                        $wrapper.find('.mh-nav-mobile-toggle i').removeClass('fa-times').addClass('fa-bars');
-                        $('html, body').stop().animate({ scrollTop: target.offset().top - 80 }, scrollSpeed);
-                    }
-                });
-            });
-        </script>
         <?php
     }
 }

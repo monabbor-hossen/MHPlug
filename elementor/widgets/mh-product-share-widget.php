@@ -21,6 +21,8 @@ class MH_Product_Share_Widget extends Widget_Base {
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'product', 'share', 'social', 'facebook', 'twitter', 'whatsapp', 'mh' ]; }
 
+    public function get_style_depends() { return [ 'mh-widgets-css' ]; }
+
     protected function register_controls() {
 
         /* ── CONTENT: PLATFORMS ── */
@@ -188,14 +190,6 @@ class MH_Product_Share_Widget extends Widget_Base {
         $is_official = $settings['icon_color_type'] === 'official';
 
         ?>
-        <style>
-            .mh-share-wrapper { display: flex; align-items: center; flex-wrap: wrap; }
-            .mh-share-label { font-weight: 600; margin-bottom: 0; }
-            .mh-share-icons-container { display: flex; align-items: center; flex-wrap: wrap; }
-            .mh-share-icon { display: inline-flex; align-items: center; justify-content: center; text-decoration: none !important; transition: all 0.3s ease; cursor: pointer; }
-            .mh-share-icon:hover { transform: translateY(-2px); }
-        </style>
-
         <div class="mh-share-wrapper">
             <?php if ( ! empty( $settings['share_label'] ) ) : ?>
                 <div class="mh-share-label"><?php echo esc_html( $settings['share_label'] ); ?></div>

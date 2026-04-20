@@ -18,6 +18,9 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
     public function get_icon() { return 'eicon-heart'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
+    public function get_style_depends() { return [ 'mh-widgets-css' ]; }
+    public function get_script_depends() { return [ 'mh-widgets-js' ]; }
+
     protected function register_controls() {
 
         /* ── CONTENT: LOGIC & BEHAVIOR ── */
@@ -193,22 +196,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
         $svg_filled = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg>';
 
         ?>
-        <style>
-            .mh-advanced-wishlist-btn { display: inline-flex; align-items: center; cursor: pointer; transition: color 0.3s ease; }
-            .mh-icon-wrap { display: inline-flex; align-items: center; justify-content: center; }
-            .mh-icon-wrap svg { transition: transform 0.3s ease, fill 0.3s ease; }
-            
-            /* Hover Pop Animation */
-            .mh-advanced-wishlist-btn:hover .mh-icon-wrap svg { transform: scale(1.15); }
-            
-            /* Logic for showing Empty vs Filled Heart */
-            .mh-advanced-wishlist-btn .mh-icon-added { display: none; }
-            .mh-advanced-wishlist-btn .mh-icon-normal { display: inline-flex; }
-            
-            .mh-advanced-wishlist-btn.added .mh-icon-normal { display: none !important; }
-            .mh-advanced-wishlist-btn.added .mh-icon-added { display: inline-flex !important; }
-        </style>
-
         <div class="mh-advanced-wishlist-wrap">
             <a href="<?php echo esc_url( $current_href ); ?>" 
                class="mh-advanced-wishlist-btn <?php echo $in_wishlist ? 'added' : ''; ?>" 
@@ -233,57 +220,6 @@ class MH_Wishlist_Button_Widget extends Widget_Base {
             </a>
         </div>
 
-        <script>
-            jQuery(document).ready(function($){
-                var mhAjaxUrl = '<?php echo esc_url( $ajax_url ); ?>';
-                var mhNonce   = '<?php echo esc_attr( $nonce ); ?>';
-
-                $('.mh-advanced-wishlist-btn').off('click.mhSmartWishlist').on('click.mhSmartWishlist', function(e){
-                    var $btn = $(this);
-                    var behavior = $btn.data('behavior');
-                    
-                    if( behavior === 'browse' && $btn.hasClass('added') ) { return; }
-                    
-                    e.preventDefault(); 
-                    
-                    var pid = $btn.data('product-id');
-                    $btn.css({'opacity': '0.5', 'pointer-events': 'none'});
-
-                    $.post(mhAjaxUrl, {
-                        action: 'mh_wishlist_toggle',
-                        product_id: pid,
-                        security: mhNonce
-                    }, function(response) {
-                        $btn.css({'opacity': '1', 'pointer-events': 'auto'});
-                        
-                        if(response.success) {
-                            var status = response.data.status;
-                            var $label = $btn.find('.mh-wishlist-label');
-                            
-                            if(status === 'added') {
-                                $btn.addClass('added');
-                                
-                                if(behavior === 'browse') {
-                                    if($label.length) $label.text($btn.data('browse-text'));
-                                    $btn.attr('href', $btn.data('wishlist-url'));
-                                } else {
-                                    if($label.length) $label.text($btn.data('remove-text'));
-                                }
-                            } else {
-                                $btn.removeClass('added');
-                                if($label.length) $label.text($btn.data('add-text'));
-                                $btn.attr('href', '#');
-                            }
-                            
-                            $(document).trigger('mh_wishlist_updated', [status]);
-
-                        } else {
-                            alert(response.data.message || 'Please log in to add to wishlist.');
-                        }
-                    });
-                });
-            });
-        </script>
         <?php
     }
 }

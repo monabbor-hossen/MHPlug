@@ -16,13 +16,15 @@ final class MH_Elementor_Loader {
     }
 
     private function __construct() {
-        // 🚀 THE FIX: We removed the redundant 'plugins_loaded' check because
-        // mh-plug.php already guarantees Elementor is loaded before this file runs.
-        // We bind directly to Elementor's native hooks immediately!
         add_action('elementor/elements/categories_registered', [$this, 'register_widget_category']);
         add_action('elementor/widgets/register', [$this, 'register_widgets']);
         add_action('elementor/editor/before_enqueue_scripts', [$this, 'print_inline_editor_styles']);
-        
+
+        // Register general widget assets (non-WC dependent)
+        add_action( 'wp_enqueue_scripts', [$this, 'mh_plug_register_widget_assets'] );
+        add_action( 'elementor/frontend/after_register_scripts', [$this, 'mh_plug_register_widget_assets'] );
+
+        // Register WooCommerce-specific scripts
         add_action( 'wp_enqueue_scripts', [$this, 'mh_plug_enqueue_woo_scripts'] );
         add_action( 'elementor/frontend/after_register_scripts', [$this, 'mh_plug_enqueue_woo_scripts'] );
     }
@@ -123,42 +125,100 @@ final class MH_Elementor_Loader {
         }
     }
 
+    /**
+     * Register general (non-WC) widget assets.
+     * Loaded on demand via get_style_depends() / get_script_depends().
+     */
+    public function mh_plug_register_widget_assets() {
+
+        // ── Consolidated Widget CSS ──
+        $css_path_widgets = MH_PLUG_PATH . 'elementor/assets/css/mh-widgets.css';
+        wp_register_style(
+            'mh-widgets-css',
+            MH_PLUG_URL . 'elementor/assets/css/mh-widgets.css',
+            [],
+            file_exists( $css_path_widgets ) ? filemtime( $css_path_widgets ) : MH_PLUG_VERSION
+        );
+
+        // ── Consolidated Widget JS ──
+        $js_path_widgets = MH_PLUG_PATH . 'elementor/assets/js/mh-widgets.js';
+        wp_register_script(
+            'mh-widgets-js',
+            MH_PLUG_URL . 'elementor/assets/js/mh-widgets.js',
+            [ 'jquery' ],
+            file_exists( $js_path_widgets ) ? filemtime( $js_path_widgets ) : MH_PLUG_VERSION,
+            true
+        );
+
+        // ── Nav Menu CSS ──
+        $css_path_nav = MH_PLUG_PATH . 'elementor/assets/css/mh-nav-menu.css';
+        wp_register_style(
+            'mh-nav-menu-css',
+            MH_PLUG_URL . 'elementor/assets/css/mh-nav-menu.css',
+            [],
+            file_exists( $css_path_nav ) ? filemtime( $css_path_nav ) : MH_PLUG_VERSION
+        );
+
+        // ── Nav Menu JS ──
+        $js_path_nav = MH_PLUG_PATH . 'elementor/assets/js/mh-nav-menu.js';
+        wp_register_script(
+            'mh-nav-menu-js',
+            MH_PLUG_URL . 'elementor/assets/js/mh-nav-menu.js',
+            [ 'jquery' ],
+            file_exists( $js_path_nav ) ? filemtime( $js_path_nav ) : MH_PLUG_VERSION,
+            true
+        );
+    }
+
+    /**
+     * Register and enqueue WooCommerce-specific scripts.
+     */
     public function mh_plug_enqueue_woo_scripts() {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return;
         }
 
-        // Standard Woo Scripts
+        // ── Core Woo Scripts ──
         $js_path_universal = MH_PLUG_PATH . 'elementor/assets/js/mh-woo-scripts.js';
         wp_register_script(
             'mh-woo-scripts',
             MH_PLUG_URL . 'elementor/assets/js/mh-woo-scripts.js',
             [ 'jquery' ],
             file_exists( $js_path_universal ) ? filemtime( $js_path_universal ) : MH_PLUG_VERSION,
-            true 
+            true
         );
 
-        // Gallery Script
+        // ── Gallery Script ──
         $js_path_gallery = MH_PLUG_PATH . 'elementor/assets/js/mh-product-gallery.js';
         wp_register_script(
             'mh-product-gallery-script',
             MH_PLUG_URL . 'elementor/assets/js/mh-product-gallery.js',
-            [ 'jquery', 'slick-js' ],
+            [ 'jquery', 'mh-slick-js' ],
             file_exists( $js_path_gallery ) ? filemtime( $js_path_gallery ) : MH_PLUG_VERSION,
-            true 
+            true
         );
 
-        wp_enqueue_script('mh-woo-scripts');
-        
+        // Make mh-widgets-js depend on mh-woo-scripts when WC is active
+        wp_script_add_data( 'mh-widgets-js', 'group', 1 );
+
+        // Always enqueue core woo scripts
+        wp_enqueue_script( 'mh-woo-scripts' );
+
         if ( is_product() ) {
-            wp_enqueue_script('mh-product-gallery-script');
+            wp_enqueue_script( 'mh-product-gallery-script' );
         }
 
+        // ── Localized AJAX object ──
         $ajax_data = [
-            'ajax_url'  => admin_url( 'admin-ajax.php' ),
-            'login_url' => wc_get_page_permalink( 'myaccount' )
+            'ajax_url'       => admin_url( 'admin-ajax.php' ),
+            'login_url'      => wc_get_page_permalink( 'myaccount' ),
+            'wishlist_nonce' => wp_create_nonce( 'mh_wishlist_nonce' ),
         ];
-        wp_add_inline_script( 'mh-woo-scripts', 'var mh_plug_ajax = ' . wp_json_encode( $ajax_data ) . ';', 'before' );
+        wp_add_inline_script(
+            'mh-woo-scripts',
+            'var mh_plug_ajax = ' . wp_json_encode( $ajax_data ) . ';',
+            'before'
+        );
     }
 
 }
