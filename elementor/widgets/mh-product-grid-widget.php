@@ -1,7 +1,7 @@
 <?php
 /**
  * MH Product Grid Widget
- * Fully Customizable version + Theme Builder Template Support for Quick View.
+ * Fully Customizable version + Theme Builder Template Support & Gallery Fixes.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,7 +21,6 @@ class MH_Product_Grid_Widget extends Widget_Base {
     public function get_icon() { return 'eicon-products'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
-    // 🚀 THE FIX: Now specifically queries YOUR custom Theme Builder templates!
     private function get_elementor_templates() {
         $templates = [ '' => __( 'Default (Built-in Layout)', 'mh-plug' ) ];
         $query = new \WP_Query( [ 
@@ -151,6 +150,13 @@ class MH_Product_Grid_Widget extends Widget_Base {
         if ( ! class_exists( 'WooCommerce' ) ) return;
         $settings = $this->get_settings_for_display();
 
+        // 🚀 FORCE WOOCOMMERCE GALLERY SCRIPTS TO LOAD ON THIS PAGE
+        wp_enqueue_script( 'zoom' );
+        wp_enqueue_script( 'flexslider' );
+        wp_enqueue_script( 'photoswipe-ui-default' );
+        wp_enqueue_script( 'wc-single-product' );
+        wp_enqueue_style( 'photoswipe-default-skin' );
+
         $args = [ 'post_type' => 'product', 'post_status' => 'publish', 'ignore_sticky_posts' => 1, 'posts_per_page' => $settings['posts_per_page'] ];
         switch ( $settings['query_type'] ) {
             case 'best_sellers': $args['meta_key'] = 'total_sales'; $args['orderby'] = 'meta_value_num'; break;
@@ -197,6 +203,11 @@ class MH_Product_Grid_Widget extends Widget_Base {
             .mh-product-price { font-weight: 700; margin-top: auto; }
             .mh-product-price del { font-weight: 400; margin-right: 5px; }
             .mh-product-price ins { text-decoration: none; background: transparent; }
+            
+            /* Quick fix to prevent huge image stacks while gallery loads */
+            .mh-qv-body .woocommerce-product-gallery { opacity: 0; transition: opacity 0.3s; }
+            .mh-qv-body .woocommerce-product-gallery.loaded { opacity: 1; }
+            .mh-qv-body .woocommerce-product-gallery .woocommerce-product-gallery__image:not(:first-child) { display: none; }
         </style>
 
         <div class="mh-product-grid">
@@ -269,7 +280,6 @@ class MH_Product_Grid_Widget extends Widget_Base {
 
                 $('.mh-quick-view-trigger').on('click', function(e) {
                     e.preventDefault();
-                    // 🚀 THE FIX: Safely grab the template ID using jQuery .attr() to avoid caching bugs
                     var product_id = $(this).attr('data-product-id');
                     var template_id = $(this).attr('data-template-id'); 
                     
@@ -283,10 +293,26 @@ class MH_Product_Grid_Widget extends Widget_Base {
                         if (response.success) {
                             $body.html(response.data);
                             
+                            // 🚀 THE FIX: RE-BOOT WOOCOMMERCE & ELEMENTOR JS IN THE POPUP
+                            
+                            // 1. Re-init Variations
                             if (typeof $.fn.wc_variation_form !== 'undefined') {
                                 $body.find('.variations_form').each(function() { $(this).wc_variation_form(); });
                             }
 
+                            // 2. Re-init WooCommerce Native Gallery
+                            if (typeof $.fn.wc_product_gallery !== 'undefined') {
+                                $body.find('.woocommerce-product-gallery').each(function() {
+                                    $(this).wc_product_gallery();
+                                });
+                            }
+
+                            // 3. Re-init Elementor Custom Widgets (Sliders, Swiper, etc.)
+                            if (typeof window.elementorFrontend !== 'undefined') {
+                                window.elementorFrontend.elementsHandler.runReadyTrigger($body);
+                            }
+
+                            // Inject + / - Qty Buttons
                             $body.find('.quantity').each(function() {
                                 var $qtyWrapper = $(this);
                                 if ($qtyWrapper.find('.mh-qty-btn').length === 0) {
@@ -294,6 +320,11 @@ class MH_Product_Grid_Widget extends Widget_Base {
                                     $qtyWrapper.append('<span class="mh-qty-btn mh-plus">+</span>');
                                 }
                             });
+
+                            // Remove the hidden loading state from the gallery
+                            setTimeout(function(){
+                                $body.find('.woocommerce-product-gallery').addClass('loaded');
+                            }, 100);
                         }
                     });
                 });
