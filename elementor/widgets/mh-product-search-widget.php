@@ -1,6 +1,7 @@
 <?php
 /**
  * MH Product Search Widget (Live AJAX Search)
+ * Fully Responsive & Optimized AJAX Script included.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,6 +12,7 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Box_Shadow;
 use Elementor\Icons_Manager;
 
 class MH_Plug_Product_Search_Widget extends Widget_Base {
@@ -20,14 +22,6 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
     public function get_icon() { return 'eicon-search'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'search', 'product', 'ajax', 'live', 'woocommerce' ]; }
-
-    // Tell Elementor to load our scripts so the AJAX works
-    public function get_script_depends() {
-        return [ 'mh-woo-scripts', 'mh-widgets-js' ];
-    }
-    public function get_style_depends() {
-        return [ 'mh-widgets-css' ];
-    }
 
     protected function register_controls() {
         
@@ -50,17 +44,14 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         $this->add_control( 'search_icon', [
             'label'     => __( 'Search Icon', 'mh-plug' ),
             'type'      => Controls_Manager::ICONS,
-            'default'   => [
-                'value'   => 'fas fa-search',
-                'library' => 'fa-solid',
-            ],
+            'default'   => [ 'value' => 'fas fa-search', 'library' => 'fa-solid' ],
             'condition' => [ 'design_style' => 'modern' ],
         ] );
 
         $this->add_control( 'placeholder', [
             'label'   => __( 'Placeholder Text', 'mh-plug' ),
             'type'    => Controls_Manager::TEXT,
-            'default' => __( 'Search for premium vapes, pods, devices...', 'mh-plug' ),
+            'default' => __( 'Search for premium vapes, pods...', 'mh-plug' ),
         ] );
 
         $this->add_control( 'not_found_text', [
@@ -71,7 +62,7 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
 
         $this->end_controls_section();
 
-        /* ── STYLE ── */
+        /* ── STYLE: INPUT ── */
         $this->start_controls_section( 'style_input_section', [
             'label' => __( 'Input Style', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
@@ -85,18 +76,21 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         $this->add_control( 'input_bg', [
             'label'     => __( 'Background Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
+            'default'   => '#f1f1f1',
             'selectors' => [ '{{WRAPPER}} .mh-search-input' => 'background-color: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'input_color', [
             'label'     => __( 'Text Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
+            'default'   => '#333333',
             'selectors' => [ '{{WRAPPER}} .mh-search-input' => 'color: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'placeholder_color', [
             'label'     => __( 'Placeholder Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
+            'default'   => '#888888',
             'selectors' => [ 
                 '{{WRAPPER}} .mh-search-input::placeholder' => 'color: {{VALUE}}; opacity: 1;',
                 '{{WRAPPER}} .mh-search-input:-ms-input-placeholder' => 'color: {{VALUE}};',
@@ -104,21 +98,28 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
             ],
         ] );
 
+        $this->add_responsive_control( 'input_padding', [
+            'label'      => __( 'Padding', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', 'em', '%' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-search-input' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+        ] );
+
         $this->add_group_control( Group_Control_Border::get_type(), [
             'name'      => 'input_border',
             'selector'  => '{{WRAPPER}} .mh-search-input',
-            'separator' => 'before',
         ] );
 
-        $this->add_control( 'input_radius', [
+        $this->add_responsive_control( 'input_radius', [
             'label'      => __( 'Border Radius', 'mh-plug' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-search-input' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ],
+            'selectors'  => [ '{{WRAPPER}} .mh-search-input' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
         $this->end_controls_section();
 
+        /* ── STYLE: ICON ── */
         $this->start_controls_section( 'style_icon_section', [
             'label'     => __( 'Icon Style', 'mh-plug' ),
             'tab'       => Controls_Manager::TAB_STYLE,
@@ -128,10 +129,8 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         $this->add_control( 'icon_color', [
             'label'     => __( 'Icon Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
-            'selectors' => [ 
-                '{{WRAPPER}} .mh-search-icon i' => 'color: {{VALUE}};',
-                '{{WRAPPER}} .mh-search-icon svg' => 'fill: {{VALUE}};',
-            ],
+            'default'   => '#888888',
+            'selectors' => [ '{{WRAPPER}} .mh-search-icon i, {{WRAPPER}} .mh-search-spinner i' => 'color: {{VALUE}};', '{{WRAPPER}} .mh-search-icon svg' => 'fill: {{VALUE}};' ],
         ] );
 
         $this->add_responsive_control( 'icon_size', [
@@ -140,9 +139,37 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
             'size_units' => [ 'px' ],
             'range'      => [ 'px' => [ 'min' => 10, 'max' => 50 ] ],
             'selectors'  => [
-                '{{WRAPPER}} .mh-search-icon i' => 'font-size: {{SIZE}}{{UNIT}};',
+                '{{WRAPPER}} .mh-search-icon i, {{WRAPPER}} .mh-search-spinner i' => 'font-size: {{SIZE}}{{UNIT}};',
                 '{{WRAPPER}} .mh-search-icon svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
             ],
+        ] );
+
+        $this->add_responsive_control( 'icon_spacing', [
+            'label'      => __( 'Icon Left Position', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px' ],
+            'range'      => [ 'px' => [ 'min' => 0, 'max' => 50 ] ],
+            'selectors'  => [ '{{WRAPPER}} .mh-search-icon' => 'left: {{SIZE}}{{UNIT}};' ],
+        ] );
+
+        $this->end_controls_section();
+
+        /* ── STYLE: DROPDOWN RESULTS ── */
+        $this->start_controls_section( 'style_results_section', [
+            'label' => __( 'Dropdown Results', 'mh-plug' ),
+            'tab'   => Controls_Manager::TAB_STYLE,
+        ] );
+
+        $this->add_control( 'results_bg', [
+            'label'     => __( 'Background Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#ffffff',
+            'selectors' => [ '{{WRAPPER}} .mh-search-results' => 'background-color: {{VALUE}};' ],
+        ] );
+
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
+            'name'     => 'results_shadow',
+            'selector' => '{{WRAPPER}} .mh-search-results',
         ] );
 
         $this->end_controls_section();
@@ -152,21 +179,41 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         $settings = $this->get_settings_for_display();
         $design   = $settings['design_style'];
         $icon     = $settings['search_icon'];
-
-        // Determine inline styles based on the chosen design
-        if ( $design === 'modern' ) {
-            $input_style = "width: 100%; padding: 12px 15px 12px 45px; background-color: #f1f1f1; border: none; border-radius: 4px; outline: none;";
-        } else {
-            $input_style = "width: 100%; padding: 12px 15px; background-color: #fff; border: 1px solid #ddd; border-radius: 4px; outline: none;";
-        }
+        $not_found = esc_attr( $settings['not_found_text'] );
         ?>
-        <div class="mh-live-search-wrapper" style="position: relative; width: 100%;">
+
+        <style>
+            .mh-live-search-wrapper { position: relative; width: 100%; display: block; }
+            .mh-search-form { position: relative; display: flex; align-items: center; margin: 0; width: 100%; }
             
-            <form role="search" method="get" class="mh-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" style="position: relative; display: flex; align-items: center; margin: 0;">
+            /* Input Base Styles */
+            .mh-search-input { width: 100%; outline: none; transition: 0.3s; }
+            .mh-search-input::-webkit-search-cancel-button { cursor: pointer; }
+            
+            /* Modern Design specific overrides */
+            <?php if ( $design === 'modern' ) : ?>
+                /* Fallback padding if Elementor control isn't set yet */
+                .mh-search-input { padding-left: 45px; } 
+                .mh-search-icon { position: absolute; left: 15px; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 2; }
+            <?php endif; ?>
+            
+            .mh-search-spinner { position: absolute; right: 15px; display: none; z-index: 2; }
+            
+            /* Results Dropdown */
+            .mh-search-results { 
+                display: none; position: absolute; top: calc(100% + 5px); left: 0; width: 100%; 
+                z-index: 99999; border-radius: 4px; max-height: 400px; overflow-y: auto; 
+            }
+            .mh-search-results a { transition: background 0.2s; }
+            .mh-search-results a:hover { background: #f9f9f9; }
+        </style>
+
+        <div class="mh-live-search-wrapper">
+            <form role="search" method="get" class="mh-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
                 <input type="hidden" name="post_type" value="product">
                 
                 <?php if ( $design === 'modern' && ! empty( $icon['value'] ) ) : ?>
-                    <span class="mh-search-icon" style="position: absolute; left: 15px; display: flex; align-items: center; justify-content: center; color: #888; pointer-events: none;">
+                    <span class="mh-search-icon">
                         <?php Icons_Manager::render_icon( $icon, [ 'aria-hidden' => 'true' ] ); ?>
                     </span>
                 <?php endif; ?>
@@ -176,15 +223,60 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                     name="s"
                     class="mh-search-input" 
                     placeholder="<?php echo esc_attr( $settings['placeholder'] ); ?>" 
-                    data-not-found="<?php echo esc_attr( $settings['not_found_text'] ); ?>"
                     autocomplete="off"
-                    style="<?php echo esc_attr( $input_style ); ?>"
                 >
+                
+                <span class="mh-search-spinner"><i class="fas fa-spinner fa-spin"></i></span>
             </form>
             
-            <div class="mh-search-results" style="display: none; position: absolute; top: calc(100% + 5px); left: 0; width: 100%; background: #fff; z-index: 9999; border: 1px solid #eee; border-radius: 4px; box-shadow: 0 10px 20px rgba(0,0,0,0.08); max-height: 400px; overflow-y: auto;">
-                </div>
+            <div class="mh-search-results"></div>
         </div>
+
+        <script>
+            jQuery(document).ready(function($) {
+                var ajaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
+                var searchTimer;
+                var notFoundText = '<?php echo $not_found; ?>';
+
+                $('.mh-search-input').on('keyup', function() {
+                    var keyword = $(this).val().trim();
+                    var $wrapper = $(this).closest('.mh-live-search-wrapper');
+                    var $results = $wrapper.find('.mh-search-results');
+                    var $spinner = $wrapper.find('.mh-search-spinner');
+
+                    // Clear previous timer if typing continues
+                    clearTimeout(searchTimer);
+
+                    // If less than 3 characters, hide results to save server resources
+                    if (keyword.length < 3) {
+                        $results.hide().empty();
+                        $spinner.hide();
+                        return;
+                    }
+
+                    $spinner.show();
+
+                    // Wait 500ms after the user STOPS typing before sending request (Debouncing)
+                    searchTimer = setTimeout(function() {
+                        $.post(ajaxUrl, { action: 'mh_live_product_search', keyword: keyword }, function(response) {
+                            $spinner.hide();
+                            if (response.success && response.data !== '') {
+                                $results.html(response.data).slideDown(200);
+                            } else {
+                                $results.html('<div style="padding: 15px; color: #888; text-align: center;">' + notFoundText + '</div>').slideDown(200);
+                            }
+                        });
+                    }, 500); 
+                });
+
+                // Hide dropdown when clicking outside the search box
+                $(document).on('click', function(e) {
+                    if (!$(e.target).closest('.mh-live-search-wrapper').length) {
+                        $('.mh-search-results').hide();
+                    }
+                });
+            });
+        </script>
         <?php
     }
 }
