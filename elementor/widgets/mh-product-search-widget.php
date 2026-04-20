@@ -1,7 +1,7 @@
 <?php
 /**
  * MH Product Search Widget (Live AJAX Search)
- * Fully Responsive with Isolated CSS Variables for Ultimate Customization.
+ * Fully Responsive with Isolated CSS Variables, Padding Everywhere, and Fixed Morphing Placeholders.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -37,6 +37,16 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 'standard'   => __( 'Standard (Always Open)', 'mh-plug' ),
                 'expandable' => __( 'Dropdown Box (Icon Click)', 'mh-plug' ),
                 'slide_out'  => __( 'Morphing (Sliding Animation)', 'mh-plug' ),
+            ],
+        ] );
+
+        $this->add_control( 'design_style', [
+            'label'   => __( 'Input Design Style', 'mh-plug' ),
+            'type'    => Controls_Manager::SELECT,
+            'default' => 'modern',
+            'options' => [
+                'classic' => __( 'Classic (Standard Box)', 'mh-plug' ),
+                'modern'  => __( 'Modern (Icon Inside Input)', 'mh-plug' ),
             ],
         ] );
 
@@ -78,6 +88,12 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
             'label'     => __( 'Text Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}}' => '--std-in-c: {{VALUE}};' ],
+        ] );
+
+        $this->add_control( 'std_ph_color', [
+            'label'     => __( 'Placeholder Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'selectors' => [ '{{WRAPPER}}' => '--std-ph-c: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'std_icon_color', [
@@ -139,6 +155,13 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
             'selectors'  => [ '{{WRAPPER}}' => '--exp-box-w: {{SIZE}}{{UNIT}};' ],
         ] );
 
+        $this->add_responsive_control( 'exp_box_pad', [
+            'label'      => __( 'Dropdown Box Padding', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', 'em' ],
+            'selectors'  => [ '{{WRAPPER}}' => '--exp-box-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+        ] );
+
         $this->add_control( 'heading_exp_trigger', [ 'label' => __( 'Trigger Button', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
 
         $this->add_control( 'exp_trig_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-tr-c: {{VALUE}};' ] ] );
@@ -147,15 +170,23 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         $this->add_control( 'exp_trig_bg_h', [ 'label' => __( 'Hover Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-tr-hbg: {{VALUE}};' ] ] );
         
         $this->add_responsive_control( 'exp_trig_size', [ 'label' => __( 'Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}}' => '--exp-tr-s: {{SIZE}}{{UNIT}};' ] ] );
-        $this->add_responsive_control( 'exp_trig_pad', [ 'label' => __( 'Padding', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}}' => '--exp-tr-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'exp_trig_pad', [ 'label' => __( 'Button Padding', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}}' => '--exp-tr-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
         $this->add_responsive_control( 'exp_trig_rad', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}}' => '--exp-tr-r: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
 
         $this->add_control( 'heading_exp_input', [ 'label' => __( 'Inside Search Input', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
         
         $this->add_control( 'exp_in_bg', [ 'label' => __( 'Input Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-in-bg: {{VALUE}};' ] ] );
         $this->add_control( 'exp_in_c', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-in-c: {{VALUE}};' ] ] );
+        $this->add_control( 'exp_ph_color', [ 'label' => __( 'Placeholder Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-ph-c: {{VALUE}};' ] ] );
         $this->add_control( 'exp_ic_c', [ 'label' => __( 'Inside Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-ic-c: {{VALUE}};' ] ] );
         
+        $this->add_responsive_control( 'exp_in_pad', [
+            'label'      => __( 'Input Padding', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', 'em' ],
+            'selectors'  => [ '{{WRAPPER}}' => '--exp-in-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+        ] );
+
         $this->end_controls_section();
 
         /* ==========================================
@@ -195,7 +226,16 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
 
         $this->add_control( 'mor_in_bg', [ 'label' => __( 'Input Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-in-bg: {{VALUE}};' ] ] );
         $this->add_control( 'mor_in_c', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-in-c: {{VALUE}};' ] ] );
+        $this->add_control( 'mor_ph_color', [ 'label' => __( 'Placeholder Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-ph-c: {{VALUE}};' ] ] );
         $this->add_control( 'mor_ic_c', [ 'label' => __( 'Inside Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-ic-c: {{VALUE}};' ] ] );
+        
+        $this->add_responsive_control( 'mor_in_pad', [
+            'label'      => __( 'Expanded Input Padding', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', 'em' ],
+            'selectors'  => [ '{{WRAPPER}}' => '--mor-in-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+        ] );
+
         $this->add_responsive_control( 'mor_in_r', [ 'label' => __( 'Expanded Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}}' => '--mor-in-r: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
         
         $this->add_control( 'mor_bd_c', [ 'label' => __( 'Expanded Border Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-bd-c: {{VALUE}};' ] ] );
@@ -280,7 +320,7 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 echo "{$prefix}-standard.mh-live-search-wrapper { justify-content: center !important; }\n";
                 echo "{$prefix}-standard .mh-search-form { width: 100% !important; max-width: 100% !important; transition: none !important; background: transparent !important; border: none !important; }\n";
                 echo "{$prefix}-standard .mh-search-input { cursor: text !important; background-color: var(--std-in-bg, #f1f1f1) !important; color: var(--std-in-c, #333333) !important; padding: var(--std-in-p, 12px 15px 12px 45px) !important; border-radius: var(--std-in-r, 4px) !important; border: var(--std-bd-w, 0px) solid var(--std-bd-c, transparent) !important; }\n";
-                echo "{$prefix}-standard .mh-search-input::placeholder { color: var(--std-ph-c, #888888) !important; }\n";
+                echo "{$prefix}-standard .mh-search-input::placeholder { color: var(--std-ph-c, #888888) !important; opacity: 1 !important; }\n";
                 echo "{$prefix}-standard .mh-search-icon i, {$prefix}-standard .mh-search-icon svg, {$prefix}-standard .mh-search-spinner i { color: var(--std-ic-c, #888888) !important; fill: var(--std-ic-c, #888888) !important; font-size: var(--std-ic-s, 16px) !important; width: var(--std-ic-s, 16px) !important; height: var(--std-ic-s, 16px) !important; }\n";
                 echo "{$prefix}-standard .mh-search-results { position: absolute !important; top: calc(100% + 5px) !important; left: 0 !important; width: 100% !important; z-index: 99999 !important; border-radius: 4px !important; box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important; border: 1px solid #eee !important; margin: 0 !important; padding: 0 !important; max-height: 400px !important; overflow-y: auto !important; display: none; }\n";
 
@@ -288,11 +328,12 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 echo "{$prefix}-expandable .mh-search-trigger { display: flex !important; color: var(--exp-tr-c, #333333) !important; background-color: var(--exp-tr-bg, transparent) !important; padding: var(--exp-tr-p, 10px) !important; border-radius: var(--exp-tr-r, 4px) !important; }\n";
                 echo "{$prefix}-expandable .mh-search-trigger:hover { color: var(--exp-tr-hc, #d63638) !important; background-color: var(--exp-tr-hbg, transparent) !important; }\n";
                 echo "{$prefix}-expandable .mh-search-trigger i, {$prefix}-expandable .mh-search-trigger svg { font-size: var(--exp-tr-s, 20px) !important; width: var(--exp-tr-s, 20px) !important; height: var(--exp-tr-s, 20px) !important; }\n";
-                echo "{$prefix}-expandable .mh-search-expandable-container { position: absolute !important; top: calc(100% + 15px) !important; right: 0 !important; opacity: 0 !important; visibility: hidden !important; transform: translateY(10px) !important; background: #fff !important; padding: 15px !important; border-radius: 8px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important; max-width: 90vw !important; width: var(--exp-box-w, 320px) !important; z-index: 9999 !important; display: block; }\n";
+                echo "{$prefix}-expandable .mh-search-expandable-container { position: absolute !important; top: calc(100% + 15px) !important; right: 0 !important; opacity: 0 !important; visibility: hidden !important; transform: translateY(10px) !important; background: #fff !important; padding: var(--exp-box-p, 15px) !important; border-radius: 8px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important; max-width: 90vw !important; width: var(--exp-box-w, 320px) !important; z-index: 9999 !important; display: block; }\n";
                 echo "{$prefix}-expandable.mh-search-is-open .mh-search-expandable-container { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; }\n";
                 echo "{$prefix}-expandable.mh-live-search-wrapper { justify-content: flex-end !important; }\n";
                 echo "{$prefix}-expandable .mh-search-form { width: 100% !important; max-width: 100% !important; transition: none !important; background: transparent !important; border: none !important; }\n";
-                echo "{$prefix}-expandable .mh-search-input { cursor: text !important; background-color: var(--exp-in-bg, #f1f1f1) !important; color: var(--exp-in-c, #333333) !important; padding-left: 45px !important; padding-right: 15px !important; border-radius: 4px !important; }\n";
+                echo "{$prefix}-expandable .mh-search-input { cursor: text !important; background-color: var(--exp-in-bg, #f1f1f1) !important; color: var(--exp-in-c, #333333) !important; padding: var(--exp-in-p, 12px 15px 12px 45px) !important; border-radius: 4px !important; }\n";
+                echo "{$prefix}-expandable .mh-search-input::placeholder { color: var(--exp-ph-c, #888888) !important; opacity: 1 !important; }\n";
                 echo "{$prefix}-expandable .mh-search-icon i, {$prefix}-expandable .mh-search-icon svg { color: var(--exp-ic-c, #888888) !important; fill: var(--exp-ic-c, #888888) !important; }\n";
                 echo "{$prefix}-expandable .mh-search-results { position: static !important; box-shadow: none !important; border-top: 1px solid #eee !important; margin-top: 10px !important; padding-top: 10px !important; border: none !important; max-height: 400px !important; overflow-y: auto !important; display: none; }\n";
 
@@ -312,7 +353,8 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 
                 // Active Open State (Morphing)
                 echo "{$prefix}-slide_out.mh-search-is-open .mh-search-form { width: var(--mor-box-w, 320px) !important; }\n";
-                echo "{$prefix}-slide_out.mh-search-is-open .mh-search-input { cursor: text !important; background-color: var(--mor-in-bg, #ffffff) !important; color: var(--mor-in-c, #333333) !important; padding-left: 45px !important; padding-right: 15px !important; border-radius: var(--mor-in-r, 50px) !important; border: var(--mor-bd-w, 0px) solid var(--mor-bd-c, transparent) !important; }\n";
+                echo "{$prefix}-slide_out.mh-search-is-open .mh-search-input { cursor: text !important; background-color: var(--mor-in-bg, #ffffff) !important; color: var(--mor-in-c, #333333) !important; padding: var(--mor-in-p, 12px 15px 12px 45px) !important; border-radius: var(--mor-in-r, 50px) !important; border: var(--mor-bd-w, 0px) solid var(--mor-bd-c, transparent) !important; }\n";
+                echo "{$prefix}-slide_out.mh-search-is-open .mh-search-input::placeholder { color: var(--mor-ph-c, #888888) !important; opacity: 1 !important; }\n";
                 echo "{$prefix}-slide_out.mh-search-is-open .mh-search-icon { color: var(--mor-ic-c, #888888) !important; fill: var(--mor-ic-c, #888888) !important; pointer-events: none !important; }\n";
                 
                 echo "{$prefix}-slide_out .mh-search-results { position: absolute !important; top: calc(100% + 5px) !important; right: 0 !important; left: auto !important; width: var(--mor-box-w, 320px) !important; z-index: 99999 !important; border-radius: 4px !important; box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important; border: 1px solid #eee !important; margin: 0 !important; padding: 0 !important; max-height: 400px !important; overflow-y: auto !important; display: none; }\n";
