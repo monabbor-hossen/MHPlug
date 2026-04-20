@@ -3,7 +3,7 @@
  * MH Plug - Theme Builder Admin Page
  *
  * Template type slugs (authoritative):
- *   header | footer | single_post | single_product | archive_post | archive_product
+ * header | footer | single_post | single_product | archive_post | archive_product | quick_view
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -15,11 +15,10 @@ $is_wc_active = class_exists( 'WooCommerce' );
 
 <div class="wrap mh-plug-admin-wrap">
 
-    <!-- Header Area -->
     <div class="mh-tb-header">
         <div class="mh-tb-header-text">
             <h1 class="mh-plug-title"><?php esc_html_e( 'Theme Builder', 'mh-plug' ); ?></h1>
-            <p class="mh-tb-description"><?php esc_html_e( 'Create and manage custom Elementor templates for headers, footers, single posts, products, and archives.', 'mh-plug' ); ?></p>
+            <p class="mh-tb-description"><?php esc_html_e( 'Create and manage custom Elementor templates for headers, footers, single posts, products, archives, and quick views.', 'mh-plug' ); ?></p>
         </div>
         <div class="mh-tb-header-actions">
             <button class="mh-button mh-tb-action-create" id="mh-tb-create-btn">
@@ -31,7 +30,6 @@ $is_wc_active = class_exists( 'WooCommerce' );
         </div>
     </div>
 
-    <!-- Navigation Tabs (data-tab must match _mh_template_type slugs) -->
     <ul class="mh-tb-tabs">
         <li data-tab="all" class="active"><?php esc_html_e( 'All', 'mh-plug' ); ?></li>
         <li data-tab="header"><?php esc_html_e( 'Header', 'mh-plug' ); ?></li>
@@ -41,32 +39,31 @@ $is_wc_active = class_exists( 'WooCommerce' );
         <li data-tab="archive_product" class="<?php echo $is_wc_active ? '' : 'mh-disabled-tab'; ?>">
             <?php esc_html_e( 'Product Archive', 'mh-plug' ); ?>
             <?php if ( ! $is_wc_active ) : ?>
-                <span class="mh-tb-wc-req">(<?php esc_html_e( 'Requires WooCommerce', 'mh-plug' ); ?>)</span>
+                <span class="mh-tb-wc-req">(<?php esc_html_e( 'Requires Woo', 'mh-plug' ); ?>)</span>
             <?php endif; ?>
         </li>
         <li data-tab="single_product" class="<?php echo $is_wc_active ? '' : 'mh-disabled-tab'; ?>">
             <?php esc_html_e( 'Single Product', 'mh-plug' ); ?>
             <?php if ( ! $is_wc_active ) : ?>
-                <span class="mh-tb-wc-req">(<?php esc_html_e( 'Requires WooCommerce', 'mh-plug' ); ?>)</span>
+                <span class="mh-tb-wc-req">(<?php esc_html_e( 'Requires Woo', 'mh-plug' ); ?>)</span>
+            <?php endif; ?>
+        </li>
+        <li data-tab="quick_view" class="<?php echo $is_wc_active ? '' : 'mh-disabled-tab'; ?>">
+            <?php esc_html_e( 'Quick View', 'mh-plug' ); ?>
+            <?php if ( ! $is_wc_active ) : ?>
+                <span class="mh-tb-wc-req">(<?php esc_html_e( 'Requires Woo', 'mh-plug' ); ?>)</span>
             <?php endif; ?>
         </li>
     </ul>
 
-    <!-- Template Grid -->
     <div class="mh-tb-grid">
 
-        <!-- "Add New" Card -->
         <div class="mh-tb-card mh-tb-card-add-new" id="mh-tb-card-add-new" data-type="all">
             <div class="mh-tb-add-icon"><i class="dashicons dashicons-plus"></i></div>
             <h3><?php esc_html_e( 'Add New', 'mh-plug' ); ?></h3>
         </div>
 
         <?php
-        /**
-         * Query all mh_templates posts.
-         * We read _mh_template_type (new) then fall back to mh_template_type (old)
-         * via get_post_meta() in the loop — no meta_query needed here.
-         */
         $templates = new WP_Query( [
             'post_type'      => 'mh_templates',
             'posts_per_page' => -1,
@@ -74,7 +71,6 @@ $is_wc_active = class_exists( 'WooCommerce' );
             'no_found_rows'  => true,
         ] );
 
-        // Legacy slug → canonical slug map (display normalisation)
         $legacy_map = [
             'single'          => 'single_post',
             'product_single'  => 'single_product',
@@ -82,7 +78,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
             'product_archive' => 'archive_product',
         ];
 
-        // Icon map keyed by canonical slug
+        // 🚀 NEW: Added Quick View Icon
         $icon_map = [
             'header'          => 'dashicons-align-center',
             'footer'          => 'dashicons-arrow-down-alt2',
@@ -90,9 +86,10 @@ $is_wc_active = class_exists( 'WooCommerce' );
             'single_product'  => 'dashicons-products',
             'archive_post'    => 'dashicons-portfolio',
             'archive_product' => 'dashicons-cart',
+            'quick_view'      => 'dashicons-visibility', 
         ];
 
-        // Human-readable badge labels
+        // 🚀 NEW: Added Quick View Label
         $label_map = [
             'header'          => __( 'Header', 'mh-plug' ),
             'footer'          => __( 'Footer', 'mh-plug' ),
@@ -100,6 +97,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
             'single_product'  => __( 'Single Product', 'mh-plug' ),
             'archive_post'    => __( 'Archive', 'mh-plug' ),
             'archive_product' => __( 'Product Archive', 'mh-plug' ),
+            'quick_view'      => __( 'Quick View', 'mh-plug' ),
         ];
 
         if ( $templates->have_posts() ) :
@@ -107,15 +105,14 @@ $is_wc_active = class_exists( 'WooCommerce' );
                 $templates->the_post();
                 $template_id = get_the_ID();
 
-                // Read new private meta first, then legacy
                 $raw_type = get_post_meta( $template_id, '_mh_template_type', true );
                 if ( empty( $raw_type ) ) {
                     $raw_type = get_post_meta( $template_id, 'mh_template_type', true );
                 }
-                // Normalise legacy slugs
+                
                 $template_type = isset( $legacy_map[ $raw_type ] ) ? $legacy_map[ $raw_type ] : $raw_type;
                 if ( empty( $template_type ) ) {
-                    $template_type = 'single_post'; // safe default
+                    $template_type = 'single_post'; 
                 }
 
                 $edit_url  = admin_url( 'post.php?post=' . $template_id . '&action=elementor' );
@@ -162,10 +159,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
         endif;
         ?>
 
-    </div><!-- .mh-tb-grid -->
-
-    <!-- Theme Builder Modal -->
-    <div class="mh-tb-modal" id="mh-tb-modal">
+    </div><div class="mh-tb-modal" id="mh-tb-modal">
         <div class="mh-tb-modal-content">
             <div class="mh-tb-modal-header">
                 <h2><?php esc_html_e( 'Create New Template', 'mh-plug' ); ?></h2>
@@ -196,6 +190,10 @@ $is_wc_active = class_exists( 'WooCommerce' );
                             <?php esc_html_e( 'Single Product', 'mh-plug' ); ?>
                             <?php if ( ! $is_wc_active ) echo ' (' . esc_html__( 'Requires WooCommerce', 'mh-plug' ) . ')'; ?>
                         </option>
+                        <option value="quick_view" <?php disabled( ! $is_wc_active ); ?>>
+                            <?php esc_html_e( 'Quick View Popup', 'mh-plug' ); ?>
+                            <?php if ( ! $is_wc_active ) echo ' (' . esc_html__( 'Requires WooCommerce', 'mh-plug' ) . ')'; ?>
+                        </option>
                     </select>
                 </div>
 
@@ -212,8 +210,6 @@ $is_wc_active = class_exists( 'WooCommerce' );
         </div>
     </div>
 
-</div><!-- .wrap -->
-
-<script>
+</div><script>
     var mhTbAjaxUrl = "<?php echo admin_url( 'admin-ajax.php' ); ?>";
 </script>

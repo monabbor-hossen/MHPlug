@@ -377,7 +377,6 @@ if ( ! function_exists( 'mh_qv_output_simple_attributes' ) ) {
         echo '</div>';
     }
 }
-
 // 2. Load Quick View HTML (Supports Default AND Elementor Templates)
 if ( ! function_exists( 'mh_quick_view_ajax_handler' ) ) {
     add_action( 'wp_ajax_mh_quick_view_load', 'mh_quick_view_ajax_handler' );
@@ -389,24 +388,35 @@ if ( ! function_exists( 'mh_quick_view_ajax_handler' ) ) {
         
         if ( ! $product_id ) wp_send_json_error();
 
-        global $post, $product;
-        $post = get_post( $product_id );
-        setup_postdata( $post );
+        global $post, $product, $wp_query;
+        
+        $post    = get_post( $product_id );
         $product = wc_get_product( $product_id );
+        
+        // 🚀 THE MAGIC TRICK: Fake the WordPress Query!
+        // This forces Elementor's WooCommerce widgets to load data for THIS specific product during the AJAX call.
+        setup_postdata( $post );
+        $wp_query->post              = $post;
+        $wp_query->posts             = [ $post ];
+        $wp_query->queried_object    = $post;
+        $wp_query->queried_object_id = $product_id;
+        $wp_query->is_single         = true;
+        $wp_query->is_singular       = true;
 
         ob_start();
 
         if ( $template_id && class_exists( '\Elementor\Plugin' ) ) {
-            if ( class_exists( '\Elementor\Core\Files\CSS\Post' ) ) {
-                try {
-                    $css_file = new \Elementor\Core\Files\CSS\Post( $template_id );
-                    $css_file->enqueue();
-                } catch ( Exception $e ) {
-                    // Ignore CSS enqueue errors
-                }
-            }
-            echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id );
+            
+            // We wrap the custom template in our cart wrapper so the AJAX Add-to-Cart JS still works perfectly!
+            echo '<div class="mh-qv-add-to-cart-wrap" data-product-id="' . esc_attr($product_id) . '">';
+            
+            // The "true" parameter tells Elementor to print the CSS inline so the popup doesn't look broken
+            echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id, true );
+            
+            echo '</div>';
+
         } else {
+            // Default Layout Fallback
             ?>
             <div class="mh-qv-grid">
                 <div class="mh-qv-image">
@@ -430,7 +440,8 @@ if ( ! function_exists( 'mh_quick_view_ajax_handler' ) ) {
         }
 
         $html = ob_get_clean();
-        wp_reset_postdata(); 
+        wp_reset_postdata(); // Reset the trick so we don't break the main page
+        
         wp_send_json_success( $html );
     }
 }
