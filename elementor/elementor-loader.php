@@ -85,7 +85,7 @@ final class MH_Elementor_Loader {
             'mh_wishlist_table'      => ['file' => 'mh-wishlist-table-widget.php',  'class' => 'MH_Wishlist_Table_Widget'  ],
             'mh_nav_menu'            => ['file' => 'mh-nav-menu-widget.php', 'class' => 'MH_Nav_Menu_Widget' ],
             'mh_copyright'           => ['file' => 'mh-copyright-widget.php', 'class' => 'MH_Copyright_Widget'],
-                'mh_taxonomy_card'   => [ 'file' => 'mh-taxonomy-card-widget.php', 'class' => 'MH_Plug_Taxonomy_Card_Widget' ],
+            'mh_taxonomy_card'       => [ 'file' => 'mh-taxonomy-card-widget.php', 'class' => 'MH_Plug_Taxonomy_Card_Widget' ],
         ];
 
         if ( class_exists( 'WooCommerce' ) ) {
