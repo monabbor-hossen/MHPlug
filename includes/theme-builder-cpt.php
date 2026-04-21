@@ -11,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Allowed template type slugs
 // ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_allowed_template_types() {
-    // 🚀 NEW: Added 'quick_view' to the allowed list!
     return [ 'header', 'footer', 'single_post', 'single_product', 'archive_post', 'archive_product', 'quick_view' ];
 }
 
@@ -34,7 +33,9 @@ function mh_plug_register_template_cpt() {
         'supports'            => [ 'title', 'editor', 'elementor' ],
         'hierarchical'        => false,
         'public'              => true,
-        'show_ui'             => false,
+        // 🚀 THE FIX: show_ui MUST be true for Elementor to load the editor!
+        'show_ui'             => true, 
+        // We keep this false so it doesn't clutter the main WP sidebar
         'show_in_menu'        => false,
         'show_in_admin_bar'   => false,
         'show_in_nav_menus'   => false,
@@ -42,6 +43,8 @@ function mh_plug_register_template_cpt() {
         'has_archive'         => false,
         'exclude_from_search' => true,
         'publicly_queryable'  => true, 
+        // 🚀 THE FIX: Added an explicit rewrite rule for clean URLs
+        'rewrite'             => [ 'slug' => 'mh-template' ], 
         'capability_type'     => 'post',
     ] );
 }
@@ -91,7 +94,6 @@ function mh_plug_ajax_create_template() {
     update_post_meta( $post_id, '_mh_template_type',   $template_type );
     update_post_meta( $post_id, '_mh_template_active', 'yes' );
 
-    // 🚀 NEW: Map 'quick_view' to 'single-product' so Woo widgets load in the builder!
     $elementor_type_map = [
         'header'          => 'header',
         'footer'          => 'footer',
