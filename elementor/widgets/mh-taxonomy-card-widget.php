@@ -1,7 +1,7 @@
 <?php
 /**
  * MH Taxonomy Card Widget
- * Displays Categories, Brands, Tags, or Custom Content as a beautiful image card.
+ * Displays Categories, Brands, Tags, or Custom Content with Bulletproof Responsive Alignment.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,7 +13,6 @@ use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Background;
 use Elementor\Group_Control_Box_Shadow;
-use Elementor\Group_Control_Border;
 
 class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
 
@@ -102,7 +101,6 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
             'condition' => [ 'source_type' => 'custom' ],
         ] );
 
-        // General Content Options
         $this->add_control( 'show_description', [
             'label'        => __( 'Show Description', 'mh-plug' ),
             'type'         => Controls_Manager::SWITCHER,
@@ -113,14 +111,14 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
 
         $this->end_controls_section();
 
-        /* ── STYLE: BOX LAYOUT ── */
+        /* ── STYLE: BOX LAYOUT & POSITION ── */
         $this->start_controls_section( 'section_style_box', [
-            'label' => __( 'Box & Layout', 'mh-plug' ),
+            'label' => __( 'Box & Content Position', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_responsive_control( 'min_height', [
-            'label'      => __( 'Minimum Height', 'mh-plug' ),
+            'label'      => __( 'Card Minimum Height', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'vh', 'em' ],
             'range'      => [ 'px' => [ 'min' => 100, 'max' => 800 ] ],
@@ -135,20 +133,14 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
             'selectors'  => [ '{{WRAPPER}} .mh-tax-card-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
-        $this->add_control( 'horizontal_align', [
-            'label'     => __( 'Horizontal Alignment', 'mh-plug' ),
-            'type'      => Controls_Manager::CHOOSE,
-            'options'   => [
-                'flex-start' => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center'     => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'flex-end'   => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
-            ],
-            'default'   => 'center',
-            'selectors' => [ '{{WRAPPER}} .mh-tax-card' => 'justify-content: {{VALUE}}; text-align: {{VALUE}};' ],
+        $this->add_control( 'heading_alignment', [
+            'label'     => __( 'Content Position', 'mh-plug' ),
+            'type'      => Controls_Manager::HEADING,
+            'separator' => 'before',
         ] );
 
-        $this->add_control( 'vertical_align', [
-            'label'     => __( 'Vertical Alignment', 'mh-plug' ),
+        $this->add_responsive_control( 'vertical_align', [
+            'label'     => __( 'Vertical Position', 'mh-plug' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
                 'flex-start' => [ 'title' => __( 'Top', 'mh-plug' ), 'icon' => 'eicon-v-align-top' ],
@@ -156,13 +148,27 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
                 'flex-end'   => [ 'title' => __( 'Bottom', 'mh-plug' ), 'icon' => 'eicon-v-align-bottom' ],
             ],
             'default'   => 'center',
-            'selectors' => [ '{{WRAPPER}} .mh-tax-card' => 'align-items: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-tax-card' => 'justify-content: {{VALUE}} !important;' ],
+        ] );
+
+        // 🚀 THE FIX: Uses Elementor's native prefix_class generation for bulletproof responsive mapping!
+        $this->add_responsive_control( 'horizontal_align', [
+            'label'        => __( 'Horizontal Position', 'mh-plug' ),
+            'type'         => Controls_Manager::CHOOSE,
+            'options'      => [
+                'left'   => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
+                'center' => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
+                'right'  => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+            ],
+            'default'      => 'center',
+            'prefix_class' => 'mh-card-align%s-', 
         ] );
 
         $this->add_responsive_control( 'border_radius', [
             'label'      => __( 'Border Radius', 'mh-plug' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
+            'separator'  => 'before',
             'selectors'  => [ '{{WRAPPER}} .mh-tax-card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
@@ -254,7 +260,6 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
         $link   = '';
         $bg_url = '';
 
-        // 1. Fetch Dynamic Data based on Source
         if ( $source === 'custom' ) {
             $title  = $settings['custom_title'];
             $desc   = $settings['custom_desc'];
@@ -269,7 +274,6 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
                     $desc  = $term->description;
                     $link  = get_term_link( $term );
 
-                    // Attempt to fetch WooCommerce Image if it's a product category/brand
                     if ( in_array( $source, [ 'product_cat', 'product_brand' ] ) ) {
                         $thumbnail_id = get_term_meta( $term_id, 'thumbnail_id', true );
                         if ( $thumbnail_id ) {
@@ -280,28 +284,59 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
             }
         }
 
-        // CSS Classes
         $zoom_class = $settings['hover_animation'] === 'yes' ? 'mh-hover-zoom' : '';
         $inline_bg  = $bg_url ? 'background-image: url(' . esc_url( $bg_url ) . ');' : '';
 
-        // Handle Link
         $target = ($source === 'custom' && ! empty($settings['custom_link']['is_external'])) ? ' target="_blank"' : '';
         $nofollow = ($source === 'custom' && ! empty($settings['custom_link']['nofollow'])) ? ' rel="nofollow"' : '';
         ?>
 
         <style>
-            .mh-tax-card { position: relative; display: flex; width: 100%; overflow: hidden; text-decoration: none; box-sizing: border-box; }
+            /* The Parent Container */
+            .mh-tax-card { position: relative; display: flex; flex-direction: column; width: 100%; overflow: hidden; text-decoration: none; box-sizing: border-box; }
+            
+            /* Backgrounds and Overlays */
             .mh-tax-card-bg-fallback { position: absolute; inset: 0; z-index: 1; }
             .mh-tax-card-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 2; }
             .mh-tax-card.mh-hover-zoom:hover .mh-tax-card-bg { transform: scale(1.1); }
-            .mh-tax-card-overlay { position: absolute; inset: 0; z-index: 3; transition: all 0.4s ease; background-color: rgba(0,0,0,0.4); } /* Default slight dark overlay for readability */
-            .mh-tax-card-content { position: relative; z-index: 4; width: 100%; transition: all 0.4s ease; }
+            .mh-tax-card-overlay { position: absolute; inset: 0; z-index: 3; transition: all 0.4s ease; background-color: rgba(0,0,0,0.4); }
+            
+            /* 🚀 THE FIX: The inner content is now a Flex Column */
+            .mh-tax-card-content { position: relative; z-index: 4; width: 100%; transition: all 0.4s ease; display: flex; flex-direction: column; }
+            
             .mh-tax-card-title { margin: 0 0 10px 0; transition: color 0.3s ease; }
             .mh-tax-card-desc { margin: 0; }
             .mh-tax-card-link-overlay { position: absolute; inset: 0; z-index: 10; }
-            /* Alignment fixes if flex is overridden by text-align */
-            .mh-tax-card[style*="text-align: center"] .mh-tax-card-content { display: flex; flex-direction: column; align-items: center; }
-            .mh-tax-card[style*="text-align: right"] .mh-tax-card-content { display: flex; flex-direction: column; align-items: flex-end; }
+
+            /* =======================================
+               🚀 BULLETPROOF DYNAMIC RESPONSIVE ALIGNMENT ENGINE
+               ======================================= */
+            <?php
+            $breakpoints = [
+                'desktop' => [ 'prefix' => '.mh-card-align', 'media' => '' ],
+                'tablet'  => [ 'prefix' => '.mh-card-align-tablet', 'media' => '@media (max-width: 1024px)' ],
+                'mobile'  => [ 'prefix' => '.mh-card-align-mobile', 'media' => '@media (max-width: 767px)' ],
+            ];
+
+            foreach ( $breakpoints as $bp ) {
+                if ( $bp['media'] ) echo $bp['media'] . " {\n";
+                $p = $bp['prefix'];
+                
+                /* LEFT */
+                echo "{$p}-left .mh-tax-card-content { align-items: flex-start !important; text-align: left !important; }\n";
+                echo "{$p}-left .mh-tax-card-content > * { text-align: left !important; }\n"; /* Overrides strict themes */
+                
+                /* CENTER */
+                echo "{$p}-center .mh-tax-card-content { align-items: center !important; text-align: center !important; }\n";
+                echo "{$p}-center .mh-tax-card-content > * { text-align: center !important; }\n";
+                
+                /* RIGHT */
+                echo "{$p}-right .mh-tax-card-content { align-items: flex-end !important; text-align: right !important; }\n";
+                echo "{$p}-right .mh-tax-card-content > * { text-align: right !important; }\n";
+                
+                if ( $bp['media'] ) echo "}\n";
+            }
+            ?>
         </style>
 
         <div class="mh-tax-card <?php echo esc_attr( $zoom_class ); ?>">
