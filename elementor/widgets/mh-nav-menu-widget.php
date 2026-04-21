@@ -1,7 +1,6 @@
 <?php
 /**
  * MH Nav Menu Widget (Pro Version)
- *
  * Advanced navigation menu with buttery smooth hover pointers, fade-in dropdowns, and sticky support.
  */
 
@@ -62,6 +61,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'separator' => 'before',
         ] );
 
+        // 🚀 THE FIX: We removed 'selectors' and replaced it with 'prefix_class'
         $this->add_responsive_control( 'align_items', [
             'label'     => __( 'Menu Position Align', 'mh-plug' ),
             'type'      => Controls_Manager::CHOOSE,
@@ -71,7 +71,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 'flex-end'   => [ 'title' => 'Right', 'icon' => 'eicon-h-align-right' ],
                 'stretch'    => [ 'title' => 'Stretch', 'icon' => 'eicon-h-align-stretch' ],
             ],
-            'selectors' => [ '{{WRAPPER}} .mh-nav-desktop .mh-menu' => 'justify-content: {{VALUE}};' ],
+            'prefix_class' => 'mh-nav-align%s-', // This allows us to use advanced CSS to force the stretch!
         ] );
 
         $this->add_responsive_control( 'item_text_align', [
@@ -347,14 +347,12 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> { position: relative; width: 100%; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
             
-            /* 🚀 THE FIX: Premium Smooth Transitions for Links */
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu a { 
                 display: flex; align-items: center; text-decoration: none; position: relative;
                 transition: color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
             }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu li { position: relative; }
             
-            /* Hide Mobile Tools on Desktop */
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: none; width: 100%; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { display: none; }
             
@@ -364,11 +362,10 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     content: '\<?php echo ( $icon === 'fa-caret-down' ? 'f0d7' : ($icon === 'fa-angle-down' ? 'f107' : 'f067') ); ?>';
                     font-family: 'Font Awesome 5 Free'; font-weight: 900; margin-left: 8px; font-size: 0.8em; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
                 }
-                /* Rotate icon on dropdown hover */
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children:hover > a::after { transform: rotate(180deg); }
             <?php endif; ?>
 
-            /* 🚀 THE FIX: Buttery Smooth Hardware-Accelerated Underline Hover */
+            /* Underline Hover */
             <?php if ( $hover === 'underline' ) : ?>
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a::after {
                     content: ''; position: absolute; bottom: 0; left: 0; width: 100%; background: #333; 
@@ -388,22 +385,18 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li { width: 100%; }
             <?php endif; ?>
 
-            /* 🚀 THE FIX: Premium Smooth Fade & Glide Dropdowns */
+            /* Fade & Glide Dropdowns */
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu { 
                 position: absolute; top: 100%; left: 0; min-width: 220px; 
                 flex-direction: column; list-style: none; padding: 0; margin: 0; z-index: 999; 
-                
-                /* Smooth transition setup instead of display: none */
                 opacity: 0; visibility: hidden; pointer-events: none;
                 transform: translateY(15px);
                 transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
                 display: flex;
             }
-            
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu a { padding: 12px 20px; font-size: 14px; width: 100%; box-sizing: border-box; }
             
             <?php if ( $display === 'hover' ) : ?>
-                /* Show smoothly on hover */
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li:hover > .sub-menu { 
                     opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); 
                 }
@@ -423,15 +416,40 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu li { width: 100%; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { padding: 15px 20px; border-bottom: 1px solid #eee; width: 100%; box-sizing: border-box; }
                     
-                    /* Mobile submenus use basic display toggle for slide effects */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu { position: static; display: none; box-shadow: none; border: none; background: #fafafa; opacity: 1; visibility: visible; pointer-events: auto; transform: none; width: 100%; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu a { padding-left: 40px; }
                     
-                    /* Reset mobile carets */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .menu-item-has-children > a::after { display: none; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-mobile-caret { position: absolute; right: 0; top: 0; width: 50px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; border-left: 1px solid #eee; z-index: 10; transition: transform 0.3s; }
                 }
             <?php endif; ?>
+
+            /* =======================================
+               🚀 THE FIX: DYNAMIC RESPONSIVE STRETCH ENGINE
+               ======================================= */
+            <?php
+            $align_breakpoints = [
+                'desktop' => [ 'prefix' => '.mh-nav-align', 'media' => '' ],
+                'tablet'  => [ 'prefix' => '.mh-nav-align-tablet', 'media' => '@media (max-width: 1024px)' ],
+                'mobile'  => [ 'prefix' => '.mh-nav-align-mobile', 'media' => '@media (max-width: 767px)' ],
+            ];
+
+            foreach ( $align_breakpoints as $bp ) {
+                if ( $bp['media'] ) echo $bp['media'] . " {\n";
+                $p = $bp['prefix'];
+                
+                echo "{$p}-flex-start .mh-nav-desktop .mh-menu { justify-content: flex-start; }\n";
+                echo "{$p}-center .mh-nav-desktop .mh-menu { justify-content: center; }\n";
+                echo "{$p}-flex-end .mh-nav-desktop .mh-menu { justify-content: flex-end; }\n";
+                
+                /* When stretch is selected, we force the children to grow and fill the space! */
+                echo "{$p}-stretch .mh-nav-desktop .mh-menu { justify-content: space-between; width: 100%; }\n";
+                echo "{$p}-stretch .mh-nav-desktop .mh-menu > li { flex-grow: 1; }\n";
+                echo "{$p}-stretch .mh-nav-desktop .mh-menu > li > a { width: 100%; }\n";
+                
+                if ( $bp['media'] ) echo "}\n";
+            }
+            ?>
         </style>
 
         <div class="mh-nav-wrapper mh-nav-wrapper-<?php echo esc_attr( $widget_id ); ?>" data-speed="<?php echo esc_attr($settings['scroll_speed']); ?>">
