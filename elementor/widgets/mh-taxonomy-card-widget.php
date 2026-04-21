@@ -17,7 +17,7 @@ use Elementor\Group_Control_Box_Shadow;
 class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
 
     public function get_name() { return 'mh_taxonomy_card'; }
-    public function get_title() { return __( 'MH Category / Taxonomy Card', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Taxonomy Card', 'mh-plug' ); }
     public function get_icon() { return 'eicon-image-box'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
