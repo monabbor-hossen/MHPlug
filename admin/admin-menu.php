@@ -60,6 +60,7 @@ class MH_Admin_Menu {
         'mh_header_wishlist' => 'Header Wishlist Icon',
         'mh_header_cart'     => 'Header Cart Icon',
         'mh_product_grid'    => 'Product Grid',
+        'mh_taxonomy_card'   => 'Category / Taxonomy Card', // <--- ADD THIS LINE!
         
     ];
 
@@ -240,6 +241,7 @@ class MH_Admin_Menu {
                 'mh_header_wishlist', 
                 'mh_header_cart', // <-- Add them here!
                 'mh_product_grid',
+                'mh_taxonomy_card' 
                 
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
