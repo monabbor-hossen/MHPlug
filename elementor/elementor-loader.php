@@ -85,16 +85,16 @@ final class MH_Elementor_Loader {
             'mh_wishlist_table'      => ['file' => 'mh-wishlist-table-widget.php',  'class' => 'MH_Wishlist_Table_Widget'  ],
             'mh_nav_menu'            => ['file' => 'mh-nav-menu-widget.php', 'class' => 'MH_Nav_Menu_Widget' ],
             'mh_copyright'           => ['file' => 'mh-copyright-widget.php', 'class' => 'MH_Copyright_Widget'],
-            'mh_taxonomy_card'       => [ 'file' => 'mh-taxonomy-card-widget.php', 'class' => 'MH_Plug_Taxonomy_Card_Widget' ],
+            'mh_taxonomy_card'       => ['file' => 'mh-taxonomy-card-widget.php', 'class' => 'MH_Plug_Taxonomy_Card_Widget'],
         ];
 
         if ( class_exists( 'WooCommerce' ) ) {
             $wc_widget_map = [
-                'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php',  'class' => 'MH_Woo_Add_To_Cart_Widget' ],
-                'mh_woo_attributes'  => [ 'file' => 'mh-woo-attributes-widget.php',   'class' => 'MH_Woo_Attributes_Widget' ],
-                'mh_product_search'  => [ 'file' => 'mh-product-search-widget.php',   'class' => 'MH_Plug_Product_Search_Widget' ],
-                'mh_product_title'   => [ 'file' => 'mh-product-title-widget.php',    'class' => 'MH_Product_Title_Widget' ],
-                'mh_product_price'   => [ 'file' => 'mh-product-price-widget.php',    'class' => 'MH_Product_Price_Widget' ],
+                'mh_woo_add_to_cart'           => [ 'file' => 'mh-woo-add-to-cart-widget.php',  'class' => 'MH_Woo_Add_To_Cart_Widget' ],
+                'mh_woo_attributes'            => [ 'file' => 'mh-woo-attributes-widget.php',   'class' => 'MH_Woo_Attributes_Widget' ],
+                'mh_product_search'            => [ 'file' => 'mh-product-search-widget.php',   'class' => 'MH_Plug_Product_Search_Widget' ],
+                'mh_product_title'             => [ 'file' => 'mh-product-title-widget.php',    'class' => 'MH_Product_Title_Widget' ],
+                'mh_product_price'             => [ 'file' => 'mh-product-price-widget.php',    'class' => 'MH_Product_Price_Widget' ],
                 'mh_product_short_description' => [ 'file' => 'mh-product-short-description-widget.php',  'class' => 'MH_Product_Short_Description_Widget' ],
                 'mh_product_category'          => [ 'file' => 'mh-product-category-widget.php',           'class' => 'MH_Product_Category_Widget' ],
                 'mh_product_tags'              => [ 'file' => 'mh-product-tags-widget.php',               'class' => 'MH_Product_Tags_Widget' ],
@@ -104,22 +104,31 @@ final class MH_Elementor_Loader {
                 'mh_product_gallery'           => [ 'file' => 'mh-product-gallery-widget.php',            'class' => 'MH_Product_Gallery_Widget' ],
                 'mh_product_share'             => [ 'file' => 'mh-product-share-widget.php',              'class' => 'MH_Product_Share_Widget' ],
                 'mh_product_data_accordion'    => [ 'file' => 'mh-product-data-accordion-widget.php',     'class' => 'MH_Product_Data_Accordion_Widget' ],
-                'mh_header_wishlist' => [ 'file' => 'mh-header-wishlist-widget.php', 'class' => 'MH_Header_Wishlist_Widget' ],
-                'mh_header_cart'     => [ 'file' => 'mh-header-cart-widget.php',     'class' => 'MH_Header_Cart_Widget' ],
-                // 🚀 NEW: Add the Product Grid Widget here
-                'mh_product_grid' => [ 'file' => 'mh-product-grid-widget.php', 'class' => 'MH_Product_Grid_Widget' ],
-                ];
+                'mh_header_wishlist'           => [ 'file' => 'mh-header-wishlist-widget.php', 'class' => 'MH_Header_Wishlist_Widget' ],
+                'mh_header_cart'               => [ 'file' => 'mh-header-cart-widget.php',     'class' => 'MH_Header_Cart_Widget' ],
+                'mh_product_grid'              => [ 'file' => 'mh-product-grid-widget.php', 'class' => 'MH_Product_Grid_Widget' ],
+            ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
 
         foreach ($widget_map as $option_key => $widget_data) {
+            
+            // Check if widget is active in settings (default true if not set)
             $is_enabled = isset($widget_options[$option_key]) ? (bool)$widget_options[$option_key] : true;
+            
             if ($is_enabled) {
                 $file_path = MH_PLUG_PATH . 'elementor/widgets/' . $widget_data['file'];
-                if (is_readable($file_path)) {
+                
+                // 🚀 SAFETY CHECK: Does the file exist and is it readable?
+                if (file_exists($file_path) && is_readable($file_path)) {
                     require_once $file_path;
-                    if (class_exists($widget_data['class'])) {
-                        $widgets_manager->register(new $widget_data['class']());
+                    
+                    // 🚀 STRICT NAMESPACE FIX: Forces PHP to look globally for the class name
+                    $class_name = '\\' . ltrim($widget_data['class'], '\\');
+
+                    // 🚀 SAFETY CHECK: Did the class actually load from the file?
+                    if (class_exists($class_name)) {
+                        $widgets_manager->register(new $class_name());
                     }
                 }
             }
@@ -128,11 +137,9 @@ final class MH_Elementor_Loader {
 
     /**
      * Register general (non-WC) widget assets.
-     * Loaded on demand via get_style_depends() / get_script_depends().
      */
     public function mh_plug_register_widget_assets() {
 
-        // ── Consolidated Widget CSS ──
         $css_path_widgets = MH_PLUG_PATH . 'elementor/assets/css/mh-widgets.css';
         wp_register_style(
             'mh-widgets-css',
@@ -141,7 +148,6 @@ final class MH_Elementor_Loader {
             file_exists( $css_path_widgets ) ? filemtime( $css_path_widgets ) : MH_PLUG_VERSION
         );
 
-        // ── Consolidated Widget JS ──
         $js_path_widgets = MH_PLUG_PATH . 'elementor/assets/js/mh-widgets.js';
         wp_register_script(
             'mh-widgets-js',
@@ -151,7 +157,6 @@ final class MH_Elementor_Loader {
             true
         );
 
-        // ── Nav Menu CSS ──
         $css_path_nav = MH_PLUG_PATH . 'elementor/assets/css/mh-nav-menu.css';
         wp_register_style(
             'mh-nav-menu-css',
@@ -160,7 +165,6 @@ final class MH_Elementor_Loader {
             file_exists( $css_path_nav ) ? filemtime( $css_path_nav ) : MH_PLUG_VERSION
         );
 
-        // ── Nav Menu JS ──
         $js_path_nav = MH_PLUG_PATH . 'elementor/assets/js/mh-nav-menu.js';
         wp_register_script(
             'mh-nav-menu-js',
@@ -179,7 +183,6 @@ final class MH_Elementor_Loader {
             return;
         }
 
-        // ── Core Woo Scripts ──
         $js_path_universal = MH_PLUG_PATH . 'elementor/assets/js/mh-woo-scripts.js';
         wp_register_script(
             'mh-woo-scripts',
@@ -189,7 +192,6 @@ final class MH_Elementor_Loader {
             true
         );
 
-        // ── Gallery Script ──
         $js_path_gallery = MH_PLUG_PATH . 'elementor/assets/js/mh-product-gallery.js';
         wp_register_script(
             'mh-product-gallery-script',
@@ -199,17 +201,13 @@ final class MH_Elementor_Loader {
             true
         );
 
-        // Make mh-widgets-js depend on mh-woo-scripts when WC is active
         wp_script_add_data( 'mh-widgets-js', 'group', 1 );
-
-        // Always enqueue core woo scripts
         wp_enqueue_script( 'mh-woo-scripts' );
 
         if ( is_product() ) {
             wp_enqueue_script( 'mh-product-gallery-script' );
         }
 
-        // ── Localized AJAX object ──
         $ajax_data = [
             'ajax_url'       => admin_url( 'admin-ajax.php' ),
             'login_url'      => wc_get_page_permalink( 'myaccount' ),
