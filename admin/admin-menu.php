@@ -43,24 +43,24 @@ class MH_Admin_Menu {
         'mh_product_search'  => 'Product Search',
 
         // 🚀 THE FIX: Added the missing WooCommerce Widgets here!
-        'mh_product_title'             => 'Product Title',
-        'mh_product_price'             => 'Product Price',
-        'mh_product_short_description' => 'Product Short Description',
-        'mh_product_category'          => 'Product Category',
-        'mh_product_tags'              => 'Product Tags',
-        'mh_product_brands'            => 'Product Brands',
-        'mh_product_breadcrumb'        => 'Product Breadcrumb',
-        'mh_product_rating'            => 'Product Rating',
-        'mh_product_gallery'           => 'Product Gallery',
-        'mh_product_share'             => 'Product Share',
-        'mh_product_data_accordion'    => 'Product Data (Tabs & Accordion)',
-        'mh_nav_menu'       => 'Nav Menu',
+        'mh_product_title'              => 'Product Title',
+        'mh_product_price'              => 'Product Price',
+        'mh_product_short_description'  => 'Product Short Description',
+        'mh_product_category'           => 'Product Category',
+        'mh_product_tags'               => 'Product Tags',
+        'mh_product_brands'             => 'Product Brands',
+        'mh_product_breadcrumb'         => 'Product Breadcrumb',
+        'mh_product_rating'             => 'Product Rating',
+        'mh_product_gallery'            => 'Product Gallery',
+        'mh_product_share'              => 'Product Share',
+        'mh_product_data_accordion'     => 'Product Data (Tabs & Accordion)',
+        'mh_nav_menu'                   => 'Nav Menu',
         // 🚀 NEW: Add the toggle switch
-        'mh_copyright'      => 'Copyright',
-        'mh_header_wishlist' => 'Header Wishlist Icon',
-        'mh_header_cart'     => 'Header Cart Icon',
-        'mh_product_grid'    => 'Product Grid',
-        'mh_taxonomy_card'   => 'Taxonomy Card', // <--- ADD THIS LINE!
+        'mh_copyright'                  => 'Copyright',
+        'mh_header_wishlist'            => 'Header Wishlist Icon',
+        'mh_header_cart'                => 'Header Cart Icon',
+        'mh_product_grid'               => 'Product Grid',
+        'mh_taxonomy_card'              => 'Taxonomy Card',
         
     ];
 
@@ -241,7 +241,7 @@ class MH_Admin_Menu {
                 'mh_header_wishlist', 
                 'mh_header_cart', // <-- Add them here!
                 'mh_product_grid',
-                'mh_taxonomy_card' 
+                'mh_taxonomy_card',
                 
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
