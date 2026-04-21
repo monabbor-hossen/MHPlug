@@ -1,7 +1,7 @@
 <?php
 /**
  * MH Product Search Widget (Live AJAX Search)
- * Fully Responsive, Isolated CSS Variables, and Pixel-Perfect Icon Alignment.
+ * Fully Responsive, Isolated CSS Variables, Pixel-Perfect Alignments, and Missing Icon Patch.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,6 +48,7 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 'classic' => __( 'Classic (Standard Box)', 'mh-plug' ),
                 'modern'  => __( 'Modern (Icon Inside Input)', 'mh-plug' ),
             ],
+            'description' => __( 'Choose "Modern" to display the icon inside the search bar.', 'mh-plug' ),
         ] );
 
         $this->add_control( 'search_icon', [
@@ -178,8 +179,17 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         $this->add_control( 'exp_in_bg', [ 'label' => __( 'Input Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-in-bg: {{VALUE}};' ] ] );
         $this->add_control( 'exp_in_c', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-in-c: {{VALUE}};' ] ] );
         $this->add_control( 'exp_ph_color', [ 'label' => __( 'Placeholder Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-ph-c: {{VALUE}};' ] ] );
+        
         $this->add_control( 'exp_ic_c', [ 'label' => __( 'Inside Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-ic-c: {{VALUE}};' ] ] );
         
+        // 🚀 THE FIX: Added missing inside icon size control for Expandable
+        $this->add_responsive_control( 'exp_ic_s', [
+            'label'      => __( 'Inside Icon Size', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px' ],
+            'selectors'  => [ '{{WRAPPER}}' => '--exp-ic-s: {{SIZE}}{{UNIT}};' ],
+        ] );
+
         $this->add_responsive_control( 'exp_in_pad', [
             'label'      => __( 'Input Padding', 'mh-plug' ),
             'type'       => Controls_Manager::DIMENSIONS,
@@ -229,8 +239,17 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         $this->add_control( 'mor_in_bg', [ 'label' => __( 'Input Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-in-bg: {{VALUE}};' ] ] );
         $this->add_control( 'mor_in_c', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-in-c: {{VALUE}};' ] ] );
         $this->add_control( 'mor_ph_color', [ 'label' => __( 'Placeholder Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-ph-c: {{VALUE}};' ] ] );
+        
         $this->add_control( 'mor_ic_c', [ 'label' => __( 'Inside Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-ic-c: {{VALUE}};' ] ] );
         
+        // 🚀 THE FIX: Added missing inside icon size control for Morphing
+        $this->add_responsive_control( 'mor_ic_s', [
+            'label'      => __( 'Inside Icon Size', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px' ],
+            'selectors'  => [ '{{WRAPPER}}' => '--mor-ic-s: {{SIZE}}{{UNIT}};' ],
+        ] );
+
         $this->add_responsive_control( 'mor_in_pad', [
             'label'      => __( 'Expanded Input Padding', 'mh-plug' ),
             'type'       => Controls_Manager::DIMENSIONS,
@@ -254,7 +273,6 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
             'condition' => [ 'design_style' => 'modern' ],
         ] );
 
-        // 🚀 THE FIX: New controls for perfect absolute alignment!
         $this->add_responsive_control( 'icon_left_pos', [
             'label'      => __( 'Icon Left Position', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
@@ -326,12 +344,10 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
             .mh-search-trigger { background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; padding: 10px; z-index: 10; }
             .mh-search-expandable-container { transition: all 0.3s ease; }
             .mh-search-form { position: relative; display: flex; align-items: center; margin: 0 !important; padding: 0 !important; width: 100%; box-sizing: border-box; }
-            
-            /* 🚀 Ensures the text sits vertically centered naturally */
             .mh-search-input { width: 100%; outline: none; transition: 0.3s; margin: 0 !important; box-sizing: border-box; display: block; vertical-align: middle; }
             .mh-search-input::-webkit-search-cancel-button { cursor: pointer; }
             
-            /* Base Icon Rules - using new Nudge Variables */
+            /* Base Icon Rules */
             .mh-search-icon { 
                 position: absolute; 
                 left: var(--ic-l, 15px); 
@@ -367,7 +383,6 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 echo "{$prefix}-standard .mh-search-input { cursor: text !important; background-color: var(--std-in-bg, #f1f1f1) !important; color: var(--std-in-c, #333333) !important; padding: var(--std-in-p, 12px 15px 12px 45px) !important; border-radius: var(--std-in-r, 4px) !important; border: var(--std-bd-w, 0px) solid var(--std-bd-c, transparent) !important; }\n";
                 echo "{$prefix}-standard .mh-search-input::placeholder { color: var(--std-ph-c, #888888) !important; opacity: 1 !important; }\n";
                 
-                // 🚀 Ensures Standard Layout uses the nudge variables!
                 echo "{$prefix}-standard .mh-search-icon { left: var(--ic-l, 15px) !important; top: 50% !important; transform: translateY(calc(-50% + var(--ic-nudge-y, 0px))) !important; }\n";
                 echo "{$prefix}-standard .mh-search-icon i, {$prefix}-standard .mh-search-icon svg, {$prefix}-standard .mh-search-spinner i { color: var(--std-ic-c, #888888) !important; fill: var(--std-ic-c, #888888) !important; font-size: var(--std-ic-s, 16px) !important; width: var(--std-ic-s, 16px) !important; height: var(--std-ic-s, 16px) !important; }\n";
                 
@@ -384,8 +399,9 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 echo "{$prefix}-expandable .mh-search-input { cursor: text !important; background-color: var(--exp-in-bg, #f1f1f1) !important; color: var(--exp-in-c, #333333) !important; padding: var(--exp-in-p, 12px 15px 12px 45px) !important; border-radius: 4px !important; }\n";
                 echo "{$prefix}-expandable .mh-search-input::placeholder { color: var(--exp-ph-c, #888888) !important; opacity: 1 !important; }\n";
                 
-                // 🚀 Ensures Expandable Layout uses the nudge variables!
-                echo "{$prefix}-expandable .mh-search-icon { left: var(--ic-l, 15px) !important; top: 50% !important; transform: translateY(calc(-50% + var(--ic-nudge-y, 0px))) !important; color: var(--exp-ic-c, #888888) !important; fill: var(--exp-ic-c, #888888) !important; }\n";
+                // 🚀 THE FIX: Forces icon to display via CSS, with exact sizes
+                echo "{$prefix}-expandable.mh-design-modern .mh-search-icon { display: flex !important; left: var(--ic-l, 15px) !important; top: 50% !important; transform: translateY(calc(-50% + var(--ic-nudge-y, 0px))) !important; }\n";
+                echo "{$prefix}-expandable .mh-search-icon i, {$prefix}-expandable .mh-search-icon svg, {$prefix}-expandable .mh-search-spinner i { color: var(--exp-ic-c, #888888) !important; fill: var(--exp-ic-c, #888888) !important; font-size: var(--exp-ic-s, 16px) !important; width: var(--exp-ic-s, 16px) !important; height: var(--exp-ic-s, 16px) !important; display: block !important; }\n";
                 
                 echo "{$prefix}-expandable .mh-search-results { position: static !important; box-shadow: none !important; border-top: 1px solid #eee !important; margin-top: 10px !important; padding-top: 10px !important; border: none !important; max-height: 400px !important; overflow-y: auto !important; display: none; }\n";
 
@@ -408,8 +424,10 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 
                 echo "{$prefix}-slide_out.mh-search-is-open .mh-search-form { width: 100% !important; max-width: var(--mor-box-w, 320px) !important; background-color: var(--mor-in-bg, #ffffff) !important; border-radius: var(--mor-in-r, 50px) !important; border-color: var(--mor-bd-c, transparent) !important; }\n";
                 
-                // 🚀 Ensures Morphing Layout uses the nudge variables when opened!
                 echo "{$prefix}-slide_out.mh-search-is-open .mh-search-icon { position: absolute !important; left: var(--ic-l, 15px) !important; top: 50% !important; transform: translateY(calc(-50% + var(--ic-nudge-y, 0px))) !important; padding: 0 !important; width: auto !important; height: auto !important; color: var(--mor-ic-c, #888888) !important; fill: var(--mor-ic-c, #888888) !important; }\n";
+                
+                // 🚀 THE FIX: Applied morphing inner icon size when opened
+                echo "{$prefix}-slide_out.mh-search-is-open .mh-search-icon i, {$prefix}-slide_out.mh-search-is-open .mh-search-icon svg, {$prefix}-slide_out.mh-search-is-open .mh-search-spinner i { font-size: var(--mor-ic-s, var(--mor-tr-s, 20px)) !important; width: var(--mor-ic-s, var(--mor-tr-s, 20px)) !important; height: var(--mor-ic-s, var(--mor-tr-s, 20px)) !important; }\n";
                 
                 echo "{$prefix}-slide_out.mh-search-is-open .mh-search-input { position: relative !important; opacity: 1 !important; cursor: text !important; color: var(--mor-in-c, #333333) !important; padding: var(--mor-in-p, 12px 15px 12px 45px) !important; line-height: normal !important; }\n";
                 echo "{$prefix}-slide_out.mh-search-is-open .mh-search-input::placeholder { color: var(--mor-ph-c, #888888) !important; opacity: 1 !important; }\n";
