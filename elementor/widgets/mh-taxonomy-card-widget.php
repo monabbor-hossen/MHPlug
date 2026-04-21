@@ -1,7 +1,7 @@
 <?php
 /**
  * MH Taxonomy Card Widget
- * Displays Categories, Brands, Tags, or Custom Content with Bulletproof Responsive Alignment.
+ * Displays Categories, Brands, Tags, or Custom Content with WooCommerce Dependency Checks.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -37,6 +37,29 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
 
     protected function register_controls() {
 
+        // 🚀 THE FIX: Conditionally build the Data Source options based on WooCommerce!
+        $source_options = [
+            'custom'   => __( 'Custom Content', 'mh-plug' ),
+            'category' => __( 'Post Category', 'mh-plug' ),
+            'post_tag' => __( 'Post Tag', 'mh-plug' ),
+        ];
+
+        $taxonomies = [
+            'category' => __( 'Select Post Category', 'mh-plug' ),
+            'post_tag' => __( 'Select Post Tag', 'mh-plug' ),
+        ];
+
+        // Only add WooCommerce options if WooCommerce is actually installed and active
+        if ( class_exists( 'WooCommerce' ) ) {
+            $source_options['product_cat']   = __( 'Product Category', 'mh-plug' );
+            $source_options['product_brand'] = __( 'Product Brand', 'mh-plug' );
+            $source_options['product_tag']   = __( 'Product Tag', 'mh-plug' );
+
+            $taxonomies['product_cat']   = __( 'Select Product Category', 'mh-plug' );
+            $taxonomies['product_brand'] = __( 'Select Product Brand', 'mh-plug' );
+            $taxonomies['product_tag']   = __( 'Select Product Tag', 'mh-plug' );
+        }
+
         /* ── CONTENT: SOURCE ── */
         $this->start_controls_section( 'section_content', [
             'label' => __( 'Card Content', 'mh-plug' ),
@@ -46,25 +69,10 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
             'label'   => __( 'Data Source', 'mh-plug' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'custom',
-            'options' => [
-                'custom'        => __( 'Custom Content', 'mh-plug' ),
-                'product_cat'   => __( 'Product Category', 'mh-plug' ),
-                'product_brand' => __( 'Product Brand', 'mh-plug' ),
-                'product_tag'   => __( 'Product Tag', 'mh-plug' ),
-                'category'      => __( 'Post Category', 'mh-plug' ),
-                'post_tag'      => __( 'Post Tag', 'mh-plug' ),
-            ],
+            'options' => $source_options,
         ] );
 
-        // Dynamic Term Selectors
-        $taxonomies = [
-            'product_cat'   => __( 'Select Product Category', 'mh-plug' ),
-            'product_brand' => __( 'Select Product Brand', 'mh-plug' ),
-            'product_tag'   => __( 'Select Product Tag', 'mh-plug' ),
-            'category'      => __( 'Select Post Category', 'mh-plug' ),
-            'post_tag'      => __( 'Select Post Tag', 'mh-plug' ),
-        ];
-
+        // Loop through our dynamically generated taxonomies list
         foreach ( $taxonomies as $tax_slug => $tax_label ) {
             $this->add_control( $tax_slug . '_id', [
                 'label'     => $tax_label,
@@ -151,7 +159,6 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
             'selectors' => [ '{{WRAPPER}} .mh-tax-card' => 'justify-content: {{VALUE}} !important;' ],
         ] );
 
-        // 🚀 THE FIX: Uses Elementor's native prefix_class generation for bulletproof responsive mapping!
         $this->add_responsive_control( 'horizontal_align', [
             'label'        => __( 'Horizontal Position', 'mh-plug' ),
             'type'         => Controls_Manager::CHOOSE,
@@ -275,6 +282,8 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
                     $link  = get_term_link( $term );
 
                     if ( in_array( $source, [ 'product_cat', 'product_brand' ] ) ) {
+                        // Safe to use get_term_meta here, it's a standard WP function 
+                        // even if WooCommerce is deactivated, though the source will never be product_cat
                         $thumbnail_id = get_term_meta( $term_id, 'thumbnail_id', true );
                         if ( $thumbnail_id ) {
                             $bg_url = wp_get_attachment_image_url( $thumbnail_id, 'full' );
@@ -292,16 +301,12 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
         ?>
 
         <style>
-            /* The Parent Container */
             .mh-tax-card { position: relative; display: flex; flex-direction: column; width: 100%; overflow: hidden; text-decoration: none; box-sizing: border-box; }
-            
-            /* Backgrounds and Overlays */
             .mh-tax-card-bg-fallback { position: absolute; inset: 0; z-index: 1; }
             .mh-tax-card-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 2; }
             .mh-tax-card.mh-hover-zoom:hover .mh-tax-card-bg { transform: scale(1.1); }
             .mh-tax-card-overlay { position: absolute; inset: 0; z-index: 3; transition: all 0.4s ease; background-color: rgba(0,0,0,0.4); }
             
-            /* 🚀 THE FIX: The inner content is now a Flex Column */
             .mh-tax-card-content { position: relative; z-index: 4; width: 100%; transition: all 0.4s ease; display: flex; flex-direction: column; }
             
             .mh-tax-card-title { margin: 0 0 10px 0; transition: color 0.3s ease; }
@@ -309,7 +314,7 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
             .mh-tax-card-link-overlay { position: absolute; inset: 0; z-index: 10; }
 
             /* =======================================
-               🚀 BULLETPROOF DYNAMIC RESPONSIVE ALIGNMENT ENGINE
+               BULLETPROOF DYNAMIC RESPONSIVE ALIGNMENT ENGINE
                ======================================= */
             <?php
             $breakpoints = [
@@ -324,7 +329,7 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
                 
                 /* LEFT */
                 echo "{$p}-left .mh-tax-card-content { align-items: flex-start !important; text-align: left !important; }\n";
-                echo "{$p}-left .mh-tax-card-content > * { text-align: left !important; }\n"; /* Overrides strict themes */
+                echo "{$p}-left .mh-tax-card-content > * { text-align: left !important; }\n"; 
                 
                 /* CENTER */
                 echo "{$p}-center .mh-tax-card-content { align-items: center !important; text-align: center !important; }\n";
