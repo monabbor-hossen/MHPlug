@@ -155,6 +155,17 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'selectors' => [ '{{WRAPPER}} .mh-nav-mobile-toggle-wrapper' => 'justify-content: {{VALUE}};' ],
         ] );
 
+        // 🚀 THE FIX: Dropdown Distance Slider to fix overlap!
+        $this->add_responsive_control( 'mobile_dropdown_distance', [
+            'label'      => __( 'Dropdown Distance (Fix Overlap)', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px' ],
+            'range'      => [ 'px' => [ 'min' => -50, 'max' => 200 ] ],
+            'selectors'  => [ '{{WRAPPER}} .mh-nav-mobile-panel' => 'margin-top: {{SIZE}}{{UNIT}};' ],
+            'description'=> __( 'Push the menu down so it does not overlap your header items.', 'mh-plug' ),
+            'separator'  => 'before',
+        ] );
+
         $this->end_controls_section();
 
 
@@ -418,7 +429,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         display: none; box-sizing: border-box; 
                     }
 
-                    /* 🚀 Force mobile items into a strict un-stretching column */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu { 
                         display: flex !important; flex-direction: column !important; width: 100% !important; margin: 0 !important; padding: 0 !important; 
                     }
@@ -445,7 +455,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         padding: 12px 20px 12px 40px !important; border-bottom: 1px solid #eee !important; display: flex; 
                     }
                     
-                    /* Custom Caret logic so JS can grab it easily */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .menu-item-has-children > a::after { display: none !important; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-mobile-caret { 
                         position: absolute; right: 0; top: 0; width: 50px; height: 100%; display: flex; align-items: center; justify-content: center; 
@@ -472,7 +481,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 echo "{$p}-center .mh-nav-desktop .mh-menu { justify-content: center; }\n";
                 echo "{$p}-flex-end .mh-nav-desktop .mh-menu { justify-content: flex-end; }\n";
                 
-                /* The stretch command ONLY affects the desktop menu, keeping mobile safe! */
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu { justify-content: space-between; width: 100%; }\n";
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu > li { flex-grow: 1; }\n";
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu > li > a { width: 100%; }\n";
@@ -525,7 +533,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         }
                     }
 
-                    // Run on resize and toggle click
                     $(window).on('resize', forceMobileFullWidth);
                     $toggle.on('click', function() {
                         forceMobileFullWidth();
