@@ -141,7 +141,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'label'   => __( 'Stretch Dropdown', 'mh-plug' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'full',
-            'options' => [ 'full' => 'Full Width', 'custom' => 'Custom' ],
+            'options' => [ 'full' => 'Full Screen Width', 'custom' => 'Stay Inside Column' ],
         ] );
 
         $this->add_responsive_control( 'toggle_align', [
@@ -344,7 +344,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         ?>
         <style>
             /* ── GLOBAL NAV BASE ── */
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> { position: relative; width: 100%; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> { position: relative; width: 100%; box-sizing: border-box; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu { list-style: none; margin: 0; padding: 0; }
             
             /* ── DESKTOP MENU CORE ── */
@@ -415,10 +415,10 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { 
                         width: 100%; position: absolute; top: 100%; left: 0; z-index: 9999; 
                         background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-                        display: none; 
+                        display: none; box-sizing: border-box; 
                     }
 
-                    /* 🚀 THE FIX: Force mobile items into a strict un-stretching column */
+                    /* 🚀 Force mobile items into a strict un-stretching column */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu { 
                         display: flex !important; flex-direction: column !important; width: 100% !important; margin: 0 !important; padding: 0 !important; 
                     }
@@ -428,14 +428,14 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     }
                     
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { 
-                        display: flex; align-items: center; justify-content: space-between; /* Pushes text left, icon right */
+                        display: flex; align-items: center; justify-content: space-between; 
                         padding: 15px 20px; border-bottom: 1px solid #eee; width: 100%; box-sizing: border-box; 
                         text-decoration: none; 
                     }
 
                     /* Dropdown reset for mobile */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu { 
-                        position: static !important; display: none; /* JS toggles this */
+                        position: static !important; display: none; 
                         box-shadow: none !important; border: none !important; background: #fafafa !important; 
                         opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; transform: none !important; 
                         width: 100% !important; flex-direction: column !important; margin: 0 !important; padding: 0 !important;
@@ -504,6 +504,35 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         </div>
 
+        <?php if ( $settings['mobile_stretch'] === 'full' && $breakpoint !== 'none' ) : ?>
+            <script>
+                jQuery(document).ready(function($) {
+                    var $wrapper = $('.mh-nav-wrapper-<?php echo esc_attr($widget_id); ?>');
+                    var $panel = $wrapper.find('.mh-nav-mobile-panel');
+                    var $toggle = $wrapper.find('.mh-nav-mobile-toggle');
+
+                    function forceMobileFullWidth() {
+                        if ($(window).width() <= <?php echo esc_attr($breakpoint); ?>) {
+                            var offsetLeft = $wrapper[0].getBoundingClientRect().left;
+                            $panel.css({
+                                'width': $(window).width() + 'px',
+                                'left': '-' + offsetLeft + 'px',
+                                'right': 'auto',
+                                'box-sizing': 'border-box'
+                            });
+                        } else {
+                            $panel.css({ 'width': '', 'left': '', 'right': '' });
+                        }
+                    }
+
+                    // Run on resize and toggle click
+                    $(window).on('resize', forceMobileFullWidth);
+                    $toggle.on('click', function() {
+                        forceMobileFullWidth();
+                    });
+                });
+            </script>
+        <?php endif; ?>
         <?php
     }
 }
