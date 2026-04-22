@@ -253,7 +253,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->start_controls_section( 'style_sub_menu', [ 'label' => __( 'Sub Menu', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
 
-        // 🚀 NEW FEATURE: Submenu Text Alignment Control
         $this->add_responsive_control( 'sub_text_align', [
             'label'     => __( 'Submenu Alignment', 'mh-plug' ),
             'type'      => Controls_Manager::CHOOSE,
@@ -264,13 +263,23 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             ],
             'selectors' => [ 
                 '{{WRAPPER}} .mh-menu .sub-menu a' => 'justify-content: {{VALUE}} !important;',
-                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu a' => 'justify-content: {{VALUE}} !important;',
             ],
         ] );
 
-        $this->add_control( 'sub_offset', [
+        // 🚀 THE FIX: Precise padding control for Submenus!
+        $this->add_responsive_control( 'sub_item_padding', [
+            'label'      => __( 'Item Padding', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', 'em', '%' ],
+            'selectors'  => [ 
+                '{{WRAPPER}} .mh-menu .sub-menu a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+            ],
+        ] );
+
+        // 🚀 THE FIX: Target .mh-nav-desktop only so it doesn't break mobile dropdowns!
+        $this->add_responsive_control( 'sub_offset', [
             'label' => 'Sub Menu Offset', 'type' => Controls_Manager::SLIDER,
-            'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu' => 'margin-top: {{SIZE}}px;' ],
+            'selectors' => [ '{{WRAPPER}} .mh-nav-desktop .mh-menu .sub-menu' => 'margin-top: {{SIZE}}px !important;' ],
             'separator' => 'before',
         ] );
 
@@ -281,10 +290,8 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $this->add_control( 'sub_divider_color', [
             'label' => 'Divider Color', 'type' => Controls_Manager::COLOR, 'default' => '#eeeeee',
             'condition' => [ 'sub_divider' => 'yes' ],
-            // 🚀 THE FIX: Applied !important to Elementor selectors so they always override the base CSS
             'selectors' => [ 
                 '{{WRAPPER}} .mh-menu .sub-menu li:not(:last-child) a' => 'border-bottom: 1px solid {{VALUE}} !important;',
-                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu > li > a' => 'border-bottom: 1px solid {{VALUE}} !important;',
             ],
         ] );
 
@@ -294,34 +301,22 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->add_control( 'sub_bg_color', [
             'label' => 'Background Color', 'type' => Controls_Manager::COLOR, 'default' => '#ffffff',
-            'selectors' => [ 
-                '{{WRAPPER}} .mh-menu .sub-menu' => 'background-color: {{VALUE}} !important;',
-                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu' => 'background-color: {{VALUE}} !important;',
-            ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu' => 'background-color: {{VALUE}} !important;' ],
         ] );
 
         $this->add_control( 'sub_text_color', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR, 'default' => '#555555',
-            'selectors' => [ 
-                '{{WRAPPER}} .mh-menu .sub-menu a' => 'color: {{VALUE}} !important;',
-                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu a' => 'color: {{VALUE}} !important;',
-            ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu a' => 'color: {{VALUE}} !important;' ],
         ] );
 
         $this->add_control( 'sub_text_color_hover', [
             'label' => 'Hover Text Color', 'type' => Controls_Manager::COLOR, 'default' => '#111111',
-            'selectors' => [ 
-                '{{WRAPPER}} .mh-menu .sub-menu a:hover' => 'color: {{VALUE}} !important;',
-                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu a:hover' => 'color: {{VALUE}} !important;',
-            ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu a:hover' => 'color: {{VALUE}} !important;' ],
         ] );
         
         $this->add_control( 'sub_bg_color_hover', [
             'label' => 'Hover Background Color', 'type' => Controls_Manager::COLOR,
-            'selectors' => [ 
-                '{{WRAPPER}} .mh-menu .sub-menu a:hover' => 'background-color: {{VALUE}} !important;',
-                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu a:hover' => 'background-color: {{VALUE}} !important;',
-            ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu a:hover' => 'background-color: {{VALUE}} !important;' ],
         ] );
 
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
@@ -392,12 +387,15 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li { position: relative; }
             
+            /* 🚀 THE FIX: Bulletproof Desktop Submenu Icons */
             <?php if ( $icon !== 'none' ) : ?>
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children > a::after {
-                    content: '\<?php echo ( $icon === 'fa-caret-down' ? 'f0d7' : ($icon === 'fa-angle-down' ? 'f107' : 'f067') ); ?>';
-                    font-family: 'Font Awesome 5 Free'; font-weight: 900; margin-left: 8px; font-size: 0.8em; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                    content: '\<?php echo ( $icon === 'fa-caret-down' ? 'f0d7' : ($icon === 'fa-angle-down' ? 'f107' : 'f067') ); ?>' !important;
+                    font-family: "Font Awesome 5 Free", "FontAwesome", sans-serif !important; 
+                    font-weight: 900 !important; 
+                    margin-left: 8px; font-size: 0.8em; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
                 }
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .menu-item-has-children:hover > a::after { transform: rotate(180deg); }
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .menu-item-has-children:hover > a::after { transform: rotate(180deg) !important; }
             <?php endif; ?>
 
             <?php if ( $hover === 'underline' ) : ?>
@@ -442,7 +440,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop { display: none !important; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: flex; }
                     
-                    /* 🚀 THE FIX: Prevent squishing when "Stay Inside Column" is used */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { 
                         width: 100%; position: absolute; top: 100%; right: 0; left: auto; z-index: 9999; 
                         background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
@@ -458,7 +455,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     }
                     
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { 
-                        display: flex; align-items: center; justify-content: space-between; 
+                        display: flex; align-items: center; 
                         padding: 15px 20px; border-bottom: 1px solid #eee; width: 100%; box-sizing: border-box; 
                         text-decoration: none; 
                     }
@@ -470,8 +467,9 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         width: 100% !important; flex-direction: column !important; margin: 0 !important; padding: 0 !important;
                     }
                     
+                    /* Fallback padding if Elementor control isn't used yet */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu > li > a { 
-                        padding: 12px 20px 12px 40px !important; display: flex; 
+                        padding: 12px 20px 12px 40px; display: flex; 
                     }
                     
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .menu-item-has-children > a::after { display: none !important; }
@@ -541,6 +539,9 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     var breakpoint = <?php echo $breakpoint === 'none' ? 0 : intval($breakpoint); ?>;
                     var lastWidth = $(window).width(); 
 
+                    // 🚀 THE FIX: Dynamic Submenu Icon Injection for Mobile
+                    var mobileIconClass = '<?php echo esc_js($icon === 'none' ? '' : 'fas ' . $icon); ?>';
+
                     function forceMobileFullWidth() {
                         if (isFullWidth && $(window).width() <= breakpoint) {
                             var offsetLeft = $wrapper[0].getBoundingClientRect().left;
@@ -573,11 +574,14 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         $panel.slideToggle(300);
                     });
 
-                    $panel.find('.menu-item-has-children').each(function() {
-                        if ($(this).children('.mh-mobile-caret').length === 0) {
-                            $(this).children('a').after('<span class="mh-mobile-caret"><i class="fas fa-chevron-down"></i></span>');
-                        }
-                    });
+                    // Inject the user's chosen Elementor Icon!
+                    if (mobileIconClass !== '') {
+                        $panel.find('.menu-item-has-children').each(function() {
+                            if ($(this).children('.mh-mobile-caret').length === 0) {
+                                $(this).children('a').after('<span class="mh-mobile-caret"><i class="' + mobileIconClass + '"></i></span>');
+                            }
+                        });
+                    }
 
                     $panel.find('.mh-mobile-caret').off('click').on('click', function(e) {
                         e.preventDefault();
@@ -588,7 +592,9 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         $caret.toggleClass('mh-caret-open');
                         
                         if ($caret.hasClass('mh-caret-open')) {
-                            $caret.find('i').css('transform', 'rotate(180deg)');
+                            // If it's a plus, spin it to an X. Otherwise, flip it upside down!
+                            var rot = '<?php echo $icon === 'fa-plus' ? '45deg' : '180deg'; ?>';
+                            $caret.find('i').css('transform', 'rotate(' + rot + ')');
                         } else {
                             $caret.find('i').css('transform', 'rotate(0deg)');
                         }
