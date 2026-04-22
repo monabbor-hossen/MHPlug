@@ -253,9 +253,25 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->start_controls_section( 'style_sub_menu', [ 'label' => __( 'Sub Menu', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
 
+        // 🚀 NEW FEATURE: Submenu Text Alignment Control
+        $this->add_responsive_control( 'sub_text_align', [
+            'label'     => __( 'Submenu Alignment', 'mh-plug' ),
+            'type'      => Controls_Manager::CHOOSE,
+            'options'   => [
+                'flex-start' => [ 'title' => 'Left', 'icon' => 'eicon-h-align-left' ],
+                'center'     => [ 'title' => 'Center', 'icon' => 'eicon-h-align-center' ],
+                'flex-end'   => [ 'title' => 'Right', 'icon' => 'eicon-h-align-right' ],
+            ],
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-menu .sub-menu a' => 'justify-content: {{VALUE}} !important;',
+                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu a' => 'justify-content: {{VALUE}} !important;',
+            ],
+        ] );
+
         $this->add_control( 'sub_offset', [
             'label' => 'Sub Menu Offset', 'type' => Controls_Manager::SLIDER,
             'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu' => 'margin-top: {{SIZE}}px;' ],
+            'separator' => 'before',
         ] );
 
         $this->add_control( 'sub_divider', [
@@ -265,7 +281,11 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $this->add_control( 'sub_divider_color', [
             'label' => 'Divider Color', 'type' => Controls_Manager::COLOR, 'default' => '#eeeeee',
             'condition' => [ 'sub_divider' => 'yes' ],
-            'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu li:not(:last-child) a' => 'border-bottom: 1px solid {{VALUE}};' ],
+            // 🚀 THE FIX: Applied !important to Elementor selectors so they always override the base CSS
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-menu .sub-menu li:not(:last-child) a' => 'border-bottom: 1px solid {{VALUE}} !important;',
+                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu > li > a' => 'border-bottom: 1px solid {{VALUE}} !important;',
+            ],
         ] );
 
         $this->add_group_control( Group_Control_Border::get_type(), [
@@ -274,22 +294,34 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->add_control( 'sub_bg_color', [
             'label' => 'Background Color', 'type' => Controls_Manager::COLOR, 'default' => '#ffffff',
-            'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu' => 'background-color: {{VALUE}};' ],
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-menu .sub-menu' => 'background-color: {{VALUE}} !important;',
+                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu' => 'background-color: {{VALUE}} !important;',
+            ],
         ] );
 
         $this->add_control( 'sub_text_color', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR, 'default' => '#555555',
-            'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu a' => 'color: {{VALUE}};' ],
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-menu .sub-menu a' => 'color: {{VALUE}} !important;',
+                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu a' => 'color: {{VALUE}} !important;',
+            ],
         ] );
 
         $this->add_control( 'sub_text_color_hover', [
             'label' => 'Hover Text Color', 'type' => Controls_Manager::COLOR, 'default' => '#111111',
-            'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu a:hover' => 'color: {{VALUE}};' ],
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-menu .sub-menu a:hover' => 'color: {{VALUE}} !important;',
+                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu a:hover' => 'color: {{VALUE}} !important;',
+            ],
         ] );
         
         $this->add_control( 'sub_bg_color_hover', [
             'label' => 'Hover Background Color', 'type' => Controls_Manager::COLOR,
-            'selectors' => [ '{{WRAPPER}} .mh-menu .sub-menu a:hover' => 'background-color: {{VALUE}};' ],
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-menu .sub-menu a:hover' => 'background-color: {{VALUE}} !important;',
+                '{{WRAPPER}} .mh-nav-mobile-panel .mh-menu .sub-menu a:hover' => 'background-color: {{VALUE}} !important;',
+            ],
         ] );
 
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
@@ -410,10 +442,11 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop { display: none !important; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: flex; }
                     
+                    /* 🚀 THE FIX: Prevent squishing when "Stay Inside Column" is used */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { 
-                        width: 100%; position: absolute; top: 100%; left: 0; z-index: 9999; 
+                        width: 100%; position: absolute; top: 100%; right: 0; left: auto; z-index: 9999; 
                         background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-                        display: none; box-sizing: border-box; 
+                        display: none; box-sizing: border-box; min-width: 250px;
                     }
 
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu { 
@@ -424,22 +457,21 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         display: block !important; width: 100% !important; flex-grow: 0 !important; border: none !important; position: relative;
                     }
                     
-                    /* 🚀 THE FIX: We removed the padding constraint so text is mathematically perfectly centered! */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { 
-                        display: flex; align-items: center; 
+                        display: flex; align-items: center; justify-content: space-between; 
                         padding: 15px 20px; border-bottom: 1px solid #eee; width: 100%; box-sizing: border-box; 
                         text-decoration: none; 
                     }
 
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu { 
                         position: static !important; display: none; 
-                        box-shadow: none !important; border: none !important; background: #fafafa !important; 
+                        box-shadow: none !important; border: none !important; background: #fafafa; 
                         opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; transform: none !important; 
                         width: 100% !important; flex-direction: column !important; margin: 0 !important; padding: 0 !important;
                     }
                     
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu > li > a { 
-                        padding: 12px 20px 12px 40px !important; border-bottom: 1px solid #eee !important; display: flex; 
+                        padding: 12px 20px 12px 40px !important; display: flex; 
                     }
                     
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .menu-item-has-children > a::after { display: none !important; }
