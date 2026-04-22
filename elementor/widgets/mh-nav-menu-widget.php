@@ -183,7 +183,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $this->start_controls_tab( 'tab_main_normal', [ 'label' => 'Normal' ] );
         $this->add_control( 'main_color', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
-            // 🚀 FIX: Forced !important to override theme link colors
             'selectors' => [ '{{WRAPPER}} .mh-menu > li > a' => 'color: {{VALUE}} !important;' ],
         ] );
         $this->add_control( 'main_bg', [
@@ -253,7 +252,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $this->end_controls_section();
 
         /* ==========================================
-         * 🚀 SUB MENU STYLE
+         * SUB MENU STYLE
          * ========================================== */
         $this->start_controls_section( 'style_sub_menu', [ 'label' => __( 'Sub Menu', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
 
@@ -393,7 +392,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $unique_id  = str_replace('-', '_', $widget_id);
 
         if ( ! $menu_slug || $menu_slug === '' ) {
-            echo '<div style="padding:15px; border:1px dashed #d63638; text-align:center; color: #d63638;"><strong>' . __( 'Please select a menu from the Elementor Panel.', 'mh-plug' ) . '</strong></div>';
+            echo '<div style="padding:15px; border:1px dashed #d63638; text-align:center; color: #d63638; background: #fff;"><strong>' . __( 'Please select a menu from the Elementor Panel.', 'mh-plug' ) . '</strong></div>';
             return;
         }
 
@@ -405,8 +404,8 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         ?>
         <style>
             /* 🚀 THE FIX: Ultimate CSS Reset block to prevent themes from adding bullets and messing up footers */
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> ul { list-style: none !important; margin: 0 !important; padding: 0 !important; }
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> li { list-style: none !important; margin: 0 !important; padding: 0 !important; border: none !important; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> ul { list-style: none !important; margin: 0 !important; padding: 0 !important; border: none !important; background: transparent !important; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> li { list-style: none !important; margin: 0 !important; padding: 0 !important; border: none !important; background: transparent !important; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> a { text-decoration: none !important; box-shadow: none !important; }
 
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> { position: relative; width: 100%; box-sizing: border-box; }
@@ -441,10 +440,10 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .menu-item-has-children > a::after { display: none; }
             <?php endif; ?>
 
-            /* 🚀 THE FIX: Vertical layout properly formats to full width columns */
+            /* 🚀 THE FIX: Vertical layout completely rebuilt so alignment controls work perfectly */
             <?php if ( $layout === 'vertical' ) : ?>
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu { flex-direction: column; width: 100%; }
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li { width: 100%; }
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu { flex-direction: column; }
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu > li { width: auto; } /* Let it wrap tightly so flex alignment can move it */
             <?php endif; ?>
 
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu { 
@@ -525,10 +524,10 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 if ( $bp['media'] ) echo $bp['media'] . " {\n";
                 $p = $bp['prefix'];
                 
-                // 🚀 THE FIX: align-items applied to vertical layouts so they obey Left/Center/Right
                 echo "{$p}-flex-start .mh-nav-desktop .mh-menu { justify-content: flex-start; align-items: flex-start; }\n";
                 echo "{$p}-center .mh-nav-desktop .mh-menu { justify-content: center; align-items: center; }\n";
                 echo "{$p}-flex-end .mh-nav-desktop .mh-menu { justify-content: flex-end; align-items: flex-end; }\n";
+                
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu { justify-content: space-between; align-items: stretch; width: 100%; }\n";
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu > li { flex-grow: 1; }\n";
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu > li > a { width: 100%; }\n";
@@ -551,12 +550,16 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     $menu_classes .= ' mh-submenu-click';
                 }
                 
-                // 🚀 THE FIX: Forces WP to not render a fallback <div> block if the menu is broken
+                // 🚀 THE FIX: Bulletproof Fallback. If a menu is completely empty, it will display a warning link instead of crashing Elementor with a grey box!
+                $fallback_menu = function() use ( $menu_classes ) {
+                    echo '<ul class="' . esc_attr( $menu_classes ) . '"><li class="menu-item"><a href="' . admin_url('nav-menus.php') . '" style="color:#d63638 !important;">' . __( 'Menu is empty. Click here to assign items.', 'mh-plug' ) . '</a></li></ul>';
+                };
+
                 wp_nav_menu([ 
                     'menu'        => $menu_slug, 
                     'menu_class'  => $menu_classes, 
                     'container'   => false,
-                    'fallback_cb' => '__return_empty_string'
+                    'fallback_cb' => $fallback_menu
                 ]); 
                 ?>
             </div>
@@ -567,7 +570,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     'menu'        => $menu_slug, 
                     'menu_class'  => 'mh-menu', 
                     'container'   => false,
-                    'fallback_cb' => '__return_empty_string'
+                    'fallback_cb' => $fallback_menu
                 ]); 
                 ?>
             </div>
