@@ -155,7 +155,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'selectors' => [ '{{WRAPPER}} .mh-nav-mobile-toggle-wrapper' => 'justify-content: {{VALUE}};' ],
         ] );
 
-        // 🚀 THE FIX: Dropdown Distance Slider to fix overlap!
         $this->add_responsive_control( 'mobile_dropdown_distance', [
             'label'      => __( 'Dropdown Distance (Fix Overlap)', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
@@ -167,7 +166,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         ] );
 
         $this->end_controls_section();
-
 
         /* ==========================================
          * STYLE TAB
@@ -182,7 +180,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->start_controls_tabs( 'tabs_main_menu_style' );
         
-        // --- NORMAL TAB ---
         $this->start_controls_tab( 'tab_main_normal', [ 'label' => 'Normal' ] );
         $this->add_control( 'main_color', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
@@ -198,7 +195,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         ] );
         $this->end_controls_tab();
         
-        // --- HOVER TAB ---
         $this->start_controls_tab( 'tab_main_hover', [ 'label' => 'Hover' ] );
         $this->add_control( 'main_color_hover', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
@@ -219,7 +215,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         ] );
         $this->end_controls_tab();
 
-        // --- ACTIVE TAB ---
         $this->start_controls_tab( 'tab_main_active', [ 'label' => 'Active' ] );
         $this->add_control( 'main_color_active', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
@@ -354,11 +349,9 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         ?>
         <style>
-            /* ── GLOBAL NAV BASE ── */
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> { position: relative; width: 100%; box-sizing: border-box; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu { list-style: none; margin: 0; padding: 0; }
             
-            /* ── DESKTOP MENU CORE ── */
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu { display: flex; flex-wrap: wrap; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu a { 
                 display: flex; align-items: center; text-decoration: none; position: relative; box-sizing: border-box;
@@ -366,7 +359,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li { position: relative; }
             
-            /* Submenu Icon (Desktop & Mobile Base) */
             <?php if ( $icon !== 'none' ) : ?>
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children > a::after {
                     content: '\<?php echo ( $icon === 'fa-caret-down' ? 'f0d7' : ($icon === 'fa-angle-down' ? 'f107' : 'f067') ); ?>';
@@ -375,7 +367,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .menu-item-has-children:hover > a::after { transform: rotate(180deg); }
             <?php endif; ?>
 
-            /* Underline Hover (Desktop Only) */
             <?php if ( $hover === 'underline' ) : ?>
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu > li > a::after {
                     content: ''; position: absolute; bottom: 0; left: 0; width: 100%; background: #333; 
@@ -389,13 +380,11 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .menu-item-has-children > a::after { display: none; }
             <?php endif; ?>
 
-            /* Layout: Vertical (Desktop) */
             <?php if ( $layout === 'vertical' ) : ?>
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu { flex-direction: column; width: 100%; }
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li { width: 100%; }
             <?php endif; ?>
 
-            /* Desktop Dropdowns */
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu { 
                 position: absolute; top: 100%; left: 0; min-width: 220px; 
                 flex-direction: column; list-style: none; padding: 0; margin: 0; z-index: 999; 
@@ -410,7 +399,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 }
             <?php endif; ?>
             
-            /* ── MOBILE MENU CORE (Strictly Isolated) ── */
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: none; width: 100%; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { display: none; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle { cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.3s; }
@@ -418,11 +406,9 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             <?php if ( $breakpoint !== 'none' ) : ?>
                 @media (max-width: <?php echo esc_attr( $breakpoint ); ?>px) {
                     
-                    /* Hide desktop instantly */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop { display: none !important; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: flex; }
                     
-                    /* Mobile Panel Wrapper */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { 
                         width: 100%; position: absolute; top: 100%; left: 0; z-index: 9999; 
                         background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
@@ -434,7 +420,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     }
                     
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu li { 
-                        display: block !important; width: 100% !important; flex-grow: 0 !important; border: none !important; 
+                        display: block !important; width: 100% !important; flex-grow: 0 !important; border: none !important; position: relative;
                     }
                     
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { 
@@ -443,7 +429,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         text-decoration: none; 
                     }
 
-                    /* Dropdown reset for mobile */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu { 
                         position: static !important; display: none; 
                         box-shadow: none !important; border: none !important; background: #fafafa !important; 
@@ -455,17 +440,16 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         padding: 12px 20px 12px 40px !important; border-bottom: 1px solid #eee !important; display: flex; 
                     }
                     
+                    /* 🚀 THE FIX: Dynamic CSS for the Mobile Submenu Caret */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .menu-item-has-children > a::after { display: none !important; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-mobile-caret { 
-                        position: absolute; right: 0; top: 0; width: 50px; height: 100%; display: flex; align-items: center; justify-content: center; 
-                        cursor: pointer; border-left: 1px solid #eee; z-index: 10; transition: transform 0.3s; 
+                        position: absolute; right: 0; top: 0; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; 
+                        cursor: pointer; border-left: 1px solid #eee; z-index: 10; color: #555; font-size: 14px;
                     }
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-mobile-caret i { transition: transform 0.3s ease; }
                 }
             <?php endif; ?>
 
-            /* =======================================
-               🚀 DYNAMIC RESPONSIVE STRETCH ENGINE
-               ======================================= */
             <?php
             $align_breakpoints = [
                 'desktop' => [ 'prefix' => '.mh-nav-align', 'media' => '' ],
@@ -480,7 +464,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 echo "{$p}-flex-start .mh-nav-desktop .mh-menu { justify-content: flex-start; }\n";
                 echo "{$p}-center .mh-nav-desktop .mh-menu { justify-content: center; }\n";
                 echo "{$p}-flex-end .mh-nav-desktop .mh-menu { justify-content: flex-end; }\n";
-                
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu { justify-content: space-between; width: 100%; }\n";
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu > li { flex-grow: 1; }\n";
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu > li > a { width: 100%; }\n";
@@ -512,34 +495,66 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         </div>
 
-        <?php if ( $settings['mobile_stretch'] === 'full' && $breakpoint !== 'none' ) : ?>
-            <script>
-                jQuery(document).ready(function($) {
-                    var $wrapper = $('.mh-nav-wrapper-<?php echo esc_attr($widget_id); ?>');
-                    var $panel = $wrapper.find('.mh-nav-mobile-panel');
-                    var $toggle = $wrapper.find('.mh-nav-mobile-toggle');
+        <script>
+            jQuery(document).ready(function($) {
+                var $wrapper = $('.mh-nav-wrapper-<?php echo esc_attr($widget_id); ?>');
+                var $panel = $wrapper.find('.mh-nav-mobile-panel');
+                var $toggle = $wrapper.find('.mh-nav-mobile-toggle');
+                
+                var isFullWidth = <?php echo $settings['mobile_stretch'] === 'full' ? 'true' : 'false'; ?>;
+                var breakpoint = <?php echo $breakpoint === 'none' ? 0 : intval($breakpoint); ?>;
 
-                    function forceMobileFullWidth() {
-                        if ($(window).width() <= <?php echo esc_attr($breakpoint); ?>) {
-                            var offsetLeft = $wrapper[0].getBoundingClientRect().left;
-                            $panel.css({
-                                'width': $(window).width() + 'px',
-                                'left': '-' + offsetLeft + 'px',
-                                'right': 'auto',
-                                'box-sizing': 'border-box'
-                            });
-                        } else {
-                            $panel.css({ 'width': '', 'left': '', 'right': '' });
-                        }
+                // 1. Handle Full Width Stretching
+                function forceMobileFullWidth() {
+                    if (isFullWidth && $(window).width() <= breakpoint) {
+                        var offsetLeft = $wrapper[0].getBoundingClientRect().left;
+                        $panel.css({
+                            'width': $(window).width() + 'px',
+                            'left': '-' + offsetLeft + 'px',
+                            'right': 'auto',
+                            'box-sizing': 'border-box'
+                        });
+                    } else {
+                        $panel.css({ 'width': '', 'left': '', 'right': '' });
                     }
+                }
 
-                    $(window).on('resize', forceMobileFullWidth);
-                    $toggle.on('click', function() {
-                        forceMobileFullWidth();
-                    });
+                $(window).on('resize', function() {
+                    forceMobileFullWidth();
+                    // Auto-hide mobile panel if resizing back to desktop
+                    if ($(window).width() > breakpoint) {
+                        $panel.css('display', '');
+                    }
                 });
-            </script>
-        <?php endif; ?>
+
+                // 2. Open / Close the Mobile Panel
+                $toggle.on('click', function(e) {
+                    e.preventDefault();
+                    forceMobileFullWidth();
+                    $panel.slideToggle(300);
+                });
+
+                // 3. Inject Carets into Submenus
+                $panel.find('.menu-item-has-children > a').after('<span class="mh-mobile-caret"><i class="fas fa-chevron-down"></i></span>');
+
+                // 4. Slide Open / Close Submenus
+                $panel.find('.mh-mobile-caret').on('click', function(e) {
+                    e.preventDefault();
+                    var $caret = $(this);
+                    var $subMenu = $caret.siblings('.sub-menu');
+                    
+                    $caret.toggleClass('mh-caret-open');
+                    
+                    if ($caret.hasClass('mh-caret-open')) {
+                        $caret.find('i').css('transform', 'rotate(180deg)');
+                    } else {
+                        $caret.find('i').css('transform', 'rotate(0deg)');
+                    }
+                    
+                    $subMenu.slideToggle(300);
+                });
+            });
+        </script>
         <?php
     }
 }
