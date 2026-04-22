@@ -61,7 +61,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'separator' => 'before',
         ] );
 
-        // 🚀 THE FIX: We removed 'selectors' and replaced it with 'prefix_class'
         $this->add_responsive_control( 'align_items', [
             'label'     => __( 'Menu Position Align', 'mh-plug' ),
             'type'      => Controls_Manager::CHOOSE,
@@ -71,7 +70,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 'flex-end'   => [ 'title' => 'Right', 'icon' => 'eicon-h-align-right' ],
                 'stretch'    => [ 'title' => 'Stretch', 'icon' => 'eicon-h-align-stretch' ],
             ],
-            'prefix_class' => 'mh-nav-align%s-', // This allows us to use advanced CSS to force the stretch!
+            'prefix_class' => 'mh-nav-align%s-', 
         ] );
 
         $this->add_responsive_control( 'item_text_align', [
@@ -344,57 +343,55 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         ?>
         <style>
+            /* ── GLOBAL NAV BASE ── */
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> { position: relative; width: 100%; }
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu { list-style: none; margin: 0; padding: 0; }
             
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu a { 
-                display: flex; align-items: center; text-decoration: none; position: relative;
+            /* ── DESKTOP MENU CORE ── */
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu { display: flex; flex-wrap: wrap; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu a { 
+                display: flex; align-items: center; text-decoration: none; position: relative; box-sizing: border-box;
                 transition: color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
             }
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu li { position: relative; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li { position: relative; }
             
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: none; width: 100%; }
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { display: none; }
-            
-            /* Submenu Icon */
+            /* Submenu Icon (Desktop & Mobile Base) */
             <?php if ( $icon !== 'none' ) : ?>
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children > a::after {
                     content: '\<?php echo ( $icon === 'fa-caret-down' ? 'f0d7' : ($icon === 'fa-angle-down' ? 'f107' : 'f067') ); ?>';
                     font-family: 'Font Awesome 5 Free'; font-weight: 900; margin-left: 8px; font-size: 0.8em; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
                 }
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children:hover > a::after { transform: rotate(180deg); }
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .menu-item-has-children:hover > a::after { transform: rotate(180deg); }
             <?php endif; ?>
 
-            /* Underline Hover */
+            /* Underline Hover (Desktop Only) */
             <?php if ( $hover === 'underline' ) : ?>
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a::after {
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu > li > a::after {
                     content: ''; position: absolute; bottom: 0; left: 0; width: 100%; background: #333; 
                     transform: scaleX(0); transform-origin: center; 
                     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
                 }
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li > a:hover::after,
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu > li.current-menu-item > a::after { 
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu > li > a:hover::after,
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu > li.current-menu-item > a::after { 
                     transform: scaleX(1); 
                 }
-                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .menu-item-has-children > a::after { display: none; }
+                .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .menu-item-has-children > a::after { display: none; }
             <?php endif; ?>
 
-            /* Layout: Vertical */
+            /* Layout: Vertical (Desktop) */
             <?php if ( $layout === 'vertical' ) : ?>
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu { flex-direction: column; width: 100%; }
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li { width: 100%; }
             <?php endif; ?>
 
-            /* Fade & Glide Dropdowns */
+            /* Desktop Dropdowns */
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu { 
                 position: absolute; top: 100%; left: 0; min-width: 220px; 
                 flex-direction: column; list-style: none; padding: 0; margin: 0; z-index: 999; 
                 opacity: 0; visibility: hidden; pointer-events: none;
-                transform: translateY(15px);
-                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-                display: flex;
+                transform: translateY(15px); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex;
             }
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu a { padding: 12px 20px; font-size: 14px; width: 100%; box-sizing: border-box; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu .sub-menu a { padding: 12px 20px; font-size: 14px; width: 100%; }
             
             <?php if ( $display === 'hover' ) : ?>
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li:hover > .sub-menu { 
@@ -402,30 +399,63 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 }
             <?php endif; ?>
             
-            /* Mobile Toggle */
+            /* ── MOBILE MENU CORE (Strictly Isolated) ── */
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: none; width: 100%; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { display: none; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle { cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.3s; }
             
-            /* Breakpoint Logic */
             <?php if ( $breakpoint !== 'none' ) : ?>
                 @media (max-width: <?php echo esc_attr( $breakpoint ); ?>px) {
+                    
+                    /* Hide desktop instantly */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop { display: none !important; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-toggle-wrapper { display: flex; }
                     
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { width: 100%; position: absolute; top: 100%; left: 0; z-index: 9999; background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); display: none; }
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu { flex-direction: column; width: 100%; display: flex; }
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu li { width: 100%; }
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { padding: 15px 20px; border-bottom: 1px solid #eee; width: 100%; box-sizing: border-box; }
+                    /* Mobile Panel Wrapper */
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel { 
+                        width: 100%; position: absolute; top: 100%; left: 0; z-index: 9999; 
+                        background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+                        display: none; 
+                    }
+
+                    /* 🚀 THE FIX: Force mobile items into a strict un-stretching column */
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu { 
+                        display: flex !important; flex-direction: column !important; width: 100% !important; margin: 0 !important; padding: 0 !important; 
+                    }
                     
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu { position: static; display: none; box-shadow: none; border: none; background: #fafafa; opacity: 1; visibility: visible; pointer-events: auto; transform: none; width: 100%; }
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu a { padding-left: 40px; }
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu li { 
+                        display: block !important; width: 100% !important; flex-grow: 0 !important; border: none !important; 
+                    }
                     
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .menu-item-has-children > a::after { display: none; }
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-mobile-caret { position: absolute; right: 0; top: 0; width: 50px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; border-left: 1px solid #eee; z-index: 10; transition: transform 0.3s; }
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { 
+                        display: flex; align-items: center; justify-content: space-between; /* Pushes text left, icon right */
+                        padding: 15px 20px; border-bottom: 1px solid #eee; width: 100%; box-sizing: border-box; 
+                        text-decoration: none; 
+                    }
+
+                    /* Dropdown reset for mobile */
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu { 
+                        position: static !important; display: none; /* JS toggles this */
+                        box-shadow: none !important; border: none !important; background: #fafafa !important; 
+                        opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; transform: none !important; 
+                        width: 100% !important; flex-direction: column !important; margin: 0 !important; padding: 0 !important;
+                    }
+                    
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu > li > a { 
+                        padding: 12px 20px 12px 40px !important; border-bottom: 1px solid #eee !important; display: flex; 
+                    }
+                    
+                    /* Custom Caret logic so JS can grab it easily */
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .menu-item-has-children > a::after { display: none !important; }
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-mobile-caret { 
+                        position: absolute; right: 0; top: 0; width: 50px; height: 100%; display: flex; align-items: center; justify-content: center; 
+                        cursor: pointer; border-left: 1px solid #eee; z-index: 10; transition: transform 0.3s; 
+                    }
                 }
             <?php endif; ?>
 
             /* =======================================
-               🚀 THE FIX: DYNAMIC RESPONSIVE STRETCH ENGINE
+               🚀 DYNAMIC RESPONSIVE STRETCH ENGINE
                ======================================= */
             <?php
             $align_breakpoints = [
@@ -442,7 +472,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 echo "{$p}-center .mh-nav-desktop .mh-menu { justify-content: center; }\n";
                 echo "{$p}-flex-end .mh-nav-desktop .mh-menu { justify-content: flex-end; }\n";
                 
-                /* When stretch is selected, we force the children to grow and fill the space! */
+                /* The stretch command ONLY affects the desktop menu, keeping mobile safe! */
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu { justify-content: space-between; width: 100%; }\n";
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu > li { flex-grow: 1; }\n";
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu > li > a { width: 100%; }\n";
