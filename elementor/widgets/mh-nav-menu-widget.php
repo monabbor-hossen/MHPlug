@@ -440,7 +440,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         padding: 12px 20px 12px 40px !important; border-bottom: 1px solid #eee !important; display: flex; 
                     }
                     
-                    /* 🚀 THE FIX: Dynamic CSS for the Mobile Submenu Caret */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .menu-item-has-children > a::after { display: none !important; }
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-mobile-caret { 
                         position: absolute; right: 0; top: 0; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; 
@@ -503,6 +502,9 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 
                 var isFullWidth = <?php echo $settings['mobile_stretch'] === 'full' ? 'true' : 'false'; ?>;
                 var breakpoint = <?php echo $breakpoint === 'none' ? 0 : intval($breakpoint); ?>;
+                
+                // Track screen width to prevent fake mobile resize bugs
+                var lastWidth = $(window).width(); 
 
                 // 1. Handle Full Width Stretching
                 function forceMobileFullWidth() {
@@ -520,26 +522,35 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 }
 
                 $(window).on('resize', function() {
-                    forceMobileFullWidth();
-                    // Auto-hide mobile panel if resizing back to desktop
-                    if ($(window).width() > breakpoint) {
-                        $panel.css('display', '');
+                    var currentWidth = $(window).width();
+                    // 🚀 FIX: Only run if the physical width actually changed!
+                    if (currentWidth !== lastWidth) {
+                        forceMobileFullWidth();
+                        if (currentWidth > breakpoint) {
+                            $panel.css('display', '');
+                        }
+                        lastWidth = currentWidth;
                     }
                 });
 
                 // 2. Open / Close the Mobile Panel
-                $toggle.on('click', function(e) {
+                // 🚀 FIX: .off('click') stops Elementor from double-clicking!
+                $toggle.off('click').on('click', function(e) {
                     e.preventDefault();
+                    e.stopPropagation(); // Stops other scripts from interfering
                     forceMobileFullWidth();
                     $panel.slideToggle(300);
                 });
 
-                // 3. Inject Carets into Submenus
-                $panel.find('.menu-item-has-children > a').after('<span class="mh-mobile-caret"><i class="fas fa-chevron-down"></i></span>');
+                // 3. Inject Carets into Submenus (Only if they don't exist yet)
+                if ($panel.find('.mh-mobile-caret').length === 0) {
+                    $panel.find('.menu-item-has-children > a').after('<span class="mh-mobile-caret"><i class="fas fa-chevron-down"></i></span>');
+                }
 
                 // 4. Slide Open / Close Submenus
-                $panel.find('.mh-mobile-caret').on('click', function(e) {
+                $panel.find('.mh-mobile-caret').off('click').on('click', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     var $caret = $(this);
                     var $subMenu = $caret.siblings('.sub-menu');
                     
