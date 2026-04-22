@@ -82,7 +82,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 'flex-end'   => [ 'title' => 'Right', 'icon' => 'eicon-text-align-right' ],
             ],
             'selectors' => [ 
-                '{{WRAPPER}} .mh-menu > li > a' => 'justify-content: {{VALUE}}; text-align: {{VALUE}};',
+                '{{WRAPPER}} .mh-menu > li > a' => 'justify-content: {{VALUE}} !important; text-align: {{VALUE}} !important;',
             ],
         ] );
 
@@ -183,11 +183,12 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $this->start_controls_tab( 'tab_main_normal', [ 'label' => 'Normal' ] );
         $this->add_control( 'main_color', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
-            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a' => 'color: {{VALUE}};' ],
+            // 🚀 FIX: Forced !important to override theme link colors
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a' => 'color: {{VALUE}} !important;' ],
         ] );
         $this->add_control( 'main_bg', [
             'label' => 'Background Color', 'type' => Controls_Manager::COLOR,
-            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a' => 'background-color: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a' => 'background-color: {{VALUE}} !important;' ],
         ] );
         $this->add_group_control( Group_Control_Border::get_type(), [
             'name'     => 'main_menu_border_normal',
@@ -198,11 +199,11 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $this->start_controls_tab( 'tab_main_hover', [ 'label' => 'Hover' ] );
         $this->add_control( 'main_color_hover', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
-            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a:hover' => 'color: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a:hover' => 'color: {{VALUE}} !important;' ],
         ] );
         $this->add_control( 'main_bg_hover', [
             'label' => 'Background Color', 'type' => Controls_Manager::COLOR,
-            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a:hover' => 'background-color: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a:hover' => 'background-color: {{VALUE}} !important;' ],
         ] );
         $this->add_group_control( Group_Control_Border::get_type(), [
             'name'     => 'main_menu_border_hover',
@@ -211,18 +212,18 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $this->add_control( 'main_pointer_color', [
             'label' => 'Pointer Color (If Underline)', 'type' => Controls_Manager::COLOR,
             'condition' => [ 'hover_effect' => 'underline' ],
-            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a::after' => 'background-color: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a::after' => 'background-color: {{VALUE}} !important;' ],
         ] );
         $this->end_controls_tab();
 
         $this->start_controls_tab( 'tab_main_active', [ 'label' => 'Active' ] );
         $this->add_control( 'main_color_active', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR,
-            'selectors' => [ '{{WRAPPER}} .mh-menu > li.current-menu-item > a' => 'color: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li.current-menu-item > a' => 'color: {{VALUE}} !important;' ],
         ] );
         $this->add_control( 'main_bg_active', [
             'label' => 'Background Color', 'type' => Controls_Manager::COLOR,
-            'selectors' => [ '{{WRAPPER}} .mh-menu > li.current-menu-item > a' => 'background-color: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li.current-menu-item > a' => 'background-color: {{VALUE}} !important;' ],
         ] );
         $this->add_group_control( Group_Control_Border::get_type(), [
             'name'     => 'main_menu_border_active',
@@ -235,24 +236,24 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $this->add_control( 'pointer_height', [
             'label' => 'Pointer Height (px)', 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 2 ],
             'condition' => [ 'hover_effect' => 'underline' ],
-            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a::after' => 'height: {{SIZE}}px;' ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a::after' => 'height: {{SIZE}}px !important;' ],
             'separator' => 'before'
         ] );
 
         $this->add_responsive_control( 'inner_h_spacing', [
             'label' => 'Inner Horizontal Spacing', 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 15 ],
-            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a' => 'padding-left: {{SIZE}}px; padding-right: {{SIZE}}px;' ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a' => 'padding-left: {{SIZE}}px !important; padding-right: {{SIZE}}px !important;' ],
         ] );
 
         $this->add_responsive_control( 'vertical_spacing', [
             'label' => 'Vertical Spacing', 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 15 ],
-            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a' => 'padding-top: {{SIZE}}px; padding-bottom: {{SIZE}}px;' ],
+            'selectors' => [ '{{WRAPPER}} .mh-menu > li > a' => 'padding-top: {{SIZE}}px !important; padding-bottom: {{SIZE}}px !important;' ],
         ] );
 
         $this->end_controls_section();
 
         /* ==========================================
-         * 🚀 SUB MENU STYLE (Optimized Tab UI)
+         * 🚀 SUB MENU STYLE
          * ========================================== */
         $this->start_controls_section( 'style_sub_menu', [ 'label' => __( 'Sub Menu', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
 
@@ -289,10 +290,8 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             'separator' => 'after',
         ] );
 
-        // --- SUB MENU TABS START ---
         $this->start_controls_tabs( 'tabs_sub_menu_style' );
         
-        // NORMAL TAB
         $this->start_controls_tab( 'tab_sub_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
 
         $this->add_control( 'sub_text_color', [
@@ -327,7 +326,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->end_controls_tab();
 
-        // HOVER TAB
         $this->start_controls_tab( 'tab_sub_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
 
         $this->add_control( 'sub_text_color_hover', [
@@ -347,8 +345,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         ] );
 
         $this->end_controls_tab();
-        
-        // --- SUB MENU TABS END ---
         $this->end_controls_tabs();
 
         $this->end_controls_section();
@@ -360,22 +356,22 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         $this->add_control( 'toggle_color', [
             'label' => 'Color', 'type' => Controls_Manager::COLOR, 'default' => '#333333',
-            'selectors' => [ '{{WRAPPER}} .mh-nav-mobile-toggle i' => 'color: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-nav-mobile-toggle i' => 'color: {{VALUE}} !important;' ],
         ] );
 
         $this->add_control( 'toggle_bg', [
             'label' => 'Background Color', 'type' => Controls_Manager::COLOR, 'default' => 'transparent',
-            'selectors' => [ '{{WRAPPER}} .mh-nav-mobile-toggle' => 'background-color: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-nav-mobile-toggle' => 'background-color: {{VALUE}} !important;' ],
         ] );
 
         $this->add_responsive_control( 'toggle_size', [
             'label' => 'Icon Size', 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 24 ],
-            'selectors' => [ '{{WRAPPER}} .mh-nav-mobile-toggle i' => 'font-size: {{SIZE}}px;' ],
+            'selectors' => [ '{{WRAPPER}} .mh-nav-mobile-toggle i' => 'font-size: {{SIZE}}px !important;' ],
         ] );
 
         $this->add_responsive_control( 'toggle_padding', [
             'label' => 'Button Padding', 'type' => Controls_Manager::DIMENSIONS,
-            'selectors' => [ '{{WRAPPER}} .mh-nav-mobile-toggle' => 'padding: {{TOP}}px {{RIGHT}}px {{BOTTOM}}px {{LEFT}}px;' ],
+            'selectors' => [ '{{WRAPPER}} .mh-nav-mobile-toggle' => 'padding: {{TOP}}px {{RIGHT}}px {{BOTTOM}}px {{LEFT}}px !important;' ],
         ] );
 
         $this->add_group_control( Group_Control_Border::get_type(), [
@@ -408,12 +404,16 @@ class MH_Nav_Menu_Widget extends Widget_Base {
 
         ?>
         <style>
+            /* 🚀 THE FIX: Ultimate CSS Reset block to prevent themes from adding bullets and messing up footers */
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> ul { list-style: none !important; margin: 0 !important; padding: 0 !important; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> li { list-style: none !important; margin: 0 !important; padding: 0 !important; border: none !important; }
+            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> a { text-decoration: none !important; box-shadow: none !important; }
+
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> { position: relative; width: 100%; box-sizing: border-box; }
-            .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-menu { list-style: none; margin: 0; padding: 0; }
             
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu { display: flex; flex-wrap: wrap; }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu a { 
-                display: flex; align-items: center; text-decoration: none; position: relative; box-sizing: border-box;
+                display: flex; align-items: center; position: relative; box-sizing: border-box;
                 transition: color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
             }
             .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li { position: relative; }
@@ -441,6 +441,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .menu-item-has-children > a::after { display: none; }
             <?php endif; ?>
 
+            /* 🚀 THE FIX: Vertical layout properly formats to full width columns */
             <?php if ( $layout === 'vertical' ) : ?>
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu { flex-direction: column; width: 100%; }
                 .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-desktop .mh-menu li { width: 100%; }
@@ -510,6 +511,9 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 }
             <?php endif; ?>
 
+            /* =======================================
+               🚀 DYNAMIC RESPONSIVE ALIGNMENT ENGINE
+               ======================================= */
             <?php
             $align_breakpoints = [
                 'desktop' => [ 'prefix' => '.mh-nav-align', 'media' => '' ],
@@ -521,10 +525,11 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 if ( $bp['media'] ) echo $bp['media'] . " {\n";
                 $p = $bp['prefix'];
                 
-                echo "{$p}-flex-start .mh-nav-desktop .mh-menu { justify-content: flex-start; }\n";
-                echo "{$p}-center .mh-nav-desktop .mh-menu { justify-content: center; }\n";
-                echo "{$p}-flex-end .mh-nav-desktop .mh-menu { justify-content: flex-end; }\n";
-                echo "{$p}-stretch .mh-nav-desktop .mh-menu { justify-content: space-between; width: 100%; }\n";
+                // 🚀 THE FIX: align-items applied to vertical layouts so they obey Left/Center/Right
+                echo "{$p}-flex-start .mh-nav-desktop .mh-menu { justify-content: flex-start; align-items: flex-start; }\n";
+                echo "{$p}-center .mh-nav-desktop .mh-menu { justify-content: center; align-items: center; }\n";
+                echo "{$p}-flex-end .mh-nav-desktop .mh-menu { justify-content: flex-end; align-items: flex-end; }\n";
+                echo "{$p}-stretch .mh-nav-desktop .mh-menu { justify-content: space-between; align-items: stretch; width: 100%; }\n";
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu > li { flex-grow: 1; }\n";
                 echo "{$p}-stretch .mh-nav-desktop .mh-menu > li > a { width: 100%; }\n";
                 
@@ -545,12 +550,26 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                 if ( $display === 'click' ) {
                     $menu_classes .= ' mh-submenu-click';
                 }
-                wp_nav_menu([ 'menu' => $menu_slug, 'menu_class' => $menu_classes, 'container' => false ]); 
+                
+                // 🚀 THE FIX: Forces WP to not render a fallback <div> block if the menu is broken
+                wp_nav_menu([ 
+                    'menu'        => $menu_slug, 
+                    'menu_class'  => $menu_classes, 
+                    'container'   => false,
+                    'fallback_cb' => '__return_empty_string'
+                ]); 
                 ?>
             </div>
 
             <div class="mh-nav-mobile-panel">
-                <?php wp_nav_menu([ 'menu' => $menu_slug, 'menu_class' => 'mh-menu', 'container' => false ]); ?>
+                <?php 
+                wp_nav_menu([ 
+                    'menu'        => $menu_slug, 
+                    'menu_class'  => 'mh-menu', 
+                    'container'   => false,
+                    'fallback_cb' => '__return_empty_string'
+                ]); 
+                ?>
             </div>
 
         </div>
