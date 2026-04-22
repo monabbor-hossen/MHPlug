@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MH Plug
  * Description:       A custom Elementor addon with a dedicated dashboard for managing widgets and features.
- * Plugin URI:        https://your-website.com/
+ * Plugin URI:        https://monabbor-hossen.github.io/MHPlug/
  * Version:           1.0.0
  * Author:            MHutin
  * Author URI:        https://mhutin.com/
