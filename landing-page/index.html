@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MH Plug — All-in-One Elementor Addon & WooCommerce Toolkit</title>
+<meta name="description" content="Supercharge Elementor with 34+ custom widgets, a visual Theme Builder, WooCommerce Wishlist, Age Gate, and more."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{
+  colors:{brand:{DEFAULT:'#004265',light:'#005a8a',dark:'#001e33',accent:'#00a8e8',glow:'#00d4ff'}},
+  fontFamily:{sans:['Inter','sans-serif'],display:['Space Grotesk','sans-serif']},
+  boxShadow:{
+    neu:'8px 8px 20px #001020,-8px -8px 20px #005680',
+    'neu-sm':'4px 4px 12px #001020,-4px -4px 12px #005680',
+    float:'0 30px 70px -10px rgba(0,168,232,.45)',
+    glow3d:'0 0 40px rgba(0,212,255,.5),0 20px 60px rgba(0,100,200,.3)',
+  }
+}}}
+</script>
+<style>
+*{box-sizing:border-box;scroll-behavior:smooth;margin:0;padding:0;}
+body{background:#00101e;font-family:'Inter',sans-serif;overflow-x:hidden;color:#fff;}
+
+/* ── Canvas BG ── */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6;}
+
+/* ── Glass ── */
+.glass{background:rgba(255,255,255,.06);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);}
+.glass-dark{background:rgba(0,16,30,.7);backdrop-filter:blur(20px);border:1px solid rgba(0,212,255,.15);}
+
+/* ── Gradient text ── */
+.g1{background:linear-gradient(135deg,#00d4ff,#7c3aed,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.g2{background:linear-gradient(90deg,#00d4ff,#00ffb3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.g3{background:linear-gradient(90deg,#f472b6,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* ── Neumorphic button ── */
+.btn3d{
+  background:linear-gradient(145deg,#00527a,#00334d);
+  box-shadow:6px 6px 20px #000e1a,-6px -6px 20px #006a9e,inset 0 1px 0 rgba(255,255,255,.1);
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+}
+.btn3d:hover{box-shadow:8px 8px 28px #000e1a,-8px -8px 28px #007ab5,0 0 40px rgba(0,212,255,.4);transform:translateY(-3px) scale(1.02);}
+.btn3d:active{box-shadow:inset 4px 4px 14px #000e1a,inset -4px -4px 14px #005e8f;transform:translateY(1px) scale(.98);}
+
+/* ── 3D Card ── */
+.card3d{
+  transform-style:preserve-3d;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1),box-shadow .5s ease;
+  transform:perspective(900px) rotateX(0) rotateY(0);
+}
+.card3d:hover{box-shadow:0 40px 80px rgba(0,168,232,.4),0 0 0 1px rgba(0,212,255,.3);}
+.card3d .inner{transform:translateZ(20px);transition:transform .5s ease;}
+
+/* ── Hero 3D box ── */
+.hero3d{
+  animation:heroSpin 10s ease-in-out infinite;
+  transform-style:preserve-3d;
+}
+@keyframes heroSpin{
+  0%,100%{transform:perspective(900px) rotateX(6deg) rotateY(-16deg) translateY(0);}
+  33%{transform:perspective(900px) rotateX(8deg) rotateY(-8deg) translateY(-15px);}
+  66%{transform:perspective(900px) rotateX(4deg) rotateY(-22deg) translateY(-8px);}
+}
+
+/* ── Orbit ring ── */
+.orbit{animation:orbitSpin 18s linear infinite;transform-style:preserve-3d;}
+@keyframes orbitSpin{from{transform:perspective(600px) rotateY(0)}to{transform:perspective(600px) rotateY(360deg)}}
+
+/* ── Float ── */
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.float{animation:fl 6s ease-in-out infinite;}
+.float2{animation:fl 9s ease-in-out 1.5s infinite;}
+.float3{animation:fl 7s ease-in-out 3s infinite;}
+
+/* ── Glow pulse ── */
+@keyframes gp{0%,100%{box-shadow:0 0 20px rgba(0,212,255,.3)}50%{box-shadow:0 0 50px rgba(0,212,255,.8),0 0 80px rgba(0,100,200,.4)}}
+.glow-pulse{animation:gp 3s ease-in-out infinite;}
+
+/* ── Shimmer badge ── */
+@keyframes shim{0%{background-position:-200% center}100%{background-position:200% center}}
+.badge-shim{
+  background:linear-gradient(90deg,rgba(0,212,255,.1) 25%,rgba(0,212,255,.35) 50%,rgba(0,212,255,.1) 75%);
+  background-size:200% auto;animation:shim 2.5s linear infinite;
+}
+
+/* ── Widget tag ── */
+@keyframes wtag{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.02)}}
+.wtag{animation:wtag 5s ease-in-out infinite;transition:all .3s;}
+.wtag:nth-child(2n){animation-delay:.7s;}.wtag:nth-child(3n){animation-delay:1.4s;}.wtag:nth-child(4n){animation-delay:2s;}
+.wtag:hover{transform:translateY(-8px) scale(1.08) !important;box-shadow:0 12px 30px rgba(0,212,255,.4);}
+
+/* ── FAQ ── */
+.faq-body{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.4,0,.2,1),padding .3s;}
+.faq-body.open{max-height:300px;padding-top:.75rem;padding-bottom:.75rem;}
+.faq-ico{transition:transform .35s cubic-bezier(.34,1.56,.64,1);}
+.faq-ico.open{transform:rotate(45deg);}
+
+/* ── Timeline ── */
+.tl-line{background:linear-gradient(to bottom,#00d4ff,#7c3aed,#f472b6);width:3px;border-radius:4px;}
+
+/* ── Scroll reveal ── */
+.rv{opacity:0;transform:translateY(50px) scale(.97);transition:opacity .7s ease,transform .7s ease;}
+.rv.in{opacity:1;transform:translateY(0) scale(1);}
+
+/* ── Terminal ── */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.cur{display:inline-block;width:9px;height:18px;background:#00d4ff;margin-left:3px;vertical-align:middle;animation:blink 1s step-end infinite;border-radius:1px;}
+
+/* ── 3D Perspective Grid ── */
+.perspective-grid{
+  position:absolute;bottom:0;left:0;right:0;height:300px;
+  background:linear-gradient(transparent,rgba(0,212,255,.03));
+  overflow:hidden;pointer-events:none;
+}
+.perspective-grid::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,212,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.08) 1px,transparent 1px);
+  background-size:60px 60px;
+  transform:perspective(400px) rotateX(60deg);transform-origin:center bottom;
+}
+
+/* ── Glowing border card ── */
+.gb{position:relative;}
+.gb::before{
+  content:'';position:absolute;inset:-1px;border-radius:inherit;
+  background:linear-gradient(135deg,rgba(0,212,255,.5),rgba(124,58,237,.5),rgba(244,114,182,.5));
+  z-index:-1;opacity:0;transition:opacity .4s;
+}
+.gb:hover::before{opacity:1;}
+
+/* ── Section divider wave ── */
+.wave-sep{height:80px;overflow:hidden;}
+.wave-sep svg{display:block;}
+
+/* ── Neon line ── */
+.neon-line{height:1px;background:linear-gradient(90deg,transparent,#00d4ff,#7c3aed,transparent);}
+</style>
+</head>
+<body>
+
+<!-- Particle Canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- ═══ NAV ═══ -->
+<nav class="fixed top-0 left-0 right-0 z-50 glass-dark border-b border-white/5 px-6 py-3" style="z-index:100;">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#" class="flex items-center gap-3 group">
+      <div class="relative">
+        <img src="MH-icon.png" alt="MH Plug Logo" class="w-10 h-10 object-contain rounded-xl glow-pulse"/>
+        <div class="absolute inset-0 rounded-xl bg-brand-glow/20 blur-md -z-10 group-hover:bg-brand-glow/40 transition"></div>
+      </div>
+      <span class="font-display font-bold text-xl tracking-tight">MH <span class="g2">Plug</span></span>
+    </a>
+    <!-- Links -->
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-white/60">
+      <a href="#features" class="hover:text-brand-glow transition-colors">Features</a>
+      <a href="#widgets" class="hover:text-brand-glow transition-colors">Widgets</a>
+      <a href="#setup" class="hover:text-brand-glow transition-colors">Setup</a>
+      <a href="#faq" class="hover:text-brand-glow transition-colors">FAQ</a>
+    </div>
+    <a href="#hero" class="btn3d px-5 py-2.5 rounded-xl text-sm font-bold text-brand-glow tracking-wide">Get Plugin ↗</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero" class="relative min-h-screen flex items-center pt-20 pb-10 overflow-hidden" style="position:relative;z-index:1;">
+  <!-- Glow blobs -->
+  <div class="absolute top-1/4 left-0 w-[500px] h-[500px] rounded-full blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(0,168,232,.25) 0%,transparent 70%);"></div>
+  <div class="absolute bottom-10 right-0 w-[400px] h-[400px] rounded-full blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(124,58,237,.2) 0%,transparent 70%);"></div>
+  <!-- Grid perspective -->
+  <div class="perspective-grid"></div>
+
+  <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-14 items-center w-full relative z-10">
+    <!-- LEFT -->
+    <div class="space-y-8">
+      <div class="flex flex-wrap gap-3">
+        <span class="badge-shim glow-pulse px-4 py-1.5 rounded-full text-xs font-bold text-brand-glow border border-brand-glow/30 tracking-wide">⚡ Elementor 3.0+</span>
+        <span class="badge-shim px-4 py-1.5 rounded-full text-xs font-bold text-purple-300 border border-purple-300/30" style="animation-delay:.5s">🛒 WooCommerce</span>
+        <span class="badge-shim px-4 py-1.5 rounded-full text-xs font-bold text-pink-300 border border-pink-300/30" style="animation-delay:1s">🐘 PHP 7.4+</span>
+      </div>
+
+      <div>
+        <h1 class="font-display font-black leading-tight mb-5">
+          <span class="g1 text-6xl lg:text-7xl block">MH Plug</span>
+          <span class="text-white/90 text-3xl lg:text-4xl font-bold block mt-2 leading-snug">All-in-One Elementor Addon<br/>&amp; WooCommerce Toolkit</span>
+        </h1>
+        <p class="text-white/55 text-lg leading-relaxed max-w-lg">Supercharge Elementor with <strong class="text-brand-glow">34+ custom widgets</strong>, a visual Theme Builder, WooCommerce Wishlist, Age Gate, and blazing-fast conditional asset loading.</p>
+      </div>
+
+      <div class="flex flex-wrap gap-4">
+        <a href="#" class="btn3d group px-8 py-4 rounded-2xl text-brand-glow font-black text-lg flex items-center gap-3">
+          <img src="MH-icon.png" alt="" class="w-7 h-7 object-contain rounded-lg"/>
+          <span>Get MH Plug Now</span>
+          <svg class="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+        <a href="#features" class="glass px-6 py-4 rounded-2xl text-white/60 font-medium hover:text-white border border-white/10 hover:border-brand-glow/40 transition">Explore Features ↓</a>
+      </div>
+
+      <div class="neon-line w-full my-2"></div>
+      <div class="flex items-center gap-8 text-sm text-white/40 pt-1">
+        <span>✅ 34+ Widgets</span><span>✅ Theme Builder</span><span>✅ AJAX Secured</span><span>✅ Free Updates</span>
+      </div>
+    </div>
+
+    <!-- RIGHT — 3D Floating Dashboard Card -->
+    <div class="flex items-center justify-center relative h-[480px]">
+      <!-- Outer glow ring -->
+      <div class="absolute w-[360px] h-[360px] rounded-full border border-brand-glow/20 animate-spin" style="animation-duration:20s;"></div>
+      <div class="absolute w-[420px] h-[420px] rounded-full border border-purple-500/10 animate-spin" style="animation-duration:30s;animation-direction:reverse;"></div>
+
+      <!-- Orbiting satellites -->
+      <div class="absolute" style="width:300px;height:300px;">
+        <div class="float absolute -top-4 left-1/2 -translate-x-1/2 glass px-3 py-1.5 rounded-full text-xs font-bold text-brand-glow border border-brand-glow/30 whitespace-nowrap">⚡ Conditional Loading</div>
+        <div class="float2 absolute bottom-0 -right-8 glass px-3 py-1.5 rounded-full text-xs font-bold text-purple-300 border border-purple-400/30 whitespace-nowrap">🎨 Theme Builder</div>
+        <div class="float3 absolute bottom-4 -left-10 glass px-3 py-1.5 rounded-full text-xs font-bold text-pink-300 border border-pink-400/30 whitespace-nowrap">🛒 WooCommerce</div>
+      </div>
+
+      <!-- Main 3D card -->
+      <div class="hero3d relative w-72 h-80 gb rounded-3xl" style="cursor:none;">
+        <div class="absolute inset-0 glass rounded-3xl overflow-hidden" style="box-shadow:0 50px 100px rgba(0,168,232,.5),inset 0 1px 0 rgba(255,255,255,.15);">
+          <div class="absolute inset-0 bg-gradient-to-br from-brand-accent/20 via-purple-600/10 to-pink-500/15"></div>
+          <!-- Top bar -->
+          <div class="relative z-10 px-6 pt-6 pb-4 flex items-center gap-3 border-b border-white/10">
+            <img src="MH-icon.png" alt="MH Plug" class="w-12 h-12 object-contain rounded-xl" style="filter:drop-shadow(0 0 8px rgba(0,212,255,.6));"/>
+            <div>
+              <p class="font-display font-bold text-base">MH Plug</p>
+              <p class="text-brand-glow text-xs font-semibold">v2.0 · Active</p>
+            </div>
+            <div class="ml-auto w-2.5 h-2.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,.8)]"></div>
+          </div>
+          <!-- Stats -->
+          <div class="relative z-10 px-6 py-4 grid grid-cols-3 gap-3">
+            <div class="glass rounded-xl p-3 text-center">
+              <div class="text-2xl font-black g2">34+</div>
+              <div class="text-white/40 text-xs mt-0.5">Widgets</div>
+            </div>
+            <div class="glass rounded-xl p-3 text-center">
+              <div class="text-2xl font-black text-purple-300">∞</div>
+              <div class="text-white/40 text-xs mt-0.5">Templates</div>
+            </div>
+            <div class="glass rounded-xl p-3 text-center">
+              <div class="text-2xl font-black text-pink-300">5★</div>
+              <div class="text-white/40 text-xs mt-0.5">Rating</div>
+            </div>
+          </div>
+          <!-- Tags -->
+          <div class="relative z-10 px-6 py-4 border-t border-white/10 flex flex-wrap gap-2">
+            <span class="text-xs px-2 py-1 rounded-lg bg-brand-glow/15 text-brand-glow">Elementor</span>
+            <span class="text-xs px-2 py-1 rounded-lg bg-purple-500/15 text-purple-300">WooCommerce</span>
+            <span class="text-xs px-2 py-1 rounded-lg bg-pink-500/15 text-pink-300">Theme Builder</span>
+            <span class="text-xs px-2 py-1 rounded-lg bg-green-500/15 text-green-300">Age Gate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-sep"><svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%;height:80px;"><path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="rgba(0,212,255,0.04)"/></svg></div>
+
+<!-- ═══ FEATURES ═══ -->
+<section id="features" class="py-24 px-6 relative" style="z-index:1;">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 rv">
+      <span class="text-brand-glow text-xs font-bold uppercase tracking-[.2em] mb-3 inline-block">Why Choose MH Plug</span>
+      <h2 class="font-display font-black text-5xl mb-4">Features at a <span class="g1">Glance</span></h2>
+      <p class="text-white/40 max-w-lg mx-auto">Every pillar engineered for speed, security, and visual perfection.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Card macro -->
+      <div class="card3d gb glass rounded-3xl p-8 space-y-5 rv cursor-default">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl" style="background:rgba(250,204,21,.12);box-shadow:0 0 20px rgba(250,204,21,.15);">⚡</div>
+        <div class="inner"><h3 class="font-display font-bold text-xl mb-2">Performance First</h3><p class="text-white/45 leading-relaxed text-sm">Conditional loading via <code class="text-brand-glow">get_style_depends()</code>. Every widget loads assets only when used. Zero bloat, maximum Lighthouse score.</p></div>
+        <div class="flex gap-2 flex-wrap"><span class="text-xs px-2.5 py-1 rounded-lg bg-yellow-400/10 text-yellow-300 border border-yellow-400/15">Lazy Load</span><span class="text-xs px-2.5 py-1 rounded-lg bg-yellow-400/10 text-yellow-300 border border-yellow-400/15">Cached Assets</span></div>
+      </div>
+      <div class="card3d gb glass rounded-3xl p-8 space-y-5 rv cursor-default" style="transition-delay:.08s">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl" style="background:rgba(52,211,153,.12);box-shadow:0 0 20px rgba(52,211,153,.15);">🛒</div>
+        <div class="inner"><h3 class="font-display font-bold text-xl mb-2">WooCommerce Suite</h3><p class="text-white/45 leading-relaxed text-sm">Ajax Wishlist, Quick View modal, Live Search, Header Cart, custom Add to Cart, Product Gallery & Rating — all in one plugin.</p></div>
+        <div class="flex gap-2 flex-wrap"><span class="text-xs px-2.5 py-1 rounded-lg bg-green-400/10 text-green-300 border border-green-400/15">Wishlist</span><span class="text-xs px-2.5 py-1 rounded-lg bg-green-400/10 text-green-300 border border-green-400/15">Quick View</span><span class="text-xs px-2.5 py-1 rounded-lg bg-green-400/10 text-green-300 border border-green-400/15">Live Search</span></div>
+      </div>
+      <div class="card3d gb glass rounded-3xl p-8 space-y-5 rv cursor-default" style="transition-delay:.16s">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl" style="background:rgba(167,139,250,.12);box-shadow:0 0 20px rgba(167,139,250,.15);">🎨</div>
+        <div class="inner"><h3 class="font-display font-bold text-xl mb-2">Visual Theme Builder</h3><p class="text-white/45 leading-relaxed text-sm">Design Headers, Footers, Single Products & Archive pages entirely in Elementor. Full template library with one-click conditions.</p></div>
+        <div class="flex gap-2 flex-wrap"><span class="text-xs px-2.5 py-1 rounded-lg bg-purple-400/10 text-purple-300 border border-purple-400/15">Templates</span><span class="text-xs px-2.5 py-1 rounded-lg bg-purple-400/10 text-purple-300 border border-purple-400/15">Conditions</span></div>
+      </div>
+      <div class="card3d gb glass rounded-3xl p-8 space-y-5 rv cursor-default" style="transition-delay:.24s">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl" style="background:rgba(248,113,113,.12);box-shadow:0 0 20px rgba(248,113,113,.15);">🔒</div>
+        <div class="inner"><h3 class="font-display font-bold text-xl mb-2">Security Hardened</h3><p class="text-white/45 leading-relaxed text-sm">Every AJAX endpoint verified with WordPress Nonces. Full input sanitization and output escaping throughout the codebase.</p></div>
+        <div class="flex gap-2 flex-wrap"><span class="text-xs px-2.5 py-1 rounded-lg bg-red-400/10 text-red-300 border border-red-400/15">Nonces</span><span class="text-xs px-2.5 py-1 rounded-lg bg-red-400/10 text-red-300 border border-red-400/15">Sanitized</span></div>
+      </div>
+      <div class="card3d gb glass rounded-3xl p-8 space-y-5 rv cursor-default" style="transition-delay:.32s">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl" style="background:rgba(244,114,182,.12);box-shadow:0 0 20px rgba(244,114,182,.15);">🔞</div>
+        <div class="inner"><h3 class="font-display font-bold text-xl mb-2">Age Gate System</h3><p class="text-white/45 leading-relaxed text-sm">Customizable age verification modal with persistent cookies, configurable durations, custom colors, and a GDPR-ready design.</p></div>
+        <div class="flex gap-2 flex-wrap"><span class="text-xs px-2.5 py-1 rounded-lg bg-pink-400/10 text-pink-300 border border-pink-400/15">Cookies</span><span class="text-xs px-2.5 py-1 rounded-lg bg-pink-400/10 text-pink-300 border border-pink-400/15">GDPR</span></div>
+      </div>
+      <div class="card3d gb glass rounded-3xl p-8 space-y-5 rv cursor-default" style="transition-delay:.4s">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl" style="background:rgba(56,189,248,.12);box-shadow:0 0 20px rgba(56,189,248,.15);">🎯</div>
+        <div class="inner"><h3 class="font-display font-bold text-xl mb-2">MH Icon Picker</h3><p class="text-white/45 leading-relaxed text-sm">Full menu icon picker with MH Icons library + Font Awesome 7. Assign beautiful icons to any nav menu item — zero code needed.</p></div>
+        <div class="flex gap-2 flex-wrap"><span class="text-xs px-2.5 py-1 rounded-lg bg-sky-400/10 text-sky-300 border border-sky-400/15">FA 7</span><span class="text-xs px-2.5 py-1 rounded-lg bg-sky-400/10 text-sky-300 border border-sky-400/15">MH Icons</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WIDGETS ═══ -->
+<section id="widgets" class="py-24 px-6 relative" style="z-index:1;">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-accent/5 to-transparent pointer-events-none"></div>
+  <div class="max-w-7xl mx-auto relative">
+    <div class="text-center mb-16 rv">
+      <span class="text-purple-400 text-xs font-bold uppercase tracking-[.2em] mb-3 inline-block">Complete Library</span>
+      <h2 class="font-display font-black text-5xl mb-4"><span class="g1">34+ Widgets</span> Showcase</h2>
+      <p class="text-white/40 max-w-lg mx-auto">Drag-and-drop Elementor widgets crafted for pixel-perfect output and blazing performance.</p>
+    </div>
+    <!-- Content -->
+    <div class="mb-12 rv">
+      <div class="flex items-center gap-3 mb-5"><span class="w-8 h-0.5 bg-brand-glow inline-block rounded-full"></span><h3 class="text-xs font-bold uppercase tracking-[.2em] text-brand-glow">Content &amp; Layout</h3></div>
+      <div class="flex flex-wrap gap-3">
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-brand-glow/50 cursor-default">📰 Advanced Posts Grid</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-brand-glow/50 cursor-default">🧭 Breadcrumb</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-brand-glow/50 cursor-default">💬 Social Share</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-brand-glow/50 cursor-default">🌤 Weather Widget</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-brand-glow/50 cursor-default">🕒 Business Hours</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-brand-glow/50 cursor-default">⏳ Countdown Timer</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-brand-glow/50 cursor-default">📊 Progress Bar</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-brand-glow/50 cursor-default">❓ FAQ Accordion</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-brand-glow/50 cursor-default">🗺 Map Embed</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-brand-glow/50 cursor-default">📌 Sticky Section</span>
+      </div>
+    </div>
+    <!-- Site Builder -->
+    <div class="mb-12 rv">
+      <div class="flex items-center gap-3 mb-5"><span class="w-8 h-0.5 bg-purple-400 inline-block rounded-full"></span><h3 class="text-xs font-bold uppercase tracking-[.2em] text-purple-400">Site Builder</h3></div>
+      <div class="flex flex-wrap gap-3">
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-purple-400/50 cursor-default">🍔 Off-Canvas Menu</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-purple-400/50 cursor-default">🏠 Site Logo</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-purple-400/50 cursor-default">🔍 Search Bar</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-purple-400/50 cursor-default">🧭 Nav Menu</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-purple-400/50 cursor-default">📱 Mobile Menu</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-purple-400/50 cursor-default">👤 Account Icon</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-purple-400/50 cursor-default">🌐 Language Switcher</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-purple-400/50 cursor-default">📢 Announcement Bar</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-purple-400/50 cursor-default">🔝 Back to Top</span>
+      </div>
+    </div>
+    <!-- WooCommerce widgets -->
+    <div class="rv">
+      <div class="flex items-center gap-3 mb-5"><span class="w-8 h-0.5 bg-pink-400 inline-block rounded-full"></span><h3 class="text-xs font-bold uppercase tracking-[.2em] text-pink-400">WooCommerce Widgets</h3></div>
+      <div class="flex flex-wrap gap-3">
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">🛍 Product Grid</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">🖼 Product Gallery</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">💰 Product Price</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">⭐ Product Rating</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">📝 Product Description</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">🛒 Add to Cart</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">❤️ Wishlist Button</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">🔖 Product Tabs</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">🛒 Header Cart</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">💖 Header Wishlist</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">🔎 Live Search</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">📦 Related Products</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">🏷 Product Badge</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">⚡ Quick View</span>
+        <span class="wtag glass px-4 py-2 rounded-full text-sm text-white/75 border border-white/10 hover:border-pink-400/50 cursor-default">🔗 Product Share</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SETUP ═══ -->
+<section id="setup" class="py-24 px-6 relative" style="z-index:1;">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16 rv">
+      <span class="text-green-400 text-xs font-bold uppercase tracking-[.2em] mb-3 inline-block">Simple Setup</span>
+      <h2 class="font-display font-black text-5xl mb-4">How It <span class="g1">Works</span></h2>
+      <p class="text-white/40">Up and running in under two minutes.</p>
+    </div>
+    <div class="relative">
+      <div class="tl-line absolute left-8 top-0 bottom-0 hidden md:block"></div>
+      <div class="space-y-8">
+        <div class="flex gap-8 items-start rv">
+          <div class="flex-shrink-0 z-10 w-16 h-16 rounded-2xl font-black text-2xl flex items-center justify-center glow-pulse" style="background:linear-gradient(135deg,#00d4ff,#00a8e8);box-shadow:0 0 30px rgba(0,212,255,.5);">1</div>
+          <div class="gb glass rounded-2xl p-6 flex-1"><h3 class="font-display font-bold text-xl mb-2">Upload &amp; Activate</h3><p class="text-white/45 text-sm leading-relaxed">Upload <code class="text-brand-glow">mh-plug.zip</code> via WordPress › Plugins › Add New, then click Activate. Done in under 60 seconds.</p></div>
+        </div>
+        <div class="flex gap-8 items-start rv" style="transition-delay:.12s">
+          <div class="flex-shrink-0 z-10 w-16 h-16 rounded-2xl font-black text-2xl flex items-center justify-center" style="background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 0 30px rgba(124,58,237,.5);">2</div>
+          <div class="gb glass rounded-2xl p-6 flex-1"><h3 class="font-display font-bold text-xl mb-2">Open the Admin Dashboard</h3><p class="text-white/45 text-sm leading-relaxed">Navigate to <strong class="text-white">MH Plug</strong> in the WP sidebar. The neumorphic dashboard gives you full control from one beautiful panel.</p></div>
+        </div>
+        <div class="flex gap-8 items-start rv" style="transition-delay:.24s">
+          <div class="flex-shrink-0 z-10 w-16 h-16 rounded-2xl font-black text-2xl flex items-center justify-center" style="background:linear-gradient(135deg,#f472b6,#fb923c);box-shadow:0 0 30px rgba(244,114,182,.5);">3</div>
+          <div class="gb glass rounded-2xl p-6 flex-1"><h3 class="font-display font-bold text-xl mb-2">Toggle Features &amp; Widgets</h3><p class="text-white/45 text-sm leading-relaxed">Enable only what you need. Individual toggles for every widget and module — keeping your site lightning fast.</p></div>
+        </div>
+        <div class="flex gap-8 items-start rv" style="transition-delay:.36s">
+          <div class="flex-shrink-0 z-10 w-16 h-16 rounded-2xl font-black text-2xl flex items-center justify-center" style="background:linear-gradient(135deg,#00d4ff,#00ffb3);box-shadow:0 0 30px rgba(0,255,179,.4);">4</div>
+          <div class="gb glass rounded-2xl p-6 flex-1"><h3 class="font-display font-bold text-xl mb-2">Design in Elementor</h3><p class="text-white/45 text-sm leading-relaxed">All enabled widgets appear in Elementor under the <strong class="text-brand-glow">MH Plug</strong> category. Drag, drop, and customize with complete visual control.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ REQUIREMENTS ═══ -->
+<section id="requirements" class="py-20 px-6" style="z-index:1;position:relative;">
+  <div class="max-w-3xl mx-auto rv">
+    <div class="text-center mb-12">
+      <span class="text-green-400 text-xs font-bold uppercase tracking-[.2em] mb-3 inline-block">System Requirements</span>
+      <h2 class="font-display font-black text-4xl mb-4">What You <span class="g2">Need</span></h2>
+    </div>
+    <div style="background:rgba(0,8,16,.85);backdrop-filter:blur(24px);border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:2rem;box-shadow:0 0 80px rgba(0,212,255,.08),inset 0 1px 0 rgba(255,255,255,.05);">
+      <div class="flex items-center gap-2 mb-6 pb-4 border-b border-white/8">
+        <div class="w-3 h-3 rounded-full bg-red-400 shadow-[0_0_6px_rgba(248,113,113,.8)]"></div>
+        <div class="w-3 h-3 rounded-full bg-yellow-400 shadow-[0_0_6px_rgba(250,204,21,.8)]"></div>
+        <div class="w-3 h-3 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,.8)]"></div>
+        <span class="ml-3 text-white/25 text-xs font-mono">requirements.sh — bash</span>
+      </div>
+      <div class="font-mono text-sm space-y-3">
+        <p class="text-white/35">$ <span class="text-brand-glow">mhplug</span> check-requirements</p>
+        <div class="space-y-2.5 pl-2 border-l-2 border-brand-glow/20 ml-2">
+          <p><span class="text-green-400 mr-2">✔</span>WordPress <span class="text-white font-bold">5.0+</span><span class="text-white/25 ml-4">// required</span></p>
+          <p><span class="text-green-400 mr-2">✔</span>PHP <span class="text-white font-bold">7.4+</span><span class="text-white/25 ml-4">// required</span></p>
+          <p><span class="text-green-400 mr-2">✔</span>Elementor <span class="text-white font-bold">3.0+</span><span class="text-white/25 ml-4">// required</span></p>
+          <p><span class="text-yellow-400 mr-2">○</span>WooCommerce <span class="text-white font-bold">5.0+</span><span class="text-white/25 ml-4">// optional (store features)</span></p>
+        </div>
+        <p class="text-green-400 mt-4 pt-2 border-t border-white/8">All core requirements met. Ready to install.<span class="cur"></span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section id="faq" class="py-24 px-6" style="z-index:1;position:relative;">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-16 rv">
+      <span class="text-pink-400 text-xs font-bold uppercase tracking-[.2em] mb-3 inline-block">Got Questions?</span>
+      <h2 class="font-display font-black text-5xl mb-4">Frequently <span class="g3">Asked</span></h2>
+    </div>
+    <div class="space-y-4">
+      <div class="gb glass rounded-2xl overflow-hidden rv">
+        <button onclick="tFaq(this)" class="w-full flex items-center justify-between p-6 text-left font-semibold hover:text-brand-glow transition-colors text-sm md:text-base"><span>Do I need WooCommerce installed?</span><span class="faq-ico text-brand-glow text-2xl leading-none">+</span></button>
+        <div class="faq-body px-6 text-white/50 text-sm leading-relaxed">No! WooCommerce is completely optional. MH Plug works as a pure Elementor addon. WooCommerce widgets simply won't appear if WooCommerce isn't active — no errors, just a cleaner panel.</div>
+      </div>
+      <div class="gb glass rounded-2xl overflow-hidden rv" style="transition-delay:.08s">
+        <button onclick="tFaq(this)" class="w-full flex items-center justify-between p-6 text-left font-semibold hover:text-brand-glow transition-colors text-sm md:text-base"><span>Will disabling a widget speed up my site?</span><span class="faq-ico text-brand-glow text-2xl leading-none">+</span></button>
+        <div class="faq-body px-6 text-white/50 text-sm leading-relaxed">Absolutely. Disabled widgets don't register any CSS or JS — not a single byte added to pages that don't use them. Elementor's <code class="text-brand-glow">get_style_depends()</code> system ensures maximum performance.</div>
+      </div>
+      <div class="gb glass rounded-2xl overflow-hidden rv" style="transition-delay:.16s">
+        <button onclick="tFaq(this)" class="w-full flex items-center justify-between p-6 text-left font-semibold hover:text-brand-glow transition-colors text-sm md:text-base"><span>Does the Wishlist work for guest users?</span><span class="faq-ico text-brand-glow text-2xl leading-none">+</span></button>
+        <div class="faq-body px-6 text-white/50 text-sm leading-relaxed">Yes! The Wishlist uses browser session/cookie storage for guests and syncs to the user's account upon login. No account required to save favourites.</div>
+      </div>
+      <div class="gb glass rounded-2xl overflow-hidden rv" style="transition-delay:.24s">
+        <button onclick="tFaq(this)" class="w-full flex items-center justify-between p-6 text-left font-semibold hover:text-brand-glow transition-colors text-sm md:text-base"><span>Is the Age Gate GDPR compliant?</span><span class="faq-ico text-brand-glow text-2xl leading-none">+</span></button>
+        <div class="faq-body px-6 text-white/50 text-sm leading-relaxed">The Age Gate uses a simple cookie to remember verification — no personal data is stored server-side. Cookie duration is fully configurable. Pair it with a consent plugin for full GDPR coverage.</div>
+      </div>
+      <div class="gb glass rounded-2xl overflow-hidden rv" style="transition-delay:.32s">
+        <button onclick="tFaq(this)" class="w-full flex items-center justify-between p-6 text-left font-semibold hover:text-brand-glow transition-colors text-sm md:text-base"><span>Can I build custom Archive &amp; Single templates?</span><span class="faq-ico text-brand-glow text-2xl leading-none">+</span></button>
+        <div class="faq-body px-6 text-white/50 text-sm leading-relaxed">Yes! The Theme Builder supports Headers, Footers, Single Posts, Single Products, Product Archives, and custom page templates — all built visually in Elementor with condition-based display rules.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA BANNER ═══ -->
+<section class="py-20 px-6" style="z-index:1;position:relative;">
+  <div class="max-w-5xl mx-auto rv">
+    <div class="relative rounded-3xl overflow-hidden" style="background:linear-gradient(135deg,rgba(0,66,101,.9),rgba(124,58,237,.6),rgba(219,39,119,.5));padding:3px;">
+      <div class="rounded-3xl overflow-hidden px-10 py-20 text-center relative" style="background:rgba(0,12,22,.92);">
+        <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 50% 0%,rgba(0,212,255,.15) 0%,transparent 70%);"></div>
+        <!-- Floating logo -->
+        <div class="float inline-block mb-6 relative">
+          <img src="MH-icon.png" alt="MH Plug" class="w-20 h-20 object-contain mx-auto rounded-2xl glow-pulse" style="filter:drop-shadow(0 0 20px rgba(0,212,255,.8));"/>
+        </div>
+        <h2 class="font-display font-black text-4xl lg:text-5xl mb-4 relative">Ready to <span class="g1">Supercharge</span><br/>Your Elementor?</h2>
+        <p class="text-white/45 mb-10 text-lg max-w-xl mx-auto relative">Join thousands of developers building premium WordPress sites with MH Plug.</p>
+        <a href="mailto:support@mhutin.com" class="btn3d inline-flex items-center gap-3 px-10 py-5 rounded-2xl text-brand-glow font-black text-xl relative z-10">
+          <img src="MH-icon.png" alt="" class="w-8 h-8 object-contain rounded-xl"/>
+          Get MH Plug Now
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="py-12 px-6 border-t border-white/6 relative" style="z-index:1;">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+    <div class="flex items-center gap-3">
+      <img src="MH-icon.png" alt="MH Plug" class="w-10 h-10 object-contain rounded-xl glow-pulse"/>
+      <div><p class="font-display font-bold text-lg">MH <span class="g2">Plug</span></p><p class="text-white/30 text-xs">All-in-One Elementor Addon</p></div>
+    </div>
+    <div class="flex flex-wrap justify-center gap-6 text-sm text-white/40">
+      <a href="https://mhutin.com" target="_blank" rel="noopener" class="hover:text-white transition-colors">mhutin.com</a>
+      <a href="mailto:support@mhutin.com" class="hover:text-white transition-colors">support@mhutin.com</a>
+      <a href="#features" class="hover:text-white transition-colors">Features</a>
+      <a href="#widgets" class="hover:text-white transition-colors">Widgets</a>
+      <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+    </div>
+    <p class="text-white/25 text-sm">© 2026 <a href="https://mhutin.com" class="hover:text-white transition-colors">MHutin</a>. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+// ── Particle Background ──
+(function(){
+  const c=document.getElementById('bg-canvas');
+  const ctx=c.getContext('2d');
+  let W,H,pts=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  for(let i=0;i<90;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.5+.5});
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;
+      if(p.y<0||p.y>H)p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(0,212,255,.5)';ctx.fill();
+    });
+    pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{
+      const d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<130){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(0,168,232,${.18*(1-d/130)})`;ctx.lineWidth=.6;ctx.stroke();}
+    }));
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── FAQ ──
+function tFaq(btn){
+  const body=btn.nextElementSibling,ico=btn.querySelector('.faq-ico');
+  const open=body.classList.contains('open');
+  document.querySelectorAll('.faq-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('.faq-ico').forEach(i=>i.classList.remove('open'));
+  if(!open){body.classList.add('open');ico.classList.add('open');}
+}
+
+// ── Scroll Reveal ──
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// ── 3D Card Tilt ──
+document.querySelectorAll('.card3d').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const rx=((e.clientY-r.top)/r.height-.5)*-14;
+    const ry=((e.clientX-r.left)/r.width-.5)*14;
+    card.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(22px)`;
+  });
+  card.addEventListener('mouseleave',()=>{card.style.transform='';});
+});
+
+// ── Nav active link highlight ──
+const navLinks=document.querySelectorAll('nav a[href^="#"]');
+window.addEventListener('scroll',()=>{
+  const pos=window.scrollY+100;
+  navLinks.forEach(a=>{
+    const sec=document.querySelector(a.getAttribute('href'));
+    if(sec&&pos>=sec.offsetTop&&pos<sec.offsetTop+sec.offsetHeight)
+      a.style.color='#00d4ff';
+    else a.style.color='';
+  });
+},{ passive:true });
+</script>
+</body>
+</html>
