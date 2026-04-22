@@ -20,124 +20,7 @@ tailwind.config={theme:{extend:{
   }
 }}}
 </script>
-<style>
-*{box-sizing:border-box;scroll-behavior:smooth;margin:0;padding:0;}
-body{background:#00101e;font-family:'Inter',sans-serif;overflow-x:hidden;color:#fff;}
-
-/* ── Canvas BG ── */
-#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6;}
-
-/* ── Glass ── */
-.glass{background:rgba(255,255,255,.06);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);}
-.glass-dark{background:rgba(0,16,30,.7);backdrop-filter:blur(20px);border:1px solid rgba(0,212,255,.15);}
-
-/* ── Gradient text ── */
-.g1{background:linear-gradient(135deg,#00d4ff,#7c3aed,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.g2{background:linear-gradient(90deg,#00d4ff,#00ffb3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.g3{background:linear-gradient(90deg,#f472b6,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-
-/* ── Neumorphic button ── */
-.btn3d{
-  background:linear-gradient(145deg,#00527a,#00334d);
-  box-shadow:6px 6px 20px #000e1a,-6px -6px 20px #006a9e,inset 0 1px 0 rgba(255,255,255,.1);
-  transition:all .2s cubic-bezier(.34,1.56,.64,1);
-}
-.btn3d:hover{box-shadow:8px 8px 28px #000e1a,-8px -8px 28px #007ab5,0 0 40px rgba(0,212,255,.4);transform:translateY(-3px) scale(1.02);}
-.btn3d:active{box-shadow:inset 4px 4px 14px #000e1a,inset -4px -4px 14px #005e8f;transform:translateY(1px) scale(.98);}
-
-/* ── 3D Card ── */
-.card3d{
-  transform-style:preserve-3d;
-  transition:transform .5s cubic-bezier(.34,1.56,.64,1),box-shadow .5s ease;
-  transform:perspective(900px) rotateX(0) rotateY(0);
-}
-.card3d:hover{box-shadow:0 40px 80px rgba(0,168,232,.4),0 0 0 1px rgba(0,212,255,.3);}
-.card3d .inner{transform:translateZ(20px);transition:transform .5s ease;}
-
-/* ── Hero 3D box ── */
-.hero3d{
-  animation:heroSpin 10s ease-in-out infinite;
-  transform-style:preserve-3d;
-}
-@keyframes heroSpin{
-  0%,100%{transform:perspective(900px) rotateX(6deg) rotateY(-16deg) translateY(0);}
-  33%{transform:perspective(900px) rotateX(8deg) rotateY(-8deg) translateY(-15px);}
-  66%{transform:perspective(900px) rotateX(4deg) rotateY(-22deg) translateY(-8px);}
-}
-
-/* ── Orbit ring ── */
-.orbit{animation:orbitSpin 18s linear infinite;transform-style:preserve-3d;}
-@keyframes orbitSpin{from{transform:perspective(600px) rotateY(0)}to{transform:perspective(600px) rotateY(360deg)}}
-
-/* ── Float ── */
-@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
-.float{animation:fl 6s ease-in-out infinite;}
-.float2{animation:fl 9s ease-in-out 1.5s infinite;}
-.float3{animation:fl 7s ease-in-out 3s infinite;}
-
-/* ── Glow pulse ── */
-@keyframes gp{0%,100%{box-shadow:0 0 20px rgba(0,212,255,.3)}50%{box-shadow:0 0 50px rgba(0,212,255,.8),0 0 80px rgba(0,100,200,.4)}}
-.glow-pulse{animation:gp 3s ease-in-out infinite;}
-
-/* ── Shimmer badge ── */
-@keyframes shim{0%{background-position:-200% center}100%{background-position:200% center}}
-.badge-shim{
-  background:linear-gradient(90deg,rgba(0,212,255,.1) 25%,rgba(0,212,255,.35) 50%,rgba(0,212,255,.1) 75%);
-  background-size:200% auto;animation:shim 2.5s linear infinite;
-}
-
-/* ── Widget tag ── */
-@keyframes wtag{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.02)}}
-.wtag{animation:wtag 5s ease-in-out infinite;transition:all .3s;}
-.wtag:nth-child(2n){animation-delay:.7s;}.wtag:nth-child(3n){animation-delay:1.4s;}.wtag:nth-child(4n){animation-delay:2s;}
-.wtag:hover{transform:translateY(-8px) scale(1.08) !important;box-shadow:0 12px 30px rgba(0,212,255,.4);}
-
-/* ── FAQ ── */
-.faq-body{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.4,0,.2,1),padding .3s;}
-.faq-body.open{max-height:300px;padding-top:.75rem;padding-bottom:.75rem;}
-.faq-ico{transition:transform .35s cubic-bezier(.34,1.56,.64,1);}
-.faq-ico.open{transform:rotate(45deg);}
-
-/* ── Timeline ── */
-.tl-line{background:linear-gradient(to bottom,#00d4ff,#7c3aed,#f472b6);width:3px;border-radius:4px;}
-
-/* ── Scroll reveal ── */
-.rv{opacity:0;transform:translateY(50px) scale(.97);transition:opacity .7s ease,transform .7s ease;}
-.rv.in{opacity:1;transform:translateY(0) scale(1);}
-
-/* ── Terminal ── */
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.cur{display:inline-block;width:9px;height:18px;background:#00d4ff;margin-left:3px;vertical-align:middle;animation:blink 1s step-end infinite;border-radius:1px;}
-
-/* ── 3D Perspective Grid ── */
-.perspective-grid{
-  position:absolute;bottom:0;left:0;right:0;height:300px;
-  background:linear-gradient(transparent,rgba(0,212,255,.03));
-  overflow:hidden;pointer-events:none;
-}
-.perspective-grid::before{
-  content:'';position:absolute;inset:0;
-  background-image:linear-gradient(rgba(0,212,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.08) 1px,transparent 1px);
-  background-size:60px 60px;
-  transform:perspective(400px) rotateX(60deg);transform-origin:center bottom;
-}
-
-/* ── Glowing border card ── */
-.gb{position:relative;}
-.gb::before{
-  content:'';position:absolute;inset:-1px;border-radius:inherit;
-  background:linear-gradient(135deg,rgba(0,212,255,.5),rgba(124,58,237,.5),rgba(244,114,182,.5));
-  z-index:-1;opacity:0;transition:opacity .4s;
-}
-.gb:hover::before{opacity:1;}
-
-/* ── Section divider wave ── */
-.wave-sep{height:80px;overflow:hidden;}
-.wave-sep svg{display:block;}
-
-/* ── Neon line ── */
-.neon-line{height:1px;background:linear-gradient(90deg,transparent,#00d4ff,#7c3aed,transparent);}
-</style>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
@@ -148,11 +31,8 @@ body{background:#00101e;font-family:'Inter',sans-serif;overflow-x:hidden;color:#
 <nav class="fixed top-0 left-0 right-0 z-50 glass-dark border-b border-white/5 px-6 py-3" style="z-index:100;">
   <div class="max-w-7xl mx-auto flex items-center justify-between">
     <!-- Logo -->
-    <a href="#" class="flex items-center gap-3 group">
-      <div class="relative">
-        <img src="MH-icon.png" alt="MH Plug Logo" class="w-10 h-10 object-contain rounded-xl glow-pulse"/>
-        <div class="absolute inset-0 rounded-xl bg-brand-glow/20 blur-md -z-10 group-hover:bg-brand-glow/40 transition"></div>
-      </div>
+    <a href="#" class="flex items-center gap-3">
+      <img src="MH-icon.png" alt="MH Plug Logo" class="w-10 h-10 object-contain logo-glow"/>
       <span class="font-display font-bold text-xl tracking-tight">MH <span class="g2">Plug</span></span>
     </a>
     <!-- Links -->
@@ -193,7 +73,7 @@ body{background:#00101e;font-family:'Inter',sans-serif;overflow-x:hidden;color:#
 
       <div class="flex flex-wrap gap-4">
         <a href="#" class="btn3d group px-8 py-4 rounded-2xl text-brand-glow font-black text-lg flex items-center gap-3">
-          <img src="MH-icon.png" alt="" class="w-7 h-7 object-contain rounded-lg"/>
+          <img src="MH-icon.png" alt="" class="w-7 h-7 object-contain logo-glow"/>
           <span>Get MH Plug Now</span>
           <svg class="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </a>
@@ -225,7 +105,7 @@ body{background:#00101e;font-family:'Inter',sans-serif;overflow-x:hidden;color:#
           <div class="absolute inset-0 bg-gradient-to-br from-brand-accent/20 via-purple-600/10 to-pink-500/15"></div>
           <!-- Top bar -->
           <div class="relative z-10 px-6 pt-6 pb-4 flex items-center gap-3 border-b border-white/10">
-            <img src="MH-icon.png" alt="MH Plug" class="w-12 h-12 object-contain rounded-xl" style="filter:drop-shadow(0 0 8px rgba(0,212,255,.6));"/>
+            <img src="MH-icon.png" alt="MH Plug" class="w-12 h-12 object-contain logo-glow"/>
             <div>
               <p class="font-display font-bold text-base">MH Plug</p>
               <p class="text-brand-glow text-xs font-semibold">v2.0 · Active</p>
@@ -471,12 +351,12 @@ body{background:#00101e;font-family:'Inter',sans-serif;overflow-x:hidden;color:#
         <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 50% 0%,rgba(0,212,255,.15) 0%,transparent 70%);"></div>
         <!-- Floating logo -->
         <div class="float inline-block mb-6 relative">
-          <img src="MH-icon.png" alt="MH Plug" class="w-20 h-20 object-contain mx-auto rounded-2xl glow-pulse" style="filter:drop-shadow(0 0 20px rgba(0,212,255,.8));"/>
+          <img src="MH-icon.png" alt="MH Plug" class="w-20 h-20 object-contain mx-auto logo-glow"/>
         </div>
         <h2 class="font-display font-black text-4xl lg:text-5xl mb-4 relative">Ready to <span class="g1">Supercharge</span><br/>Your Elementor?</h2>
         <p class="text-white/45 mb-10 text-lg max-w-xl mx-auto relative">Join thousands of developers building premium WordPress sites with MH Plug.</p>
         <a href="mailto:support@mhutin.com" class="btn3d inline-flex items-center gap-3 px-10 py-5 rounded-2xl text-brand-glow font-black text-xl relative z-10">
-          <img src="MH-icon.png" alt="" class="w-8 h-8 object-contain rounded-xl"/>
+          <img src="MH-icon.png" alt="" class="w-8 h-8 object-contain logo-glow"/>
           Get MH Plug Now
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </a>
@@ -489,7 +369,7 @@ body{background:#00101e;font-family:'Inter',sans-serif;overflow-x:hidden;color:#
 <footer class="py-12 px-6 border-t border-white/6 relative" style="z-index:1;">
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
     <div class="flex items-center gap-3">
-      <img src="MH-icon.png" alt="MH Plug" class="w-10 h-10 object-contain rounded-xl glow-pulse"/>
+      <img src="MH-icon.png" alt="MH Plug" class="w-10 h-10 object-contain logo-glow"/>
       <div><p class="font-display font-bold text-lg">MH <span class="g2">Plug</span></p><p class="text-white/30 text-xs">All-in-One Elementor Addon</p></div>
     </div>
     <div class="flex flex-wrap justify-center gap-6 text-sm text-white/40">
@@ -503,68 +383,6 @@ body{background:#00101e;font-family:'Inter',sans-serif;overflow-x:hidden;color:#
   </div>
 </footer>
 
-<script>
-// ── Particle Background ──
-(function(){
-  const c=document.getElementById('bg-canvas');
-  const ctx=c.getContext('2d');
-  let W,H,pts=[];
-  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
-  resize();window.addEventListener('resize',resize);
-  for(let i=0;i<90;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.5+.5});
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    pts.forEach(p=>{
-      p.x+=p.vx;p.y+=p.vy;
-      if(p.x<0||p.x>W)p.vx*=-1;
-      if(p.y<0||p.y>H)p.vy*=-1;
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(0,212,255,.5)';ctx.fill();
-    });
-    pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{
-      const d=Math.hypot(a.x-b.x,a.y-b.y);
-      if(d<130){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(0,168,232,${.18*(1-d/130)})`;ctx.lineWidth=.6;ctx.stroke();}
-    }));
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
-
-// ── FAQ ──
-function tFaq(btn){
-  const body=btn.nextElementSibling,ico=btn.querySelector('.faq-ico');
-  const open=body.classList.contains('open');
-  document.querySelectorAll('.faq-body').forEach(b=>b.classList.remove('open'));
-  document.querySelectorAll('.faq-ico').forEach(i=>i.classList.remove('open'));
-  if(!open){body.classList.add('open');ico.classList.add('open');}
-}
-
-// ── Scroll Reveal ──
-const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.1});
-document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
-
-// ── 3D Card Tilt ──
-document.querySelectorAll('.card3d').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    const rx=((e.clientY-r.top)/r.height-.5)*-14;
-    const ry=((e.clientX-r.left)/r.width-.5)*14;
-    card.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(22px)`;
-  });
-  card.addEventListener('mouseleave',()=>{card.style.transform='';});
-});
-
-// ── Nav active link highlight ──
-const navLinks=document.querySelectorAll('nav a[href^="#"]');
-window.addEventListener('scroll',()=>{
-  const pos=window.scrollY+100;
-  navLinks.forEach(a=>{
-    const sec=document.querySelector(a.getAttribute('href'));
-    if(sec&&pos>=sec.offsetTop&&pos<sec.offsetTop+sec.offsetHeight)
-      a.style.color='#00d4ff';
-    else a.style.color='';
-  });
-},{ passive:true });
-</script>
+<script src="script.js"></script>
 </body>
 </html>
