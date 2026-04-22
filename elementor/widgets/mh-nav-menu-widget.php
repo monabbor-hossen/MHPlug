@@ -336,6 +336,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $icon       = $settings['submenu_icon'];
         $display    = $settings['submenu_display'];
         $widget_id  = $this->get_id();
+        $unique_id  = str_replace('-', '_', $widget_id); // Safe ID for javascript functions
 
         if ( ! $menu_slug || $menu_slug === '' ) {
             echo '<div style="padding:15px; border:1px dashed #d63638; text-align:center; color: #d63638;"><strong>' . __( 'Please select a menu from the Elementor Panel.', 'mh-plug' ) . '</strong></div>';
@@ -428,6 +429,11 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         padding: 15px 20px; border-bottom: 1px solid #eee; width: 100%; box-sizing: border-box; 
                         text-decoration: none; 
                     }
+                    
+                    /* Make space for the caret icon so text doesn't overlap it */
+                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .menu-item-has-children > a { 
+                        padding-right: 55px !important; 
+                    }
 
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu { 
                         position: static !important; display: none; 
@@ -495,76 +501,86 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         </div>
 
         <script>
-            jQuery(document).ready(function($) {
-                var $wrapper = $('.mh-nav-wrapper-<?php echo esc_attr($widget_id); ?>');
-                var $panel = $wrapper.find('.mh-nav-mobile-panel');
-                var $toggle = $wrapper.find('.mh-nav-mobile-toggle');
-                
-                var isFullWidth = <?php echo $settings['mobile_stretch'] === 'full' ? 'true' : 'false'; ?>;
-                var breakpoint = <?php echo $breakpoint === 'none' ? 0 : intval($breakpoint); ?>;
-                
-                // Track screen width to prevent fake mobile resize bugs
-                var lastWidth = $(window).width(); 
+            (function($) {
+                var initNavMenu_<?php echo $unique_id; ?> = function() {
+                    var $wrapper = $('.mh-nav-wrapper-<?php echo esc_attr($widget_id); ?>');
+                    if (!$wrapper.length) return; // Fail safe
+                    
+                    var $panel = $wrapper.find('.mh-nav-mobile-panel');
+                    var $toggle = $wrapper.find('.mh-nav-mobile-toggle');
+                    
+                    var isFullWidth = <?php echo $settings['mobile_stretch'] === 'full' ? 'true' : 'false'; ?>;
+                    var breakpoint = <?php echo $breakpoint === 'none' ? 0 : intval($breakpoint); ?>;
+                    var lastWidth = $(window).width(); 
 
-                // 1. Handle Full Width Stretching
-                function forceMobileFullWidth() {
-                    if (isFullWidth && $(window).width() <= breakpoint) {
-                        var offsetLeft = $wrapper[0].getBoundingClientRect().left;
-                        $panel.css({
-                            'width': $(window).width() + 'px',
-                            'left': '-' + offsetLeft + 'px',
-                            'right': 'auto',
-                            'box-sizing': 'border-box'
-                        });
-                    } else {
-                        $panel.css({ 'width': '', 'left': '', 'right': '' });
-                    }
-                }
-
-                $(window).on('resize', function() {
-                    var currentWidth = $(window).width();
-                    // 🚀 FIX: Only run if the physical width actually changed!
-                    if (currentWidth !== lastWidth) {
-                        forceMobileFullWidth();
-                        if (currentWidth > breakpoint) {
-                            $panel.css('display', '');
+                    // Full Width Stretching Logic
+                    function forceMobileFullWidth() {
+                        if (isFullWidth && $(window).width() <= breakpoint) {
+                            var offsetLeft = $wrapper[0].getBoundingClientRect().left;
+                            $panel.css({
+                                'width': $(window).width() + 'px',
+                                'left': '-' + offsetLeft + 'px',
+                                'right': 'auto',
+                                'box-sizing': 'border-box'
+                            });
+                        } else {
+                            $panel.css({ 'width': '', 'left': '', 'right': '' });
                         }
-                        lastWidth = currentWidth;
                     }
-                });
 
-                // 2. Open / Close the Mobile Panel
-                // 🚀 FIX: .off('click') stops Elementor from double-clicking!
-                $toggle.off('click').on('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation(); // Stops other scripts from interfering
-                    forceMobileFullWidth();
-                    $panel.slideToggle(300);
-                });
+                    // Window Resize Monitor
+                    $(window).on('resize', function() {
+                        var currentWidth = $(window).width();
+                        if (currentWidth !== lastWidth) {
+                            forceMobileFullWidth();
+                            if (currentWidth > breakpoint) {
+                                $panel.css('display', '');
+                            }
+                            lastWidth = currentWidth;
+                        }
+                    });
 
-                // 3. Inject Carets into Submenus (Only if they don't exist yet)
-                if ($panel.find('.mh-mobile-caret').length === 0) {
-                    $panel.find('.menu-item-has-children > a').after('<span class="mh-mobile-caret"><i class="fas fa-chevron-down"></i></span>');
-                }
+                    // Mobile Toggle Button Click
+                    $toggle.off('click').on('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        forceMobileFullWidth();
+                        $panel.slideToggle(300);
+                    });
 
-                // 4. Slide Open / Close Submenus
-                $panel.find('.mh-mobile-caret').off('click').on('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    var $caret = $(this);
-                    var $subMenu = $caret.siblings('.sub-menu');
-                    
-                    $caret.toggleClass('mh-caret-open');
-                    
-                    if ($caret.hasClass('mh-caret-open')) {
-                        $caret.find('i').css('transform', 'rotate(180deg)');
-                    } else {
-                        $caret.find('i').css('transform', 'rotate(0deg)');
-                    }
-                    
-                    $subMenu.slideToggle(300);
-                });
-            });
+                    // Inject Carets for Submenus
+                    $panel.find('.menu-item-has-children').each(function() {
+                        if ($(this).children('.mh-mobile-caret').length === 0) {
+                            $(this).children('a').after('<span class="mh-mobile-caret"><i class="fas fa-chevron-down"></i></span>');
+                        }
+                    });
+
+                    // Dropdown Caret Click Logic
+                    $panel.find('.mh-mobile-caret').off('click').on('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        var $caret = $(this);
+                        var $subMenu = $caret.siblings('.sub-menu');
+                        
+                        $caret.toggleClass('mh-caret-open');
+                        
+                        if ($caret.hasClass('mh-caret-open')) {
+                            $caret.find('i').css('transform', 'rotate(180deg)');
+                        } else {
+                            $caret.find('i').css('transform', 'rotate(0deg)');
+                        }
+                        
+                        $subMenu.slideToggle(300);
+                    });
+                };
+
+                // 1. Run instantly (Guarantees it works inside the Elementor Editor)
+                initNavMenu_<?php echo $unique_id; ?>();
+                
+                // 2. Run on ready (Guarantees it works on the Live Site)
+                $(document).ready(initNavMenu_<?php echo $unique_id; ?>);
+
+            })(jQuery);
         </script>
         <?php
     }
