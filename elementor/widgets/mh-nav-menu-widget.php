@@ -336,7 +336,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
         $icon       = $settings['submenu_icon'];
         $display    = $settings['submenu_display'];
         $widget_id  = $this->get_id();
-        $unique_id  = str_replace('-', '_', $widget_id); // Safe ID for javascript functions
+        $unique_id  = str_replace('-', '_', $widget_id);
 
         if ( ! $menu_slug || $menu_slug === '' ) {
             echo '<div style="padding:15px; border:1px dashed #d63638; text-align:center; color: #d63638;"><strong>' . __( 'Please select a menu from the Elementor Panel.', 'mh-plug' ) . '</strong></div>';
@@ -424,15 +424,11 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         display: block !important; width: 100% !important; flex-grow: 0 !important; border: none !important; position: relative;
                     }
                     
+                    /* 🚀 THE FIX: We removed the padding constraint so text is mathematically perfectly centered! */
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu > li > a { 
-                        display: flex; align-items: center; justify-content: space-between; 
+                        display: flex; align-items: center; 
                         padding: 15px 20px; border-bottom: 1px solid #eee; width: 100%; box-sizing: border-box; 
                         text-decoration: none; 
-                    }
-                    
-                    /* Make space for the caret icon so text doesn't overlap it */
-                    .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .menu-item-has-children > a { 
-                        padding-right: 55px !important; 
                     }
 
                     .mh-nav-wrapper-<?php echo esc_attr($widget_id); ?> .mh-nav-mobile-panel .mh-menu .sub-menu { 
@@ -504,7 +500,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
             (function($) {
                 var initNavMenu_<?php echo $unique_id; ?> = function() {
                     var $wrapper = $('.mh-nav-wrapper-<?php echo esc_attr($widget_id); ?>');
-                    if (!$wrapper.length) return; // Fail safe
+                    if (!$wrapper.length) return; 
                     
                     var $panel = $wrapper.find('.mh-nav-mobile-panel');
                     var $toggle = $wrapper.find('.mh-nav-mobile-toggle');
@@ -513,7 +509,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     var breakpoint = <?php echo $breakpoint === 'none' ? 0 : intval($breakpoint); ?>;
                     var lastWidth = $(window).width(); 
 
-                    // Full Width Stretching Logic
                     function forceMobileFullWidth() {
                         if (isFullWidth && $(window).width() <= breakpoint) {
                             var offsetLeft = $wrapper[0].getBoundingClientRect().left;
@@ -528,7 +523,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         }
                     }
 
-                    // Window Resize Monitor
                     $(window).on('resize', function() {
                         var currentWidth = $(window).width();
                         if (currentWidth !== lastWidth) {
@@ -540,7 +534,6 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         }
                     });
 
-                    // Mobile Toggle Button Click
                     $toggle.off('click').on('click', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
@@ -548,14 +541,12 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                         $panel.slideToggle(300);
                     });
 
-                    // Inject Carets for Submenus
                     $panel.find('.menu-item-has-children').each(function() {
                         if ($(this).children('.mh-mobile-caret').length === 0) {
                             $(this).children('a').after('<span class="mh-mobile-caret"><i class="fas fa-chevron-down"></i></span>');
                         }
                     });
 
-                    // Dropdown Caret Click Logic
                     $panel.find('.mh-mobile-caret').off('click').on('click', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
@@ -574,10 +565,7 @@ class MH_Nav_Menu_Widget extends Widget_Base {
                     });
                 };
 
-                // 1. Run instantly (Guarantees it works inside the Elementor Editor)
                 initNavMenu_<?php echo $unique_id; ?>();
-                
-                // 2. Run on ready (Guarantees it works on the Live Site)
                 $(document).ready(initNavMenu_<?php echo $unique_id; ?>);
 
             })(jQuery);
