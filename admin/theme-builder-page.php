@@ -16,123 +16,125 @@ $is_wc_active = class_exists( 'WooCommerce' );
 <div class="wrap mh-plug-admin-wrap">
 
     <style>
-        /* Main Plugin Buttons */
+        /* 🚀 THE FIX: Bulletproof Buttons */
         .mh-plug-admin-wrap .mh-button {
-            background: #004265; /* Plugin Brand Color */
+            background: #004265 !important; /* Forced Plugin Brand Color */
             color: #ffffff !important;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 66, 101, 0.2);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            outline: none;
+            border: none !important;
+            padding: 10px 24px !important;
+            border-radius: 6px !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: 0 4px 10px rgba(0, 66, 101, 0.2) !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+            outline: none !important;
         }
         .mh-plug-admin-wrap .mh-button:hover {
-            background: #002b42; /* Darker Brand Color */
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 66, 101, 0.3);
-            color: #ffffff;
+            background: #002b42 !important; /* Darker Brand Color */
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 15px rgba(0, 66, 101, 0.3) !important;
+            color: #ffffff !important;
         }
         .mh-plug-admin-wrap .mh-button-content-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
         }
         .mh-plug-admin-wrap .mh-button .dashicons {
-            font-size: 18px;
-            line-height: 1;
-            width: 18px;
-            height: 18px;
-            transition: transform 0.3s ease;
+            font-size: 18px !important;
+            line-height: 1 !important;
+            width: 18px !important;
+            height: 18px !important;
+            transition: transform 0.3s ease !important;
         }
         .mh-plug-admin-wrap .mh-button:hover .dashicons {
-            transform: scale(1.1);
+            transform: scale(1.1) !important;
         }
 
         /* Modal Polish */
         .mh-tb-modal-content {
             border-radius: 12px !important;
-            overflow: hidden;
-            background: #ffffff;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            padding: 0;
-            border: 1px solid #e0e0e0;
+            overflow: hidden !important;
+            background: #ffffff !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
+            padding: 0 !important;
+            border: 1px solid #e0e0e0 !important;
         }
         .mh-tb-modal-header {
-            background: #f8f9fa;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 20px 25px;
+            background: #f8f9fa !important;
+            border-bottom: 1px solid #e0e0e0 !important;
+            padding: 20px 25px !important;
         }
         .mh-tb-modal-header h2 {
-            margin: 0;
-            color: #004265;
-            font-weight: 700;
+            margin: 0 !important;
+            color: #004265 !important;
+            font-weight: 700 !important;
         }
         .mh-tb-form {
-            padding: 25px;
+            padding: 25px !important;
         }
 
-        /* 🚀 NEW: Beautiful Custom Form Inputs & Dropdowns */
+        /* 🚀 THE FIX: Bulletproof Form Inputs (Kills WordPress 3D Shadows) */
         .mh-tb-form-group {
-            margin-bottom: 20px;
+            margin-bottom: 20px !important;
         }
         .mh-tb-form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3338;
-            font-size: 13px;
+            display: block !important;
+            margin-bottom: 8px !important;
+            font-weight: 600 !important;
+            color: #2c3338 !important;
+            font-size: 13px !important;
         }
         .mh-tb-form-group input[type="text"],
         .mh-tb-form-group select {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 14px;
-            border: 1px solid #8c8f94;
-            border-radius: 6px;
-            background-color: #ffffff;
-            color: #2c3338;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            box-sizing: border-box;
-            appearance: none; /* Removes default ugly browser arrow */
-            -webkit-appearance: none;
-            -moz-appearance: none;
+            width: 100% !important;
+            height: auto !important;
+            padding: 10px 14px !important;
+            font-size: 14px !important;
+            line-height: 1.5 !important;
+            border: 1px solid #8c8f94 !important;
+            border-radius: 4px !important;
+            background-color: #ffffff !important;
+            color: #2c3338 !important;
+            box-shadow: none !important; /* 🚀 Kills the ugly puffy shadow */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+            box-sizing: border-box !important;
+            appearance: none !important; 
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
         }
         
         /* Custom SVG Arrow for Dropdown */
         .mh-tb-form-group select {
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%207l5%205%205-5%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            background-size: 14px;
-            padding-right: 40px;
-            cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%207l5%205%205-5%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 12px center !important;
+            background-size: 16px !important;
+            padding-right: 40px !important;
+            cursor: pointer !important;
         }
 
         /* Focus States (Glowing Brand Color) */
         .mh-tb-form-group input[type="text"]:focus,
         .mh-tb-form-group select:focus {
-            border-color: #004265;
-            box-shadow: 0 0 0 2px rgba(0, 66, 101, 0.2);
-            outline: none;
+            border-color: #004265 !important;
+            box-shadow: 0 0 0 1px #004265 !important; /* Clean flat focus ring */
+            outline: none !important;
         }
 
         /* Modal 'Save & Edit' Button */
         .mh-tb-form-actions {
-            margin-top: 30px;
+            margin-top: 30px !important;
         }
         .mh-tb-modal-content .mh-tb-submit-btn {
-            width: 100%;
-            padding: 14px;
-            font-size: 15px;
+            width: 100% !important;
+            padding: 14px !important;
+            font-size: 15px !important;
         }
     </style>
 
