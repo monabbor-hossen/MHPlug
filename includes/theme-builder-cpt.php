@@ -208,3 +208,65 @@ function mh_plug_get_template_active_meta( $post_id ) {
     }
     return ( $active === 'yes' ) ? 'yes' : 'no';
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 🚀 PRO FEATURE: INDIVIDUAL CATEGORY TEMPLATE SELECTOR
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 1. Add Dropdown to "Create New Category" screen
+function mh_plug_category_template_add_field() {
+    $templates = get_posts([ 'post_type' => 'mh_templates', 'posts_per_page' => -1, 'post_status' => 'publish' ]);
+    ?>
+    <div class="form-field">
+        <label for="mh_category_template"><?php _e( 'MH Custom Template (Optional)', 'mh-plug' ); ?></label>
+        <select name="mh_category_template" id="mh_category_template">
+            <option value=""><?php _e( '— Use Default Archive Template —', 'mh-plug' ); ?></option>
+            <?php foreach ( $templates as $tpl ) : ?>
+                <option value="<?php echo esc_attr( $tpl->ID ); ?>"><?php echo esc_html( $tpl->post_title ); ?></option>
+            <?php endforeach; ?>
+        </select>
+        <p><?php _e( 'Select a specific Elementor template for this category. This will override the global archive template.', 'mh-plug' ); ?></p>
+    </div>
+    <?php
+}
+
+// 2. Add Dropdown to "Edit Category" screen
+function mh_plug_category_template_edit_field( $term ) {
+    $templates = get_posts([ 'post_type' => 'mh_templates', 'posts_per_page' => -1, 'post_status' => 'publish' ]);
+    $current   = get_term_meta( $term->term_id, '_mh_category_template', true );
+    ?>
+    <tr class="form-field">
+        <th scope="row"><label for="mh_category_template"><?php _e( 'MH Custom Template', 'mh-plug' ); ?></label></th>
+        <td>
+            <select name="mh_category_template" id="mh_category_template">
+                <option value=""><?php _e( '— Use Default Archive Template —', 'mh-plug' ); ?></option>
+                <?php foreach ( $templates as $tpl ) : ?>
+                    <option value="<?php echo esc_attr( $tpl->ID ); ?>" <?php selected( $current, $tpl->ID ); ?>>
+                        <?php echo esc_html( $tpl->post_title ); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <p class="description"><?php _e( 'Select a specific Elementor template for this category. This will override the global archive template.', 'mh-plug' ); ?></p>
+        </td>
+    </tr>
+    <?php
+}
+
+// 3. Save the Data
+function mh_plug_save_category_template( $term_id ) {
+    if ( isset( $_POST['mh_category_template'] ) ) {
+        update_term_meta( $term_id, '_mh_category_template', sanitize_text_field( $_POST['mh_category_template'] ) );
+    }
+}
+
+// Hook into WooCommerce Product Categories
+add_action( 'product_cat_add_form_fields', 'mh_plug_category_template_add_field' );
+add_action( 'product_cat_edit_form_fields', 'mh_plug_category_template_edit_field' );
+add_action( 'created_product_cat', 'mh_plug_save_category_template' );
+add_action( 'edited_product_cat', 'mh_plug_save_category_template' );
+
+// Hook into Standard WordPress Post Categories
+add_action( 'category_add_form_fields', 'mh_plug_category_template_add_field' );
+add_action( 'category_edit_form_fields', 'mh_plug_category_template_edit_field' );
+add_action( 'created_category', 'mh_plug_save_category_template' );
+add_action( 'edited_category', 'mh_plug_save_category_template' );
