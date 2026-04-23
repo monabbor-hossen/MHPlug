@@ -3,7 +3,7 @@
  * MH Plug - Theme Builder Admin Page
  *
  * Template type slugs (authoritative):
- * header | footer | single_post | single_product | archive_post | archive_product | quick_view | post_category | product_category
+ * header | footer | single_post | single_product | archive_post | archive_product | quick_view | post_category | product_category | custom
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +18,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
     <div class="mh-tb-header">
         <div class="mh-tb-header-text">
             <h1 class="mh-plug-title"><?php esc_html_e( 'Theme Builder', 'mh-plug' ); ?></h1>
-            <p class="mh-tb-description"><?php esc_html_e( 'Create and manage custom Elementor templates for headers, footers, single posts, products, archives, categories, and quick views.', 'mh-plug' ); ?></p>
+            <p class="mh-tb-description"><?php esc_html_e( 'Create and manage custom Elementor templates for headers, footers, single posts, products, archives, categories, and generic layouts.', 'mh-plug' ); ?></p>
         </div>
         <div class="mh-tb-header-actions">
             <button class="mh-button mh-tb-action-create" id="mh-tb-create-btn">
@@ -37,6 +37,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
         <li data-tab="single_post"><?php esc_html_e( 'Single Post', 'mh-plug' ); ?></li>
         <li data-tab="archive_post"><?php esc_html_e( 'Archive', 'mh-plug' ); ?></li>
         <li data-tab="post_category"><?php esc_html_e( 'Post Category', 'mh-plug' ); ?></li>
+        <li data-tab="custom"><?php esc_html_e( 'Custom', 'mh-plug' ); ?></li>
         
         <li data-tab="archive_product" class="<?php echo $is_wc_active ? '' : 'mh-disabled-tab'; ?>">
             <?php esc_html_e( 'Product Archive', 'mh-plug' ); ?>
@@ -86,7 +87,6 @@ $is_wc_active = class_exists( 'WooCommerce' );
             'product_archive' => 'archive_product',
         ];
 
-        // 🚀 UPDATED ICONS: Added Category Icons
         $icon_map = [
             'header'           => 'dashicons-align-center',
             'footer'           => 'dashicons-arrow-down-alt2',
@@ -97,9 +97,9 @@ $is_wc_active = class_exists( 'WooCommerce' );
             'post_category'    => 'dashicons-category', 
             'product_category' => 'dashicons-store', 
             'quick_view'       => 'dashicons-visibility', 
+            'custom'           => 'dashicons-layout', // 🚀 NEW: Custom Layout Icon
         ];
 
-        // 🚀 UPDATED LABELS: Added Category Labels
         $label_map = [
             'header'           => __( 'Header', 'mh-plug' ),
             'footer'           => __( 'Footer', 'mh-plug' ),
@@ -110,6 +110,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
             'post_category'    => __( 'Post Category', 'mh-plug' ), 
             'product_category' => __( 'Product Category', 'mh-plug' ), 
             'quick_view'       => __( 'Quick View', 'mh-plug' ),
+            'custom'           => __( 'Custom Template', 'mh-plug' ), // 🚀 NEW: Custom Label
         ];
 
         if ( $templates->have_posts() ) :
@@ -215,6 +216,8 @@ $is_wc_active = class_exists( 'WooCommerce' );
                             <?php esc_html_e( 'Quick View Popup', 'mh-plug' ); ?>
                             <?php if ( ! $is_wc_active ) echo ' (' . esc_html__( 'Requires WooCommerce', 'mh-plug' ) . ')'; ?>
                         </option>
+                        
+                        <option value="custom"><?php esc_html_e( 'Custom (Use Anywhere)', 'mh-plug' ); ?></option>
                     </select>
                 </div>
 
