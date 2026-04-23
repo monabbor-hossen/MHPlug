@@ -1,19 +1,11 @@
 <?php
 /**
- * MH Plug - Universal Theme Builder Display Logic (The Kill Switch)
+ * MH Plug - Universal Theme Builder Display Logic (Clean & Native)
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-// 1. Force Elementor Free to see all templates as standard pages (Prevents Pro Document crashes)
-add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key, $single ) {
-    if ( $meta_key === '_elementor_template_type' && get_post_type( $object_id ) === 'mh_templates' ) {
-        return $single ? 'wp-page' : [ 'wp-page' ];
-    }
-    return $value;
-}, 10, 4 );
-
-// 2. Safe Template Fetcher
+// 1. Safe Template Fetcher
 if ( ! function_exists( 'mh_plug_get_active_template' ) ) {
     function mh_plug_get_active_template( $type ) {
         $type = sanitize_key( $type );
@@ -32,7 +24,7 @@ if ( ! function_exists( 'mh_plug_get_active_template' ) ) {
     }
 }
 
-// 3. Safe Elementor Renderer
+// 2. Safe Elementor Renderer
 if ( ! function_exists( 'mh_plug_render_template' ) ) {
     function mh_plug_render_template( $template_post ) {
         if ( ! $template_post ) return;
@@ -48,36 +40,32 @@ if ( ! function_exists( 'mh_plug_render_template' ) ) {
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 🚀 THE KILL SWITCH: Force Canvas and STOP the active theme!
-// Block Themes ignore standard routing. We MUST exit the script manually.
-// ─────────────────────────────────────────────────────────────────────────────
-add_action( 'template_redirect', 'mh_plug_force_canvas_killswitch', 99999 );
-function mh_plug_force_canvas_killswitch() {
-    if ( is_singular( 'mh_templates' ) ) {
-        $canvas = MH_PLUG_PATH . 'includes/templates/mh-canvas.php';
-        if ( file_exists( $canvas ) ) {
-            include $canvas;
-            exit; // 🚀 THIS IS THE MAGIC. It completely kills the WordPress theme.
+// 3. Live Site Universal Router (Only wraps the frontend, ignores the editor completely)
+if ( ! function_exists( 'mh_plug_universal_router' ) ) {
+    function mh_plug_universal_router( $template ) {
+        
+        // COMPLETELY IGNORE Admin, AJAX, and REST API (This prevents the JSON error!)
+        if ( is_admin() || wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+            return $template;
         }
-    }
-}
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 5. Ultimate Clean Router for the Live Site
-// ─────────────────────────────────────────────────────────────────────────────
-add_filter( 'template_include', 'mh_plug_universal_router', 99999 );
-function mh_plug_universal_router( $template ) {
-    // If we are editing standard pages in Elementor, step aside!
-    if ( isset( $_GET['elementor-preview'] ) || ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) ) {
+        // COMPLETELY IGNORE Elementor Editor
+        if ( isset( $_GET['elementor-preview'] ) || ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) ) {
+            return $template;
+        }
+
+        // Let Elementor natively handle viewing the templates directly
+        if ( is_singular( 'mh_templates' ) ) {
+            return $template;
+        }
+
+        // Wrap the LIVE website with our universal designs
+        $wrapper = MH_PLUG_PATH . 'includes/templates/mh-universal-wrapper.php';
+        if ( file_exists( $wrapper ) ) {
+            return $wrapper;
+        }
+
         return $template;
     }
-
-    // Route live frontend traffic through our Universal Wrapper
-    $wrapper = MH_PLUG_PATH . 'includes/templates/mh-universal-wrapper.php';
-    if ( file_exists( $wrapper ) ) {
-        return $wrapper;
-    }
-
-    return $template;
 }
+add_filter( 'template_include', 'mh_plug_universal_router', 999 );

@@ -49,18 +49,6 @@ function mh_plug_add_cpt_elementor_support() {
 }
 add_action( 'init', 'mh_plug_add_cpt_elementor_support' );
 
-// 🚀 FORCE NATIVE ELEMENTOR CANVAS
-add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key, $single ) {
-    if ( '_wp_page_template' === $meta_key && get_post_type( $object_id ) === 'mh_templates' ) {
-        return 'elementor_canvas';
-    }
-    return $value;
-}, 10, 4 );
-
-// Clean up old buggy canvas filters if they exist
-remove_filter( 'template_include', 'mh_force_elementor_canvas', 9999 );
-remove_filter( 'template_include', 'mh_force_elementor_canvas', 999 );
-
 function mh_plug_ajax_create_template() {
     check_ajax_referer( 'mh_tb_create_template', '_ajax_nonce' );
 
@@ -89,13 +77,10 @@ function mh_plug_ajax_create_template() {
         wp_send_json_error( [ 'message' => $post_id->get_error_message() ] );
     }
 
+    // Safely apply metadata so Elementor Native Canvas handles it without forcing it
     update_post_meta( $post_id, '_mh_template_type',   $template_type );
     update_post_meta( $post_id, '_mh_template_active', 'yes' );
-
-    // 🚀 Guarantee Elementor canvas is saved
     update_post_meta( $post_id, '_wp_page_template', 'elementor_canvas' );
-
-    // 🚀 Force wp-page so Elementor Free NEVER crashes looking for Pro document types
     update_post_meta( $post_id, '_elementor_template_type', 'wp-page' );
     update_post_meta( $post_id, '_elementor_edit_mode',     'builder' );
 
@@ -147,11 +132,7 @@ function mh_plug_ajax_delete_template() {
 }
 add_action( 'wp_ajax_mh_tb_delete_template', 'mh_plug_ajax_delete_template' );
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PRO FEATURE: INDIVIDUAL CATEGORY TEMPLATE SELECTOR
-// ─────────────────────────────────────────────────────────────────────────────
-
-// 1. Add Dropdown to "Create New Category" screen
+// PRO CATEGORY LOGIC
 function mh_plug_category_template_add_field() {
     $templates = get_posts([ 'post_type' => 'mh_templates', 'posts_per_page' => -1, 'post_status' => 'publish' ]);
     ?>
@@ -163,12 +144,11 @@ function mh_plug_category_template_add_field() {
                 <option value="<?php echo esc_attr( $tpl->ID ); ?>"><?php echo esc_html( $tpl->post_title ); ?></option>
             <?php endforeach; ?>
         </select>
-        <p><?php _e( 'Select a specific Elementor template for this category. This will override the global archive template.', 'mh-plug' ); ?></p>
+        <p><?php _e( 'Select a specific Elementor template for this category.', 'mh-plug' ); ?></p>
     </div>
     <?php
 }
 
-// 2. Add Dropdown to "Edit Category" screen
 function mh_plug_category_template_edit_field( $term ) {
     $templates = get_posts([ 'post_type' => 'mh_templates', 'posts_per_page' => -1, 'post_status' => 'publish' ]);
     $current   = get_term_meta( $term->term_id, '_mh_category_template', true );
@@ -184,34 +164,26 @@ function mh_plug_category_template_edit_field( $term ) {
                     </option>
                 <?php endforeach; ?>
             </select>
-            <p class="description"><?php _e( 'Select a specific Elementor template for this category. This will override the global archive template.', 'mh-plug' ); ?></p>
         </td>
     </tr>
     <?php
 }
 
-// 3. Save the Data
 function mh_plug_save_category_template( $term_id ) {
     if ( isset( $_POST['mh_category_template'] ) ) {
         update_term_meta( $term_id, '_mh_category_template', sanitize_text_field( $_POST['mh_category_template'] ) );
     }
 }
 
-// Hook into WooCommerce Product Categories
 add_action( 'product_cat_add_form_fields', 'mh_plug_category_template_add_field' );
 add_action( 'product_cat_edit_form_fields', 'mh_plug_category_template_edit_field' );
 add_action( 'created_product_cat', 'mh_plug_save_category_template' );
 add_action( 'edited_product_cat', 'mh_plug_save_category_template' );
-
-// Hook into Standard WordPress Post Categories
 add_action( 'category_add_form_fields', 'mh_plug_category_template_add_field' );
 add_action( 'category_edit_form_fields', 'mh_plug_category_template_edit_field' );
 add_action( 'created_category', 'mh_plug_save_category_template' );
 add_action( 'edited_category', 'mh_plug_save_category_template' );
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_get_template_type_meta( $post_id ) {
     $type = get_post_meta( $post_id, '_mh_template_type', true );
     if ( empty( $type ) ) {
