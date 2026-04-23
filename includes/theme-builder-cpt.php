@@ -253,3 +253,20 @@ function mh_plug_get_template_active_meta( $post_id ) {
     }
     return ( $active === 'yes' ) ? 'yes' : 'no';
 }
+// ─────────────────────────────────────────────────────────────────────────────
+// 🚀 THE FIX: Force Elementor's Native Canvas for all mh_templates!
+// ─────────────────────────────────────────────────────────────────────────────
+function mh_force_elementor_canvas( $template ) {
+    if ( is_singular( 'mh_templates' ) ) {
+        // Borrow Elementor's official canvas template so we NEVER get the 'the_content' error!
+        if ( defined( 'ELEMENTOR_PATH' ) ) {
+            $canvas = ELEMENTOR_PATH . 'modules/page-templates/templates/canvas.php';
+            if ( file_exists( $canvas ) ) {
+                return $canvas;
+            }
+        }
+    }
+    return $template;
+}
+// Using priority 9999 to guarantee it overrides the theme
+add_filter( 'template_include', 'mh_force_elementor_canvas', 9999 );
