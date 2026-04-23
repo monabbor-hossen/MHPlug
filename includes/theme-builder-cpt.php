@@ -11,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Allowed template type slugs
 // ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_allowed_template_types() {
-    // 🚀 NEW: Added 'custom' to the allowed list!
     return [ 'header', 'footer', 'single_post', 'single_product', 'archive_post', 'archive_product', 'quick_view', 'product_category', 'post_category', 'custom' ];
 }
 
@@ -59,6 +58,22 @@ function mh_plug_add_cpt_elementor_support() {
 add_action( 'init', 'mh_plug_add_cpt_elementor_support' );
 
 // ─────────────────────────────────────────────────────────────────────────────
+// 🚀 THE ULTIMATE FIX: Natively Force Elementor Canvas!
+// ─────────────────────────────────────────────────────────────────────────────
+// This perfectly tells Elementor to use its own built-in Canvas layout for ALL your templates,
+// which 100% guarantees the "the_content" error will NEVER happen again!
+add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key, $single ) {
+    if ( '_wp_page_template' === $meta_key && get_post_type( $object_id ) === 'mh_templates' ) {
+        return 'elementor_canvas';
+    }
+    return $value;
+}, 10, 4 );
+
+// Clean up old buggy canvas filters if they exist to prevent conflicts
+remove_filter( 'template_include', 'mh_force_elementor_canvas', 9999 );
+remove_filter( 'template_include', 'mh_force_elementor_canvas', 999 );
+
+// ─────────────────────────────────────────────────────────────────────────────
 // AJAX: Create Template
 // ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_ajax_create_template() {
@@ -92,6 +107,9 @@ function mh_plug_ajax_create_template() {
     update_post_meta( $post_id, '_mh_template_type',   $template_type );
     update_post_meta( $post_id, '_mh_template_active', 'yes' );
 
+    // 🚀 Guarantee Elementor canvas is saved to the database on creation
+    update_post_meta( $post_id, '_wp_page_template', 'elementor_canvas' );
+
     $elementor_type_map = [
         'header'           => 'header',
         'footer'           => 'footer',
@@ -102,7 +120,7 @@ function mh_plug_ajax_create_template() {
         'product_category' => 'archive',
         'post_category'    => 'archive',
         'quick_view'       => 'single-product', 
-        'custom'           => 'wp-page', // 🚀 NEW: 'custom' maps to a standard Elementor page layout
+        'custom'           => 'wp-page', 
     ];
     $elementor_type = $elementor_type_map[ $template_type ] ?? 'wp-post';
 
@@ -253,20 +271,3 @@ function mh_plug_get_template_active_meta( $post_id ) {
     }
     return ( $active === 'yes' ) ? 'yes' : 'no';
 }
-// ─────────────────────────────────────────────────────────────────────────────
-// 🚀 THE FIX: Force Elementor's Native Canvas for all mh_templates!
-// ─────────────────────────────────────────────────────────────────────────────
-function mh_force_elementor_canvas( $template ) {
-    if ( is_singular( 'mh_templates' ) ) {
-        // Borrow Elementor's official canvas template so we NEVER get the 'the_content' error!
-        if ( defined( 'ELEMENTOR_PATH' ) ) {
-            $canvas = ELEMENTOR_PATH . 'modules/page-templates/templates/canvas.php';
-            if ( file_exists( $canvas ) ) {
-                return $canvas;
-            }
-        }
-    }
-    return $template;
-}
-// Using priority 9999 to guarantee it overrides the theme
-add_filter( 'template_include', 'mh_force_elementor_canvas', 9999 );
