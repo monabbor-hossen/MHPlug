@@ -15,6 +15,127 @@ $is_wc_active = class_exists( 'WooCommerce' );
 
 <div class="wrap mh-plug-admin-wrap">
 
+    <style>
+        /* Main Plugin Buttons */
+        .mh-plug-admin-wrap .mh-button {
+            background: #004265; /* Plugin Brand Color */
+            color: #ffffff !important;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 66, 101, 0.2);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            outline: none;
+        }
+        .mh-plug-admin-wrap .mh-button:hover {
+            background: #002b42; /* Darker Brand Color */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 66, 101, 0.3);
+            color: #ffffff;
+        }
+        .mh-plug-admin-wrap .mh-button-content-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .mh-plug-admin-wrap .mh-button .dashicons {
+            font-size: 18px;
+            line-height: 1;
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease;
+        }
+        .mh-plug-admin-wrap .mh-button:hover .dashicons {
+            transform: scale(1.1);
+        }
+
+        /* Modal Polish */
+        .mh-tb-modal-content {
+            border-radius: 12px !important;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            padding: 0;
+            border: 1px solid #e0e0e0;
+        }
+        .mh-tb-modal-header {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 20px 25px;
+        }
+        .mh-tb-modal-header h2 {
+            margin: 0;
+            color: #004265;
+            font-weight: 700;
+        }
+        .mh-tb-form {
+            padding: 25px;
+        }
+
+        /* 🚀 NEW: Beautiful Custom Form Inputs & Dropdowns */
+        .mh-tb-form-group {
+            margin-bottom: 20px;
+        }
+        .mh-tb-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3338;
+            font-size: 13px;
+        }
+        .mh-tb-form-group input[type="text"],
+        .mh-tb-form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 1px solid #8c8f94;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: #2c3338;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            appearance: none; /* Removes default ugly browser arrow */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        
+        /* Custom SVG Arrow for Dropdown */
+        .mh-tb-form-group select {
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%207l5%205%205-5%22%20stroke%3D%22%23555%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 14px;
+            padding-right: 40px;
+            cursor: pointer;
+        }
+
+        /* Focus States (Glowing Brand Color) */
+        .mh-tb-form-group input[type="text"]:focus,
+        .mh-tb-form-group select:focus {
+            border-color: #004265;
+            box-shadow: 0 0 0 2px rgba(0, 66, 101, 0.2);
+            outline: none;
+        }
+
+        /* Modal 'Save & Edit' Button */
+        .mh-tb-form-actions {
+            margin-top: 30px;
+        }
+        .mh-tb-modal-content .mh-tb-submit-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+        }
+    </style>
+
     <div class="mh-tb-header">
         <div class="mh-tb-header-text">
             <h1 class="mh-plug-title"><?php esc_html_e( 'Theme Builder', 'mh-plug' ); ?></h1>
@@ -97,7 +218,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
             'post_category'    => 'dashicons-category', 
             'product_category' => 'dashicons-store', 
             'quick_view'       => 'dashicons-visibility', 
-            'custom'           => 'dashicons-layout', // 🚀 NEW: Custom Layout Icon
+            'custom'           => 'dashicons-layout',
         ];
 
         $label_map = [
@@ -110,7 +231,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
             'post_category'    => __( 'Post Category', 'mh-plug' ), 
             'product_category' => __( 'Product Category', 'mh-plug' ), 
             'quick_view'       => __( 'Quick View', 'mh-plug' ),
-            'custom'           => __( 'Custom Template', 'mh-plug' ), // 🚀 NEW: Custom Label
+            'custom'           => __( 'Custom Template', 'mh-plug' ),
         ];
 
         if ( $templates->have_posts() ) :
@@ -159,7 +280,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
             <div class="mh-tb-card-actions">
                 <a href="<?php echo esc_url( $edit_url ); ?>" class="mh-tb-edit-link">
                     <i class="dashicons dashicons-edit"></i>
-                    <?php esc_html_e( 'Edit with Elementor', 'mh-plug' ); ?>
+                    <?php esc_html_e( 'Edit', 'mh-plug' ); ?>
                 </a>
                 <button class="mh-tb-delete-btn" data-id="<?php echo esc_attr( $template_id ); ?>">
                     <i class="dashicons dashicons-trash"></i>
