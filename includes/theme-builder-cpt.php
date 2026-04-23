@@ -11,7 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Allowed template type slugs
 // ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_allowed_template_types() {
-    return [ 'header', 'footer', 'single_post', 'single_product', 'archive_post', 'archive_product', 'quick_view' ];
+    // 🚀 NEW: Added 'product_category' and 'post_category'
+    return [ 'header', 'footer', 'single_post', 'single_product', 'archive_post', 'archive_product', 'quick_view', 'product_category', 'post_category' ];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -94,14 +95,16 @@ function mh_plug_ajax_create_template() {
     update_post_meta( $post_id, '_mh_template_type',   $template_type );
     update_post_meta( $post_id, '_mh_template_active', 'yes' );
 
-    $elementor_type_map = [
-        'header'          => 'header',
-        'footer'          => 'footer',
-        'single_post'     => 'wp-post',
-        'single_product'  => 'single-product',
-        'archive_post'    => 'archive',
-        'archive_product' => 'archive',
-        'quick_view'      => 'single-product', 
+$elementor_type_map = [
+        'header'           => 'header',
+        'footer'           => 'footer',
+        'single_post'      => 'wp-post',
+        'single_product'   => 'single-product',
+        'archive_post'     => 'archive',
+        'archive_product'  => 'archive',
+        'product_category' => 'archive', // 🚀 NEW
+        'post_category'    => 'archive', // 🚀 NEW
+        'quick_view'       => 'single-product', 
     ];
     $elementor_type = $elementor_type_map[ $template_type ] ?? 'wp-post';
 

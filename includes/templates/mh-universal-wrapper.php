@@ -1,6 +1,6 @@
 <?php
 /**
- * MH Plug - Universal Theme Wrapper (Pro Version with Category Routing)
+ * MH Plug - Universal Theme Wrapper (Pro Version with Advanced Hierarchy)
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
@@ -13,16 +13,22 @@ $active_template = null;
 
 if ( is_tax( 'product_cat' ) || is_category() ) {
     
-    // 1. Check if THIS specific category has a custom template assigned
+    // LEVEL 1: Check if THIS specific individual category has a custom template assigned
     $term_id = get_queried_object_id();
     $custom_cat_template_id = get_term_meta( $term_id, '_mh_category_template', true );
     
     if ( ! empty( $custom_cat_template_id ) ) {
         $active_template = get_post( $custom_cat_template_id );
     } else {
-        // 2. If no specific template is chosen, fallback to the Global Archive template
-        $archive_type = is_tax( 'product_cat' ) ? 'archive_product' : 'archive_post';
-        $active_template = mh_plug_get_active_template( $archive_type );
+        // LEVEL 2: Fallback to the Global Category Template
+        $cat_type = is_tax( 'product_cat' ) ? 'product_category' : 'post_category';
+        $active_template = mh_plug_get_active_template( $cat_type );
+        
+        // LEVEL 3: Ultimate Fallback to the General Archive Template
+        if ( ! $active_template ) {
+            $archive_type = is_tax( 'product_cat' ) ? 'archive_product' : 'archive_post';
+            $active_template = mh_plug_get_active_template( $archive_type );
+        }
     }
 
 } elseif ( class_exists('WooCommerce') && ( is_shop() || is_post_type_archive( 'product' ) ) ) {
@@ -53,7 +59,6 @@ if ( is_tax( 'product_cat' ) || is_category() ) {
 
     <main id="primary" class="site-main mh-universal-content">
         <?php
-        // 🚀 THE FIX: Tell WordPress what to render!
         if ( is_singular( 'mh_templates' ) ) {
             // Let Elementor Editor do its native preview logic
             if ( have_posts() ) : while ( have_posts() ) : the_post(); the_content(); endwhile; endif;
