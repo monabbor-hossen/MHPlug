@@ -3,20 +3,12 @@
  * MH Plug - Theme Builder CPT Registration & AJAX Handlers
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Allowed template type slugs
-// ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_allowed_template_types() {
     return [ 'header', 'footer', 'single_post', 'single_product', 'archive_post', 'archive_product', 'quick_view', 'product_category', 'post_category', 'custom' ];
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Register the mh_templates Custom Post Type
-// ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_register_template_cpt() {
     $labels = [
         'name'          => _x( 'MH Templates', 'Post Type General Name', 'mh-plug' ),
@@ -57,11 +49,7 @@ function mh_plug_add_cpt_elementor_support() {
 }
 add_action( 'init', 'mh_plug_add_cpt_elementor_support' );
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 🚀 THE ULTIMATE FIX: Natively Force Elementor Canvas!
-// ─────────────────────────────────────────────────────────────────────────────
-// This perfectly tells Elementor to use its own built-in Canvas layout for ALL your templates,
-// which 100% guarantees the "the_content" error will NEVER happen again!
+// 🚀 FORCE NATIVE ELEMENTOR CANVAS
 add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key, $single ) {
     if ( '_wp_page_template' === $meta_key && get_post_type( $object_id ) === 'mh_templates' ) {
         return 'elementor_canvas';
@@ -69,13 +57,10 @@ add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key, $singl
     return $value;
 }, 10, 4 );
 
-// Clean up old buggy canvas filters if they exist to prevent conflicts
+// Clean up old buggy canvas filters if they exist
 remove_filter( 'template_include', 'mh_force_elementor_canvas', 9999 );
 remove_filter( 'template_include', 'mh_force_elementor_canvas', 999 );
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AJAX: Create Template
-// ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_ajax_create_template() {
     check_ajax_referer( 'mh_tb_create_template', '_ajax_nonce' );
 
@@ -107,24 +92,11 @@ function mh_plug_ajax_create_template() {
     update_post_meta( $post_id, '_mh_template_type',   $template_type );
     update_post_meta( $post_id, '_mh_template_active', 'yes' );
 
-    // 🚀 Guarantee Elementor canvas is saved to the database on creation
+    // 🚀 Guarantee Elementor canvas is saved
     update_post_meta( $post_id, '_wp_page_template', 'elementor_canvas' );
 
-    $elementor_type_map = [
-        'header'           => 'header',
-        'footer'           => 'footer',
-        'single_post'      => 'wp-post',
-        'single_product'   => 'single-product',
-        'archive_post'     => 'archive',
-        'archive_product'  => 'archive',
-        'product_category' => 'archive',
-        'post_category'    => 'archive',
-        'quick_view'       => 'single-product', 
-        'custom'           => 'wp-page', 
-    ];
-    $elementor_type = $elementor_type_map[ $template_type ] ?? 'wp-post';
-
-    update_post_meta( $post_id, '_elementor_template_type', $elementor_type );
+    // 🚀 Force wp-page so Elementor Free NEVER crashes looking for Pro document types
+    update_post_meta( $post_id, '_elementor_template_type', 'wp-page' );
     update_post_meta( $post_id, '_elementor_edit_mode',     'builder' );
 
     wp_send_json_success( [
@@ -134,16 +106,12 @@ function mh_plug_ajax_create_template() {
 }
 add_action( 'wp_ajax_mh_tb_create_template', 'mh_plug_ajax_create_template' );
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AJAX: Toggle Active Status
-// ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_ajax_toggle_status() {
     if ( ! current_user_can( 'edit_posts' ) ) {
         wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'mh-plug' ) ] );
     }
 
     $template_id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
-    
     $is_active_raw = isset( $_POST['is_active'] ) ? $_POST['is_active'] : false;
     $is_active = ( filter_var( $is_active_raw, FILTER_VALIDATE_BOOLEAN ) ) ? 'yes' : 'no';
 
@@ -156,9 +124,6 @@ function mh_plug_ajax_toggle_status() {
 }
 add_action( 'wp_ajax_mh_tb_toggle_status', 'mh_plug_ajax_toggle_status' );
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AJAX: Delete Template
-// ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_ajax_delete_template() {
     check_ajax_referer( 'mh_tb_delete_template', '_ajax_nonce' );
 
@@ -183,7 +148,7 @@ function mh_plug_ajax_delete_template() {
 add_action( 'wp_ajax_mh_tb_delete_template', 'mh_plug_ajax_delete_template' );
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 🚀 PRO FEATURE: INDIVIDUAL CATEGORY TEMPLATE SELECTOR
+// PRO FEATURE: INDIVIDUAL CATEGORY TEMPLATE SELECTOR
 // ─────────────────────────────────────────────────────────────────────────────
 
 // 1. Add Dropdown to "Create New Category" screen
