@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Allowed template type slugs
 // ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_allowed_template_types() {
-    // 🚀 NEW: Added 'product_category' and 'post_category'
-    return [ 'header', 'footer', 'single_post', 'single_product', 'archive_post', 'archive_product', 'quick_view', 'product_category', 'post_category' ];
+    // 🚀 NEW: Added 'custom' to the allowed list!
+    return [ 'header', 'footer', 'single_post', 'single_product', 'archive_post', 'archive_product', 'quick_view', 'product_category', 'post_category', 'custom' ];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -34,9 +34,7 @@ function mh_plug_register_template_cpt() {
         'supports'            => [ 'title', 'editor', 'elementor' ],
         'hierarchical'        => false,
         'public'              => true,
-        // 🚀 THE FIX: show_ui MUST be true for Elementor to load the editor!
         'show_ui'             => true, 
-        // We keep this false so it doesn't clutter the main WP sidebar
         'show_in_menu'        => false,
         'show_in_admin_bar'   => false,
         'show_in_nav_menus'   => false,
@@ -44,7 +42,6 @@ function mh_plug_register_template_cpt() {
         'has_archive'         => false,
         'exclude_from_search' => true,
         'publicly_queryable'  => true, 
-        // 🚀 THE FIX: Added an explicit rewrite rule for clean URLs
         'rewrite'             => [ 'slug' => 'mh-template' ], 
         'capability_type'     => 'post',
     ] );
@@ -95,16 +92,17 @@ function mh_plug_ajax_create_template() {
     update_post_meta( $post_id, '_mh_template_type',   $template_type );
     update_post_meta( $post_id, '_mh_template_active', 'yes' );
 
-$elementor_type_map = [
+    $elementor_type_map = [
         'header'           => 'header',
         'footer'           => 'footer',
         'single_post'      => 'wp-post',
         'single_product'   => 'single-product',
         'archive_post'     => 'archive',
         'archive_product'  => 'archive',
-        'product_category' => 'archive', // 🚀 NEW
-        'post_category'    => 'archive', // 🚀 NEW
+        'product_category' => 'archive',
+        'post_category'    => 'archive',
         'quick_view'       => 'single-product', 
+        'custom'           => 'wp-page', // 🚀 NEW: 'custom' maps to a standard Elementor page layout
     ];
     $elementor_type = $elementor_type_map[ $template_type ] ?? 'wp-post';
 
@@ -165,52 +163,6 @@ function mh_plug_ajax_delete_template() {
     wp_send_json_success( [ 'message' => __( 'Template deleted.', 'mh-plug' ) ] );
 }
 add_action( 'wp_ajax_mh_tb_delete_template', 'mh_plug_ajax_delete_template' );
-
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 🚀 THE FIX: Force Elementor's Native Canvas for all mh_templates!
-// ─────────────────────────────────────────────────────────────────────────────
-function mh_force_elementor_canvas( $template ) {
-    if ( is_singular( 'mh_templates' ) ) {
-        // Borrow Elementor's official canvas template so we NEVER get the 'the_content' error!
-        if ( defined( 'ELEMENTOR_PATH' ) ) {
-            $canvas = ELEMENTOR_PATH . 'modules/page-templates/templates/canvas.php';
-            if ( file_exists( $canvas ) ) {
-                return $canvas;
-            }
-        }
-    }
-    return $template;
-}
-// Note: We changed this from 'single_template' to 'template_include' for better overrides!
-add_filter( 'template_include', 'mh_force_elementor_canvas', 999 );
-// ─────────────────────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────────────────────
-function mh_plug_get_template_type_meta( $post_id ) {
-    $type = get_post_meta( $post_id, '_mh_template_type', true );
-    if ( empty( $type ) ) {
-        $type = get_post_meta( $post_id, 'mh_template_type', true );
-    }
-    $legacy_map = [
-        'single'          => 'single_post',
-        'product_single'  => 'single_product',
-        'archive'         => 'archive_post',
-        'product_archive' => 'archive_product',
-    ];
-    if ( isset( $legacy_map[ $type ] ) ) {
-        $type = $legacy_map[ $type ];
-    }
-    return (string) $type;
-}
-
-function mh_plug_get_template_active_meta( $post_id ) {
-    $active = get_post_meta( $post_id, '_mh_template_active', true );
-    if ( empty( $active ) ) {
-        $active = get_post_meta( $post_id, 'mh_template_active', true );
-    }
-    return ( $active === 'yes' ) ? 'yes' : 'no';
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 🚀 PRO FEATURE: INDIVIDUAL CATEGORY TEMPLATE SELECTOR
@@ -273,3 +225,31 @@ add_action( 'category_add_form_fields', 'mh_plug_category_template_add_field' );
 add_action( 'category_edit_form_fields', 'mh_plug_category_template_edit_field' );
 add_action( 'created_category', 'mh_plug_save_category_template' );
 add_action( 'edited_category', 'mh_plug_save_category_template' );
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+function mh_plug_get_template_type_meta( $post_id ) {
+    $type = get_post_meta( $post_id, '_mh_template_type', true );
+    if ( empty( $type ) ) {
+        $type = get_post_meta( $post_id, 'mh_template_type', true );
+    }
+    $legacy_map = [
+        'single'          => 'single_post',
+        'product_single'  => 'single_product',
+        'archive'         => 'archive_post',
+        'product_archive' => 'archive_product',
+    ];
+    if ( isset( $legacy_map[ $type ] ) ) {
+        $type = $legacy_map[ $type ];
+    }
+    return (string) $type;
+}
+
+function mh_plug_get_template_active_meta( $post_id ) {
+    $active = get_post_meta( $post_id, '_mh_template_active', true );
+    if ( empty( $active ) ) {
+        $active = get_post_meta( $post_id, 'mh_template_active', true );
+    }
+    return ( $active === 'yes' ) ? 'yes' : 'no';
+}
