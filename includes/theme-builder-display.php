@@ -1,38 +1,37 @@
 <?php
 /**
- * MH Plug - Universal Theme Builder Display Logic (Bulletproof Version)
+ * MH Plug - Universal Theme Builder Display Logic (God Mode Version)
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-// 1. Safe Editor Check (🚀 UPGRADED to catch Elementor Preview Iframes!)
+// 1. Safe Editor Check
 if ( ! function_exists( 'mh_plug_is_elementor_edit_mode' ) ) {
     function mh_plug_is_elementor_edit_mode() {
-        
-        // Catch the secret Elementor Preview Iframe URL parameter
-        if ( isset( $_GET['elementor-preview'] ) ) {
-            return true;
-        }
-
-        // Catch the standard Elementor Editor URL
-        if ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) {
-            return true;
-        }
-
-        // Catch internal Elementor states
+        if ( isset( $_GET['elementor-preview'] ) ) return true;
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) return true;
         if ( class_exists( '\Elementor\Plugin' ) ) {
             $plugin = \Elementor\Plugin::instance();
-            if ( isset( $plugin->editor ) && $plugin->editor->is_edit_mode() ) {
-                return true;
-            }
-            if ( isset( $plugin->preview ) && $plugin->preview->is_preview_mode() ) {
-                return true;
-            }
+            if ( isset( $plugin->editor ) && $plugin->editor->is_edit_mode() ) return true;
+            if ( isset( $plugin->preview ) && $plugin->preview->is_preview_mode() ) return true;
         }
-        
         return false;
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 🚀 THE ULTIMATE FIX: Trick Elementor Free into loading the editor!
+// Elementor Free blocks "Header" and "Archive" document types. 
+// We dynamically force it to see them as normal "pages" during editing so it doesn't crash!
+// ─────────────────────────────────────────────────────────────────────────────
+add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key, $single ) {
+    if ( get_post_type( $object_id ) === 'mh_templates' ) {
+        if ( $meta_key === '_elementor_template_type' ) {
+            return $single ? 'wp-page' : [ 'wp-page' ];
+        }
+    }
+    return $value;
+}, 10, 4 );
 
 // 2. Safe Template Fetcher
 if ( ! function_exists( 'mh_plug_get_active_template' ) ) {
@@ -66,7 +65,6 @@ if ( ! function_exists( 'mh_plug_render_template' ) ) {
             }
         }
         
-        // Fallback if Elementor engine isn't ready
         echo apply_filters( 'the_content', $template_post->post_content );
     }
 }
@@ -74,18 +72,30 @@ if ( ! function_exists( 'mh_plug_render_template' ) ) {
 // 4. Safe Universal Router
 if ( ! function_exists( 'mh_plug_universal_router' ) ) {
     function mh_plug_universal_router( $template ) {
-        // 🚀 THE FIX: Do not interfere with Elementor Editor or the CPT directly
-        if ( mh_plug_is_elementor_edit_mode() ) return $template;
-        if ( is_singular( 'mh_templates' ) ) return $template;
-
-        // Route everything else through the Universal Wrapper
-        $universal_wrapper = MH_PLUG_PATH . 'includes/templates/mh-universal-wrapper.php';
         
-        if ( file_exists( $universal_wrapper ) ) {
-            return $universal_wrapper;
+        $canvas  = MH_PLUG_PATH . 'includes/templates/mh-canvas.php';
+        $wrapper = MH_PLUG_PATH . 'includes/templates/mh-universal-wrapper.php';
+
+        // 🚀 Force OUR custom canvas when viewing/editing the template directly!
+        if ( is_singular( 'mh_templates' ) ) {
+            if ( file_exists( $canvas ) ) {
+                return $canvas;
+            }
+        }
+
+        // Do not interfere with Elementor Editor for standard pages/posts
+        if ( mh_plug_is_elementor_edit_mode() ) {
+            return $template;
+        }
+
+        // Route frontend traffic through the Universal Wrapper
+        if ( file_exists( $wrapper ) ) {
+            return $wrapper;
         }
 
         return $template;
     }
 }
+// 🚀 High priority to beat FSE themes (like Twenty Twenty-Four)
 add_filter( 'template_include', 'mh_plug_universal_router', 99999 );
+add_filter( 'single_template', 'mh_plug_universal_router', 99999 );
