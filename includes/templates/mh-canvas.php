@@ -10,7 +10,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
+    <meta charset="<?php bloginfo( 'charset' ); ?>"><?php
+/**
+ * MH Plug - Canvas Template (Absolute Elementor Override)
+ */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
+?>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php wp_head(); ?>
+    <style>
+        /* Force a clean workspace for Elementor */
+        html, body { margin: 0; padding: 0; min-height: 100vh; background: #fff; }
+    </style>
+</head>
+<body <?php body_class( 'elementor-template-canvas' ); ?>>
+    <?php wp_body_open(); ?>
+    
+    <?php
+    // 🚀 ELEMENTOR REQUIRES EXACTLY THIS LOOP. NOTHING ELSE.
+    if ( have_posts() ) :
+        while ( have_posts() ) : the_post();
+            the_content();
+        endwhile;
+    endif;
+    ?>
+
+    <?php wp_footer(); ?>
+</body>
+</html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php wp_head(); ?>
 </head>
