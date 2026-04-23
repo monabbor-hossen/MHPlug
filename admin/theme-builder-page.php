@@ -3,7 +3,7 @@
  * MH Plug - Theme Builder Admin Page
  *
  * Template type slugs (authoritative):
- * header | footer | single_post | single_product | archive_post | archive_product | quick_view
+ * header | footer | single_post | single_product | archive_post | archive_product | quick_view | post_category | product_category
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +18,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
     <div class="mh-tb-header">
         <div class="mh-tb-header-text">
             <h1 class="mh-plug-title"><?php esc_html_e( 'Theme Builder', 'mh-plug' ); ?></h1>
-            <p class="mh-tb-description"><?php esc_html_e( 'Create and manage custom Elementor templates for headers, footers, single posts, products, archives, and quick views.', 'mh-plug' ); ?></p>
+            <p class="mh-tb-description"><?php esc_html_e( 'Create and manage custom Elementor templates for headers, footers, single posts, products, archives, categories, and quick views.', 'mh-plug' ); ?></p>
         </div>
         <div class="mh-tb-header-actions">
             <button class="mh-button mh-tb-action-create" id="mh-tb-create-btn">
@@ -36,8 +36,16 @@ $is_wc_active = class_exists( 'WooCommerce' );
         <li data-tab="footer"><?php esc_html_e( 'Footer', 'mh-plug' ); ?></li>
         <li data-tab="single_post"><?php esc_html_e( 'Single Post', 'mh-plug' ); ?></li>
         <li data-tab="archive_post"><?php esc_html_e( 'Archive', 'mh-plug' ); ?></li>
+        <li data-tab="post_category"><?php esc_html_e( 'Post Category', 'mh-plug' ); ?></li>
+        
         <li data-tab="archive_product" class="<?php echo $is_wc_active ? '' : 'mh-disabled-tab'; ?>">
             <?php esc_html_e( 'Product Archive', 'mh-plug' ); ?>
+            <?php if ( ! $is_wc_active ) : ?>
+                <span class="mh-tb-wc-req">(<?php esc_html_e( 'Requires Woo', 'mh-plug' ); ?>)</span>
+            <?php endif; ?>
+        </li>
+        <li data-tab="product_category" class="<?php echo $is_wc_active ? '' : 'mh-disabled-tab'; ?>">
+            <?php esc_html_e( 'Product Category', 'mh-plug' ); ?>
             <?php if ( ! $is_wc_active ) : ?>
                 <span class="mh-tb-wc-req">(<?php esc_html_e( 'Requires Woo', 'mh-plug' ); ?>)</span>
             <?php endif; ?>
@@ -78,26 +86,30 @@ $is_wc_active = class_exists( 'WooCommerce' );
             'product_archive' => 'archive_product',
         ];
 
-        // 🚀 NEW: Added Quick View Icon
+        // 🚀 UPDATED ICONS: Added Category Icons
         $icon_map = [
-            'header'          => 'dashicons-align-center',
-            'footer'          => 'dashicons-arrow-down-alt2',
-            'single_post'     => 'dashicons-media-document',
-            'single_product'  => 'dashicons-products',
-            'archive_post'    => 'dashicons-portfolio',
-            'archive_product' => 'dashicons-cart',
-            'quick_view'      => 'dashicons-visibility', 
+            'header'           => 'dashicons-align-center',
+            'footer'           => 'dashicons-arrow-down-alt2',
+            'single_post'      => 'dashicons-media-document',
+            'single_product'   => 'dashicons-products',
+            'archive_post'     => 'dashicons-portfolio',
+            'archive_product'  => 'dashicons-cart',
+            'post_category'    => 'dashicons-category', 
+            'product_category' => 'dashicons-store', 
+            'quick_view'       => 'dashicons-visibility', 
         ];
 
-        // 🚀 NEW: Added Quick View Label
+        // 🚀 UPDATED LABELS: Added Category Labels
         $label_map = [
-            'header'          => __( 'Header', 'mh-plug' ),
-            'footer'          => __( 'Footer', 'mh-plug' ),
-            'single_post'     => __( 'Single Post', 'mh-plug' ),
-            'single_product'  => __( 'Single Product', 'mh-plug' ),
-            'archive_post'    => __( 'Archive', 'mh-plug' ),
-            'archive_product' => __( 'Product Archive', 'mh-plug' ),
-            'quick_view'      => __( 'Quick View', 'mh-plug' ),
+            'header'           => __( 'Header', 'mh-plug' ),
+            'footer'           => __( 'Footer', 'mh-plug' ),
+            'single_post'      => __( 'Single Post', 'mh-plug' ),
+            'single_product'   => __( 'Single Product', 'mh-plug' ),
+            'archive_post'     => __( 'Archive', 'mh-plug' ),
+            'archive_product'  => __( 'Product Archive', 'mh-plug' ),
+            'post_category'    => __( 'Post Category', 'mh-plug' ), 
+            'product_category' => __( 'Product Category', 'mh-plug' ), 
+            'quick_view'       => __( 'Quick View', 'mh-plug' ),
         ];
 
         if ( $templates->have_posts() ) :
@@ -159,7 +171,9 @@ $is_wc_active = class_exists( 'WooCommerce' );
         endif;
         ?>
 
-    </div><div class="mh-tb-modal" id="mh-tb-modal">
+    </div>
+    
+    <div class="mh-tb-modal" id="mh-tb-modal">
         <div class="mh-tb-modal-content">
             <div class="mh-tb-modal-header">
                 <h2><?php esc_html_e( 'Create New Template', 'mh-plug' ); ?></h2>
@@ -182,6 +196,13 @@ $is_wc_active = class_exists( 'WooCommerce' );
                         <option value="footer"><?php esc_html_e( 'Footer', 'mh-plug' ); ?></option>
                         <option value="single_post"><?php esc_html_e( 'Single Post', 'mh-plug' ); ?></option>
                         <option value="archive_post"><?php esc_html_e( 'Archive', 'mh-plug' ); ?></option>
+                        
+                        <option value="post_category"><?php esc_html_e( 'Post Category', 'mh-plug' ); ?></option>
+                        <option value="product_category" <?php disabled( ! $is_wc_active ); ?>>
+                            <?php esc_html_e( 'Product Category', 'mh-plug' ); ?>
+                            <?php if ( ! $is_wc_active ) echo ' (' . esc_html__( 'Requires WooCommerce', 'mh-plug' ) . ')'; ?>
+                        </option>
+
                         <option value="archive_product" <?php disabled( ! $is_wc_active ); ?>>
                             <?php esc_html_e( 'Product Archive', 'mh-plug' ); ?>
                             <?php if ( ! $is_wc_active ) echo ' (' . esc_html__( 'Requires WooCommerce', 'mh-plug' ) . ')'; ?>
