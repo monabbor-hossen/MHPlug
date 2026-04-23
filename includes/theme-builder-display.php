@@ -5,16 +5,32 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-// 1. Safe Editor Check
+// 1. Safe Editor Check (🚀 UPGRADED to catch Elementor Preview Iframes!)
 if ( ! function_exists( 'mh_plug_is_elementor_edit_mode' ) ) {
     function mh_plug_is_elementor_edit_mode() {
-        if ( ! did_action( 'elementor/loaded' ) ) return false;
-        if ( ! class_exists( '\Elementor\Plugin' ) ) return false;
         
-        $instance = \Elementor\Plugin::instance();
-        if ( empty( $instance ) || empty( $instance->editor ) ) return false;
+        // Catch the secret Elementor Preview Iframe URL parameter
+        if ( isset( $_GET['elementor-preview'] ) ) {
+            return true;
+        }
+
+        // Catch the standard Elementor Editor URL
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) {
+            return true;
+        }
+
+        // Catch internal Elementor states
+        if ( class_exists( '\Elementor\Plugin' ) ) {
+            $plugin = \Elementor\Plugin::instance();
+            if ( isset( $plugin->editor ) && $plugin->editor->is_edit_mode() ) {
+                return true;
+            }
+            if ( isset( $plugin->preview ) && $plugin->preview->is_preview_mode() ) {
+                return true;
+            }
+        }
         
-        return $instance->editor->is_edit_mode();
+        return false;
     }
 }
 
@@ -58,7 +74,7 @@ if ( ! function_exists( 'mh_plug_render_template' ) ) {
 // 4. Safe Universal Router
 if ( ! function_exists( 'mh_plug_universal_router' ) ) {
     function mh_plug_universal_router( $template ) {
-        // Do not interfere with Elementor Editor or the CPT directly
+        // 🚀 THE FIX: Do not interfere with Elementor Editor or the CPT directly
         if ( mh_plug_is_elementor_edit_mode() ) return $template;
         if ( is_singular( 'mh_templates' ) ) return $template;
 

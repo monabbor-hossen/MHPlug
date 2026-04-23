@@ -163,20 +163,24 @@ function mh_plug_ajax_delete_template() {
 }
 add_action( 'wp_ajax_mh_tb_delete_template', 'mh_plug_ajax_delete_template' );
 
+
 // ─────────────────────────────────────────────────────────────────────────────
-// single_template: Force our canvas for all mh_templates singular views
+// 🚀 THE FIX: Force Elementor's Native Canvas for all mh_templates!
 // ─────────────────────────────────────────────────────────────────────────────
 function mh_force_elementor_canvas( $template ) {
     if ( is_singular( 'mh_templates' ) ) {
-        $canvas = MH_PLUG_PATH . 'includes/templates/mh-canvas.php';
-        if ( file_exists( $canvas ) ) {
-            return $canvas;
+        // Borrow Elementor's official canvas template so we NEVER get the 'the_content' error!
+        if ( defined( 'ELEMENTOR_PATH' ) ) {
+            $canvas = ELEMENTOR_PATH . 'modules/page-templates/templates/canvas.php';
+            if ( file_exists( $canvas ) ) {
+                return $canvas;
+            }
         }
     }
     return $template;
 }
-add_filter( 'single_template', 'mh_force_elementor_canvas', 999 );
-
+// Note: We changed this from 'single_template' to 'template_include' for better overrides!
+add_filter( 'template_include', 'mh_force_elementor_canvas', 999 );
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
