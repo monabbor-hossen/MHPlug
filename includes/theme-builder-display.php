@@ -1,6 +1,6 @@
 <?php
 /**
- * MH Plug - Universal Theme Builder Display Logic (Clean & Native)
+ * MH Plug - Universal Theme Builder Display Logic (Clean Version)
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
@@ -40,26 +40,24 @@ if ( ! function_exists( 'mh_plug_render_template' ) ) {
     }
 }
 
-// 3. Live Site Universal Router (Only wraps the frontend, ignores the editor completely)
+// 3. Clean Universal Router
 if ( ! function_exists( 'mh_plug_universal_router' ) ) {
     function mh_plug_universal_router( $template ) {
         
-        // COMPLETELY IGNORE Admin, AJAX, and REST API (This prevents the JSON error!)
-        if ( is_admin() || wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
-            return $template;
+        // 🚀 FORCE OUR CANVAS for Elementor Editor so FSE Themes don't crash it
+        if ( is_singular( 'mh_templates' ) ) {
+            $canvas = MH_PLUG_PATH . 'includes/templates/mh-canvas.php';
+            if ( file_exists( $canvas ) ) {
+                return $canvas;
+            }
         }
 
-        // COMPLETELY IGNORE Elementor Editor
+        // Do not interfere with standard Elementor edits
         if ( isset( $_GET['elementor-preview'] ) || ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) ) {
             return $template;
         }
 
-        // Let Elementor natively handle viewing the templates directly
-        if ( is_singular( 'mh_templates' ) ) {
-            return $template;
-        }
-
-        // Wrap the LIVE website with our universal designs
+        // Apply our Universal Wrapper to the frontend live site
         $wrapper = MH_PLUG_PATH . 'includes/templates/mh-universal-wrapper.php';
         if ( file_exists( $wrapper ) ) {
             return $wrapper;
@@ -68,4 +66,5 @@ if ( ! function_exists( 'mh_plug_universal_router' ) ) {
         return $template;
     }
 }
-add_filter( 'template_include', 'mh_plug_universal_router', 999 );
+add_filter( 'template_include', 'mh_plug_universal_router', 99999 );
+add_filter( 'single_template', 'mh_plug_universal_router', 99999 );

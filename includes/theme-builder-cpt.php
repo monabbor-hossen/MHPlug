@@ -49,6 +49,9 @@ function mh_plug_add_cpt_elementor_support() {
 }
 add_action( 'init', 'mh_plug_add_cpt_elementor_support' );
 
+// ─────────────────────────────────────────────────────────────────────────────
+// AJAX: Create Template
+// ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_ajax_create_template() {
     check_ajax_referer( 'mh_tb_create_template', '_ajax_nonce' );
 
@@ -77,12 +80,14 @@ function mh_plug_ajax_create_template() {
         wp_send_json_error( [ 'message' => $post_id->get_error_message() ] );
     }
 
-    // Safely apply metadata so Elementor Native Canvas handles it without forcing it
+    // Save custom plugin meta
     update_post_meta( $post_id, '_mh_template_type',   $template_type );
     update_post_meta( $post_id, '_mh_template_active', 'yes' );
+
+    // 🚀 SAFELY save Elementor data directly into the database so the REST API doesn't crash
     update_post_meta( $post_id, '_wp_page_template', 'elementor_canvas' );
     update_post_meta( $post_id, '_elementor_template_type', 'wp-page' );
-    update_post_meta( $post_id, '_elementor_edit_mode',     'builder' );
+    update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
 
     wp_send_json_success( [
         'message'  => __( 'Template created successfully.', 'mh-plug' ),
@@ -132,7 +137,9 @@ function mh_plug_ajax_delete_template() {
 }
 add_action( 'wp_ajax_mh_tb_delete_template', 'mh_plug_ajax_delete_template' );
 
-// PRO CATEGORY LOGIC
+// ─────────────────────────────────────────────────────────────────────────────
+// PRO FEATURE: INDIVIDUAL CATEGORY TEMPLATE SELECTOR
+// ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_category_template_add_field() {
     $templates = get_posts([ 'post_type' => 'mh_templates', 'posts_per_page' => -1, 'post_status' => 'publish' ]);
     ?>
@@ -144,7 +151,7 @@ function mh_plug_category_template_add_field() {
                 <option value="<?php echo esc_attr( $tpl->ID ); ?>"><?php echo esc_html( $tpl->post_title ); ?></option>
             <?php endforeach; ?>
         </select>
-        <p><?php _e( 'Select a specific Elementor template for this category.', 'mh-plug' ); ?></p>
+        <p><?php _e( 'Select a specific Elementor template for this category. This will override the global archive template.', 'mh-plug' ); ?></p>
     </div>
     <?php
 }
@@ -164,6 +171,7 @@ function mh_plug_category_template_edit_field( $term ) {
                     </option>
                 <?php endforeach; ?>
             </select>
+            <p class="description"><?php _e( 'Select a specific Elementor template for this category. This will override the global archive template.', 'mh-plug' ); ?></p>
         </td>
     </tr>
     <?php
@@ -179,6 +187,7 @@ add_action( 'product_cat_add_form_fields', 'mh_plug_category_template_add_field'
 add_action( 'product_cat_edit_form_fields', 'mh_plug_category_template_edit_field' );
 add_action( 'created_product_cat', 'mh_plug_save_category_template' );
 add_action( 'edited_product_cat', 'mh_plug_save_category_template' );
+
 add_action( 'category_add_form_fields', 'mh_plug_category_template_add_field' );
 add_action( 'category_edit_form_fields', 'mh_plug_category_template_edit_field' );
 add_action( 'created_category', 'mh_plug_save_category_template' );
