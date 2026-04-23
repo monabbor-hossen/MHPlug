@@ -27,6 +27,7 @@ function mh_plug_register_template_cpt() {
         'public'              => true,
         'show_ui'             => true, 
         'show_in_menu'        => false,
+        'show_in_rest'        => true, // 🚀 FIX: This permanently stops the Gutenberg JSON error!
         'show_in_admin_bar'   => false,
         'show_in_nav_menus'   => false,
         'can_export'          => true,
@@ -49,9 +50,6 @@ function mh_plug_add_cpt_elementor_support() {
 }
 add_action( 'init', 'mh_plug_add_cpt_elementor_support' );
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AJAX: Create Template
-// ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_ajax_create_template() {
     check_ajax_referer( 'mh_tb_create_template', '_ajax_nonce' );
 
@@ -80,13 +78,14 @@ function mh_plug_ajax_create_template() {
         wp_send_json_error( [ 'message' => $post_id->get_error_message() ] );
     }
 
-    // Save custom plugin meta
+    // Save our plugin's internal template type
     update_post_meta( $post_id, '_mh_template_type',   $template_type );
     update_post_meta( $post_id, '_mh_template_active', 'yes' );
 
-    // 🚀 SAFELY save Elementor data directly into the database so the REST API doesn't crash
+    // 🚀 FIX: Force Elementor Free to see this as a standard page!
+    // This stops Elementor from blocking the editor and kicking you back to Gutenberg.
+    update_post_meta( $post_id, '_elementor_template_type', 'wp-page' ); 
     update_post_meta( $post_id, '_wp_page_template', 'elementor_canvas' );
-    update_post_meta( $post_id, '_elementor_template_type', 'wp-page' );
     update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
 
     wp_send_json_success( [
@@ -98,17 +97,14 @@ add_action( 'wp_ajax_mh_tb_create_template', 'mh_plug_ajax_create_template' );
 
 function mh_plug_ajax_toggle_status() {
     if ( ! current_user_can( 'edit_posts' ) ) {
-        wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'mh-plug' ) ] );
+        wp_send_json_error( [ 'message' => __( 'No permission.', 'mh-plug' ) ] );
     }
-
     $template_id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
     $is_active_raw = isset( $_POST['is_active'] ) ? $_POST['is_active'] : false;
     $is_active = ( filter_var( $is_active_raw, FILTER_VALIDATE_BOOLEAN ) ) ? 'yes' : 'no';
-
     if ( ! $template_id ) {
         wp_send_json_error( [ 'message' => __( 'Invalid ID.', 'mh-plug' ) ] );
     }
-
     update_post_meta( $template_id, '_mh_template_active', $is_active );
     wp_send_json_success( [ 'message' => __( 'Status updated.', 'mh-plug' ) ] );
 }
@@ -116,30 +112,21 @@ add_action( 'wp_ajax_mh_tb_toggle_status', 'mh_plug_ajax_toggle_status' );
 
 function mh_plug_ajax_delete_template() {
     check_ajax_referer( 'mh_tb_delete_template', '_ajax_nonce' );
-
     if ( ! current_user_can( 'delete_posts' ) ) {
-        wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'mh-plug' ) ] );
+        wp_send_json_error( [ 'message' => __( 'No permission.', 'mh-plug' ) ] );
     }
-
     $template_id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
-
     if ( ! $template_id || get_post_type( $template_id ) !== 'mh_templates' ) {
         wp_send_json_error( [ 'message' => __( 'Invalid template.', 'mh-plug' ) ] );
     }
-
     $result = wp_trash_post( $template_id );
-
     if ( ! $result ) {
-        wp_send_json_error( [ 'message' => __( 'Could not delete template. Please try again.', 'mh-plug' ) ] );
+        wp_send_json_error( [ 'message' => __( 'Could not delete template.', 'mh-plug' ) ] );
     }
-
     wp_send_json_success( [ 'message' => __( 'Template deleted.', 'mh-plug' ) ] );
 }
 add_action( 'wp_ajax_mh_tb_delete_template', 'mh_plug_ajax_delete_template' );
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PRO FEATURE: INDIVIDUAL CATEGORY TEMPLATE SELECTOR
-// ─────────────────────────────────────────────────────────────────────────────
 function mh_plug_category_template_add_field() {
     $templates = get_posts([ 'post_type' => 'mh_templates', 'posts_per_page' => -1, 'post_status' => 'publish' ]);
     ?>
@@ -151,7 +138,7 @@ function mh_plug_category_template_add_field() {
                 <option value="<?php echo esc_attr( $tpl->ID ); ?>"><?php echo esc_html( $tpl->post_title ); ?></option>
             <?php endforeach; ?>
         </select>
-        <p><?php _e( 'Select a specific Elementor template for this category. This will override the global archive template.', 'mh-plug' ); ?></p>
+        <p><?php _e( 'Select a specific Elementor template for this category.', 'mh-plug' ); ?></p>
     </div>
     <?php
 }
@@ -171,7 +158,6 @@ function mh_plug_category_template_edit_field( $term ) {
                     </option>
                 <?php endforeach; ?>
             </select>
-            <p class="description"><?php _e( 'Select a specific Elementor template for this category. This will override the global archive template.', 'mh-plug' ); ?></p>
         </td>
     </tr>
     <?php
@@ -187,7 +173,6 @@ add_action( 'product_cat_add_form_fields', 'mh_plug_category_template_add_field'
 add_action( 'product_cat_edit_form_fields', 'mh_plug_category_template_edit_field' );
 add_action( 'created_product_cat', 'mh_plug_save_category_template' );
 add_action( 'edited_product_cat', 'mh_plug_save_category_template' );
-
 add_action( 'category_add_form_fields', 'mh_plug_category_template_add_field' );
 add_action( 'category_edit_form_fields', 'mh_plug_category_template_edit_field' );
 add_action( 'created_category', 'mh_plug_save_category_template' );
@@ -197,15 +182,6 @@ function mh_plug_get_template_type_meta( $post_id ) {
     $type = get_post_meta( $post_id, '_mh_template_type', true );
     if ( empty( $type ) ) {
         $type = get_post_meta( $post_id, 'mh_template_type', true );
-    }
-    $legacy_map = [
-        'single'          => 'single_post',
-        'product_single'  => 'single_product',
-        'archive'         => 'archive_post',
-        'product_archive' => 'archive_product',
-    ];
-    if ( isset( $legacy_map[ $type ] ) ) {
-        $type = $legacy_map[ $type ];
     }
     return (string) $type;
 }
