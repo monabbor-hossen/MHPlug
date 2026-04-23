@@ -1,11 +1,11 @@
 <?php
 /**
- * MH Plug - Universal Theme Builder Display Logic (Ultimate Failsafe)
+ * MH Plug - Universal Theme Builder Display Logic (Absolute Failsafe)
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-// 1. Force Elementor Free to see all templates as standard pages (Prevents Pro Document Type crashes)
+// 1. Force Elementor Free to see all templates as standard pages (Prevents Pro crashes)
 add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key, $single ) {
     if ( $meta_key === '_elementor_template_type' && get_post_type( $object_id ) === 'mh_templates' ) {
         return $single ? 'wp-page' : [ 'wp-page' ];
@@ -67,18 +67,23 @@ if ( ! function_exists( 'mh_plug_render_template' ) ) {
 if ( ! function_exists( 'mh_plug_universal_router' ) ) {
     function mh_plug_universal_router( $template ) {
         
-        // 🚀 RULE 1: If Elementor is trying to edit or preview, STEP ASIDE!
+        $canvas  = MH_PLUG_PATH . 'includes/templates/mh-canvas.php';
+        $wrapper = MH_PLUG_PATH . 'includes/templates/mh-universal-wrapper.php';
+
+        // 🚀 THE CRITICAL FIX: If we are editing or viewing OUR custom templates, WE take control!
+        // We CANNOT let the active theme handle this, because Block Themes don't have the_content()
+        if ( is_singular( 'mh_templates' ) ) {
+            if ( file_exists( $canvas ) ) {
+                return $canvas; // ALWAYS load our safe canvas for Elementor Editor!
+            }
+        }
+
+        // 🚀 RULE 2: If Elementor is trying to edit standard pages/posts, step aside!
         if ( mh_plug_is_elementor_edit_mode() ) {
             return $template;
         }
 
-        // 🚀 RULE 2: If viewing a Template directly, STEP ASIDE! (Elementor Native Canvas handles it)
-        if ( is_singular( 'mh_templates' ) ) {
-            return $template;
-        }
-
         // 🚀 RULE 3: For the live website, wrap the whole site in our Universal Wrapper
-        $wrapper = MH_PLUG_PATH . 'includes/templates/mh-universal-wrapper.php';
         if ( file_exists( $wrapper ) ) {
             return $wrapper;
         }
@@ -86,5 +91,6 @@ if ( ! function_exists( 'mh_plug_universal_router' ) ) {
         return $template;
     }
 }
+// Run at an insanely high priority to defeat FSE Themes and third-party overrides
 add_filter( 'template_include', 'mh_plug_universal_router', 99999 );
 add_filter( 'single_template', 'mh_plug_universal_router', 99999 );
