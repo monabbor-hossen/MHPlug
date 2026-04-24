@@ -1,20 +1,35 @@
 <?php
 /**
- * MH Plug - Universal Theme Builder Display Logic (Final Native Version)
+ * MH Plug - Universal Theme Builder Display Logic (Server Cache Override)
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-// 1. Safe Template Fetcher (Strictly checks if it is set to 'Active')
+// ─────────────────────────────────────────────────────────────────────────────
+// 🚀 THE MAGIC FIX: FORCE HOSTINGER SERVER CACHE TO FLUSH!
+// Since the LiteSpeed plugin is gone, the server cache got "stuck".
+// This forces Hostinger to serve the fresh, working page to logged-out users!
+// ─────────────────────────────────────────────────────────────────────────────
+add_action( 'send_headers', function() {
+    if ( ! is_admin() ) {
+        header( 'Cache-Control: no-store, no-cache, must-revalidate, max-age=0' );
+        header( 'Cache-Control: post-check=0, pre-check=0', false );
+        header( 'Pragma: no-cache' );
+        header( 'X-LiteSpeed-Cache-Control: no-cache' );
+    }
+}, 1 );
+
+// 1. Safe Template Fetcher
 if ( ! function_exists( 'mh_plug_get_active_template' ) ) {
     function mh_plug_get_active_template( $type ) {
         $type = sanitize_key( $type );
         $posts = get_posts([
-            'post_type'      => 'mh_templates',
-            'post_status'    => 'publish',
-            'posts_per_page' => 1,
-            'no_found_rows'  => true,
-            'meta_query'     => [
+            'post_type'        => 'mh_templates',
+            'post_status'      => 'publish',
+            'posts_per_page'   => 1,
+            'no_found_rows'    => true,
+            'suppress_filters' => true, // 🚀 Guarantees no other plugins hide this from logged-out users!
+            'meta_query'       => [
                 'relation' => 'AND',
                 [
                     'relation' => 'OR',
@@ -48,61 +63,7 @@ if ( ! function_exists( 'mh_plug_render_template' ) ) {
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 🚀 RESTORE THE CSS FIX FOR CACHING & LOGGED-OUT USERS
-// Without this, Hostinger's LiteSpeed Cache strips all styles from the live site!
-// ─────────────────────────────────────────────────────────────────────────────
-add_action( 'wp_enqueue_scripts', 'mh_plug_enqueue_elementor_template_css', 9999 );
-function mh_plug_enqueue_elementor_template_css() {
-    if ( ! class_exists( '\Elementor\Core\Files\CSS\Post' ) ) return;
-
-    $templates_to_load = [];
-
-    // Queue Header CSS
-    $header = mh_plug_get_active_template( 'header' );
-    if ( $header ) $templates_to_load[] = $header->ID;
-
-    // Queue Footer CSS
-    $footer = mh_plug_get_active_template( 'footer' );
-    if ( $footer ) $templates_to_load[] = $footer->ID;
-
-    // Detect and Queue the Active Body Template CSS
-    $active_template = null;
-    if ( is_tax( 'product_cat' ) || is_category() ) {
-        $term_id = get_queried_object_id();
-        $custom_cat_template_id = get_term_meta( $term_id, '_mh_category_template', true );
-        if ( ! empty( $custom_cat_template_id ) ) {
-            $active_template = get_post( $custom_cat_template_id );
-        } else {
-            $cat_type = is_tax( 'product_cat' ) ? 'product_category' : 'post_category';
-            $active_template = mh_plug_get_active_template( $cat_type );
-            if ( ! $active_template ) {
-                $archive_type = is_tax( 'product_cat' ) ? 'archive_product' : 'archive_post';
-                $active_template = mh_plug_get_active_template( $archive_type );
-            }
-        }
-    } elseif ( class_exists('WooCommerce') && ( is_shop() || is_post_type_archive( 'product' ) ) ) {
-        $active_template = mh_plug_get_active_template( 'archive_product' );
-    } elseif ( is_archive() || is_home() || is_search() ) {
-        $active_template = mh_plug_get_active_template( 'archive_post' );
-    } elseif ( is_singular( 'product' ) ) {
-        $active_template = mh_plug_get_active_template( 'single_product' );
-    } elseif ( is_singular( 'post' ) || is_page() ) {
-        $active_template = mh_plug_get_active_template( 'single_post' );
-    }
-
-    if ( $active_template ) {
-        $templates_to_load[] = $active_template->ID;
-    }
-
-    // Enqueue all matched template CSS files safely into the <head>
-    foreach ( array_unique($templates_to_load) as $template_id ) {
-        $css_file = new \Elementor\Core\Files\CSS\Post( $template_id );
-        $css_file->enqueue();
-    }
-}
-
-// 4. Clean Universal Router (No JSON Crashes)
+// 3. Clean Universal Router
 if ( ! function_exists( 'mh_plug_universal_router' ) ) {
     function mh_plug_universal_router( $template ) {
         
@@ -133,5 +94,10 @@ if ( ! function_exists( 'mh_plug_universal_router' ) ) {
         return $template;
     }
 }
+
+// Force the wrapper on every single possible page load
 add_filter( 'template_include', 'mh_plug_universal_router', 99999 );
 add_filter( 'single_template', 'mh_plug_universal_router', 99999 );
+add_filter( 'archive_template', 'mh_plug_universal_router', 99999 );
+add_filter( 'page_template', 'mh_plug_universal_router', 99999 );
+add_filter( 'index_template', 'mh_plug_universal_router', 99999 );
