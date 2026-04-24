@@ -5,13 +5,16 @@ if (!defined('ABSPATH')) {
 }
 
 // Fetch existing settings
-$settings   = get_option('mh_plug_preloader_settings', []);
-$enable     = isset($settings['enable']) ? $settings['enable'] : 'no';
-$image      = isset($settings['image']) ? $settings['image'] : '';
-$bg_color   = isset($settings['bg_color']) ? $settings['bg_color'] : '#ffffff';
-$img_width  = isset($settings['img_width']) ? $settings['img_width'] : '150';
-$delay      = isset($settings['delay']) ? $settings['delay'] : '500';
-$transition = isset($settings['transition']) ? $settings['transition'] : '500';
+$settings     = get_option('mh_plug_preloader_settings', []);
+$enable       = isset($settings['enable']) ? $settings['enable'] : 'no';
+$type         = isset($settings['type']) ? $settings['type'] : 'css'; // 'image' or 'css'
+$css_effect   = isset($settings['css_effect']) ? $settings['css_effect'] : '1';
+$loader_color = isset($settings['loader_color']) ? $settings['loader_color'] : '#d63638';
+$image        = isset($settings['image']) ? $settings['image'] : '';
+$bg_color     = isset($settings['bg_color']) ? $settings['bg_color'] : '#ffffff';
+$img_width    = isset($settings['img_width']) ? $settings['img_width'] : '150';
+$delay        = isset($settings['delay']) ? $settings['delay'] : '500';
+$transition   = isset($settings['transition']) ? $settings['transition'] : '500';
 ?>
 
 <div class="wrap mh-plug-admin-wrap mh-main-settings-wrap">
@@ -41,6 +44,41 @@ $transition = isset($settings['transition']) ? $settings['transition'] : '500';
                         </tr>
 
                         <tr>
+                            <th scope="row"><?php esc_html_e('Preloader Type', 'mh-plug'); ?></th>
+                            <td>
+                                <label style="margin-right: 15px;">
+                                    <input type="radio" name="mh_plug_preloader_settings[type]" value="css" class="mh-loader-type" <?php checked($type, 'css'); ?>> 
+                                    <?php esc_html_e('Default Animations', 'mh-plug'); ?>
+                                </label>
+                                <label>
+                                    <input type="radio" name="mh_plug_preloader_settings[type]" value="image" class="mh-loader-type" <?php checked($type, 'image'); ?>> 
+                                    <?php esc_html_e('Custom Image (GIF/PNG)', 'mh-plug'); ?>
+                                </label>
+                            </td>
+                        </tr>
+
+                        <tr class="mh-css-settings" style="display: <?php echo ($type === 'css') ? 'table-row' : 'none'; ?>;">
+                            <th scope="row"><?php esc_html_e('Select Animation', 'mh-plug'); ?></th>
+                            <td>
+                                <select name="mh_plug_preloader_settings[css_effect]">
+                                    <option value="1" <?php selected($css_effect, '1'); ?>><?php esc_html_e('1. Classic Spinner', 'mh-plug'); ?></option>
+                                    <option value="2" <?php selected($css_effect, '2'); ?>><?php esc_html_e('2. Bouncing Dots', 'mh-plug'); ?></option>
+                                    <option value="3" <?php selected($css_effect, '3'); ?>><?php esc_html_e('3. Pulse Circle', 'mh-plug'); ?></option>
+                                    <option value="4" <?php selected($css_effect, '4'); ?>><?php esc_html_e('4. Flipping Square', 'mh-plug'); ?></option>
+                                    <option value="5" <?php selected($css_effect, '5'); ?>><?php esc_html_e('5. Double Bounce', 'mh-plug'); ?></option>
+                                    <option value="6" <?php selected($css_effect, '6'); ?>><?php esc_html_e('6. Bar Wave', 'mh-plug'); ?></option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr class="mh-css-settings" style="display: <?php echo ($type === 'css') ? 'table-row' : 'none'; ?>;">
+                            <th scope="row"><?php esc_html_e('Animation Color', 'mh-plug'); ?></th>
+                            <td>
+                                <input type="color" name="mh_plug_preloader_settings[loader_color]" value="<?php echo esc_attr($loader_color); ?>" style="height: 40px; width: 80px; padding: 0; cursor: pointer; border-radius: 4px;" />
+                            </td>
+                        </tr>
+
+                        <tr class="mh-image-settings" style="display: <?php echo ($type === 'image') ? 'table-row' : 'none'; ?>;">
                             <th scope="row"><?php esc_html_e('Loading Image (GIF/SVG/PNG)', 'mh-plug'); ?></th>
                             <td>
                                 <div class="mh-image-preview-wrapper" style="margin-bottom: 15px;">
@@ -56,6 +94,13 @@ $transition = isset($settings['transition']) ? $settings['transition'] : '500';
                             </td>
                         </tr>
 
+                        <tr class="mh-image-settings" style="display: <?php echo ($type === 'image') ? 'table-row' : 'none'; ?>;">
+                            <th scope="row"><?php esc_html_e('Image Width (px)', 'mh-plug'); ?></th>
+                            <td>
+                                <input type="number" name="mh_plug_preloader_settings[img_width]" value="<?php echo esc_attr($img_width); ?>" />
+                            </td>
+                        </tr>
+
                         <tr>
                             <th scope="row"><?php esc_html_e('Background Color', 'mh-plug'); ?></th>
                             <td>
@@ -63,12 +108,6 @@ $transition = isset($settings['transition']) ? $settings['transition'] : '500';
                             </td>
                         </tr>
 
-                        <tr>
-                            <th scope="row"><?php esc_html_e('Image Width (px)', 'mh-plug'); ?></th>
-                            <td>
-                                <input type="number" name="mh_plug_preloader_settings[img_width]" value="<?php echo esc_attr($img_width); ?>" />
-                            </td>
-                        </tr>
                         <tr>
                             <th scope="row"><?php esc_html_e('Display Time (ms)', 'mh-plug'); ?></th>
                             <td>
@@ -95,6 +134,18 @@ $transition = isset($settings['transition']) ? $settings['transition'] : '500';
 
 <script>
 jQuery(document).ready(function($){
+    // Toggle Image vs CSS fields
+    $('.mh-loader-type').change(function() {
+        if ($(this).val() === 'css') {
+            $('.mh-image-settings').hide();
+            $('.mh-css-settings').fadeIn();
+        } else {
+            $('.mh-css-settings').hide();
+            $('.mh-image-settings').fadeIn();
+        }
+    });
+
+    // Media Uploader
     var mediaUploader;
     $('#mh-upload-preloader-btn').click(function(e) {
         e.preventDefault();
