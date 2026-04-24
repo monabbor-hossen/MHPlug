@@ -106,7 +106,11 @@ final class MH_Elementor_Loader {
                 'mh_product_data_accordion'    => [ 'file' => 'mh-product-data-accordion-widget.php',     'class' => 'MH_Product_Data_Accordion_Widget' ],
                 'mh_header_wishlist'           => [ 'file' => 'mh-header-wishlist-widget.php', 'class' => 'MH_Header_Wishlist_Widget' ],
                 'mh_header_cart'               => [ 'file' => 'mh-header-cart-widget.php',     'class' => 'MH_Header_Cart_Widget' ],
-                'mh_product_grid'              => [ 'file' => 'mh-product-grid-widget.php', 'class' => 'MH_Product_Grid_Widget' ],
+                'mh_product_grid'              => [ 'file' => 'mh-product-grid-widget.php',    'class' => 'MH_Product_Grid_Widget' ],
+                
+                // 🚀 NEW: COMPARE WIDGETS
+                'mh_header_compare'            => [ 'file' => 'mh-header-compare-widget.php',      'class' => 'MH_Header_Compare_Widget' ],
+                'mh_product_compare_btn'       => [ 'file' => 'mh-product-compare-btn-widget.php', 'class' => 'MH_Product_Compare_Btn_Widget' ],
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }

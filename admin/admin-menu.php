@@ -11,7 +11,6 @@ if (!defined('ABSPATH')) {
 
 class MH_Admin_Menu {
 
-    // --- CHANGE THIS PROPERTY ---
     // Use an associative array for better management.
     // Key => Internal Name, Value => Display Name
     private $widgets = [
@@ -42,7 +41,6 @@ class MH_Admin_Menu {
         'mh_woo_attributes'  => 'MH Attributes',
         'mh_product_search'  => 'Product Search',
 
-        // 🚀 THE FIX: Added the missing WooCommerce Widgets here!
         'mh_product_title'              => 'Product Title',
         'mh_product_price'              => 'Product Price',
         'mh_product_short_description'  => 'Product Short Description',
@@ -55,23 +53,21 @@ class MH_Admin_Menu {
         'mh_product_share'              => 'Product Share',
         'mh_product_data_accordion'     => 'Product Data (Tabs & Accordion)',
         'mh_nav_menu'                   => 'Nav Menu',
-        // 🚀 NEW: Add the toggle switch
         'mh_copyright'                  => 'Copyright',
         'mh_header_wishlist'            => 'Header Wishlist Icon',
         'mh_header_cart'                => 'Header Cart Icon',
         'mh_product_grid'               => 'Product Grid',
         'mh_taxonomy_card'              => 'Taxonomy Card',
         
+        // 🚀 NEW: Compare Widgets added to Settings Dashboard
+        'mh_header_compare'             => 'Header Compare Icon',
+        'mh_product_compare_btn'        => 'Product Compare Button',
     ];
 
     public function __construct() {
         add_action('admin_menu', [$this, 'register_menu']);
         add_action('admin_init', [$this, 'register_settings']);
-        
-        // Hook to inject critical menu styles on ALL admin pages.
         add_action('admin_head', [$this, 'add_menu_inline_styles']);
-
-        // Hook to load page-specific assets (CSS for accordion, JS).
         add_action('admin_enqueue_scripts', [$this, 'enqueue_page_assets']);
     }
 
@@ -82,7 +78,7 @@ class MH_Admin_Menu {
             'manage_options',
             'mh-plug-settings',
             [$this, 'render_settings_page'],
-            'dashicons-admin-generic', // Placeholder
+            'dashicons-admin-generic', 
             58
         );
 
@@ -96,26 +92,18 @@ class MH_Admin_Menu {
         );
     }
 
-    /**
-     * Injects ONLY the menu icon and background styles into the <head>.
-     */
     public function add_menu_inline_styles() {
         ?>
         <style id="mh-plug-menu-styles">
-        /* Default (Inactive) State Icon */
         #adminmenu #toplevel_page_mh-plug-settings .wp-menu-image {
             background-image: url('<?php echo esc_url(MH_PLUG_URL . 'admin/assets/images/MH-icon.png'); ?>') !important;
             background-repeat: no-repeat !important;
             background-position: center center !important;
             background-size: 20px auto !important;
         }
-
-        /* Hide placeholder Dashicon */
         #adminmenu #toplevel_page_mh-plug-settings .wp-menu-image::before {
             content: '' !important;
         }
-
-        /* Active & Hover State Background */
         #adminmenu li#toplevel_page_mh-plug-settings:hover a,
         #adminmenu li.current#toplevel_page_mh-plug-settings a,
         #adminmenu li.wp-has-current-submenu#toplevel_page_mh-plug-settings a {
@@ -123,99 +111,70 @@ class MH_Admin_Menu {
             color: #fff !important;
         }
         </style>
-<?php
+        <?php
     }
-/**
-     * Enqueues assets for the plugin's settings page OR the Nav Menus page.
-     * CORRECTED LOGIC
-     */
-    public function enqueue_page_assets($hook) {
 
-        // Check if we are on the main plugin settings page or theme builder page
+    public function enqueue_page_assets($hook) {
         if ( in_array( $hook, [ 'toplevel_page_mh-plug-settings', 'mh-plug_page_mh-plug-theme-builder' ], true ) ) {
-            // Enqueue the external stylesheet for accordion and widget cards.
             $css_path = MH_PLUG_PATH . 'admin/assets/css/admin-styles.css';
             if (file_exists($css_path)) {
                 $css_version = filemtime($css_path);
                 wp_enqueue_style('mh-plug-admin-styles', MH_PLUG_URL . 'admin/assets/css/admin-styles.css', [], $css_version);
             }
 
-            // Enqueue the JavaScript for the accordion.
             $js_path = MH_PLUG_PATH . 'admin/assets/js/admin-scripts.js';
              if (file_exists($js_path)) {
                 $js_version = filemtime($js_path);
                 wp_enqueue_script('mh-plug-admin-scripts', MH_PLUG_URL . 'admin/assets/js/admin-scripts.js', ['jquery'], $js_version, true);
 
-                // Expose AJAX URL and nonces to JS (available as global vars)
                 wp_localize_script( 'mh-plug-admin-scripts', 'mhTbDeleteNonce', wp_create_nonce( 'mh_tb_delete_template' ) );
                 wp_localize_script( 'mh-plug-admin-scripts', 'mhTbAjaxUrl', admin_url( 'admin-ajax.php' ) );
              }
         }
-        // Check if we are on the Nav Menus admin page
-        elseif ( 'nav-menus.php' === $hook ) { // Use elseif here
-             // Enqueue CSS for the icon picker button and modal styles
+        elseif ( 'nav-menus.php' === $hook ) { 
             $picker_css_path = MH_PLUG_PATH . 'admin/assets/css/menu-icon-picker.css';
              if (file_exists($picker_css_path)) {
                 $picker_css_version = filemtime($picker_css_path);
                 wp_enqueue_style('mh-plug-menu-icon-picker-styles', MH_PLUG_URL . 'admin/assets/css/menu-icon-picker.css', [], $picker_css_version);
              }
 
-             // Enqueue JS for the icon picker functionality
             $picker_js_path = MH_PLUG_PATH . 'admin/assets/js/menu-icon-picker.js';
              if (file_exists($picker_js_path)) {
                  $picker_js_version = filemtime($picker_js_path);
                 wp_enqueue_script('mh-plug-menu-icon-picker-script', MH_PLUG_URL . 'admin/assets/js/menu-icon-picker.js', ['jquery'], $picker_js_version, true);
              }
 
-            // Enqueue your actual icon font CSS here too!
-            $icon_font_css_path = MH_PLUG_PATH . 'elementor/assets/css/style.css'; // Adjust path if needed
+            $icon_font_css_path = MH_PLUG_PATH . 'elementor/assets/css/style.css'; 
             if (file_exists($icon_font_css_path)) {
                 $icon_font_css_version = filemtime($icon_font_css_path);
                 wp_enqueue_style('mh-icons-for-picker', MH_PLUG_URL . 'elementor/assets/css/style.css', [], $icon_font_css_version);
             }
 
-            // --- MODIFIED BLOCK ---
-            // Enqueue your local Font Awesome 7.1.0 CSS
             $fa_css_path = MH_PLUG_PATH . 'assets/fontawesome-7/css/all.min.css';
             if (file_exists($fa_css_path)) {
-                wp_enqueue_style('mh-fontawesome-7', MH_PLUG_URL . 'assets/fontawesome-7/css/all.min.css', [], '7.1.0'); // Use the FA version
+                wp_enqueue_style('mh-fontawesome-7', MH_PLUG_URL . 'assets/fontawesome-7/css/all.min.css', [], '7.1.0'); 
             }
-            // --- END MODIFIED BLOCK ---
         }
     }
     
-    // --- The rest of the functions are unchanged ---
     public function render_settings_page() { require_once MH_PLUG_PATH . 'admin/settings-page.php'; }
 
-    public function render_theme_builder_page() {
-        require_once MH_PLUG_PATH . 'admin/theme-builder-page.php';
-    }
+    public function render_theme_builder_page() { require_once MH_PLUG_PATH . 'admin/theme-builder-page.php'; }
+
     public function register_settings() {
         register_setting(
             'mh_plug_settings_group',
             'mh_plug_widgets_settings',
-            [$this, 'sanitize_widgets_settings'] // <-- Add this sanitize callback
+            [$this, 'sanitize_widgets_settings']
         );
+        
         add_settings_section('mh_plug_widgets_section', null, null, 'mh-plug-settings-page');
-// --- GLOBAL SECTION ---
-        add_settings_section(
-            'mh_plug_global_settings_section',
-            null,
-            null,
-            'mh-plug-settings-page'
-        );
-// --- WOOCOMMERCE SECTION ---
-        add_settings_section(
-            'mh_plug_woocommerce_section',
-            null,
-            null,
-            'mh-plug-settings-page'
-        );
-// Loop through all registered settings
+        add_settings_section('mh_plug_global_settings_section', null, null, 'mh-plug-settings-page');
+        add_settings_section('mh_plug_woocommerce_section', null, null, 'mh-plug-settings-page');
+
         foreach ($this->widgets as $key => $label) {
             
-            // Route each key to the correct section
-            $section_id = 'mh_plug_widgets_section'; // Default: Elementor widgets section
+            $section_id = 'mh_plug_widgets_section'; 
             if ( $key === 'enable_menu_icons' ) {
                 $section_id = 'mh_plug_global_settings_section';
             } elseif ( in_array( $key, [
@@ -239,46 +198,38 @@ class MH_Admin_Menu {
                 'mh_nav_menu' ,
                 'mh_copyright',
                 'mh_header_wishlist', 
-                'mh_header_cart', // <-- Add them here!
+                'mh_header_cart', 
                 'mh_product_grid',
                 'mh_taxonomy_card',
-                
+                // 🚀 NEW: Route Compare widgets to WooCommerce section
+                'mh_header_compare',
+                'mh_product_compare_btn',
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
             }
-            // --- END LOGIC ---
 
             add_settings_field(
                 $key, 
                 $label, 
                 [$this, 'render_widget_toggle_field'],
                 'mh-plug-settings-page', 
-                $section_id, // <-- USE THE DYNAMIC SECTION ID
+                $section_id, 
                 ['id' => $key, 'label' => $label]
             );
         }
     }
    
-    /**
-     * Render the HTML for the 3D toggle switch.
-     * @param array $args Arguments passed from add_settings_field().
-     */
     public function render_widget_toggle_field($args) {
         $options = get_option('mh_plug_widgets_settings');
         $id = esc_attr($args['id']);
-        // Check if the option is saved and set to 1 (checked). Default is true (checked) if not set.
         $is_checked = isset($options[$id]) ? (bool)$options[$id] : true;
         $checked_attr = $is_checked ? ' checked' : '';
-
-        // Get the current value (1 or 0)
-    $current_value = $is_checked ? '1' : '0';
-// --- CHANGE #1: Get the 'disabled' string we passed from settings-page.php ---
-    $disabled_string = isset($args['disabled']) ? $args['disabled'] : '';
-        // Output the new HTML structure for the 3D switch
+        $current_value = $is_checked ? '1' : '0';
+        $disabled_string = isset($args['disabled']) ? $args['disabled'] : '';
+        
         echo "<div class='mh-widget-card'>";
         echo "  <div class='mh-widget-card-header'>";
         echo "      <div class='mh-widget-title'>" . esc_html($args['label']) . "</div>";
-        // Start of new switch HTML
         echo "      <label class='switch'>";
         echo "          <input class='cb' type='checkbox' name='mh_plug_widgets_settings[{$id}]' value='1' {$checked_attr} {$disabled_string}/>";
         echo "          <span class='toggle'>";
@@ -286,30 +237,16 @@ class MH_Admin_Menu {
         echo "              <span class='right'>on</span>";
         echo "          </span>";
         echo "      </label>";
-        // End of new switch HTML
         echo "  </div>";
-        // --- THIS IS THE "MEMORY" ---
-    // If the switch is disabled, a disabled input's value is NOT sent.
-    // So, we add a HIDDEN input with the SAME name and the REAL value.
-    // This hidden input WILL be sent, preserving the setting.
-    if ( $disabled_string !== '' ) {
-        echo "<input type='hidden' name='mh_plug_widgets_settings[{$id}]' value='{$current_value}' />";
-    }
-    // --- END OF "MEMORY" ---
+        
+        if ( $disabled_string !== '' ) {
+            echo "<input type='hidden' name='mh_plug_widgets_settings[{$id}]' value='{$current_value}' />";
+        }
         echo "</div>";
     }
 
-    /**
-     * Sanitize Callback for Widget Settings.
-     * This function ensures that unchecked boxes are saved as '0' (off).
-     * @param array $input The raw data submitted from the form.
-     * @return array The cleaned data to be saved.
-     */
     public function sanitize_widgets_settings($input) {
-        // --- MODIFY THIS FUNCTION ---
         $sanitized_data = [];
-
-        // Get all the valid keys from our new 'widgets' property.
         $widget_keys = array_keys($this->widgets);
 
         foreach ($widget_keys as $widget_key) {
