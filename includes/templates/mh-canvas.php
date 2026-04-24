@@ -1,20 +1,11 @@
 <?php
 /**
- * MH Plug - Canvas Template (Elementor Editor Override)
+ * MH Plug - Canvas Template (With WooCommerce Preview Logic)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
-?>
-<!DOCTYPE html>
-<html <?php language_attributes(); ?>>
-<head>
-    <meta charset="<?php bloginfo( 'charset' ); ?>"><?php
-/**
- * MH Plug - Canvas Template (Absolute Elementor Override)
- */
-if ( ! defined( 'ABSPATH' ) ) { exit; }
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -29,24 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 </head>
 <body <?php body_class( 'elementor-template-canvas' ); ?>>
     <?php wp_body_open(); ?>
-    
-    <?php
-    // 🚀 ELEMENTOR REQUIRES EXACTLY THIS LOOP. NOTHING ELSE.
-    if ( have_posts() ) :
-        while ( have_posts() ) : the_post();
-            the_content();
-        endwhile;
-    endif;
-    ?>
-
-    <?php wp_footer(); ?>
-</body>
-</html>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php wp_head(); ?>
-</head>
-<body <?php body_class( 'elementor-page' ); ?>>
-    <?php wp_body_open(); ?>
 
     <?php
     $template_id = get_the_ID();
@@ -60,6 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
     }
 
+    // 🚀 WOOCOMMERCE PREVIEW LOGIC
     if ( $type === 'single_product' && class_exists( 'WooCommerce' ) ) {
         $mock_products = get_posts( [
             'post_type'   => 'product',
@@ -102,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             endif;
         }
     } else {
-        // Standard template handling (Header, Footer, Single Post, etc.)
+        // Standard template handling (Header, Footer, Single Post, Archive, etc.)
         // STRICT RULE: Elementor Editor absolutely requires the standard WordPress loop here.
         if ( have_posts() ) :
             while ( have_posts() ) : the_post();
