@@ -146,13 +146,13 @@ final class MH_Elementor_Loader {
             echo '<svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false"><linearGradient id="mh-svg-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="' . esc_attr($eff_c1) . '" /><stop offset="100%" stop-color="' . esc_attr($eff_c2) . '" /></linearGradient></svg>';
         }
 
-        echo '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 25px; z-index: 5;">';
+        echo '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 35px; z-index: 5;">';
 
         if ($type === 'image' && !empty($image)) {
             echo '<img src="' . esc_url($image) . '" alt="Loading..." style="width:' . esc_attr($img_width) . 'px; height:auto;" />';
         } else {
-            // 🚀 FIX: The dynamic wrapper that blocks text overlap!
-            echo '<div style="width: calc(60px * ' . esc_attr($effect_size) . '); height: calc(60px * ' . esc_attr($effect_size) . '); display: flex; align-items: center; justify-content: center;">';
+            // 🚀 FIX: The Mathematical Protective Shield Wrapper (calc 100px * scale) ensures text is always safely below the icon
+            echo '<div style="width: calc(100px * ' . esc_attr($effect_size) . '); height: calc(100px * ' . esc_attr($effect_size) . '); display: flex; align-items: center; justify-content: center;">';
             echo '<div style="transform: scale(' . esc_attr($effect_size) . '); --mh-c1: ' . esc_attr($eff_c1) . '; --mh-bg-style: ' . esc_attr($eff_bg) . '; --mh-svg-stroke: ' . esc_attr($svg_stroke) . ';">';
             switch ($css_effect) {
                 case '1': echo '<div class="mh-loader-1"></div>'; break;
@@ -191,7 +191,7 @@ final class MH_Elementor_Loader {
         }
 
         if (!empty(trim($custom_text))) {
-            echo '<div class="mh-text-anim-' . esc_attr($text_anim) . '" style="' . esc_attr($text_style) . ' font-size: ' . esc_attr($text_size) . 'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center;">' . esc_html($custom_text) . '</div>';
+            echo '<div class="mh-text-anim-' . esc_attr($text_anim) . '" style="' . esc_attr($text_style) . ' font-size: ' . esc_attr($text_size) . 'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-top: 15px;">' . esc_html($custom_text) . '</div>';
         }
 
         echo '</div></div>';
@@ -324,7 +324,7 @@ final class MH_Elementor_Loader {
         ];
         if ( class_exists( 'WooCommerce' ) ) {
             $wc_widget_map = [
-             'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php', 'class' => 'MH_Woo_Add_To_Cart_Widget' ],
+                'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php', 'class' => 'MH_Woo_Add_To_Cart_Widget' ],
                 'mh_woo_attributes' => [ 'file' => 'mh-woo-attributes-widget.php', 'class' => 'MH_Woo_Attributes_Widget' ],
                 'mh_product_search' => [ 'file' => 'mh-product-search-widget.php', 'class' => 'MH_Plug_Product_Search_Widget' ],
                 'mh_product_title' => [ 'file' => 'mh-product-title-widget.php', 'class' => 'MH_Product_Title_Widget' ],
@@ -346,7 +346,6 @@ final class MH_Elementor_Loader {
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
-
         foreach ($widget_map as $option_key => $widget_data) {
             $is_enabled = isset($widget_options[$option_key]) ? (bool)$widget_options[$option_key] : true;
             if ($is_enabled) {
@@ -359,14 +358,12 @@ final class MH_Elementor_Loader {
             }
         }
     }
-
     public function mh_plug_register_widget_assets() {
         wp_register_style('mh-widgets-css', MH_PLUG_URL . 'elementor/assets/css/mh-widgets.css', [], MH_PLUG_VERSION);
         wp_register_script('mh-widgets-js', MH_PLUG_URL . 'elementor/assets/js/mh-widgets.js', ['jquery'], MH_PLUG_VERSION, true);
         wp_register_style('mh-nav-menu-css', MH_PLUG_URL . 'elementor/assets/css/mh-nav-menu.css', [], MH_PLUG_VERSION);
         wp_register_script('mh-nav-menu-js', MH_PLUG_URL . 'elementor/assets/js/mh-nav-menu.js', ['jquery'], MH_PLUG_VERSION, true);
     }
-
     public function mh_plug_enqueue_woo_scripts() {
         if (!class_exists('WooCommerce')) return;
         wp_register_script('mh-woo-scripts', MH_PLUG_URL . 'elementor/assets/js/mh-woo-scripts.js', ['jquery'], MH_PLUG_VERSION, true);
@@ -374,12 +371,7 @@ final class MH_Elementor_Loader {
         wp_script_add_data('mh-widgets-js', 'group', 1);
         wp_enqueue_script('mh-woo-scripts');
         if (is_product()) wp_enqueue_script('mh-product-gallery-script');
-
-        $ajax_data = [
-            'ajax_url'       => admin_url('admin-ajax.php'),
-            'login_url'      => wc_get_page_permalink('myaccount'),
-            'wishlist_nonce' => wp_create_nonce('mh_wishlist_nonce'),
-        ];
+        $ajax_data = [ 'ajax_url' => admin_url('admin-ajax.php'), 'login_url' => wc_get_page_permalink('myaccount'), 'wishlist_nonce' => wp_create_nonce('mh_wishlist_nonce') ];
         wp_add_inline_script('mh-woo-scripts', 'var mh_plug_ajax = ' . wp_json_encode($ajax_data) . ';', 'before');
     }
 }

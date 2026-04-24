@@ -91,12 +91,10 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                             <h3><?php esc_html_e('System Power', 'mh-plug'); ?></h3>
                             <p><?php esc_html_e('Activate the global preloader on your website.', 'mh-plug'); ?></p>
                         </div>
-                        
-                        <label class="switch">
+                        <label class="switch mh-native-switch">
                             <input class="cb mh-live-trigger" type="checkbox" name="mh_plug_preloader_settings[enable]" value="yes" <?php checked($enable, 'yes'); ?> />
                             <span class="toggle"><span class="left">off</span><span class="right">on</span></span>
                         </label>
-                        
                     </div>
                     <div class="mh-divider"></div>
                     <div class="mh-setting-row">
@@ -130,7 +128,7 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                                 <stop id="mh-svg-c2" offset="100%" stop-color="#00ffd5" />
                               </linearGradient>
                             </svg>
-                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 25px; z-index: 5;">
+                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 35px; z-index: 5;">
                                 <div id="mh-loader-visual"></div>
                                 <div id="mh-loader-text-display"></div>
                             </div>
@@ -142,7 +140,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
             <div class="mh-futuristic-card mh-css-settings" style="display: <?php echo ($type === 'css') ? 'block' : 'none'; ?>;">
                 <div class="mh-card-inner">
                     <h3><i class="fas fa-magic"></i> <?php esc_html_e('Animation Protocol', 'mh-plug'); ?></h3>
-                    
                     <div class="mh-field-group">
                         <label><?php esc_html_e('Select Sequence (30 Total)', 'mh-plug'); ?></label>
                         <select name="mh_plug_preloader_settings[css_effect]" id="mh_css_effect_select" class="mh-cyber-select mh-live-trigger">
@@ -287,7 +284,17 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 <style>
     :root { --mh-dark: #004265; --mh-blue: #2293e9; --mh-blue-glow: rgba(34, 147, 233, 0.4); --mh-red: #d63638; --mh-border: #e2e8f0; }
     
-    /* Dashboard Grid & Cards */
+    .switch.mh-native-switch { position: relative; display: inline-block; width: 70px; height: 32px; margin: 0; }
+    .switch.mh-native-switch input.cb { opacity: 0; width: 0; height: 0; }
+    .switch.mh-native-switch .toggle { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 11px; font-weight: bold; color: white; text-transform: uppercase; overflow: hidden; }
+    .switch.mh-native-switch .toggle:before { position: absolute; content: ""; height: 24px; width: 24px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; z-index: 2; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .switch.mh-native-switch input.cb:checked + .toggle { background-color: var(--mh-dark); box-shadow: 0 0 10px var(--mh-blue-glow); }
+    .switch.mh-native-switch input.cb:checked + .toggle:before { transform: translateX(38px); }
+    .switch.mh-native-switch .left { color: #64748b; z-index: 1; transition: 0.3s; }
+    .switch.mh-native-switch input.cb:checked + .toggle .left { opacity: 0; }
+    .switch.mh-native-switch .right { color: white; z-index: 1; opacity: 0; transition: 0.3s; }
+    .switch.mh-native-switch input.cb:checked + .toggle .right { opacity: 1; }
+
     .mh-futuristic-dashboard { max-width: 1200px; margin: 20px auto; font-family: 'Segoe UI', Tahoma, sans-serif; }
     .mh-dashboard-header { position: relative; padding: 30px; background: var(--mh-dark); border-radius: 16px; color: white; margin-bottom: 30px; overflow: hidden; }
     .mh-dashboard-header h1 { margin: 0 0 10px 0; font-size: 28px; font-weight: 800; color:white; z-index: 2; position: relative; }
@@ -306,7 +313,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
     .mh-field-group { margin-bottom: 20px; }
     .mh-field-group label { display: block; font-weight: 600; color: var(--mh-text); margin-bottom: 10px; }
     
-    /* Inputs */
     .mh-cyber-radio-group { display: flex; gap: 15px; }
     .mh-cyber-radio { cursor: pointer; flex: 1; }
     .mh-cyber-radio input { display: none; }
@@ -323,7 +329,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
     .mh-save-dock { margin-top: 30px; text-align: right; background: white; padding: 20px; border-radius: 16px; border: 1px solid var(--mh-border); }
     .mh-btn-save { background: var(--mh-dark); color: white; padding: 15px 40px; font-size: 16px; cursor: pointer; }
 
-    /* Elementor-Style Gradient UI */
     .mh-elementor-color-group { background: #f8fafc; border: 1px solid var(--mh-border); border-radius: 10px; padding: 15px; }
     .mh-color-tabs { display: flex; background: #e2e8f0; border-radius: 8px; overflow: hidden; margin-bottom: 15px; }
     .mh-tab { flex: 1; text-align: center; padding: 8px; font-size: 13px; font-weight: 600; cursor: pointer; color: #64748b; transition: 0.3s; }
@@ -332,12 +337,10 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
     .mh-picker-label { font-weight: 600; font-size: 13px; }
     .mh-color-picker-wrap input[type="color"] { width: 40px; height: 30px; padding: 0; border: none; cursor: pointer; background: transparent; }
 
-    /* Live HUD */
     .mh-hud-container { position: relative; width: 100%; height: 350px; border-radius: 12px; overflow: hidden; border: 2px solid var(--mh-blue); box-shadow: inset 0 0 30px var(--mh-blue-glow); background: #000; }
     .mh-hud-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(34,147,233,0.05) 0%, rgba(34,147,233,0.1) 50%, rgba(34,147,233,0.05) 100%); pointer-events: none; z-index: 10; }
     .mh-preview-box { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 5; transition: 0.3s; }
 
-    /* TEXT & VISUAL ANIMATIONS */
     .mh-text-anim-blink { animation: mh-text-blink 1.5s infinite; }
     .mh-text-anim-pulse { animation: mh-text-pulse 2s infinite ease-in-out; }
     .mh-text-anim-float { animation: mh-text-float 2s infinite ease-in-out; }
@@ -413,16 +416,14 @@ jQuery(document).ready(function($){
         updateLivePreview();
     });
 
-    // Range Badge updates
     $('input[type="range"]').on('input', function(){
         $(this).siblings('.mh-range-badge').find('span').text($(this).val());
     });
 
-    // Master Preview Updater
+    // 🚀 Master Preview Updater (WITH PROTECTIVE SHIELD FOR SCALING)
     function updateLivePreview() {
         var type = $('.mh-loader-type:checked').val();
         
-        // Background
         var bgType = $('#bg_type').val();
         var bgC1 = $('#bg_c1').val();
         var bgC2 = $('#bg_c2').val();
@@ -430,7 +431,6 @@ jQuery(document).ready(function($){
         var bgStyle = (bgType === 'gradient') ? 'linear-gradient(' + bgAngle + 'deg, ' + bgC1 + ', ' + bgC2 + ')' : bgC1;
         $('#mh-live-preview-box').css('background', bgStyle);
 
-        // Effect Loader
         var effect = $('#mh_css_effect_select').val();
         var effType = $('#loader_type').val();
         var effC1 = $('#loader_c1').val();
@@ -440,7 +440,6 @@ jQuery(document).ready(function($){
         var effectScale = $('#mh_effect_size_range').val();
         var svgStroke = (effType === 'gradient') ? 'url(#mh-svg-gradient)' : effC1;
 
-        // Text
         var customText = $('#mh_custom_text_input').val();
         var textAnim = $('#mh_text_anim_select').val();
         var textSize = $('#mh_text_size_range').val();
@@ -450,11 +449,13 @@ jQuery(document).ready(function($){
         var textAngle = $('#text_angle').val();
         var textBgStyle = (textType === 'gradient') ? 'linear-gradient(' + textAngle + 'deg, ' + textC1 + ', ' + textC2 + ')' : textC1;
 
-        // Update SVG Gradient Data
+        $('#mh_loader_color_picker').siblings('.mh-color-overlay').css('background-color', effC1);
+        $('#mh_bg_color_picker').siblings('.mh-color-overlay').css('background-color', bgC1);
+        $('#mh_text_color_picker').siblings('.mh-color-overlay').css('background-color', textC1);
+        
         $('#mh-svg-c1').attr('stop-color', effC1);
         $('#mh-svg-c2').attr('stop-color', effC2);
 
-        // Render Visual Base
         if(type === 'image') {
             var imgUrl = $('#mh-preloader-image-url').val();
             var imgWidth = $('#mh_img_width_range').val();
@@ -485,7 +486,6 @@ jQuery(document).ready(function($){
             if (effect === '18') html = '<div class="mh-loader-18"><div></div><div></div><div></div><div></div></div>';
             if (effect === '19') html = '<div class="mh-loader-19"></div>';
             if (effect === '20') html = '<div class="mh-loader-20"><div></div></div>';
-            // SVGs
             if (effect === '21') html = '<div class="mh-loader-21 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div>';
             if (effect === '22') html = '<div class="mh-loader-22 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></div>';
             if (effect === '23') html = '<div class="mh-loader-23 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div>';
@@ -497,14 +497,13 @@ jQuery(document).ready(function($){
             if (effect === '29') html = '<div class="mh-loader-29 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>';
             if (effect === '30') html = '<div class="mh-loader-30 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>';
 
-            // Wrap in scale block
-            $('#mh-loader-visual').html('<div style="transform: scale('+effectScale+'); --mh-c1: '+effC1+'; --mh-bg-style: '+effBgStyle+'; --mh-svg-stroke: '+svgStroke+';">' + html + '</div>');
+            // 🚀 FIX: The Mathematical Protective Shield Wrapper (calc 100px * scale)
+            $('#mh-loader-visual').html('<div style="width: calc(40px * '+effectScale+'); height: calc(40px * '+effectScale+'); display: flex; align-items: center; justify-content: center;"><div style="transform: scale('+effectScale+'); --mh-c1: '+effC1+'; --mh-bg-style: '+effBgStyle+'; --mh-svg-stroke: '+svgStroke+';">' + html + '</div></div>');
         }
 
-        // Render Text Base
         if(customText.trim() !== '') {
             var textStyle = (textType === 'gradient') ? 'background: ' + textBgStyle + '; -webkit-background-clip: text; -webkit-text-fill-color: transparent;' : 'color: ' + textC1 + ';';
-            $('#mh-loader-text-display').html('<div class="mh-text-anim-'+textAnim+'" style="' + textStyle + ' font-size: '+textSize+'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center;">' + customText + '</div>').show();
+            $('#mh-loader-text-display').html('<div class="mh-text-anim-'+textAnim+'" style="' + textStyle + ' font-size: '+textSize+'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-top: 15px;">' + customText + '</div>').show();
         } else {
             $('#mh-loader-text-display').hide();
         }
@@ -513,7 +512,6 @@ jQuery(document).ready(function($){
     $('.mh-live-trigger').on('change input', updateLivePreview);
     updateLivePreview(); // Init
 
-    // WP Media Library Handler
     var mediaUploader;
     $('#mh-upload-preloader-btn').click(function(e) {
         e.preventDefault();
