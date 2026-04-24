@@ -25,11 +25,12 @@ final class MH_Elementor_Loader {
         add_action('wp_ajax_mh_quick_view', [$this, 'quick_view_ajax']);
         add_action('wp_ajax_nopriv_mh_quick_view', [$this, 'quick_view_ajax']);
 
+        // Render Preloader globally
         add_action('wp_head', [$this, 'render_preloader_css']);
         add_action('wp_footer', [$this, 'render_preloader_html_js']);
     }
 
-    // 🚀 Output all 30 Preloader CSS Styles
+    // 🚀 Includes CSS for Animations + New Text Animations
     public function render_preloader_css() {
         if (is_admin()) return;
         if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return; 
@@ -38,15 +39,23 @@ final class MH_Elementor_Loader {
         if (empty($settings['enable']) || $settings['enable'] !== 'yes') return;
 
         $bg_color     = !empty($settings['bg_color']) ? $settings['bg_color'] : '#0f172a';
-        $img_width    = !empty($settings['img_width']) ? $settings['img_width'] : '150';
         $transition   = !empty($settings['transition']) ? intval($settings['transition']) : 500;
-        $loader_color = !empty($settings['loader_color']) ? $settings['loader_color'] : '#2293e9';
 
         echo '<style>
-            #mh-global-preloader { --mh-loader-color: ' . esc_attr($loader_color) . '; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: ' . esc_attr($bg_color) . '; z-index: 99999999; display: flex; align-items: center; justify-content: center; transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; }
+            #mh-global-preloader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: ' . esc_attr($bg_color) . '; z-index: 99999999; display: flex; align-items: center; justify-content: center; transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; }
             #mh-global-preloader.mh-preloader-hidden { opacity: 0; visibility: hidden; }
-            #mh-global-preloader img { width: ' . esc_attr($img_width) . 'px; height: auto; }
             
+            /* 🚀 TEXT ANIMATIONS */
+            .mh-text-anim-blink { animation: mh-text-blink 1.5s infinite; }
+            .mh-text-anim-pulse { animation: mh-text-pulse 2s infinite ease-in-out; }
+            .mh-text-anim-float { animation: mh-text-float 2s infinite ease-in-out; }
+            .mh-text-anim-tracking { animation: mh-text-tracking 2s infinite ease-in-out; }
+            @keyframes mh-text-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+            @keyframes mh-text-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.7; } }
+            @keyframes mh-text-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+            @keyframes mh-text-tracking { 0%, 100% { letter-spacing: 2px; } 50% { letter-spacing: 8px; } }
+
+            /* Visual Loader Keyframes */
             .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; }
             @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
             .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; }
@@ -83,35 +92,22 @@ final class MH_Elementor_Loader {
             .mh-loader-20 { width: 50px; height: 50px; perspective: 150px; } .mh-loader-20 div { width: 100%; height: 100%; border: 6px solid var(--mh-loader-color); border-radius: 50%; animation: mh-hyper-ring 2s linear infinite; }
             @keyframes mh-hyper-ring { 0% { transform: rotateX(60deg) rotateZ(0deg); } 100% { transform: rotateX(60deg) rotateZ(360deg); } }
 
-            /* 🚀 NATIVE INLINE SVG STYLES (Fixes FontAwesome Dependency) */
             .mh-ecommerce-icon { display: flex; align-items: center; justify-content: center; position: relative; }
             .mh-svg-icon { width: 50px; height: 50px; fill: none; stroke: var(--mh-loader-color); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-            
-            .mh-loader-21 { animation: mh-cart-dash 1.5s infinite ease-in-out; }
-            @keyframes mh-cart-dash { 0% { transform: translateX(-30px) rotate(-15deg); opacity: 0; } 50% { transform: translateX(0) rotate(0deg); opacity: 1; } 100% { transform: translateX(30px) rotate(15deg); opacity: 0; } }
-            .mh-loader-22 { animation: mh-bag-drop 1.2s infinite cubic-bezier(0.28, 0.84, 0.42, 1); transform-origin: bottom; }
-            @keyframes mh-bag-drop { 0% { transform: translateY(-30px) scaleY(1.2); opacity: 0; } 50% { transform: translateY(0) scaleY(0.8); opacity: 1; } 70% { transform: translateY(-10px) scaleY(1); } 100% { transform: translateY(0) scaleY(1); opacity: 0; } }
-            .mh-loader-23 { animation: mh-tag-flip 1.5s infinite; perspective: 100px; }
-            @keyframes mh-tag-flip { 0% { transform: rotateY(0deg); } 50% { transform: rotateY(180deg); } 100% { transform: rotateY(360deg); } }
-            .mh-loader-24 { animation: mh-truck-drive 2s infinite linear; }
-            @keyframes mh-truck-drive { 0% { transform: translateX(-40px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(40px); opacity: 0; } }
-            .mh-loader-25 { animation: mh-gift-shake 1.5s infinite; }
-            @keyframes mh-gift-shake { 0%, 100% { transform: rotate(0deg); } 10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); } 20%, 40%, 60%, 80% { transform: rotate(10deg); } }
-            .mh-loader-26 .mh-svg-icon { animation: mh-card-swipe 1.5s infinite ease-in-out; }
-            @keyframes mh-card-swipe { 0% { transform: translateY(-20px); opacity: 0; } 50% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(20px); opacity: 0; } }
-            .mh-loader-27 { position: relative; }
-            .mh-scanline { position: absolute; top: 0; left: -10%; width: 120%; height: 3px; background-color: var(--mh-loader-color); animation: mh-scan 1.5s infinite linear; box-shadow: 0 0 8px var(--mh-loader-color); }
-            @keyframes mh-scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
-            .mh-loader-28 { animation: mh-coin-drop 1.5s infinite ease-in-out; }
-            @keyframes mh-coin-drop { 0% { transform: translateY(-30px) rotateY(0deg); opacity: 0; } 50% { transform: translateY(0) rotateY(180deg); opacity: 1; } 100% { transform: translateY(20px) rotateY(360deg); opacity: 0; } }
-            .mh-loader-29 { animation: mh-box-pulse 1.2s infinite ease-in-out; }
-            @keyframes mh-box-pulse { 0% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 0.5; } }
-            .mh-loader-30 { transform-origin: top center; animation: mh-store-swing 2s infinite ease-in-out; }
-            @keyframes mh-store-swing { 0% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } 100% { transform: rotate(-15deg); } }
+            .mh-loader-21 { animation: mh-cart-dash 1.5s infinite ease-in-out; } @keyframes mh-cart-dash { 0% { transform: translateX(-30px) rotate(-15deg); opacity: 0; } 50% { transform: translateX(0) rotate(0deg); opacity: 1; } 100% { transform: translateX(30px) rotate(15deg); opacity: 0; } }
+            .mh-loader-22 { animation: mh-bag-drop 1.2s infinite cubic-bezier(0.28, 0.84, 0.42, 1); transform-origin: bottom; } @keyframes mh-bag-drop { 0% { transform: translateY(-30px) scaleY(1.2); opacity: 0; } 50% { transform: translateY(0) scaleY(0.8); opacity: 1; } 70% { transform: translateY(-10px) scaleY(1); } 100% { transform: translateY(0) scaleY(1); opacity: 0; } }
+            .mh-loader-23 { animation: mh-tag-flip 1.5s infinite; perspective: 100px; } @keyframes mh-tag-flip { 0% { transform: rotateY(0deg); } 50% { transform: rotateY(180deg); } 100% { transform: rotateY(360deg); } }
+            .mh-loader-24 { animation: mh-truck-drive 2s infinite linear; } @keyframes mh-truck-drive { 0% { transform: translateX(-40px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(40px); opacity: 0; } }
+            .mh-loader-25 { animation: mh-gift-shake 1.5s infinite; } @keyframes mh-gift-shake { 0%, 100% { transform: rotate(0deg); } 10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); } 20%, 40%, 60%, 80% { transform: rotate(10deg); } }
+            .mh-loader-26 .mh-svg-icon { animation: mh-card-swipe 1.5s infinite ease-in-out; } @keyframes mh-card-swipe { 0% { transform: translateY(-20px); opacity: 0; } 50% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(20px); opacity: 0; } }
+            .mh-loader-27 { position: relative; } .mh-scanline { position: absolute; top: 0; left: -10%; width: 120%; height: 3px; background-color: var(--mh-loader-color); animation: mh-scan 1.5s infinite linear; box-shadow: 0 0 8px var(--mh-loader-color); } @keyframes mh-scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+            .mh-loader-28 { animation: mh-coin-drop 1.5s infinite ease-in-out; } @keyframes mh-coin-drop { 0% { transform: translateY(-30px) rotateY(0deg); opacity: 0; } 50% { transform: translateY(0) rotateY(180deg); opacity: 1; } 100% { transform: translateY(20px) rotateY(360deg); opacity: 0; } }
+            .mh-loader-29 { animation: mh-box-pulse 1.2s infinite ease-in-out; } @keyframes mh-box-pulse { 0% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 0.5; } }
+            .mh-loader-30 { transform-origin: top center; animation: mh-store-swing 2s infinite ease-in-out; } @keyframes mh-store-swing { 0% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } 100% { transform: rotate(-15deg); } }
         </style>';
     }
 
-    // 🚀 NEW: Output SVG HTML properly
+    // 🚀 NEW: Renders Text, Scale, and Visual Animation
     public function render_preloader_html_js() {
         if (is_admin()) return;
         if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return;
@@ -119,16 +115,29 @@ final class MH_Elementor_Loader {
         $settings = get_option('mh_plug_preloader_settings', []);
         if (empty($settings['enable']) || $settings['enable'] !== 'yes') return;
 
-        $type       = isset($settings['type']) ? $settings['type'] : 'css';
-        $css_effect = isset($settings['css_effect']) ? (string)$settings['css_effect'] : '1';
-        $image      = !empty($settings['image']) ? $settings['image'] : MH_PLUG_URL . 'admin/assets/images/MH-icon.png';
-        $delay      = !empty($settings['delay']) ? intval($settings['delay']) : 500;
+        // Fetch user variables
+        $type         = isset($settings['type']) ? $settings['type'] : 'css';
+        $css_effect   = isset($settings['css_effect']) ? (string)$settings['css_effect'] : '1';
+        $loader_color = !empty($settings['loader_color']) ? $settings['loader_color'] : '#2293e9';
+        $effect_size  = !empty($settings['effect_size']) ? $settings['effect_size'] : '1.0';
+        
+        $image     = !empty($settings['image']) ? $settings['image'] : '';
+        $img_width = !empty($settings['img_width']) ? $settings['img_width'] : '150';
+        $delay     = !empty($settings['delay']) ? intval($settings['delay']) : 500;
+
+        $custom_text = isset($settings['custom_text']) ? $settings['custom_text'] : '';
+        $text_color  = !empty($settings['text_color']) ? $settings['text_color'] : '#2293e9';
+        $text_size   = !empty($settings['text_size']) ? $settings['text_size'] : '16';
+        $text_anim   = !empty($settings['text_anim']) ? $settings['text_anim'] : 'pulse';
 
         echo '<div id="mh-global-preloader">';
-        
-        if ($type === 'image') {
-            echo '<img src="' . esc_url($image) . '" alt="Loading..." />';
+        echo '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 25px; z-index: 5;">';
+
+        // 1. Render Visual Loader (With Scale Wrapper)
+        if ($type === 'image' && !empty($image)) {
+            echo '<img src="' . esc_url($image) . '" alt="Loading..." style="width:' . esc_attr($img_width) . 'px; height:auto;" />';
         } else {
+            echo '<div style="transform: scale(' . esc_attr($effect_size) . '); --mh-loader-color: ' . esc_attr($loader_color) . ';">';
             switch ($css_effect) {
                 case '1': echo '<div class="mh-loader-1"></div>'; break;
                 case '2': echo '<div class="mh-loader-2"><div></div><div></div><div></div></div>'; break;
@@ -150,7 +159,6 @@ final class MH_Elementor_Loader {
                 case '18': echo '<div class="mh-loader-18"><div></div><div></div><div></div><div></div></div>'; break;
                 case '19': echo '<div class="mh-loader-19"></div>'; break;
                 case '20': echo '<div class="mh-loader-20"><div></div></div>'; break;
-                // 🚀 Injecting Raw SVGs so they work 100% perfectly with no FontAwesome needed
                 case '21': echo '<div class="mh-loader-21 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div>'; break;
                 case '22': echo '<div class="mh-loader-22 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></div>'; break;
                 case '23': echo '<div class="mh-loader-23 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div>'; break;
@@ -163,9 +171,16 @@ final class MH_Elementor_Loader {
                 case '30': echo '<div class="mh-loader-30 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>'; break;
                 default:  echo '<div class="mh-loader-1"></div>'; break;
             }
+            echo '</div>'; // End Scale Wrapper
         }
 
-        echo '</div>';
+        // 2. Render Custom Loading Text
+        if (!empty(trim($custom_text))) {
+            echo '<div class="mh-text-anim-' . esc_attr($text_anim) . '" style="color: ' . esc_attr($text_color) . '; font-size: ' . esc_attr($text_size) . 'px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-align: center;">' . esc_html($custom_text) . '</div>';
+        }
+
+        echo '</div>'; // End flex container
+        echo '</div>'; // End global preloader
 
         echo '<script>
             window.addEventListener("load", function() {

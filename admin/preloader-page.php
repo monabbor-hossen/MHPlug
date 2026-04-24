@@ -10,9 +10,18 @@ $enable       = isset($settings['enable']) ? $settings['enable'] : 'no';
 $type         = isset($settings['type']) ? $settings['type'] : 'css';
 $css_effect   = isset($settings['css_effect']) ? $settings['css_effect'] : '1';
 $loader_color = isset($settings['loader_color']) ? $settings['loader_color'] : '#2293e9';
+$effect_size  = isset($settings['effect_size']) ? $settings['effect_size'] : '1.0'; // Scale factor
 $image        = isset($settings['image']) ? $settings['image'] : '';
-$bg_color     = isset($settings['bg_color']) ? $settings['bg_color'] : '#0f172a';
 $img_width    = isset($settings['img_width']) ? $settings['img_width'] : '100';
+
+// Text Controls
+$custom_text  = isset($settings['custom_text']) ? $settings['custom_text'] : 'SYSTEM LOADING...';
+$text_color   = isset($settings['text_color']) ? $settings['text_color'] : '#2293e9';
+$text_size    = isset($settings['text_size']) ? $settings['text_size'] : '16';
+$text_anim    = isset($settings['text_anim']) ? $settings['text_anim'] : 'pulse';
+
+// Environment
+$bg_color     = isset($settings['bg_color']) ? $settings['bg_color'] : '#0f172a';
 $delay        = isset($settings['delay']) ? $settings['delay'] : '500';
 $transition   = isset($settings['transition']) ? $settings['transition'] : '500';
 ?>
@@ -21,7 +30,7 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
     <div class="mh-dashboard-header">
         <div class="mh-header-glow"></div>
         <h1><i class="fas fa-space-shuttle"></i> <?php esc_html_e('Preloader Engine', 'mh-plug'); ?></h1>
-        <p><?php esc_html_e('Configure your global loading screen with futuristic precision.', 'mh-plug'); ?></p>
+        <p><?php esc_html_e('Configure your global loading screen with text effects and futuristic precision.', 'mh-plug'); ?></p>
     </div>
 
     <form method="post" action="options.php">
@@ -36,14 +45,12 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
                             <h3><?php esc_html_e('System Power', 'mh-plug'); ?></h3>
                             <p><?php esc_html_e('Activate the global preloader on your website.', 'mh-plug'); ?></p>
                         </div>
-                        <label class="switch">
+                        <label class="switch mh-native-switch">
                             <input class="cb" type="checkbox" name="mh_plug_preloader_settings[enable]" value="yes" <?php checked($enable, 'yes'); ?> />
                             <span class="toggle"><span class="left">off</span><span class="right">on</span></span>
                         </label>
                     </div>
-                    
                     <div class="mh-divider"></div>
-
                     <div class="mh-setting-row">
                         <div class="mh-setting-info">
                             <h3><?php esc_html_e('Render Engine Type', 'mh-plug'); ?></h3>
@@ -68,9 +75,11 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
                     <h3><i class="fas fa-eye"></i> <?php esc_html_e('Live Hologram Preview', 'mh-plug'); ?></h3>
                     <div class="mh-hud-container">
                         <div class="mh-hud-overlay"></div>
-                        <div id="mh-css-preloader-preview-box" class="mh-preview-box mh-css-settings" style="display: <?php echo ($type === 'css') ? 'flex' : 'none'; ?>; background: <?php echo esc_attr($bg_color); ?>;"></div>
-                        <div class="mh-preview-box mh-image-settings mh-image-preview-wrapper" style="display: <?php echo ($type === 'image') ? 'flex' : 'none'; ?>; background: <?php echo esc_attr($bg_color); ?>;">
-                            <img id="mh-preloader-preview" src="<?php echo esc_url($image); ?>" style="width: <?php echo esc_attr($img_width); ?>px; display: <?php echo empty($image) ? 'none' : 'block'; ?>;" />
+                        <div id="mh-live-preview-box" class="mh-preview-box" style="background: <?php echo esc_attr($bg_color); ?>;">
+                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 25px; z-index: 5;">
+                                <div id="mh-loader-visual"></div>
+                                <div id="mh-loader-text-display"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -123,6 +132,14 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
                     </div>
 
                     <div class="mh-field-group">
+                        <label><?php esc_html_e('Animation Scale (Size)', 'mh-plug'); ?></label>
+                        <div class="mh-range-slider">
+                            <input type="range" id="mh_effect_size_range" name="mh_plug_preloader_settings[effect_size]" min="0.5" max="3.0" step="0.1" value="<?php echo esc_attr($effect_size); ?>" />
+                            <span class="mh-range-badge"><span id="mh_effect_size_val"><?php echo esc_attr($effect_size); ?></span>x</span>
+                        </div>
+                    </div>
+
+                    <div class="mh-field-group">
                         <label><?php esc_html_e('Energy Color', 'mh-plug'); ?></label>
                         <div class="mh-color-picker-wrap">
                             <input type="color" id="mh_loader_color_picker" name="mh_plug_preloader_settings[loader_color]" value="<?php echo esc_attr($loader_color); ?>" />
@@ -154,6 +171,44 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
                         <div class="mh-range-slider">
                             <input type="range" id="mh_img_width_range" name="mh_plug_preloader_settings[img_width]" min="20" max="300" value="<?php echo esc_attr($img_width); ?>" />
                             <span class="mh-range-badge"><span id="mh_img_width_val"><?php echo esc_attr($img_width); ?></span>px</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mh-futuristic-card">
+                <div class="mh-card-inner">
+                    <h3><i class="fas fa-font"></i> <?php esc_html_e('Holographic Text Protocol', 'mh-plug'); ?></h3>
+                    
+                    <div class="mh-field-group">
+                        <label><?php esc_html_e('Custom Loading Text', 'mh-plug'); ?></label>
+                        <input type="text" id="mh_custom_text_input" name="mh_plug_preloader_settings[custom_text]" value="<?php echo esc_attr($custom_text); ?>" class="mh-cyber-input" placeholder="e.g. SYSTEM LOADING..." />
+                    </div>
+
+                    <div class="mh-field-group">
+                        <label><?php esc_html_e('Text Animation Effect', 'mh-plug'); ?></label>
+                        <select name="mh_plug_preloader_settings[text_anim]" id="mh_text_anim_select" class="mh-cyber-select">
+                            <option value="none" <?php selected($text_anim, 'none'); ?>>None</option>
+                            <option value="blink" <?php selected($text_anim, 'blink'); ?>>Blink</option>
+                            <option value="pulse" <?php selected($text_anim, 'pulse'); ?>>Pulse Grow</option>
+                            <option value="float" <?php selected($text_anim, 'float'); ?>>Floating</option>
+                            <option value="tracking" <?php selected($text_anim, 'tracking'); ?>>Tracking (Spacing Expand)</option>
+                        </select>
+                    </div>
+
+                    <div class="mh-field-group">
+                        <label><?php esc_html_e('Text Size (px)', 'mh-plug'); ?></label>
+                        <div class="mh-range-slider">
+                            <input type="range" id="mh_text_size_range" name="mh_plug_preloader_settings[text_size]" min="10" max="40" value="<?php echo esc_attr($text_size); ?>" />
+                            <span class="mh-range-badge"><span id="mh_text_size_val"><?php echo esc_attr($text_size); ?></span>px</span>
+                        </div>
+                    </div>
+
+                    <div class="mh-field-group">
+                        <label><?php esc_html_e('Text Color', 'mh-plug'); ?></label>
+                        <div class="mh-color-picker-wrap">
+                            <input type="color" id="mh_text_color_picker" name="mh_plug_preloader_settings[text_color]" value="<?php echo esc_attr($text_color); ?>" />
+                            <div class="mh-color-overlay" style="background-color: <?php echo esc_attr($text_color); ?>;"></div>
                         </div>
                     </div>
                 </div>
@@ -201,17 +256,20 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
 
 <style>
     :root {
-        --mh-dark: #004265;
-        --mh-blue: #2293e9;
-        --mh-blue-glow: rgba(34, 147, 233, 0.4);
-        --mh-red: #d63638;
-        --mh-bg: #f0f4f8;
-        --mh-card: #ffffff;
-        --mh-text: #334155;
-        --mh-border: #e2e8f0;
+        --mh-dark: #004265; --mh-blue: #2293e9; --mh-blue-glow: rgba(34, 147, 233, 0.4);
+        --mh-red: #d63638; --mh-bg: #f0f4f8; --mh-card: #ffffff; --mh-text: #334155; --mh-border: #e2e8f0;
     }
-    
-    /* Dashboard Layout */
+    .switch.mh-native-switch { position: relative; display: inline-block; width: 70px; height: 32px; margin: 0; }
+    .switch.mh-native-switch input.cb { opacity: 0; width: 0; height: 0; }
+    .switch.mh-native-switch .toggle { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 11px; font-weight: bold; color: white; text-transform: uppercase; overflow: hidden; }
+    .switch.mh-native-switch .toggle:before { position: absolute; content: ""; height: 24px; width: 24px; left: 4px; bottom: 4px; background-color: white; transition: .4s cubic-bezier(0.68, -0.55, 0.265, 1.55); border-radius: 50%; z-index: 2; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .switch.mh-native-switch input.cb:checked + .toggle { background-color: var(--mh-dark); box-shadow: 0 0 10px var(--mh-blue-glow); }
+    .switch.mh-native-switch input.cb:checked + .toggle:before { transform: translateX(38px); }
+    .switch.mh-native-switch .left { color: #64748b; z-index: 1; transition: 0.3s; }
+    .switch.mh-native-switch input.cb:checked + .toggle .left { opacity: 0; }
+    .switch.mh-native-switch .right { color: white; z-index: 1; opacity: 0; transition: 0.3s; }
+    .switch.mh-native-switch input.cb:checked + .toggle .right { opacity: 1; }
+
     .mh-futuristic-dashboard { max-width: 1200px; margin: 20px auto; font-family: 'Segoe UI', Tahoma, sans-serif; }
     .mh-dashboard-header { position: relative; padding: 30px; background: var(--mh-dark); border-radius: 16px; color: white; margin-bottom: 30px; overflow: hidden; box-shadow: 0 15px 35px rgba(0, 66, 101, 0.2); }
     .mh-dashboard-header h1 { color: white; margin: 0 0 10px 0; font-size: 28px; font-weight: 800; position: relative; z-index: 2; }
@@ -239,8 +297,8 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
     .mh-cyber-radio input { display: none; }
     .mh-cyber-radio span { display: block; text-align: center; padding: 12px; background: #f8fafc; border: 2px solid var(--mh-border); border-radius: 10px; font-weight: 600; color: #64748b; transition: all 0.3s; }
     .mh-cyber-radio input:checked + span { background: rgba(34, 147, 233, 0.05); border-color: var(--mh-blue); color: var(--mh-blue); box-shadow: 0 5px 15px var(--mh-blue-glow); transform: translateY(-2px); }
-    .mh-cyber-select { width: 100%; padding: 12px 15px; border-radius: 10px; border: 2px solid var(--mh-border); background: #f8fafc; font-weight: 600; color: var(--mh-dark); outline: none; transition: 0.3s; }
-    .mh-cyber-select:focus { border-color: var(--mh-blue); box-shadow: 0 0 0 4px var(--mh-blue-glow); }
+    .mh-cyber-select, .mh-cyber-input { width: 100%; padding: 12px 15px; border-radius: 10px; border: 2px solid var(--mh-border); background: #f8fafc; font-weight: 600; color: var(--mh-dark); outline: none; transition: 0.3s; }
+    .mh-cyber-select:focus, .mh-cyber-input:focus { border-color: var(--mh-blue); box-shadow: 0 0 0 4px var(--mh-blue-glow); }
     .mh-range-slider { display: flex; align-items: center; gap: 15px; background: #f8fafc; padding: 10px 15px; border-radius: 10px; border: 1px solid var(--mh-border); }
     .mh-range-slider input[type="range"] { flex: 1; -webkit-appearance: none; height: 6px; background: var(--mh-border); border-radius: 5px; outline: none; }
     .mh-range-slider input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--mh-blue); cursor: pointer; box-shadow: 0 0 10px var(--mh-blue-glow); transition: 0.2s; }
@@ -259,79 +317,61 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
     .mh-save-dock { margin-top: 30px; text-align: right; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); border: 1px solid var(--mh-border); }
     .mh-btn-save { background: var(--mh-dark); color: white; padding: 15px 40px; font-size: 16px; cursor: pointer; }
     .mh-btn-save:hover { background: var(--mh-blue); transform: translateY(-3px); box-shadow: 0 10px 25px var(--mh-blue-glow); }
-    .mh-hud-container { position: relative; width: 100%; height: 250px; border-radius: 12px; overflow: hidden; border: 2px solid var(--mh-blue); box-shadow: inset 0 0 30px var(--mh-blue-glow); background: #000; display: flex; align-items: center; justify-content: center; }
+    .mh-hud-container { position: relative; width: 100%; height: 350px; border-radius: 12px; overflow: hidden; border: 2px solid var(--mh-blue); box-shadow: inset 0 0 30px var(--mh-blue-glow); background: #000; display: flex; align-items: center; justify-content: center; }
     .mh-hud-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(34,147,233,0.05) 0%, rgba(34,147,233,0.1) 50%, rgba(34,147,233,0.05) 100%); pointer-events: none; z-index: 10; }
     .mh-hud-overlay::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px); pointer-events: none; }
     .mh-preview-box { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 5; transition: background-color 0.3s; }
 
-    /* ALL 30 PRELOADER CSS ANIMATIONS */
-    #mh-css-preloader-preview-box { --mh-loader-color: <?php echo esc_attr($loader_color); ?>; }
-    
-    .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; }
-    @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; }
-    @keyframes mh-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
-    .mh-loader-3 { width: 50px; height: 50px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); }
-    @keyframes mh-pulse { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-    .mh-loader-4 { width: 40px; height: 40px; background-color: var(--mh-loader-color); animation: mh-flip 1.2s infinite ease-in-out; }
-    @keyframes mh-flip { 0% { transform: perspective(120px) rotateX(0deg) rotateY(0deg); } 50% { transform: perspective(120px) rotateX(-180deg) rotateY(0deg); } 100% { transform: perspective(120px) rotateX(-180deg) rotateY(-180deg); } }
-    .mh-loader-5 { width: 50px; height: 50px; position: relative; } .mh-loader-5 div { width: 100%; height: 100%; border-radius: 50%; background-color: var(--mh-loader-color); opacity: 0.6; position: absolute; top: 0; left: 0; animation: mh-bounce2 2s infinite ease-in-out; } .mh-loader-5 div:nth-child(2) { animation-delay: -1.0s; }
-    @keyframes mh-bounce2 { 0%, 100% { transform: scale(0); } 50% { transform: scale(1); } }
-    .mh-loader-6 { display: flex; gap: 5px; height: 40px; align-items: center; } .mh-loader-6 div { width: 6px; height: 100%; background-color: var(--mh-loader-color); animation: mh-wave 1.2s infinite ease-in-out; } .mh-loader-6 div:nth-child(2) { animation-delay: -1.1s; } .mh-loader-6 div:nth-child(3) { animation-delay: -1.0s; } .mh-loader-6 div:nth-child(4) { animation-delay: -0.9s; } .mh-loader-6 div:nth-child(5) { animation-delay: -0.8s; }
-    @keyframes mh-wave { 0%, 40%, 100% { transform: scaleY(0.4); } 20% { transform: scaleY(1); } }
-    .mh-loader-7 { width: 50px; height: 50px; border-radius: 50%; background: conic-gradient(transparent 60%, var(--mh-loader-color)); animation: mh-spin 1s linear infinite; }
-    .mh-loader-8 { width: 40px; height: 40px; background: var(--mh-loader-color); animation: mh-morph 2s infinite ease-in-out; }
-    @keyframes mh-morph { 0% { border-radius: 0%; transform: rotate(0deg); } 50% { border-radius: 50%; transform: rotate(180deg); } 100% { border-radius: 0%; transform: rotate(360deg); } }
-    .mh-loader-9 { width: 50px; height: 50px; position: relative; animation: mh-spin 2s linear infinite; } .mh-loader-9 div { position: absolute; width: 15px; height: 15px; background: var(--mh-loader-color); border-radius: 50%; top: 0; left: 50%; transform: translateX(-50%); } .mh-loader-9 div:nth-child(2) { top: auto; bottom: 0; }
-    .mh-loader-10 { position: relative; width: 60px; height: 60px; } .mh-loader-10 div { position: absolute; border: 4px solid var(--mh-loader-color); opacity: 1; border-radius: 50%; animation: mh-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite; } .mh-loader-10 div:nth-child(2) { animation-delay: -0.5s; }
-    @keyframes mh-ripple { 0% { top: 28px; left: 28px; width: 0; height: 0; opacity: 0; } 5% { opacity: 1; } 100% { top: -1px; left: -1px; width: 58px; height: 58px; opacity: 0; } }
-    .mh-loader-11 { width: 50px; height: 50px; border: 3px dashed var(--mh-loader-color); border-radius: 50%; animation: mh-spin 4s linear infinite; display: flex; align-items: center; justify-content: center; } .mh-loader-11 div { width: 20px; height: 20px; background: var(--mh-loader-color); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); animation: mh-spin-reverse 2s linear infinite; }
-    @keyframes mh-spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
-    .mh-loader-12 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 50px; height: 50px; } .mh-loader-12 div { background: var(--mh-loader-color); border-radius: 50%; animation: mh-grid-pulse 1.2s infinite ease-in-out; } .mh-loader-12 div:nth-child(1), .mh-loader-12 div:nth-child(5), .mh-loader-12 div:nth-child(9) { animation-delay: 0.4s; } .mh-loader-12 div:nth-child(2), .mh-loader-12 div:nth-child(6), .mh-loader-12 div:nth-child(7) { animation-delay: 0.8s; } .mh-loader-12 div:nth-child(3), .mh-loader-12 div:nth-child(4), .mh-loader-12 div:nth-child(8) { animation-delay: 1.2s; }
-    @keyframes mh-grid-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.5); } }
-    .mh-loader-13 { position: relative; width: 60px; height: 20px; } .mh-loader-13 div { position: absolute; width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; animation: mh-infinity 1.5s infinite ease-in-out; } .mh-loader-13 div:nth-child(2) { animation-delay: -0.75s; }
-    @keyframes mh-infinity { 0% { left: 0; transform: scale(1); z-index: 1; } 25% { transform: scale(1.5); z-index: 2; } 50% { left: 40px; transform: scale(1); z-index: 1; } 75% { transform: scale(0.5); z-index: 0; } 100% { left: 0; transform: scale(1); z-index: 1; } }
-    .mh-loader-14 { position: relative; width: 60px; height: 60px; } .mh-loader-14 div { position: absolute; width: 100%; height: 100%; border: 3px solid transparent; border-top-color: var(--mh-loader-color); border-radius: 50%; animation: mh-spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; } .mh-loader-14 div:nth-child(2) { width: 80%; height: 80%; top: 10%; left: 10%; border-top-color: transparent; border-right-color: var(--mh-loader-color); animation-duration: 1.5s; animation-direction: reverse; } .mh-loader-14 div:nth-child(3) { width: 60%; height: 60%; top: 20%; left: 20%; border-top-color: transparent; border-bottom-color: var(--mh-loader-color); animation-duration: 1s; }
-    .mh-loader-15 { width: 40px; height: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; } .mh-loader-15 div { background: var(--mh-loader-color); animation: mh-cube-split 1.5s infinite ease-in-out; } .mh-loader-15 div:nth-child(1) { transform-origin: bottom right; } .mh-loader-15 div:nth-child(2) { transform-origin: bottom left; } .mh-loader-15 div:nth-child(3) { transform-origin: top right; } .mh-loader-15 div:nth-child(4) { transform-origin: top left; }
-    @keyframes mh-cube-split { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.5) rotate(90deg); border-radius: 50%; } }
-    .mh-loader-16 { width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; box-shadow: 0 0 20px 5px var(--mh-loader-color); animation: mh-glow-pulse 1s infinite alternate; }
-    @keyframes mh-glow-pulse { 0% { box-shadow: 0 0 10px 2px var(--mh-loader-color); transform: scale(0.8); } 100% { box-shadow: 0 0 30px 10px var(--mh-loader-color); transform: scale(1.2); } }
-    .mh-loader-17 { width: 50px; height: 50px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: var(--mh-loader-color) transparent; animation: mh-spin 1.2s linear infinite; position: relative; } .mh-loader-17 div { position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: transparent var(--mh-loader-color); animation: mh-spin-reverse 0.6s linear infinite; }
-    .mh-loader-18 { display: flex; gap: 6px; height: 40px; align-items: flex-end; } .mh-loader-18 div { width: 8px; background: var(--mh-loader-color); animation: mh-stairway 1s infinite ease-in-out alternate; } .mh-loader-18 div:nth-child(1) { animation-delay: 0s; } .mh-loader-18 div:nth-child(2) { animation-delay: 0.2s; } .mh-loader-18 div:nth-child(3) { animation-delay: 0.4s; } .mh-loader-18 div:nth-child(4) { animation-delay: 0.6s; }
-    @keyframes mh-stairway { 0% { height: 10px; } 100% { height: 40px; } }
-    .mh-loader-19 { width: 50px; height: 50px; border-radius: 50%; box-shadow: inset 0 0 0 4px rgba(255,255,255,0.1); position: relative; } .mh-loader-19::after { content: ""; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 50%; border: 4px solid transparent; border-top-color: var(--mh-loader-color); animation: mh-spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
-    .mh-loader-20 { width: 50px; height: 50px; perspective: 150px; } .mh-loader-20 div { width: 100%; height: 100%; border: 6px solid var(--mh-loader-color); border-radius: 50%; animation: mh-hyper-ring 2s linear infinite; }
-    @keyframes mh-hyper-ring { 0% { transform: rotateX(60deg) rotateZ(0deg); } 100% { transform: rotateX(60deg) rotateZ(360deg); } }
+    /* 🚀 TEXT ANIMATIONS CSS */
+    .mh-text-anim-blink { animation: mh-text-blink 1.5s infinite; }
+    .mh-text-anim-pulse { animation: mh-text-pulse 2s infinite ease-in-out; }
+    .mh-text-anim-float { animation: mh-text-float 2s infinite ease-in-out; }
+    .mh-text-anim-tracking { animation: mh-text-tracking 2s infinite ease-in-out; }
+    @keyframes mh-text-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    @keyframes mh-text-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.7; } }
+    @keyframes mh-text-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes mh-text-tracking { 0%, 100% { letter-spacing: 2px; } 50% { letter-spacing: 8px; } }
 
-    /* 🚀 FIXED E-Commerce Animations (Using Native SVG to prevent FA loading issues) */
+    /* 30 Visual Animations CSS */
+    .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; } @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; } @keyframes mh-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+    .mh-loader-3 { width: 50px; height: 50px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); } @keyframes mh-pulse { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+    .mh-loader-4 { width: 40px; height: 40px; background-color: var(--mh-loader-color); animation: mh-flip 1.2s infinite ease-in-out; } @keyframes mh-flip { 0% { transform: perspective(120px) rotateX(0deg) rotateY(0deg); } 50% { transform: perspective(120px) rotateX(-180deg) rotateY(0deg); } 100% { transform: perspective(120px) rotateX(-180deg) rotateY(-180deg); } }
+    .mh-loader-5 { width: 50px; height: 50px; position: relative; } .mh-loader-5 div { width: 100%; height: 100%; border-radius: 50%; background-color: var(--mh-loader-color); opacity: 0.6; position: absolute; top: 0; left: 0; animation: mh-bounce2 2s infinite ease-in-out; } .mh-loader-5 div:nth-child(2) { animation-delay: -1.0s; } @keyframes mh-bounce2 { 0%, 100% { transform: scale(0); } 50% { transform: scale(1); } }
+    .mh-loader-6 { display: flex; gap: 5px; height: 40px; align-items: center; } .mh-loader-6 div { width: 6px; height: 100%; background-color: var(--mh-loader-color); animation: mh-wave 1.2s infinite ease-in-out; } .mh-loader-6 div:nth-child(2) { animation-delay: -1.1s; } .mh-loader-6 div:nth-child(3) { animation-delay: -1.0s; } .mh-loader-6 div:nth-child(4) { animation-delay: -0.9s; } .mh-loader-6 div:nth-child(5) { animation-delay: -0.8s; } @keyframes mh-wave { 0%, 40%, 100% { transform: scaleY(0.4); } 20% { transform: scaleY(1); } }
+    .mh-loader-7 { width: 50px; height: 50px; border-radius: 50%; background: conic-gradient(transparent 60%, var(--mh-loader-color)); animation: mh-spin 1s linear infinite; }
+    .mh-loader-8 { width: 40px; height: 40px; background: var(--mh-loader-color); animation: mh-morph 2s infinite ease-in-out; } @keyframes mh-morph { 0% { border-radius: 0%; transform: rotate(0deg); } 50% { border-radius: 50%; transform: rotate(180deg); } 100% { border-radius: 0%; transform: rotate(360deg); } }
+    .mh-loader-9 { width: 50px; height: 50px; position: relative; animation: mh-spin 2s linear infinite; } .mh-loader-9 div { position: absolute; width: 15px; height: 15px; background: var(--mh-loader-color); border-radius: 50%; top: 0; left: 50%; transform: translateX(-50%); } .mh-loader-9 div:nth-child(2) { top: auto; bottom: 0; }
+    .mh-loader-10 { position: relative; width: 60px; height: 60px; } .mh-loader-10 div { position: absolute; border: 4px solid var(--mh-loader-color); opacity: 1; border-radius: 50%; animation: mh-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite; } .mh-loader-10 div:nth-child(2) { animation-delay: -0.5s; } @keyframes mh-ripple { 0% { top: 28px; left: 28px; width: 0; height: 0; opacity: 0; } 5% { opacity: 1; } 100% { top: -1px; left: -1px; width: 58px; height: 58px; opacity: 0; } }
+    .mh-loader-11 { width: 50px; height: 50px; border: 3px dashed var(--mh-loader-color); border-radius: 50%; animation: mh-spin 4s linear infinite; display: flex; align-items: center; justify-content: center; } .mh-loader-11 div { width: 20px; height: 20px; background: var(--mh-loader-color); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); animation: mh-spin-reverse 2s linear infinite; } @keyframes mh-spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+    .mh-loader-12 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 50px; height: 50px; } .mh-loader-12 div { background: var(--mh-loader-color); border-radius: 50%; animation: mh-grid-pulse 1.2s infinite ease-in-out; } .mh-loader-12 div:nth-child(1), .mh-loader-12 div:nth-child(5), .mh-loader-12 div:nth-child(9) { animation-delay: 0.4s; } .mh-loader-12 div:nth-child(2), .mh-loader-12 div:nth-child(6), .mh-loader-12 div:nth-child(7) { animation-delay: 0.8s; } .mh-loader-12 div:nth-child(3), .mh-loader-12 div:nth-child(4), .mh-loader-12 div:nth-child(8) { animation-delay: 1.2s; } @keyframes mh-grid-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.5); } }
+    .mh-loader-13 { position: relative; width: 60px; height: 20px; } .mh-loader-13 div { position: absolute; width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; animation: mh-infinity 1.5s infinite ease-in-out; } .mh-loader-13 div:nth-child(2) { animation-delay: -0.75s; } @keyframes mh-infinity { 0% { left: 0; transform: scale(1); z-index: 1; } 25% { transform: scale(1.5); z-index: 2; } 50% { left: 40px; transform: scale(1); z-index: 1; } 75% { transform: scale(0.5); z-index: 0; } 100% { left: 0; transform: scale(1); z-index: 1; } }
+    .mh-loader-14 { position: relative; width: 60px; height: 60px; } .mh-loader-14 div { position: absolute; width: 100%; height: 100%; border: 3px solid transparent; border-top-color: var(--mh-loader-color); border-radius: 50%; animation: mh-spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; } .mh-loader-14 div:nth-child(2) { width: 80%; height: 80%; top: 10%; left: 10%; border-top-color: transparent; border-right-color: var(--mh-loader-color); animation-duration: 1.5s; animation-direction: reverse; } .mh-loader-14 div:nth-child(3) { width: 60%; height: 60%; top: 20%; left: 20%; border-top-color: transparent; border-bottom-color: var(--mh-loader-color); animation-duration: 1s; }
+    .mh-loader-15 { width: 40px; height: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; } .mh-loader-15 div { background: var(--mh-loader-color); animation: mh-cube-split 1.5s infinite ease-in-out; } .mh-loader-15 div:nth-child(1) { transform-origin: bottom right; } .mh-loader-15 div:nth-child(2) { transform-origin: bottom left; } .mh-loader-15 div:nth-child(3) { transform-origin: top right; } .mh-loader-15 div:nth-child(4) { transform-origin: top left; } @keyframes mh-cube-split { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.5) rotate(90deg); border-radius: 50%; } }
+    .mh-loader-16 { width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; box-shadow: 0 0 20px 5px var(--mh-loader-color); animation: mh-glow-pulse 1s infinite alternate; } @keyframes mh-glow-pulse { 0% { box-shadow: 0 0 10px 2px var(--mh-loader-color); transform: scale(0.8); } 100% { box-shadow: 0 0 30px 10px var(--mh-loader-color); transform: scale(1.2); } }
+    .mh-loader-17 { width: 50px; height: 50px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: var(--mh-loader-color) transparent; animation: mh-spin 1.2s linear infinite; position: relative; } .mh-loader-17 div { position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: transparent var(--mh-loader-color); animation: mh-spin-reverse 0.6s linear infinite; }
+    .mh-loader-18 { display: flex; gap: 6px; height: 40px; align-items: flex-end; } .mh-loader-18 div { width: 8px; background: var(--mh-loader-color); animation: mh-stairway 1s infinite ease-in-out alternate; } .mh-loader-18 div:nth-child(1) { animation-delay: 0s; } .mh-loader-18 div:nth-child(2) { animation-delay: 0.2s; } .mh-loader-18 div:nth-child(3) { animation-delay: 0.4s; } .mh-loader-18 div:nth-child(4) { animation-delay: 0.6s; } @keyframes mh-stairway { 0% { height: 10px; } 100% { height: 40px; } }
+    .mh-loader-19 { width: 50px; height: 50px; border-radius: 50%; box-shadow: inset 0 0 0 4px rgba(255,255,255,0.1); position: relative; } .mh-loader-19::after { content: ""; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 50%; border: 4px solid transparent; border-top-color: var(--mh-loader-color); animation: mh-spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
+    .mh-loader-20 { width: 50px; height: 50px; perspective: 150px; } .mh-loader-20 div { width: 100%; height: 100%; border: 6px solid var(--mh-loader-color); border-radius: 50%; animation: mh-hyper-ring 2s linear infinite; } @keyframes mh-hyper-ring { 0% { transform: rotateX(60deg) rotateZ(0deg); } 100% { transform: rotateX(60deg) rotateZ(360deg); } }
+
     .mh-ecommerce-icon { display: flex; align-items: center; justify-content: center; position: relative; }
     .mh-svg-icon { width: 50px; height: 50px; fill: none; stroke: var(--mh-loader-color); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    
-    .mh-loader-21 { animation: mh-cart-dash 1.5s infinite ease-in-out; }
-    @keyframes mh-cart-dash { 0% { transform: translateX(-30px) rotate(-15deg); opacity: 0; } 50% { transform: translateX(0) rotate(0deg); opacity: 1; } 100% { transform: translateX(30px) rotate(15deg); opacity: 0; } }
-    .mh-loader-22 { animation: mh-bag-drop 1.2s infinite cubic-bezier(0.28, 0.84, 0.42, 1); transform-origin: bottom; }
-    @keyframes mh-bag-drop { 0% { transform: translateY(-30px) scaleY(1.2); opacity: 0; } 50% { transform: translateY(0) scaleY(0.8); opacity: 1; } 70% { transform: translateY(-10px) scaleY(1); } 100% { transform: translateY(0) scaleY(1); opacity: 0; } }
-    .mh-loader-23 { animation: mh-tag-flip 1.5s infinite; perspective: 100px; }
-    @keyframes mh-tag-flip { 0% { transform: rotateY(0deg); } 50% { transform: rotateY(180deg); } 100% { transform: rotateY(360deg); } }
-    .mh-loader-24 { animation: mh-truck-drive 2s infinite linear; }
-    @keyframes mh-truck-drive { 0% { transform: translateX(-40px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(40px); opacity: 0; } }
-    .mh-loader-25 { animation: mh-gift-shake 1.5s infinite; }
-    @keyframes mh-gift-shake { 0%, 100% { transform: rotate(0deg); } 10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); } 20%, 40%, 60%, 80% { transform: rotate(10deg); } }
-    .mh-loader-26 .mh-svg-icon { animation: mh-card-swipe 1.5s infinite ease-in-out; }
-    @keyframes mh-card-swipe { 0% { transform: translateY(-20px); opacity: 0; } 50% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(20px); opacity: 0; } }
-    .mh-loader-27 { position: relative; }
-    .mh-scanline { position: absolute; top: 0; left: -10%; width: 120%; height: 3px; background-color: var(--mh-loader-color); animation: mh-scan 1.5s infinite linear; box-shadow: 0 0 8px var(--mh-loader-color); }
-    @keyframes mh-scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
-    .mh-loader-28 { animation: mh-coin-drop 1.5s infinite ease-in-out; }
-    @keyframes mh-coin-drop { 0% { transform: translateY(-30px) rotateY(0deg); opacity: 0; } 50% { transform: translateY(0) rotateY(180deg); opacity: 1; } 100% { transform: translateY(20px) rotateY(360deg); opacity: 0; } }
-    .mh-loader-29 { animation: mh-box-pulse 1.2s infinite ease-in-out; }
-    @keyframes mh-box-pulse { 0% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 0.5; } }
-    .mh-loader-30 { transform-origin: top center; animation: mh-store-swing 2s infinite ease-in-out; }
-    @keyframes mh-store-swing { 0% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } 100% { transform: rotate(-15deg); } }
+    .mh-loader-21 { animation: mh-cart-dash 1.5s infinite ease-in-out; } @keyframes mh-cart-dash { 0% { transform: translateX(-30px) rotate(-15deg); opacity: 0; } 50% { transform: translateX(0) rotate(0deg); opacity: 1; } 100% { transform: translateX(30px) rotate(15deg); opacity: 0; } }
+    .mh-loader-22 { animation: mh-bag-drop 1.2s infinite cubic-bezier(0.28, 0.84, 0.42, 1); transform-origin: bottom; } @keyframes mh-bag-drop { 0% { transform: translateY(-30px) scaleY(1.2); opacity: 0; } 50% { transform: translateY(0) scaleY(0.8); opacity: 1; } 70% { transform: translateY(-10px) scaleY(1); } 100% { transform: translateY(0) scaleY(1); opacity: 0; } }
+    .mh-loader-23 { animation: mh-tag-flip 1.5s infinite; perspective: 100px; } @keyframes mh-tag-flip { 0% { transform: rotateY(0deg); } 50% { transform: rotateY(180deg); } 100% { transform: rotateY(360deg); } }
+    .mh-loader-24 { animation: mh-truck-drive 2s infinite linear; } @keyframes mh-truck-drive { 0% { transform: translateX(-40px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(40px); opacity: 0; } }
+    .mh-loader-25 { animation: mh-gift-shake 1.5s infinite; } @keyframes mh-gift-shake { 0%, 100% { transform: rotate(0deg); } 10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); } 20%, 40%, 60%, 80% { transform: rotate(10deg); } }
+    .mh-loader-26 .mh-svg-icon { animation: mh-card-swipe 1.5s infinite ease-in-out; } @keyframes mh-card-swipe { 0% { transform: translateY(-20px); opacity: 0; } 50% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(20px); opacity: 0; } }
+    .mh-loader-27 { position: relative; } .mh-scanline { position: absolute; top: 0; left: -10%; width: 120%; height: 3px; background-color: var(--mh-loader-color); animation: mh-scan 1.5s infinite linear; box-shadow: 0 0 8px var(--mh-loader-color); } @keyframes mh-scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+    .mh-loader-28 { animation: mh-coin-drop 1.5s infinite ease-in-out; } @keyframes mh-coin-drop { 0% { transform: translateY(-30px) rotateY(0deg); opacity: 0; } 50% { transform: translateY(0) rotateY(180deg); opacity: 1; } 100% { transform: translateY(20px) rotateY(360deg); opacity: 0; } }
+    .mh-loader-29 { animation: mh-box-pulse 1.2s infinite ease-in-out; } @keyframes mh-box-pulse { 0% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 0.5; } }
+    .mh-loader-30 { transform-origin: top center; animation: mh-store-swing 2s infinite ease-in-out; } @keyframes mh-store-swing { 0% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } 100% { transform: rotate(-15deg); } }
 </style>
 
 <script>
 jQuery(document).ready(function($){
+    
+    // Type Toggle 
     $('.mh-loader-type').change(function() {
         if ($(this).val() === 'css') {
             $('.mh-image-settings').hide();
@@ -342,58 +382,92 @@ jQuery(document).ready(function($){
         }
     });
 
+    // 🚀 Master Unified Preview Renderer
     function updateLivePreview() {
+        var type = $('.mh-loader-type:checked').val();
         var effect = $('#mh_css_effect_select').val();
         var loaderColor = $('#mh_loader_color_picker').val();
         var bgColor = $('#mh_bg_color_picker').val();
         var imgWidth = $('#mh_img_width_range').val();
+        var effectScale = $('#mh_effect_size_range').val();
         
+        // Text Variables
+        var customText = $('#mh_custom_text_input').val();
+        var textAnim = $('#mh_text_anim_select').val();
+        var textSize = $('#mh_text_size_range').val();
+        var textColor = $('#mh_text_color_picker').val();
+
+        // Update Overlays
         $('#mh_loader_color_picker').siblings('.mh-color-overlay').css('background-color', loaderColor);
         $('#mh_bg_color_picker').siblings('.mh-color-overlay').css('background-color', bgColor);
-        $('#mh_img_width_val').text(imgWidth);
-        $('#mh-preloader-preview').css('width', imgWidth + 'px');
-
-        var html = '';
-        if (effect === '1') html = '<div class="mh-loader-1"></div>';
-        if (effect === '2') html = '<div class="mh-loader-2"><div></div><div></div><div></div></div>';
-        if (effect === '3') html = '<div class="mh-loader-3"></div>';
-        if (effect === '4') html = '<div class="mh-loader-4"></div>';
-        if (effect === '5') html = '<div class="mh-loader-5"><div></div><div></div></div>';
-        if (effect === '6') html = '<div class="mh-loader-6"><div></div><div></div><div></div><div></div><div></div></div>';
-        if (effect === '7') html = '<div class="mh-loader-7"></div>';
-        if (effect === '8') html = '<div class="mh-loader-8"></div>';
-        if (effect === '9') html = '<div class="mh-loader-9"><div></div><div></div></div>';
-        if (effect === '10') html = '<div class="mh-loader-10"><div></div><div></div></div>';
-        if (effect === '11') html = '<div class="mh-loader-11"><div></div></div>';
-        if (effect === '12') html = '<div class="mh-loader-12"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>';
-        if (effect === '13') html = '<div class="mh-loader-13"><div></div><div></div></div>';
-        if (effect === '14') html = '<div class="mh-loader-14"><div></div><div></div><div></div></div>';
-        if (effect === '15') html = '<div class="mh-loader-15"><div></div><div></div><div></div><div></div></div>';
-        if (effect === '16') html = '<div class="mh-loader-16"></div>';
-        if (effect === '17') html = '<div class="mh-loader-17"><div></div></div>';
-        if (effect === '18') html = '<div class="mh-loader-18"><div></div><div></div><div></div><div></div></div>';
-        if (effect === '19') html = '<div class="mh-loader-19"></div>';
-        if (effect === '20') html = '<div class="mh-loader-20"><div></div></div>';
+        $('#mh_text_color_picker').siblings('.mh-color-overlay').css('background-color', textColor);
         
-        // 🚀 BULLETPROOF SVG INJECTION (No FontAwesome Needed)
-        if (effect === '21') html = '<div class="mh-loader-21 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div>';
-        if (effect === '22') html = '<div class="mh-loader-22 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></div>';
-        if (effect === '23') html = '<div class="mh-loader-23 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div>';
-        if (effect === '24') html = '<div class="mh-loader-24 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></div>';
-        if (effect === '25') html = '<div class="mh-loader-25 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg></div>';
-        if (effect === '26') html = '<div class="mh-loader-26 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg></div>';
-        if (effect === '27') html = '<div class="mh-loader-27 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 5v14M8 5v14M12 5v14M17 5v14M21 5v14"></path></svg><div class="mh-scanline"></div></div>';
-        if (effect === '28') html = '<div class="mh-loader-28 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M9 12h6"></path></svg></div>';
-        if (effect === '29') html = '<div class="mh-loader-29 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>';
-        if (effect === '30') html = '<div class="mh-loader-30 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>';
+        $('#mh_img_width_val').text(imgWidth);
+        $('#mh_effect_size_val').text(effectScale);
+        $('#mh_text_size_val').text(textSize);
 
-        $('#mh-css-preloader-preview-box').html(html).css({ '--mh-loader-color': loaderColor, 'background-color': bgColor });
-        $('.mh-image-preview-wrapper').css('background-color', bgColor);
+        // Apply bg color to preview box
+        $('#mh-live-preview-box').css('background-color', bgColor);
+
+        // Render Visual Base
+        if(type === 'image') {
+            var imgUrl = $('#mh-preloader-image-url').val();
+            if(imgUrl) {
+                $('#mh-loader-visual').html('<img src="'+imgUrl+'" style="width:'+imgWidth+'px; height:auto;"/>');
+            } else {
+                $('#mh-loader-visual').html('<i class="dashicons dashicons-format-image" style="font-size:40px; color:#888; width:40px; height:40px;"></i>');
+            }
+        } else {
+            var html = '';
+            if (effect === '1') html = '<div class="mh-loader-1"></div>';
+            if (effect === '2') html = '<div class="mh-loader-2"><div></div><div></div><div></div></div>';
+            if (effect === '3') html = '<div class="mh-loader-3"></div>';
+            if (effect === '4') html = '<div class="mh-loader-4"></div>';
+            if (effect === '5') html = '<div class="mh-loader-5"><div></div><div></div></div>';
+            if (effect === '6') html = '<div class="mh-loader-6"><div></div><div></div><div></div><div></div><div></div></div>';
+            if (effect === '7') html = '<div class="mh-loader-7"></div>';
+            if (effect === '8') html = '<div class="mh-loader-8"></div>';
+            if (effect === '9') html = '<div class="mh-loader-9"><div></div><div></div></div>';
+            if (effect === '10') html = '<div class="mh-loader-10"><div></div><div></div></div>';
+            if (effect === '11') html = '<div class="mh-loader-11"><div></div></div>';
+            if (effect === '12') html = '<div class="mh-loader-12"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>';
+            if (effect === '13') html = '<div class="mh-loader-13"><div></div><div></div></div>';
+            if (effect === '14') html = '<div class="mh-loader-14"><div></div><div></div><div></div></div>';
+            if (effect === '15') html = '<div class="mh-loader-15"><div></div><div></div><div></div><div></div></div>';
+            if (effect === '16') html = '<div class="mh-loader-16"></div>';
+            if (effect === '17') html = '<div class="mh-loader-17"><div></div></div>';
+            if (effect === '18') html = '<div class="mh-loader-18"><div></div><div></div><div></div><div></div></div>';
+            if (effect === '19') html = '<div class="mh-loader-19"></div>';
+            if (effect === '20') html = '<div class="mh-loader-20"><div></div></div>';
+            // SVGs
+            if (effect === '21') html = '<div class="mh-loader-21 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div>';
+            if (effect === '22') html = '<div class="mh-loader-22 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></div>';
+            if (effect === '23') html = '<div class="mh-loader-23 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div>';
+            if (effect === '24') html = '<div class="mh-loader-24 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></div>';
+            if (effect === '25') html = '<div class="mh-loader-25 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg></div>';
+            if (effect === '26') html = '<div class="mh-loader-26 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg></div>';
+            if (effect === '27') html = '<div class="mh-loader-27 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 5v14M8 5v14M12 5v14M17 5v14M21 5v14"></path></svg><div class="mh-scanline"></div></div>';
+            if (effect === '28') html = '<div class="mh-loader-28 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M9 12h6"></path></svg></div>';
+            if (effect === '29') html = '<div class="mh-loader-29 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>';
+            if (effect === '30') html = '<div class="mh-loader-30 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>';
+
+            // Wrap in scale block
+            $('#mh-loader-visual').html('<div style="transform: scale('+effectScale+'); --mh-loader-color: '+loaderColor+';">' + html + '</div>');
+        }
+
+        // Render Text Base
+        if(customText.trim() !== '') {
+            $('#mh-loader-text-display').html('<div class="mh-text-anim-'+textAnim+'" style="color: '+textColor+'; font-size: '+textSize+'px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;">' + customText + '</div>').show();
+        } else {
+            $('#mh-loader-text-display').hide();
+        }
     }
 
-    $('#mh_css_effect_select, #mh_loader_color_picker, #mh_bg_color_picker, #mh_img_width_range').on('change input', updateLivePreview);
-    updateLivePreview();
+    // Bind triggers to inputs
+    $('input, select').on('change input', updateLivePreview);
+    updateLivePreview(); // Init
 
+    // WP Media Library Handler
     var mediaUploader;
     $('#mh-upload-preloader-btn').click(function(e) {
         e.preventDefault();
@@ -402,7 +476,7 @@ jQuery(document).ready(function($){
         mediaUploader.on('select', function() {
             var attachment = mediaUploader.state().get('selection').first().toJSON();
             $('#mh-preloader-image-url').val(attachment.url);
-            $('#mh-preloader-preview').attr('src', attachment.url).show();
+            updateLivePreview();
             $('#mh-remove-preloader-btn').css('display', 'inline-flex');
         });
         mediaUploader.open();
@@ -411,7 +485,7 @@ jQuery(document).ready(function($){
     $('#mh-remove-preloader-btn').click(function(e){
         e.preventDefault();
         $('#mh-preloader-image-url').val('');
-        $('#mh-preloader-preview').hide().attr('src', '');
+        updateLivePreview();
         $(this).hide();
     });
 });
