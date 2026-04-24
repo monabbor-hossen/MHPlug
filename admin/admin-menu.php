@@ -62,6 +62,7 @@ class MH_Admin_Menu {
         // 🚀 NEW: Compare Widgets added to Settings Dashboard
         'mh_header_compare'             => 'Header Compare Icon',
         'mh_product_compare_btn'        => 'Product Compare Button',
+        'mh_compare_table'              => 'Compare Table', // 🚀 Add this line!
     ];
 
     public function __construct() {
@@ -204,6 +205,7 @@ class MH_Admin_Menu {
                 // 🚀 NEW: Route Compare widgets to WooCommerce section
                 'mh_header_compare',
                 'mh_product_compare_btn',
+                'mh_compare_table',
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
             }

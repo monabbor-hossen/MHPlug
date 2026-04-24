@@ -1,0 +1,61 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+use Elementor\Widget_Base;
+use Elementor\Controls_Manager;
+
+class MH_Compare_Table_Widget extends Widget_Base {
+
+    public function get_name() { return 'mh_compare_table'; }
+    public function get_title() { return __( 'MH Compare Table', 'mh-plug' ); }
+    public function get_icon() { return 'eicon-table'; }
+    public function get_categories() { return [ 'mh-plug-widgets' ]; }
+    public function get_script_depends() { return [ 'mh-widgets-js' ]; }
+
+    protected function register_controls() {
+        $this->start_controls_section('section_style', ['label' => __('Table Style', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
+        $this->add_control('header_bg', [
+            'label' => __('Header Background', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#f8f9fa',
+            'selectors' => ['{{WRAPPER}} .mh-compare-table th' => 'background-color: {{VALUE}};']
+        ]);
+        $this->add_control('border_color', [
+            'label' => __('Border Color', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'default' => '#eaeaea',
+            'selectors' => ['{{WRAPPER}} .mh-compare-table th, {{WRAPPER}} .mh-compare-table td' => 'border: 1px solid {{VALUE}};']
+        ]);
+        $this->end_controls_section();
+    }
+
+    protected function render() {
+        ?>
+        <div class="mh-compare-table-wrapper">
+            <div class="mh-compare-loading" style="text-align:center; padding:50px;">
+                <i class="fas fa-spinner fa-spin fa-2x" style="color:#004265;"></i>
+                <p style="margin-top:15px; font-weight:600;"><?php esc_html_e('Loading Compare Data...', 'mh-plug'); ?></p>
+            </div>
+        </div>
+        
+        <style>
+            .mh-compare-table-wrapper { overflow-x: auto; width: 100%; }
+            .mh-compare-table { width: 100%; border-collapse: collapse; min-width: 900px; background: #fff; }
+            .mh-compare-table th, .mh-compare-table td { border: 1px solid #eaeaea; padding: 25px; text-align: center; vertical-align: top; }
+            .mh-compare-table th { background: #f8f9fa; font-weight: 600; width: 20%; text-align: left; vertical-align: middle; color: #222; text-transform: uppercase; font-size: 14px; }
+            .mh-compare-image { display: block; margin-bottom: 15px; position: relative; }
+            .mh-compare-image img { max-width: 100%; height: auto; border-radius: 8px; }
+            .mh-compare-title { font-size: 16px; margin: 0 0 10px; font-weight: 600; line-height: 1.4; }
+            .mh-compare-title a { color: #111; text-decoration: none; transition: 0.3s; }
+            .mh-compare-title a:hover { color: #d63638; }
+            .mh-compare-price { font-size: 18px; font-weight: bold; color: #d63638; margin-bottom: 15px; }
+            .mh-remove-compare { color: #999; position: absolute; top: 10px; right: 10px; font-size: 18px; background: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.3s; z-index: 10; text-decoration: none; }
+            .mh-remove-compare:hover { color: #fff; background: #d63638; }
+            .mh-compare-add-to-cart .button { background: #004265; color: #fff; border-radius: 4px; padding: 12px 24px; border: none; text-decoration: none; display: inline-block; font-weight: 600; transition: 0.3s; }
+            .mh-compare-add-to-cart .button:hover { background: #002b42; }
+            .mh-compare-empty { padding: 60px; text-align: center; border: 2px dashed #ccc; border-radius: 8px; }
+            .mh-compare-empty h3 { color: #333; margin-bottom: 10px; }
+        </style>
+        <?php
+    }
+}

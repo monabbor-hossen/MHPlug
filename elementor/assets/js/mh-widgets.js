@@ -385,59 +385,91 @@
     });
 
 }(jQuery));
-
 // =======================================================
-// MH Plug - Cache-Proof Compare Engine (Local Storage)
+// MH Plug - Cache-Proof Compare Engine & Dynamic Table
 // =======================================================
 jQuery(document).ready(function($) {
     
-    // 1. Function to sync the UI with Local Storage
+    // 1. Sync UI (Header Badge & Buttons)
     function mhSyncCompareUI() {
         let compareList = JSON.parse(localStorage.getItem('mh_compare_list')) || [];
-        
-        // Update all Header Counter badges
         $('.mh-compare-count').text(compareList.length);
-
-        // Update all Compare Buttons (Grid & Single Product)
         $('.mh-compare-btn').each(function() {
             let pid = $(this).data('product-id');
             if (compareList.includes(pid)) {
                 $(this).addClass('added');
-                $(this).find('.mh-compare-text').text('Added to Compare'); // For single product text
+                $(this).find('.mh-compare-text').text('Added to Compare');
             } else {
                 $(this).removeClass('added');
                 $(this).find('.mh-compare-text').text('Add to Compare');
             }
         });
     }
-
-    // Initialize on page load
     mhSyncCompareUI();
 
-    // 2. Handle Click Events
+    // 2. Click to Add/Remove from Compare Button
     $(document).on('click', '.mh-compare-btn', function(e) {
         e.preventDefault();
-        
         let productId = $(this).data('product-id');
         if (!productId) return;
 
         let compareList = JSON.parse(localStorage.getItem('mh_compare_list')) || [];
 
-        // If already in list, remove it
         if (compareList.includes(productId)) {
             compareList = compareList.filter(id => id !== productId);
-        } 
-        // If not in list, add it (Limit to 4 products to prevent UI breaking)
-        else {
+        } else {
             if (compareList.length >= 4) {
                 alert('You can only compare up to 4 products at a time!');
                 return;
             }
             compareList.push(productId);
         }
-
-        // Save back to browser storage and instantly update the UI
         localStorage.setItem('mh_compare_list', JSON.stringify(compareList));
         mhSyncCompareUI();
     });
+
+    // 3. 🚀 Fetch and Render the Compare Table via AJAX
+    function mhRenderCompareTable() {
+        let tableWrapper = $('.mh-compare-table-wrapper');
+        if (tableWrapper.length === 0) return; // Only run if the table widget is on the page!
+
+        let compareList = JSON.parse(localStorage.getItem('mh_compare_list')) || [];
+        
+        if (compareList.length === 0) {
+            tableWrapper.html('<div class="mh-compare-empty"><h3>No products to compare</h3><p>Return to the shop to add products.</p></div>');
+            return;
+        }
+
+        // Send AJAX request to our elementor-loader.php hook
+        $.ajax({
+            url: mh_plug_ajax.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'mh_get_compare_table',
+                product_ids: compareList
+            },
+            success: function(response) {
+                if (response.success) {
+                    tableWrapper.html(response.data.html);
+                } else {
+                    tableWrapper.html(response.data.html);
+                }
+            }
+        });
+    }
+    mhRenderCompareTable(); // Trigger the table render on page load
+
+    // 4. Click the 'X' remove button INSIDE the table
+    $(document).on('click', '.mh-remove-compare', function(e) {
+        e.preventDefault();
+        let productId = $(this).data('product-id');
+        let compareList = JSON.parse(localStorage.getItem('mh_compare_list')) || [];
+        
+        compareList = compareList.filter(id => id !== productId);
+        localStorage.setItem('mh_compare_list', JSON.stringify(compareList));
+        
+        mhSyncCompareUI(); // Update badges
+        mhRenderCompareTable(); // Refresh the table layout
+    });
+
 });
