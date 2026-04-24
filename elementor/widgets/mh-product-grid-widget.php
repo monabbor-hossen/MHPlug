@@ -1,14 +1,14 @@
 <?php
 /**
  * MH Product Grid Widget
- * Cleaned up architecture utilizing the Quick View Trait Module.
+ * Cleaned up architecture utilizing the Quick View Trait Module + Added Cart Button.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// 🚀 Require the new modular Quick View Trait
+// Require the modular Quick View Trait
 require_once __DIR__ . '/../modules/quick-view/mh-quick-view-trait.php';
 
 use Elementor\Widget_Base;
@@ -19,7 +19,7 @@ use Elementor\Group_Control_Border;
 
 class MH_Product_Grid_Widget extends Widget_Base {
 
-    // 🚀 Import the powerful Quick View features!
+    // Import the Quick View features!
     use MH_Quick_View_Trait;
 
     public function get_name() { return 'mh_product_grid'; }
@@ -62,6 +62,9 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $this->add_control( 'show_category', [ 'label' => __( 'Show Category', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
         $this->add_control( 'show_rating', [ 'label' => __( 'Show Star Rating', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
         $this->add_control( 'show_badge', [ 'label' => __( 'Show Sale Badge', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
+        
+        // Action Buttons Toggles
+        $this->add_control( 'show_cart', [ 'label' => __( 'Show Add to Cart Button', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes', 'separator' => 'before' ] );
         $this->add_control( 'show_compare', [ 'label' => __( 'Show Compare Button', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
         $this->end_controls_section();
 
@@ -121,7 +124,7 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $this->end_controls_section();
 
         // ----------------------------------------------------
-        // STYLE: GENERAL ACTION BUTTONS (Wishlist, Compare)
+        // STYLE: GENERAL ACTION BUTTONS (Cart, Wishlist, Compare)
         // ----------------------------------------------------
         $this->start_controls_section( 'section_style_buttons', [ 'label' => __( 'General Action Buttons', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
         $this->add_responsive_control( 'btn_width', [ 'label' => __( 'Button Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger)' => 'width: {{SIZE}}px !important; min-width: {{SIZE}}px !important;' ] ] );
@@ -139,8 +142,8 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $this->end_controls_tab();
 
         $this->start_controls_tab( 'tab_btn_hover', [ 'label' => __( 'Hover & Active', 'mh-plug' ) ] );
-        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' => 'color: {{VALUE}} !important;' ] ] );
-        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' => 'background-color: {{VALUE}} !important;' ] ] );
+        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added, {{WRAPPER}} .mh-product-grid .mh-action-btn.ajax_add_to_cart.loading' => 'color: {{VALUE}} !important;' ] ] );
+        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added, {{WRAPPER}} .mh-product-grid .mh-action-btn.ajax_add_to_cart.loading' => 'background-color: {{VALUE}} !important;' ] ] );
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' ] );
         $this->end_controls_tab();
@@ -227,6 +230,22 @@ class MH_Product_Grid_Widget extends Widget_Base {
                             <?php if ( $is_product ) : ?>
                                 
                                 <?php $this->render_quick_view_button( $post_id, $settings ); ?>
+
+                                <?php if ( $settings['show_cart'] === 'yes' ) : ?>
+                                    <?php 
+                                    echo sprintf( '<a href="%s" data-quantity="1" class="%s" %s title="%s" style="display:flex; align-items:center; justify-content:center;"><i class="fas fa-shopping-cart"></i></a>',
+                                        esc_url( $product->add_to_cart_url() ),
+                                        esc_attr( 'mh-action-btn product_type_' . $product->get_type() . ( $product->is_purchasable() && $product->is_in_stock() ? ' add_to_cart_button ajax_add_to_cart' : '' ) ),
+                                        wc_implode_html_attributes( [
+                                            'data-product_id'  => $product->get_id(),
+                                            'data-product_sku' => $product->get_sku(),
+                                            'aria-label'       => $product->add_to_cart_description(),
+                                            'rel'              => 'nofollow',
+                                        ] ),
+                                        esc_attr__( 'Add to Cart', 'mh-plug' )
+                                    );
+                                    ?>
+                                <?php endif; ?>
 
                                 <?php if ( $settings['show_compare'] === 'yes' ) : ?>
                                 <a href="#" class="mh-action-btn mh-compare-btn" 

@@ -191,7 +191,7 @@ class MH_Admin_Menu {
                 'mh_product_category',
                 'mh_product_tags',
                 'mh_product_brands',
-                'mh_breadcrumb',
+                //'mh_breadcrumb',
                 'mh_product_rating',
                 'mh_product_gallery',
                 'mh_product_share',
