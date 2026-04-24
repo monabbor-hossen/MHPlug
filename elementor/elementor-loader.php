@@ -27,6 +27,52 @@ final class MH_Elementor_Loader {
         // AJAX Hooks for QUICK VIEW
         add_action('wp_ajax_mh_quick_view', [$this, 'quick_view_ajax']);
         add_action('wp_ajax_nopriv_mh_quick_view', [$this, 'quick_view_ajax']);
+
+        // 🚀 NEW: Render the Preloader globally on the frontend!
+        add_action('wp_head', [$this, 'render_preloader_css']);
+        add_action('wp_footer', [$this, 'render_preloader_html_js']);
+    }
+
+    // 🚀 NEW: Function to render Preloader CSS globally
+    public function render_preloader_css() {
+        if (is_admin()) return;
+        // Smart bypass: Do not show preloader inside Elementor editor!
+        if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return; 
+
+        $settings = get_option('mh_plug_preloader_settings', []);
+        if (empty($settings['enable']) || $settings['enable'] !== 'yes') return;
+
+        $bg_color   = !empty($settings['bg_color']) ? $settings['bg_color'] : '#ffffff';
+        $img_width  = !empty($settings['img_width']) ? $settings['img_width'] : '150';
+        $transition = !empty($settings['transition']) ? intval($settings['transition']) : 500;
+
+        echo '<style>
+            #mh-global-preloader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: ' . esc_attr($bg_color) . '; z-index: 99999999; display: flex; align-items: center; justify-content: center; transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; }
+            #mh-global-preloader.mh-preloader-hidden { opacity: 0; visibility: hidden; }
+            #mh-global-preloader img { width: ' . esc_attr($img_width) . 'px; height: auto; }
+        </style>';
+    }
+
+    // 🚀 NEW: Function to render Preloader HTML and JavaScript
+    public function render_preloader_html_js() {
+        if (is_admin()) return;
+        if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return;
+
+        $settings = get_option('mh_plug_preloader_settings', []);
+        if (empty($settings['enable']) || $settings['enable'] !== 'yes') return;
+
+        $image = !empty($settings['image']) ? $settings['image'] : MH_PLUG_URL . 'admin/assets/images/MH-icon.png';
+        $delay = !empty($settings['delay']) ? intval($settings['delay']) : 500;
+
+        echo '<div id="mh-global-preloader"><img src="' . esc_url($image) . '" alt="Loading..." /></div>';
+        echo '<script>
+            window.addEventListener("load", function() {
+                setTimeout(function() {
+                    var preloader = document.getElementById("mh-global-preloader");
+                    if (preloader) { preloader.classList.add("mh-preloader-hidden"); }
+                }, ' . esc_js($delay) . ');
+            });
+        </script>';
     }
 
     // 🚀 The AJAX Function that builds the Quick View Popup
@@ -101,7 +147,6 @@ final class MH_Elementor_Loader {
                 <tr>
                     <th>Product Details</th>
                     <?php foreach($products as $prod_obj): 
-                        // 🚀 THE FIX: Force WooCommerce to recognize the specific product context before drawing the button!
                         global $product, $post;
                         $product = $prod_obj;
                         $post = get_post($prod_obj->get_id());
@@ -115,10 +160,7 @@ final class MH_Elementor_Loader {
                             <h3 class="mh-compare-title"><a href="<?php echo $product->get_permalink(); ?>"><?php echo $product->get_title(); ?></a></h3>
                             <div class="mh-compare-price"><?php echo $product->get_price_html(); ?></div>
                             <div class="mh-compare-add-to-cart">
-                                <?php 
-                                // 🚀 Bulletproof native WooCommerce Add to Cart Generation
-                                woocommerce_template_loop_add_to_cart(); 
-                                ?>
+                                <?php woocommerce_template_loop_add_to_cart(); ?>
                             </div>
                         </td>
                     <?php endforeach; wp_reset_postdata(); ?>

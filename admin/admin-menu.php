@@ -59,10 +59,10 @@ class MH_Admin_Menu {
         'mh_product_grid'               => 'Product Grid',
         'mh_taxonomy_card'              => 'Taxonomy Card',
         
-        // 🚀 NEW: Compare Widgets added to Settings Dashboard
+        // Compare Widgets added to Settings Dashboard
         'mh_header_compare'             => 'Header Compare Icon',
         'mh_product_compare_btn'        => 'Product Compare Button',
-        'mh_compare_table'              => 'Compare Table', // 🚀 Add this line!
+        'mh_compare_table'              => 'Compare Table', 
     ];
 
     public function __construct() {
@@ -91,6 +91,16 @@ class MH_Admin_Menu {
             'mh-plug-theme-builder',
             [$this, 'render_theme_builder_page']
         );
+
+        // 🚀 NEW: Preloader Submenu Page
+        add_submenu_page(
+            'mh-plug-settings',
+            esc_html__('Preloader', 'mh-plug'),
+            esc_html__('Preloader', 'mh-plug'),
+            'manage_options',
+            'mh-plug-preloader',
+            [$this, 'render_preloader_page']
+        );
     }
 
     public function add_menu_inline_styles() {
@@ -116,7 +126,8 @@ class MH_Admin_Menu {
     }
 
     public function enqueue_page_assets($hook) {
-        if ( in_array( $hook, [ 'toplevel_page_mh-plug-settings', 'mh-plug_page_mh-plug-theme-builder' ], true ) ) {
+        // 🚀 FIX: Added 'mh-plug_page_mh-plug-preloader' to load admin styles on the preloader page
+        if ( in_array( $hook, [ 'toplevel_page_mh-plug-settings', 'mh-plug_page_mh-plug-theme-builder', 'mh-plug_page_mh-plug-preloader' ], true ) ) {
             $css_path = MH_PLUG_PATH . 'admin/assets/css/admin-styles.css';
             if (file_exists($css_path)) {
                 $css_version = filemtime($css_path);
@@ -130,6 +141,11 @@ class MH_Admin_Menu {
 
                 wp_localize_script( 'mh-plug-admin-scripts', 'mhTbDeleteNonce', wp_create_nonce( 'mh_tb_delete_template' ) );
                 wp_localize_script( 'mh-plug-admin-scripts', 'mhTbAjaxUrl', admin_url( 'admin-ajax.php' ) );
+             }
+
+             // 🚀 ENQUEUE WP MEDIA UPLOADER ONLY FOR THE PRELOADER PAGE
+             if ( $hook === 'mh-plug_page_mh-plug-preloader' ) {
+                 wp_enqueue_media();
              }
         }
         elseif ( 'nav-menus.php' === $hook ) { 
@@ -162,6 +178,9 @@ class MH_Admin_Menu {
 
     public function render_theme_builder_page() { require_once MH_PLUG_PATH . 'admin/theme-builder-page.php'; }
 
+    // 🚀 Renders the Preloader Dashboard Page
+    public function render_preloader_page() { require_once MH_PLUG_PATH . 'admin/preloader-page.php'; }
+
     public function register_settings() {
         register_setting(
             'mh_plug_settings_group',
@@ -169,6 +188,9 @@ class MH_Admin_Menu {
             [$this, 'sanitize_widgets_settings']
         );
         
+        // 🚀 NEW: Register the Preloader settings group
+        register_setting( 'mh_plug_preloader_group', 'mh_plug_preloader_settings' );
+
         add_settings_section('mh_plug_widgets_section', null, null, 'mh-plug-settings-page');
         add_settings_section('mh_plug_global_settings_section', null, null, 'mh-plug-settings-page');
         add_settings_section('mh_plug_woocommerce_section', null, null, 'mh-plug-settings-page');
@@ -202,7 +224,6 @@ class MH_Admin_Menu {
                 'mh_header_cart', 
                 'mh_product_grid',
                 'mh_taxonomy_card',
-                // 🚀 NEW: Route Compare widgets to WooCommerce section
                 'mh_header_compare',
                 'mh_product_compare_btn',
                 'mh_compare_table',
