@@ -58,9 +58,17 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
                         </tr>
 
                         <tr class="mh-css-settings" style="display: <?php echo ($type === 'css') ? 'table-row' : 'none'; ?>;">
+                            <th scope="row"><?php esc_html_e('Animation Preview', 'mh-plug'); ?></th>
+                            <td>
+                                <div id="mh-css-preloader-preview-box" style="width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; background: <?php echo esc_attr($bg_color); ?>; border: 2px dashed #ccc; border-radius: 8px; margin-bottom: 15px;">
+                                    </div>
+                            </td>
+                        </tr>
+
+                        <tr class="mh-css-settings" style="display: <?php echo ($type === 'css') ? 'table-row' : 'none'; ?>;">
                             <th scope="row"><?php esc_html_e('Select Animation', 'mh-plug'); ?></th>
                             <td>
-                                <select name="mh_plug_preloader_settings[css_effect]">
+                                <select name="mh_plug_preloader_settings[css_effect]" id="mh_css_effect_select">
                                     <option value="1" <?php selected($css_effect, '1'); ?>><?php esc_html_e('1. Classic Spinner', 'mh-plug'); ?></option>
                                     <option value="2" <?php selected($css_effect, '2'); ?>><?php esc_html_e('2. Bouncing Dots', 'mh-plug'); ?></option>
                                     <option value="3" <?php selected($css_effect, '3'); ?>><?php esc_html_e('3. Pulse Circle', 'mh-plug'); ?></option>
@@ -74,7 +82,7 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
                         <tr class="mh-css-settings" style="display: <?php echo ($type === 'css') ? 'table-row' : 'none'; ?>;">
                             <th scope="row"><?php esc_html_e('Animation Color', 'mh-plug'); ?></th>
                             <td>
-                                <input type="color" name="mh_plug_preloader_settings[loader_color]" value="<?php echo esc_attr($loader_color); ?>" style="height: 40px; width: 80px; padding: 0; cursor: pointer; border-radius: 4px;" />
+                                <input type="color" id="mh_loader_color_picker" name="mh_plug_preloader_settings[loader_color]" value="<?php echo esc_attr($loader_color); ?>" style="height: 40px; width: 80px; padding: 0; cursor: pointer; border-radius: 4px;" />
                             </td>
                         </tr>
 
@@ -82,7 +90,7 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
                             <th scope="row"><?php esc_html_e('Loading Image (GIF/SVG/PNG)', 'mh-plug'); ?></th>
                             <td>
                                 <div class="mh-image-preview-wrapper" style="margin-bottom: 15px;">
-                                    <img id="mh-preloader-preview" src="<?php echo esc_url($image); ?>" style="max-width: 150px; display: <?php echo empty($image) ? 'none' : 'block'; ?>; border: 2px dashed #ccc; padding: 10px; background: #f9f9f9; border-radius: 8px;" />
+                                    <img id="mh-preloader-preview" src="<?php echo esc_url($image); ?>" style="max-width: 150px; display: <?php echo empty($image) ? 'none' : 'block'; ?>; border: 2px dashed #ccc; padding: 10px; background: <?php echo esc_attr($bg_color); ?>; border-radius: 8px;" />
                                 </div>
                                 <input type="hidden" id="mh-preloader-image-url" name="mh_plug_preloader_settings[image]" value="<?php echo esc_attr($image); ?>" />
                                 <button type="button" class="button button-primary" id="mh-upload-preloader-btn">
@@ -104,7 +112,7 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
                         <tr>
                             <th scope="row"><?php esc_html_e('Background Color', 'mh-plug'); ?></th>
                             <td>
-                                <input type="color" name="mh_plug_preloader_settings[bg_color]" value="<?php echo esc_attr($bg_color); ?>" style="height: 40px; width: 80px; padding: 0; cursor: pointer; border-radius: 4px;" />
+                                <input type="color" id="mh_bg_color_picker" name="mh_plug_preloader_settings[bg_color]" value="<?php echo esc_attr($bg_color); ?>" style="height: 40px; width: 80px; padding: 0; cursor: pointer; border-radius: 4px;" />
                             </td>
                         </tr>
 
@@ -132,8 +140,48 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
     </form>
 </div>
 
+<style>
+    /* CSS Variables for dynamic live color updating */
+    #mh-css-preloader-preview-box { --mh-loader-color: <?php echo esc_attr($loader_color); ?>; }
+    
+    /* 1. Classic Spinner */
+    .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(0,0,0,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; }
+    @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* 2. Bouncing Dots */
+    .mh-loader-2 { display: flex; gap: 8px; }
+    .mh-loader-2 div { width: 16px; height: 16px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; }
+    .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; }
+    .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes mh-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+    /* 3. Pulse Circle */
+    .mh-loader-3 { width: 50px; height: 50px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); }
+    @keyframes mh-pulse { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+
+    /* 4. Flipping Square */
+    .mh-loader-4 { width: 40px; height: 40px; background-color: var(--mh-loader-color); animation: mh-flip 1.2s infinite ease-in-out; }
+    @keyframes mh-flip { 0% { transform: perspective(120px) rotateX(0deg) rotateY(0deg); } 50% { transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg); } 100% { transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
+
+    /* 5. Double Bounce */
+    .mh-loader-5 { width: 50px; height: 50px; position: relative; }
+    .mh-loader-5 div { width: 100%; height: 100%; border-radius: 50%; background-color: var(--mh-loader-color); opacity: 0.6; position: absolute; top: 0; left: 0; animation: mh-bounce2 2s infinite ease-in-out; }
+    .mh-loader-5 div:nth-child(2) { animation-delay: -1.0s; }
+    @keyframes mh-bounce2 { 0%, 100% { transform: scale(0); } 50% { transform: scale(1); } }
+
+    /* 6. Bar Wave */
+    .mh-loader-6 { display: flex; gap: 5px; height: 40px; align-items: center; }
+    .mh-loader-6 div { width: 6px; height: 100%; background-color: var(--mh-loader-color); animation: mh-wave 1.2s infinite ease-in-out; }
+    .mh-loader-6 div:nth-child(2) { animation-delay: -1.1s; }
+    .mh-loader-6 div:nth-child(3) { animation-delay: -1.0s; }
+    .mh-loader-6 div:nth-child(4) { animation-delay: -0.9s; }
+    .mh-loader-6 div:nth-child(5) { animation-delay: -0.8s; }
+    @keyframes mh-wave { 0%, 40%, 100% { transform: scaleY(0.4); } 20% { transform: scaleY(1); } }
+</style>
+
 <script>
 jQuery(document).ready(function($){
+    
     // Toggle Image vs CSS fields
     $('.mh-loader-type').change(function() {
         if ($(this).val() === 'css') {
@@ -145,14 +193,41 @@ jQuery(document).ready(function($){
         }
     });
 
-    // Media Uploader
+    // 🚀 Function to update the Live CSS Animation Preview
+    function updateCssPreview() {
+        var effect = $('#mh_css_effect_select').val();
+        var loaderColor = $('#mh_loader_color_picker').val();
+        var bgColor = $('#mh_bg_color_picker').val();
+        
+        var html = '';
+        if (effect === '1') html = '<div class="mh-loader-1"></div>';
+        if (effect === '2') html = '<div class="mh-loader-2"><div></div><div></div><div></div></div>';
+        if (effect === '3') html = '<div class="mh-loader-3"></div>';
+        if (effect === '4') html = '<div class="mh-loader-4"></div>';
+        if (effect === '5') html = '<div class="mh-loader-5"><div></div><div></div></div>';
+        if (effect === '6') html = '<div class="mh-loader-6"><div></div><div></div><div></div><div></div><div></div></div>';
+
+        // Update the box content and dynamically set the CSS color variables
+        $('#mh-css-preloader-preview-box').html(html).css({
+            '--mh-loader-color': loaderColor,
+            'background-color': bgColor
+        });
+        
+        // Also update the image preview background color so it matches
+        $('#mh-preloader-preview').css('background-color', bgColor);
+    }
+
+    // Trigger update when dropdown or colors are changed
+    $('#mh_css_effect_select, #mh_loader_color_picker, #mh_bg_color_picker').on('change input', updateCssPreview);
+    
+    // Run once on load to show initial state
+    updateCssPreview();
+
+    // WP Media Uploader for Images
     var mediaUploader;
     $('#mh-upload-preloader-btn').click(function(e) {
         e.preventDefault();
-        if (mediaUploader) {
-            mediaUploader.open();
-            return;
-        }
+        if (mediaUploader) { mediaUploader.open(); return; }
         mediaUploader = wp.media.frames.file_frame = wp.media({
             title: 'Choose Preloader Image',
             button: { text: 'Choose Image' },
