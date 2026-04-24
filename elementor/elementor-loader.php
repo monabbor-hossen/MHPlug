@@ -20,40 +20,71 @@ final class MH_Elementor_Loader {
         add_action('wp_enqueue_scripts', [$this, 'mh_plug_enqueue_woo_scripts']);
         add_action('elementor/frontend/after_register_scripts', [$this, 'mh_plug_enqueue_woo_scripts']);
 
-        // AJAX Hooks for Compare Table
         add_action('wp_ajax_mh_get_compare_table', [$this, 'get_compare_table_ajax']);
         add_action('wp_ajax_nopriv_mh_get_compare_table', [$this, 'get_compare_table_ajax']);
-
-        // AJAX Hooks for QUICK VIEW
         add_action('wp_ajax_mh_quick_view', [$this, 'quick_view_ajax']);
         add_action('wp_ajax_nopriv_mh_quick_view', [$this, 'quick_view_ajax']);
 
-        // 🚀 NEW: Render the Preloader globally on the frontend!
+        // 🚀 Render Preloader globally
         add_action('wp_head', [$this, 'render_preloader_css']);
         add_action('wp_footer', [$this, 'render_preloader_html_js']);
     }
 
-    // 🚀 NEW: Function to render Preloader CSS globally
+    // 🚀 FIXED: Dynamic Color Variables Injection
     public function render_preloader_css() {
         if (is_admin()) return;
-        // Smart bypass: Do not show preloader inside Elementor editor!
         if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return; 
 
         $settings = get_option('mh_plug_preloader_settings', []);
         if (empty($settings['enable']) || $settings['enable'] !== 'yes') return;
 
-        $bg_color   = !empty($settings['bg_color']) ? $settings['bg_color'] : '#ffffff';
-        $img_width  = !empty($settings['img_width']) ? $settings['img_width'] : '150';
-        $transition = !empty($settings['transition']) ? intval($settings['transition']) : 500;
+        $bg_color     = !empty($settings['bg_color']) ? $settings['bg_color'] : '#ffffff';
+        $img_width    = !empty($settings['img_width']) ? $settings['img_width'] : '150';
+        $transition   = !empty($settings['transition']) ? intval($settings['transition']) : 500;
+        $loader_color = !empty($settings['loader_color']) ? $settings['loader_color'] : '#d63638';
 
         echo '<style>
-            #mh-global-preloader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: ' . esc_attr($bg_color) . '; z-index: 99999999; display: flex; align-items: center; justify-content: center; transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; }
+            #mh-global-preloader { 
+                --mh-loader-color: ' . esc_attr($loader_color) . '; 
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+                background-color: ' . esc_attr($bg_color) . '; z-index: 99999999; 
+                display: flex; align-items: center; justify-content: center; 
+                transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; 
+            }
             #mh-global-preloader.mh-preloader-hidden { opacity: 0; visibility: hidden; }
             #mh-global-preloader img { width: ' . esc_attr($img_width) . 'px; height: auto; }
+            
+            .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(0,0,0,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; }
+            @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+            .mh-loader-2 { display: flex; gap: 8px; }
+            .mh-loader-2 div { width: 16px; height: 16px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; }
+            .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; }
+            .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; }
+            @keyframes mh-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+            .mh-loader-3 { width: 50px; height: 50px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); }
+            @keyframes mh-pulse { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+
+            .mh-loader-4 { width: 40px; height: 40px; background-color: var(--mh-loader-color); animation: mh-flip 1.2s infinite ease-in-out; }
+            @keyframes mh-flip { 0% { transform: perspective(120px) rotateX(0deg) rotateY(0deg); } 50% { transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg); } 100% { transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
+
+            .mh-loader-5 { width: 50px; height: 50px; position: relative; }
+            .mh-loader-5 div { width: 100%; height: 100%; border-radius: 50%; background-color: var(--mh-loader-color); opacity: 0.6; position: absolute; top: 0; left: 0; animation: mh-bounce2 2s infinite ease-in-out; }
+            .mh-loader-5 div:nth-child(2) { animation-delay: -1.0s; }
+            @keyframes mh-bounce2 { 0%, 100% { transform: scale(0); } 50% { transform: scale(1); } }
+
+            .mh-loader-6 { display: flex; gap: 5px; height: 40px; align-items: center; }
+            .mh-loader-6 div { width: 6px; height: 100%; background-color: var(--mh-loader-color); animation: mh-wave 1.2s infinite ease-in-out; }
+            .mh-loader-6 div:nth-child(2) { animation-delay: -1.1s; }
+            .mh-loader-6 div:nth-child(3) { animation-delay: -1.0s; }
+            .mh-loader-6 div:nth-child(4) { animation-delay: -0.9s; }
+            .mh-loader-6 div:nth-child(5) { animation-delay: -0.8s; }
+            @keyframes mh-wave { 0%, 40%, 100% { transform: scaleY(0.4); } 20% { transform: scaleY(1); } }
         </style>';
     }
 
-    // 🚀 NEW: Function to render Preloader HTML and JavaScript
+    // 🚀 FIXED: Switch logic to ensure the correct loader always prints
     public function render_preloader_html_js() {
         if (is_admin()) return;
         if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return;
@@ -61,10 +92,30 @@ final class MH_Elementor_Loader {
         $settings = get_option('mh_plug_preloader_settings', []);
         if (empty($settings['enable']) || $settings['enable'] !== 'yes') return;
 
-        $image = !empty($settings['image']) ? $settings['image'] : MH_PLUG_URL . 'admin/assets/images/MH-icon.png';
-        $delay = !empty($settings['delay']) ? intval($settings['delay']) : 500;
+        $type       = isset($settings['type']) ? $settings['type'] : 'css';
+        $css_effect = isset($settings['css_effect']) ? (string)$settings['css_effect'] : '1';
+        $image      = !empty($settings['image']) ? $settings['image'] : MH_PLUG_URL . 'admin/assets/images/MH-icon.png';
+        $delay      = !empty($settings['delay']) ? intval($settings['delay']) : 500;
 
-        echo '<div id="mh-global-preloader"><img src="' . esc_url($image) . '" alt="Loading..." /></div>';
+        echo '<div id="mh-global-preloader">';
+        
+        if ($type === 'image') {
+            echo '<img src="' . esc_url($image) . '" alt="Loading..." />';
+        } else {
+            // Bulletproof rendering
+            switch ($css_effect) {
+                case '1': echo '<div class="mh-loader-1"></div>'; break;
+                case '2': echo '<div class="mh-loader-2"><div></div><div></div><div></div></div>'; break;
+                case '3': echo '<div class="mh-loader-3"></div>'; break;
+                case '4': echo '<div class="mh-loader-4"></div>'; break;
+                case '5': echo '<div class="mh-loader-5"><div></div><div></div></div>'; break;
+                case '6': echo '<div class="mh-loader-6"><div></div><div></div><div></div><div></div><div></div></div>'; break;
+                default:  echo '<div class="mh-loader-1"></div>'; break;
+            }
+        }
+
+        echo '</div>';
+
         echo '<script>
             window.addEventListener("load", function() {
                 setTimeout(function() {
@@ -75,58 +126,38 @@ final class MH_Elementor_Loader {
         </script>';
     }
 
-    // 🚀 The AJAX Function that builds the Quick View Popup
     public function quick_view_ajax() {
-        if (!isset($_POST['product_id'])) {
-            wp_send_json_error(['message' => 'No product ID provided.']);
-        }
-
+        if (!isset($_POST['product_id'])) { wp_send_json_error(['message' => 'No product ID provided.']); }
         $product_id = intval($_POST['product_id']);
         $template_id = !empty($_POST['template_id']) ? intval($_POST['template_id']) : 0;
-
-        // Force WordPress to recognize this exact product context
         global $post, $product;
         $post = get_post($product_id);
         $product = wc_get_product($product_id);
         setup_postdata($post);
-
         ob_start();
-
         if ($template_id && class_exists('\Elementor\Plugin')) {
-            // Force Elementor to print the CSS for the custom template
             if ( class_exists( '\Elementor\Core\Files\CSS\Post' ) ) {
                 $css_file = new \Elementor\Core\Files\CSS\Post( $template_id );
                 $css_file->enqueue();
             }
-            // Print the template layout
             echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display($template_id, true);
         } else {
-            // Fallback Design if no template is selected
             echo '<div style="padding:30px; text-align:center; font-family:sans-serif;">';
             echo $product->get_image('woocommerce_single', ['style' => 'max-width:300px; border-radius:10px; margin-bottom:20px;']);
             echo '<h2 style="margin:0 0 10px; color:#111;">' . $product->get_title() . '</h2>';
             echo '<div style="font-size:20px; color:#d63638; font-weight:bold; margin-bottom:20px;">' . $product->get_price_html() . '</div>';
-            echo '<div>';
-            woocommerce_template_single_add_to_cart();
-            echo '</div></div>';
+            echo '<div>'; woocommerce_template_single_add_to_cart(); echo '</div></div>';
         }
-
         $html = ob_get_clean();
         wp_reset_postdata();
-
         wp_send_json_success(['html' => $html]);
     }
 
-    // 🚀 The AJAX Function that builds the Compare Table
     public function get_compare_table_ajax() {
-        if (!isset($_POST['product_ids']) || !is_array($_POST['product_ids'])) {
-            wp_send_json_error(['html' => '<div class="mh-compare-empty"><h3>No products to compare</h3><p>Return to the shop to add products.</p></div>']);
-        }
-
+        if (!isset($_POST['product_ids']) || !is_array($_POST['product_ids'])) { wp_send_json_error(['html' => '<div class="mh-compare-empty"><h3>No products to compare</h3><p>Return to the shop to add products.</p></div>']); }
         $product_ids = array_map('intval', $_POST['product_ids']);
         $products = [];
         $all_attributes = [];
-
         foreach ($product_ids as $id) {
             $prod = wc_get_product($id);
             if ($prod) {
@@ -137,9 +168,7 @@ final class MH_Elementor_Loader {
                 }
             }
         }
-
         if (empty($products)) wp_send_json_error(['html' => '<p>Products not found.</p>']);
-
         ob_start();
         ?>
         <table class="mh-compare-table">
@@ -159,40 +188,27 @@ final class MH_Elementor_Loader {
                             </div>
                             <h3 class="mh-compare-title"><a href="<?php echo $product->get_permalink(); ?>"><?php echo $product->get_title(); ?></a></h3>
                             <div class="mh-compare-price"><?php echo $product->get_price_html(); ?></div>
-                            <div class="mh-compare-add-to-cart">
-                                <?php woocommerce_template_loop_add_to_cart(); ?>
-                            </div>
+                            <div class="mh-compare-add-to-cart"><?php woocommerce_template_loop_add_to_cart(); ?></div>
                         </td>
                     <?php endforeach; wp_reset_postdata(); ?>
                 </tr>
                 <tr>
                     <th>Description</th>
-                    <?php foreach($products as $product): ?>
-                        <td><?php echo wp_trim_words($product->get_short_description(), 15, '...'); ?></td>
-                    <?php endforeach; ?>
+                    <?php foreach($products as $product): ?><td><?php echo wp_trim_words($product->get_short_description(), 15, '...'); ?></td><?php endforeach; ?>
                 </tr>
                 <tr>
                     <th>Rating</th>
-                    <?php foreach($products as $product): ?>
-                        <td><?php echo wc_get_rating_html($product->get_average_rating()); ?></td>
-                    <?php endforeach; ?>
+                    <?php foreach($products as $product): ?><td><?php echo wc_get_rating_html($product->get_average_rating()); ?></td><?php endforeach; ?>
                 </tr>
                 <tr>
                     <th>Availability</th>
-                    <?php foreach($products as $product): ?>
-                        <td><?php echo wc_get_stock_html($product); ?></td>
-                    <?php endforeach; ?>
+                    <?php foreach($products as $product): ?><td><?php echo wc_get_stock_html($product); ?></td><?php endforeach; ?>
                 </tr>
                 <?php foreach($all_attributes as $attr_key => $attr_label): ?>
                     <tr>
                         <th><?php echo esc_html($attr_label); ?></th>
                         <?php foreach($products as $product): ?>
-                            <td>
-                                <?php 
-                                $attr_val = $product->get_attribute($attr_key);
-                                echo !empty($attr_val) ? wp_kses_post($attr_val) : '-';
-                                ?>
-                            </td>
+                            <td><?php $attr_val = $product->get_attribute($attr_key); echo !empty($attr_val) ? wp_kses_post($attr_val) : '-'; ?></td>
                         <?php endforeach; ?>
                     </tr>
                 <?php endforeach; ?>
@@ -202,14 +218,8 @@ final class MH_Elementor_Loader {
         wp_send_json_success(['html' => ob_get_clean()]);
     }
 
-    public function register_widget_category($elements_manager) {
-        $elements_manager->add_category('mh-plug-widgets', ['title' => esc_html__('MH Plug', 'mh-plug'), 'icon' => 'eicon-plug']);
-    }
-
-    public function print_inline_editor_styles() {
-        echo '<style id="mh-plug-editor-badge-styles"> .elementor-element-wrapper [class^="mhi-"] { position: relative !important; } .elementor-element-wrapper [class^="mhi-"]::after { content: "MH"; position: absolute; top: -10px; right: -45px; z-index: 10; background-color: #2293e9ff; color: #ffffff; padding: 2px 6px; font-size: 10px; line-height: 1; font-weight: 600; border-radius: 4px; text-transform: uppercase; box-shadow: 0 1px 2px rgba(0,0,0,0.2); } </style>';
-    }
-
+    public function register_widget_category($elements_manager) { $elements_manager->add_category('mh-plug-widgets', ['title' => esc_html__('MH Plug', 'mh-plug'), 'icon' => 'eicon-plug']); }
+    public function print_inline_editor_styles() { echo '<style id="mh-plug-editor-badge-styles"> .elementor-element-wrapper [class^="mhi-"] { position: relative !important; } .elementor-element-wrapper [class^="mhi-"]::after { content: "MH"; position: absolute; top: -10px; right: -45px; z-index: 10; background-color: #2293e9ff; color: #ffffff; padding: 2px 6px; font-size: 10px; line-height: 1; font-weight: 600; border-radius: 4px; text-transform: uppercase; box-shadow: 0 1px 2px rgba(0,0,0,0.2); } </style>'; }
     public function register_widgets($widgets_manager) {
         $widget_options = get_option('mh_plug_widgets_settings', []);
         $widget_map = [
@@ -232,7 +242,6 @@ final class MH_Elementor_Loader {
             'mh_taxonomy_card' => ['file' => 'mh-taxonomy-card-widget.php', 'class' => 'MH_Plug_Taxonomy_Card_Widget'],
             'mh_breadcrumb' => [ 'file' => 'mh-breadcrumb-widget.php', 'class' => 'MH_Breadcrumb_Widget' ],
         ];
-
         if ( class_exists( 'WooCommerce' ) ) {
             $wc_widget_map = [
                 'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php', 'class' => 'MH_Woo_Add_To_Cart_Widget' ],
@@ -257,7 +266,6 @@ final class MH_Elementor_Loader {
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
-
         foreach ($widget_map as $option_key => $widget_data) {
             $is_enabled = isset($widget_options[$option_key]) ? (bool)$widget_options[$option_key] : true;
             if ($is_enabled) {
@@ -270,14 +278,12 @@ final class MH_Elementor_Loader {
             }
         }
     }
-
     public function mh_plug_register_widget_assets() {
         wp_register_style('mh-widgets-css', MH_PLUG_URL . 'elementor/assets/css/mh-widgets.css', [], MH_PLUG_VERSION);
         wp_register_script('mh-widgets-js', MH_PLUG_URL . 'elementor/assets/js/mh-widgets.js', ['jquery'], MH_PLUG_VERSION, true);
         wp_register_style('mh-nav-menu-css', MH_PLUG_URL . 'elementor/assets/css/mh-nav-menu.css', [], MH_PLUG_VERSION);
         wp_register_script('mh-nav-menu-js', MH_PLUG_URL . 'elementor/assets/js/mh-nav-menu.js', ['jquery'], MH_PLUG_VERSION, true);
     }
-
     public function mh_plug_enqueue_woo_scripts() {
         if (!class_exists('WooCommerce')) return;
         wp_register_script('mh-woo-scripts', MH_PLUG_URL . 'elementor/assets/js/mh-woo-scripts.js', ['jquery'], MH_PLUG_VERSION, true);
@@ -285,12 +291,7 @@ final class MH_Elementor_Loader {
         wp_script_add_data('mh-widgets-js', 'group', 1);
         wp_enqueue_script('mh-woo-scripts');
         if (is_product()) wp_enqueue_script('mh-product-gallery-script');
-
-        $ajax_data = [
-            'ajax_url'       => admin_url('admin-ajax.php'),
-            'login_url'      => wc_get_page_permalink('myaccount'),
-            'wishlist_nonce' => wp_create_nonce('mh_wishlist_nonce'),
-        ];
+        $ajax_data = [ 'ajax_url' => admin_url('admin-ajax.php'), 'login_url' => wc_get_page_permalink('myaccount'), 'wishlist_nonce' => wp_create_nonce('mh_wishlist_nonce') ];
         wp_add_inline_script('mh-woo-scripts', 'var mh_plug_ajax = ' . wp_json_encode($ajax_data) . ';', 'before');
     }
 }
