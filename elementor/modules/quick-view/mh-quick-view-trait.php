@@ -14,9 +14,6 @@ use Elementor\Group_Control_Box_Shadow;
 
 trait MH_Quick_View_Trait {
 
-    /**
-     * Safely fetch Theme Builder templates for the dropdown.
-     */
     protected function get_qv_templates() {
         $templates = [ '' => __( 'Default (Built-in Layout)', 'mh-plug' ) ];
         $query = new \WP_Query( [ 
@@ -32,14 +29,8 @@ trait MH_Quick_View_Trait {
         return $templates;
     }
 
-    /**
-     * Register all Quick View customization controls.
-     */
     protected function register_quick_view_controls() {
-        
-        // ----------------------------------------------------
-        // CONTENT: QUICK VIEW SETTINGS
-        // ----------------------------------------------------
+        // --- CONTENT ---
         $this->start_controls_section( 'section_quick_view_config', [
             'label' => __( 'Quick View Button', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_CONTENT
@@ -69,9 +60,7 @@ trait MH_Quick_View_Trait {
         
         $this->end_controls_section();
 
-        // ----------------------------------------------------
-        // STYLE: QUICK VIEW ADVANCED DESIGN
-        // ----------------------------------------------------
+        // --- STYLE ---
         $this->start_controls_section( 'section_quick_view_style', [
             'label'     => __( 'Quick View Style', 'mh-plug' ),
             'tab'       => Controls_Manager::TAB_STYLE,
@@ -99,65 +88,39 @@ trait MH_Quick_View_Trait {
 
         $this->start_controls_tabs( 'tabs_qv_style' );
 
-        // --- NORMAL TAB ---
+        // Normal
         $this->start_controls_tab( 'tab_qv_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        
         $this->add_control( 'qv_color', [
             'label'     => __( 'Icon Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-quick-view-trigger' => 'color: {{VALUE}} !important; fill: {{VALUE}} !important;' ]
         ]);
-
         $this->add_group_control( Group_Control_Background::get_type(), [
             'name'     => 'qv_bg',
-            'label'    => __( 'Background', 'mh-plug' ),
-            'types'    => [ 'classic', 'gradient' ], // 🚀 Adds Gradient Options!
+            'label'    => __( 'Background (Supports Gradient)', 'mh-plug' ),
+            'types'    => [ 'classic', 'gradient' ],
             'selector' => '{{WRAPPER}} .mh-quick-view-trigger'
         ]);
-
-        $this->add_group_control( Group_Control_Border::get_type(), [
-            'name'     => 'qv_border',
-            'selector' => '{{WRAPPER}} .mh-quick-view-trigger'
-        ]);
-
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
-            'name'     => 'qv_shadow',
-            'selector' => '{{WRAPPER}} .mh-quick-view-trigger'
-        ]);
-        
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'qv_border', 'selector' => '{{WRAPPER}} .mh-quick-view-trigger' ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'qv_shadow', 'selector' => '{{WRAPPER}} .mh-quick-view-trigger' ] );
         $this->end_controls_tab();
 
-        // --- HOVER TAB ---
+        // Hover
         $this->start_controls_tab( 'tab_qv_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
-        
         $this->add_control( 'qv_hover_color', [
             'label'     => __( 'Icon Hover Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-quick-view-trigger:hover' => 'color: {{VALUE}} !important; fill: {{VALUE}} !important;' ]
         ]);
-
         $this->add_group_control( Group_Control_Background::get_type(), [
             'name'     => 'qv_hover_bg',
             'label'    => __( 'Hover Background', 'mh-plug' ),
             'types'    => [ 'classic', 'gradient' ],
             'selector' => '{{WRAPPER}} .mh-quick-view-trigger:hover'
         ]);
-
-        $this->add_group_control( Group_Control_Border::get_type(), [
-            'name'     => 'qv_hover_border',
-            'selector' => '{{WRAPPER}} .mh-quick-view-trigger:hover'
-        ]);
-
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
-            'name'     => 'qv_hover_shadow',
-            'selector' => '{{WRAPPER}} .mh-quick-view-trigger:hover'
-        ]);
-
-        $this->add_control( 'qv_hover_anim', [
-            'label' => __( 'Hover Animation', 'mh-plug' ),
-            'type'  => Controls_Manager::HOVER_ANIMATION,
-        ]);
-        
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'qv_hover_border', 'selector' => '{{WRAPPER}} .mh-quick-view-trigger:hover' ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'qv_hover_shadow', 'selector' => '{{WRAPPER}} .mh-quick-view-trigger:hover' ] );
+        $this->add_control( 'qv_hover_anim', [ 'label' => __( 'Hover Animation', 'mh-plug' ), 'type'  => Controls_Manager::HOVER_ANIMATION ] );
         $this->end_controls_tab();
         $this->end_controls_tabs();
 
@@ -168,15 +131,11 @@ trait MH_Quick_View_Trait {
             'selectors' => [ '{{WRAPPER}} .mh-quick-view-trigger' => 'transition: all {{SIZE}}s ease !important;' ],
             'separator' => 'before'
         ]);
-
         $this->end_controls_section();
     }
 
-    /**
-     * Renders the Quick View Button HTML
-     */
     protected function render_quick_view_button( $product_id, $settings ) {
-        if ( $settings['show_quick_view'] !== 'yes' ) return;
+        if ( !isset($settings['show_quick_view']) || $settings['show_quick_view'] !== 'yes' ) return;
 
         $template_id = !empty( $settings['quick_view_template'] ) ? $settings['quick_view_template'] : '';
         $animation   = !empty( $settings['qv_hover_anim'] ) ? ' elementor-animation-' . $settings['qv_hover_anim'] : '';

@@ -1,14 +1,14 @@
 <?php
 /**
  * MH Product Grid Widget
- * Cleaned up architecture utilizing the Quick View Trait Module + Added Cart Button.
+ * Fully Customizable version + Theme Builder Template Support, Archive Context & Compare Feature.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Require the modular Quick View Trait
+// 🚀 Pull in the separated Quick View Module
 require_once __DIR__ . '/../modules/quick-view/mh-quick-view-trait.php';
 
 use Elementor\Widget_Base;
@@ -19,7 +19,7 @@ use Elementor\Group_Control_Border;
 
 class MH_Product_Grid_Widget extends Widget_Base {
 
-    // Import the Quick View features!
+    // 🚀 Use the trait
     use MH_Quick_View_Trait;
 
     public function get_name() { return 'mh_product_grid'; }
@@ -30,11 +30,12 @@ class MH_Product_Grid_Widget extends Widget_Base {
     public function get_style_depends() { return [ 'mh-widgets-css' ]; }
     public function get_script_depends() { return [ 'mh-widgets-js' ]; }
 
+    // (Removed get_elementor_templates as it's now handled by the trait)
+
     protected function register_controls() {
-        
-        // ----------------------------------------------------
-        // QUERY SETTINGS
-        // ----------------------------------------------------
+        /* ==========================================
+         * CONTENT: QUERY SETTINGS
+         * ========================================== */
         $this->start_controls_section( 'section_query', [ 'label' => __( 'Query Settings', 'mh-plug' ), 'tab' => Controls_Manager::TAB_CONTENT ] );
         
         $this->add_control( 'query_type', [ 
@@ -55,25 +56,26 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $this->add_responsive_control( 'columns', [ 'label' => __( 'Columns', 'mh-plug' ), 'type' => Controls_Manager::SELECT, 'default' => '4', 'tablet_default' => '2', 'mobile_default' => '1', 'options' => [ '1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6' ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid' => 'grid-template-columns: repeat({{VALUE}}, 1fr);' ], ] );
         $this->end_controls_section();
 
-        // ----------------------------------------------------
-        // CARD ELEMENTS
-        // ----------------------------------------------------
+        /* ==========================================
+         * CONTENT: CARD ELEMENTS
+         * ========================================== */
         $this->start_controls_section( 'section_elements', [ 'label' => __( 'Card Elements', 'mh-plug' ), 'tab' => Controls_Manager::TAB_CONTENT ] );
         $this->add_control( 'show_category', [ 'label' => __( 'Show Category', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
         $this->add_control( 'show_rating', [ 'label' => __( 'Show Star Rating', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
         $this->add_control( 'show_badge', [ 'label' => __( 'Show Sale Badge', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
         
-        // Action Buttons Toggles
+        // 🚀 Add Cart Button Toggle
         $this->add_control( 'show_cart', [ 'label' => __( 'Show Add to Cart Button', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes', 'separator' => 'before' ] );
         $this->add_control( 'show_compare', [ 'label' => __( 'Show Compare Button', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
+        
         $this->end_controls_section();
 
-        // 🚀 INJECT SEPARATED QUICK VIEW CONTROLS HERE
+        // 🚀 Register the Quick View Controls from the Trait
         $this->register_quick_view_controls();
 
-        // ----------------------------------------------------
-        // STYLE: GRID & CARD CONTAINER
-        // ----------------------------------------------------
+        /* ==========================================
+         * STYLE: GRID & CARD CONTAINER
+         * ========================================== */
         $this->start_controls_section( 'section_style_card', [ 'label' => __( 'Grid & Card Container', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
         $this->add_responsive_control( 'grid_gap', [ 'label' => __( 'Grid Gap', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 20 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid' => 'gap: {{SIZE}}px;' ], ] );
         $this->add_control( 'card_bg', [ 'label' => __( 'Card Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-card' => 'background-color: {{VALUE}};' ], ] );
@@ -83,9 +85,9 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'card_shadow_hover', 'label' => __( 'Hover Box Shadow', 'mh-plug' ), 'selector' => '{{WRAPPER}} .mh-product-card:hover' ] );
         $this->end_controls_section();
 
-        // ----------------------------------------------------
-        // STYLE: IMAGE & SALE BADGE
-        // ----------------------------------------------------
+        /* ==========================================
+         * STYLE: IMAGE & SALE BADGE
+         * ========================================== */
         $this->start_controls_section( 'section_style_image', [ 'label' => __( 'Image & Sale Badge', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
         $this->add_control( 'image_bg', [ 'label' => __( 'Image Wrapper Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#f7f7f7', 'selectors' => [ '{{WRAPPER}} .mh-product-image-wrap' => 'background-color: {{VALUE}};' ], ] );
         $this->add_responsive_control( 'image_padding', [ 'label' => __( 'Image Padding', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'selectors' => [ '{{WRAPPER}} .mh-product-image-wrap' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], ] );
@@ -97,9 +99,9 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $this->add_responsive_control( 'badge_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'selectors' => [ '{{WRAPPER}} .mh-badge' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
         $this->end_controls_section();
 
-        // ----------------------------------------------------
-        // STYLE: CONTENT AREA
-        // ----------------------------------------------------
+        /* ==========================================
+         * STYLE: CONTENT AREA
+         * ========================================== */
         $this->start_controls_section( 'section_style_content', [ 'label' => __( 'Content Area (Text)', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
         $this->add_responsive_control( 'content_padding', [ 'label' => __( 'Content Padding', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', 'em', '%' ], 'default' => [ 'top' => 20, 'right' => 20, 'bottom' => 20, 'left' => 20, 'isLinked' => true ], 'selectors' => [ '{{WRAPPER}} .mh-product-info' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], ] );
         $this->add_responsive_control( 'content_align', [ 'label' => __( 'Alignment', 'mh-plug' ), 'type' => Controls_Manager::CHOOSE, 'options' => [ 'left' => [ 'title' => 'Left', 'icon' => 'eicon-text-align-left' ], 'center' => [ 'title' => 'Center', 'icon' => 'eicon-text-align-center' ], 'right' => [ 'title' => 'Right', 'icon' => 'eicon-text-align-right' ] ], 'default' => 'left', 'selectors' => [ '{{WRAPPER}} .mh-product-info' => 'text-align: {{VALUE}};' ], ] );
@@ -123,10 +125,12 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'price_typo', 'selector' => '{{WRAPPER}} .mh-product-price, {{WRAPPER}} .mh-post-date' ] );
         $this->end_controls_section();
 
-        // ----------------------------------------------------
-        // STYLE: GENERAL ACTION BUTTONS (Cart, Wishlist, Compare)
-        // ----------------------------------------------------
+        /* ==========================================
+         * STYLE: GENERAL ACTION BUTTONS 
+         * ========================================== */
         $this->start_controls_section( 'section_style_buttons', [ 'label' => __( 'General Action Buttons', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
+        
+        // Exclude quick-view trigger from these styles because the Trait controls Quick View independently
         $this->add_responsive_control( 'btn_width', [ 'label' => __( 'Button Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger)' => 'width: {{SIZE}}px !important; min-width: {{SIZE}}px !important;' ] ] );
         $this->add_responsive_control( 'btn_height', [ 'label' => __( 'Button Height', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger)' => 'height: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' ] ] );
         $this->add_responsive_control( 'btn_icon_size', [ 'label' => __( 'Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 16 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger) i' => 'font-size: {{SIZE}}px !important;', '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger) svg' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important;' ] ] );
@@ -142,8 +146,8 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $this->end_controls_tab();
 
         $this->start_controls_tab( 'tab_btn_hover', [ 'label' => __( 'Hover & Active', 'mh-plug' ) ] );
-        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added, {{WRAPPER}} .mh-product-grid .mh-action-btn.ajax_add_to_cart.loading' => 'color: {{VALUE}} !important;' ] ] );
-        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added, {{WRAPPER}} .mh-product-grid .mh-action-btn.ajax_add_to_cart.loading' => 'background-color: {{VALUE}} !important;' ] ] );
+        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' => 'color: {{VALUE}} !important;' ] ] );
+        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' => 'background-color: {{VALUE}} !important;' ] ] );
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' ] );
         $this->end_controls_tab();
@@ -163,7 +167,6 @@ class MH_Product_Grid_Widget extends Widget_Base {
             wp_enqueue_style( 'photoswipe-default-skin' );
         }
 
-        // 🚀 DYNAMIC QUERY ENGINE
         $post_type = 'product'; 
         $args = [ 
             'post_status'         => 'publish', 
@@ -219,7 +222,13 @@ class MH_Product_Grid_Widget extends Widget_Base {
                 <div class="mh-product-card">
                     <div class="mh-product-image-wrap">
                         <a href="<?php the_permalink(); ?>">
-                            <?php echo $is_product ? $product->get_image('woocommerce_thumbnail') : get_the_post_thumbnail( $post_id, 'medium' ); ?>
+                            <?php 
+                            if ( $is_product ) {
+                                echo $product->get_image('woocommerce_thumbnail');
+                            } else {
+                                echo get_the_post_thumbnail( $post_id, 'medium' );
+                            }
+                            ?>
                         </a>
                         
                         <?php if ( $is_product && $settings['show_badge'] === 'yes' && $product->is_on_sale() ) : ?>
@@ -230,7 +239,7 @@ class MH_Product_Grid_Widget extends Widget_Base {
                             <?php if ( $is_product ) : ?>
                                 
                                 <?php $this->render_quick_view_button( $post_id, $settings ); ?>
-
+                                
                                 <?php if ( $settings['show_cart'] === 'yes' ) : ?>
                                     <?php 
                                     echo sprintf( '<a href="%s" data-quantity="1" class="%s" %s title="%s" style="display:flex; align-items:center; justify-content:center;"><i class="fas fa-shopping-cart"></i></a>',
@@ -271,10 +280,18 @@ class MH_Product_Grid_Widget extends Widget_Base {
                     <div class="mh-product-info">
                         <?php if ( $settings['show_category'] === 'yes' ) : ?>
                             <div class="mh-product-cat">
-                                <?php echo $is_product ? wc_get_product_category_list( $post_id, ', ' ) : get_the_category_list( ', ', '', $post_id ); ?>
+                                <?php 
+                                if ( $is_product ) {
+                                    echo wc_get_product_category_list( $post_id, ', ' ); 
+                                } else {
+                                    echo get_the_category_list( ', ', '', $post_id );
+                                }
+                                ?>
                             </div>
                         <?php endif; ?>
+                        
                         <h3 class="mh-product-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                        
                         <?php if ( $is_product ) : ?>
                             <?php if ( $settings['show_rating'] === 'yes' ) : ?>
                                 <div class="mh-product-rating"><?php echo wc_get_rating_html( $product->get_average_rating() ); ?></div>
@@ -287,6 +304,7 @@ class MH_Product_Grid_Widget extends Widget_Base {
                 </div>
             <?php endwhile; wp_reset_postdata(); ?>
         </div>
+
         <?php
     }
 }
