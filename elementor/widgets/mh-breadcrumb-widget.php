@@ -13,11 +13,11 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 
-class MH_Product_Breadcrumb_Widget extends Widget_Base {
+class MH_Breadcrumb_Widget extends Widget_Base {
 
-    public function get_name() { return 'mh_product_breadcrumb'; }
-    public function get_title() { return __( 'MH Product Breadcrumb', 'mh-plug' ); }
-    public function get_icon() { return 'eicon-product-breadcrumbs'; }
+    public function get_name() { return 'mh_breadcrumb'; }
+    public function get_title() { return __( 'MH Breadcrumb', 'mh-plug' ); }
+    public function get_icon() { return 'eicon-breadcrumbs'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'product', 'breadcrumb', 'breadcrumbs', 'woocommerce', 'mh', 'navigation' ]; }
 
@@ -52,7 +52,7 @@ class MH_Product_Breadcrumb_Widget extends Widget_Base {
             ],
             'default'      => 'left',
             'selectors'    => [
-                '{{WRAPPER}} .mh-product-breadcrumb' => 'text-align: {{VALUE}};',
+                '{{WRAPPER}} .mh-breadcrumb' => 'text-align: {{VALUE}};',
             ],
         ] );
 
@@ -66,7 +66,7 @@ class MH_Product_Breadcrumb_Widget extends Widget_Base {
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
             'name'     => 'typography',
-            'selector' => '{{WRAPPER}} .mh-product-breadcrumb',
+            'selector' => '{{WRAPPER}} .mh-breadcrumb',
         ] );
 
         $this->start_controls_tabs( 'breadcrumb_color_tabs' );
@@ -78,7 +78,7 @@ class MH_Product_Breadcrumb_Widget extends Widget_Base {
             'type'      => Controls_Manager::COLOR,
             'default'   => '#555555',
             'selectors' => [
-                '{{WRAPPER}} .mh-product-breadcrumb a' => 'color: {{VALUE}}; transition: color 0.3s ease;',
+                '{{WRAPPER}} .mh-breadcrumb a' => 'color: {{VALUE}}; transition: color 0.3s ease;',
             ],
         ] );
         $this->add_control( 'link_hover_color', [
@@ -86,7 +86,7 @@ class MH_Product_Breadcrumb_Widget extends Widget_Base {
             'type'      => Controls_Manager::COLOR,
             'default'   => '#d63638',
             'selectors' => [
-                '{{WRAPPER}} .mh-product-breadcrumb a:hover' => 'color: {{VALUE}};',
+                '{{WRAPPER}} .mh-breadcrumb a:hover' => 'color: {{VALUE}};',
             ],
         ] );
         $this->end_controls_tab();
@@ -98,7 +98,7 @@ class MH_Product_Breadcrumb_Widget extends Widget_Base {
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [
-                '{{WRAPPER}} .mh-product-breadcrumb' => 'color: {{VALUE}};', // Applies to the unlinked text at the end
+                '{{WRAPPER}} .mh-breadcrumb' => 'color: {{VALUE}};', // Applies to the unlinked text at the end
             ],
         ] );
         $this->end_controls_tab();
@@ -110,7 +110,7 @@ class MH_Product_Breadcrumb_Widget extends Widget_Base {
             'type'      => Controls_Manager::COLOR,
             'default'   => '#cccccc',
             'selectors' => [
-                '{{WRAPPER}} .mh-product-breadcrumb .mh-crumb-divider' => 'color: {{VALUE}}; margin: 0 6px;',
+                '{{WRAPPER}} .mh-breadcrumb .mh-crumb-divider' => 'color: {{VALUE}}; margin: 0 6px;',
             ],
         ] );
         $this->end_controls_tab();
@@ -122,7 +122,7 @@ class MH_Product_Breadcrumb_Widget extends Widget_Base {
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [
-                '{{WRAPPER}} .mh-product-breadcrumb' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                '{{WRAPPER}} .mh-breadcrumb' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
             ],
             'separator'  => 'before',
         ] );
@@ -139,14 +139,14 @@ class MH_Product_Breadcrumb_Widget extends Widget_Base {
         // Display Mock Breadcrumb inside Elementor Editor to make styling easy
         if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
             ?>
-            <nav class="mh-product-breadcrumb woocommerce-breadcrumb">
+            <nav class="mh-breadcrumb woocommerce-breadcrumb">
                 <a href="#"><?php echo $home_text; ?></a> 
                 <?php echo $delimiter; ?> 
                 <a href="#">Category</a> 
                 <?php echo $delimiter; ?> 
                 <a href="#">Subcategory</a> 
                 <?php echo $delimiter; ?> 
-                Current Product Name
+                Current page
             </nav>
             <?php
             return;
@@ -155,7 +155,7 @@ class MH_Product_Breadcrumb_Widget extends Widget_Base {
         // On the live frontend, output the real WooCommerce Breadcrumb
         $args = [
             'delimiter'   => $delimiter,
-            'wrap_before' => '<nav class="mh-product-breadcrumb woocommerce-breadcrumb">',
+            'wrap_before' => '<nav class="mh-breadcrumb woocommerce-breadcrumb">',
             'wrap_after'  => '</nav>',
             'home'        => $home_text,
         ];

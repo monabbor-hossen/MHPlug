@@ -30,6 +30,7 @@ class MH_Admin_Menu {
         'mh_synced_slider'  => 'Synced Slider',
         'mh_button'         => 'Button',
         'mh_stacked_carousel' => 'Stacked Carousel',
+        'mh_breadcrumb'         => 'Breadcrumb',
 
         // Elementor WooCommerce Wishlist Widgets
         'mh_wishlist_button' => 'MH Wishlist Button',
@@ -47,7 +48,6 @@ class MH_Admin_Menu {
         'mh_product_category'           => 'Product Category',
         'mh_product_tags'               => 'Product Tags',
         'mh_product_brands'             => 'Product Brands',
-        'mh_product_breadcrumb'         => 'Product Breadcrumb',
         'mh_product_rating'             => 'Product Rating',
         'mh_product_gallery'            => 'Product Gallery',
         'mh_product_share'              => 'Product Share',
@@ -191,7 +191,7 @@ class MH_Admin_Menu {
                 'mh_product_category',
                 'mh_product_tags',
                 'mh_product_brands',
-                'mh_product_breadcrumb',
+                'mh_breadcrumb',
                 'mh_product_rating',
                 'mh_product_gallery',
                 'mh_product_share',
