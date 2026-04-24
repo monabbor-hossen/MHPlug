@@ -1,11 +1,11 @@
 <?php
 /**
- * MH Plug - Universal Theme Builder Display Logic (Logged-Out CSS Fix)
+ * MH Plug - Universal Theme Builder Display Logic (Final Native Version)
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-// 1. Safe Template Fetcher (Now strictly respects the Active Status toggle!)
+// 1. Safe Template Fetcher (Strictly checks if it is set to 'Active')
 if ( ! function_exists( 'mh_plug_get_active_template' ) ) {
     function mh_plug_get_active_template( $type ) {
         $type = sanitize_key( $type );
@@ -49,9 +49,8 @@ if ( ! function_exists( 'mh_plug_render_template' ) ) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 🚀 THE FIX FOR LOGGED OUT USERS: Force Elementor CSS into the <head>
-// Caching plugins strip body CSS for logged-out users. This ensures the styles 
-// load natively in the header so the design never breaks!
+// 🚀 RESTORE THE CSS FIX FOR CACHING & LOGGED-OUT USERS
+// Without this, Hostinger's LiteSpeed Cache strips all styles from the live site!
 // ─────────────────────────────────────────────────────────────────────────────
 add_action( 'wp_enqueue_scripts', 'mh_plug_enqueue_elementor_template_css', 9999 );
 function mh_plug_enqueue_elementor_template_css() {
@@ -59,15 +58,15 @@ function mh_plug_enqueue_elementor_template_css() {
 
     $templates_to_load = [];
 
-    // Load Header CSS
+    // Queue Header CSS
     $header = mh_plug_get_active_template( 'header' );
     if ( $header ) $templates_to_load[] = $header->ID;
 
-    // Load Footer CSS
+    // Queue Footer CSS
     $footer = mh_plug_get_active_template( 'footer' );
     if ( $footer ) $templates_to_load[] = $footer->ID;
 
-    // Detect and Load the Active Body Template CSS
+    // Detect and Queue the Active Body Template CSS
     $active_template = null;
     if ( is_tax( 'product_cat' ) || is_category() ) {
         $term_id = get_queried_object_id();
@@ -96,14 +95,14 @@ function mh_plug_enqueue_elementor_template_css() {
         $templates_to_load[] = $active_template->ID;
     }
 
-    // Enqueue all matched template CSS files safely
-    foreach ( $templates_to_load as $template_id ) {
+    // Enqueue all matched template CSS files safely into the <head>
+    foreach ( array_unique($templates_to_load) as $template_id ) {
         $css_file = new \Elementor\Core\Files\CSS\Post( $template_id );
         $css_file->enqueue();
     }
 }
 
-// 4. Clean Universal Router
+// 4. Clean Universal Router (No JSON Crashes)
 if ( ! function_exists( 'mh_plug_universal_router' ) ) {
     function mh_plug_universal_router( $template ) {
         
