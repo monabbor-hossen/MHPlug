@@ -25,12 +25,12 @@ final class MH_Elementor_Loader {
         add_action('wp_ajax_mh_quick_view', [$this, 'quick_view_ajax']);
         add_action('wp_ajax_nopriv_mh_quick_view', [$this, 'quick_view_ajax']);
 
-        // Render Preloader globally
+        // 🚀 Render Preloader globally
         add_action('wp_head', [$this, 'render_preloader_css']);
         add_action('wp_footer', [$this, 'render_preloader_html_js']);
     }
 
-    // 🚀 Includes CSS for Animations + New Text Animations
+    // 🚀 Output Global CSS with Full Gradient Support
     public function render_preloader_css() {
         if (is_admin()) return;
         if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return; 
@@ -38,11 +38,17 @@ final class MH_Elementor_Loader {
         $settings = get_option('mh_plug_preloader_settings', []);
         if (empty($settings['enable']) || $settings['enable'] !== 'yes') return;
 
-        $bg_color     = !empty($settings['bg_color']) ? $settings['bg_color'] : '#0f172a';
-        $transition   = !empty($settings['transition']) ? intval($settings['transition']) : 500;
+        // Fetch Background
+        $bg_type = isset($settings['bg_type']) ? $settings['bg_type'] : 'solid';
+        $bg_c1   = isset($settings['bg_c1']) ? $settings['bg_c1'] : '#0f172a';
+        $bg_c2   = isset($settings['bg_c2']) ? $settings['bg_c2'] : '#1e293b';
+        $bg_ang  = isset($settings['bg_angle']) ? $settings['bg_angle'] : '90';
+        $global_bg = ($bg_type === 'gradient') ? "linear-gradient({$bg_ang}deg, {$bg_c1}, {$bg_c2})" : $bg_c1;
+
+        $transition = !empty($settings['transition']) ? intval($settings['transition']) : 500;
 
         echo '<style>
-            #mh-global-preloader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: ' . esc_attr($bg_color) . '; z-index: 99999999; display: flex; align-items: center; justify-content: center; transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; }
+            #mh-global-preloader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: ' . esc_attr($global_bg) . '; z-index: 99999999; display: flex; align-items: center; justify-content: center; transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; }
             #mh-global-preloader.mh-preloader-hidden { opacity: 0; visibility: hidden; }
             
             /* 🚀 TEXT ANIMATIONS */
@@ -55,59 +61,59 @@ final class MH_Elementor_Loader {
             @keyframes mh-text-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
             @keyframes mh-text-tracking { 0%, 100% { letter-spacing: 2px; } 50% { letter-spacing: 8px; } }
 
-            /* Visual Loader Keyframes */
-            .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; }
+            /* CSS VISUAL ANIMATIONS */
+            .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-c1); border-radius: 50%; animation: mh-spin 1s linear infinite; }
             @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-            .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; }
+            .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background: var(--mh-bg-style); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; }
             @keyframes mh-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
-            .mh-loader-3 { width: 50px; height: 50px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); }
+            .mh-loader-3 { width: 50px; height: 50px; background: var(--mh-bg-style); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); }
             @keyframes mh-pulse { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-            .mh-loader-4 { width: 40px; height: 40px; background-color: var(--mh-loader-color); animation: mh-flip 1.2s infinite ease-in-out; }
+            .mh-loader-4 { width: 40px; height: 40px; background: var(--mh-bg-style); animation: mh-flip 1.2s infinite ease-in-out; }
             @keyframes mh-flip { 0% { transform: perspective(120px) rotateX(0deg) rotateY(0deg); } 50% { transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg); } 100% { transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
-            .mh-loader-5 { width: 50px; height: 50px; position: relative; } .mh-loader-5 div { width: 100%; height: 100%; border-radius: 50%; background-color: var(--mh-loader-color); opacity: 0.6; position: absolute; top: 0; left: 0; animation: mh-bounce2 2s infinite ease-in-out; } .mh-loader-5 div:nth-child(2) { animation-delay: -1.0s; }
+            .mh-loader-5 { width: 50px; height: 50px; position: relative; } .mh-loader-5 div { width: 100%; height: 100%; border-radius: 50%; background: var(--mh-bg-style); opacity: 0.6; position: absolute; top: 0; left: 0; animation: mh-bounce2 2s infinite ease-in-out; } .mh-loader-5 div:nth-child(2) { animation-delay: -1.0s; }
             @keyframes mh-bounce2 { 0%, 100% { transform: scale(0); } 50% { transform: scale(1); } }
-            .mh-loader-6 { display: flex; gap: 5px; height: 40px; align-items: center; } .mh-loader-6 div { width: 6px; height: 100%; background-color: var(--mh-loader-color); animation: mh-wave 1.2s infinite ease-in-out; } .mh-loader-6 div:nth-child(2) { animation-delay: -1.1s; } .mh-loader-6 div:nth-child(3) { animation-delay: -1.0s; } .mh-loader-6 div:nth-child(4) { animation-delay: -0.9s; } .mh-loader-6 div:nth-child(5) { animation-delay: -0.8s; }
+            .mh-loader-6 { display: flex; gap: 5px; height: 40px; align-items: center; } .mh-loader-6 div { width: 6px; height: 100%; background: var(--mh-bg-style); animation: mh-wave 1.2s infinite ease-in-out; } .mh-loader-6 div:nth-child(2) { animation-delay: -1.1s; } .mh-loader-6 div:nth-child(3) { animation-delay: -1.0s; } .mh-loader-6 div:nth-child(4) { animation-delay: -0.9s; } .mh-loader-6 div:nth-child(5) { animation-delay: -0.8s; }
             @keyframes mh-wave { 0%, 40%, 100% { transform: scaleY(0.4); } 20% { transform: scaleY(1); } }
-            .mh-loader-7 { width: 50px; height: 50px; border-radius: 50%; background: conic-gradient(transparent 60%, var(--mh-loader-color)); animation: mh-spin 1s linear infinite; }
-            .mh-loader-8 { width: 40px; height: 40px; background: var(--mh-loader-color); animation: mh-morph 2s infinite ease-in-out; }
+            .mh-loader-7 { width: 50px; height: 50px; border-radius: 50%; background: conic-gradient(transparent 60%, var(--mh-c1)); animation: mh-spin 1s linear infinite; }
+            .mh-loader-8 { width: 40px; height: 40px; background: var(--mh-bg-style); animation: mh-morph 2s infinite ease-in-out; }
             @keyframes mh-morph { 0% { border-radius: 0%; transform: rotate(0deg); } 50% { border-radius: 50%; transform: rotate(180deg); } 100% { border-radius: 0%; transform: rotate(360deg); } }
-            .mh-loader-9 { width: 50px; height: 50px; position: relative; animation: mh-spin 2s linear infinite; } .mh-loader-9 div { position: absolute; width: 15px; height: 15px; background: var(--mh-loader-color); border-radius: 50%; top: 0; left: 50%; transform: translateX(-50%); } .mh-loader-9 div:nth-child(2) { top: auto; bottom: 0; }
-            .mh-loader-10 { position: relative; width: 60px; height: 60px; } .mh-loader-10 div { position: absolute; border: 4px solid var(--mh-loader-color); opacity: 1; border-radius: 50%; animation: mh-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite; } .mh-loader-10 div:nth-child(2) { animation-delay: -0.5s; }
+            .mh-loader-9 { width: 50px; height: 50px; position: relative; animation: mh-spin 2s linear infinite; } .mh-loader-9 div { position: absolute; width: 15px; height: 15px; background: var(--mh-bg-style); border-radius: 50%; top: 0; left: 50%; transform: translateX(-50%); } .mh-loader-9 div:nth-child(2) { top: auto; bottom: 0; }
+            .mh-loader-10 { position: relative; width: 60px; height: 60px; } .mh-loader-10 div { position: absolute; border: 4px solid var(--mh-c1); opacity: 1; border-radius: 50%; animation: mh-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite; } .mh-loader-10 div:nth-child(2) { animation-delay: -0.5s; }
             @keyframes mh-ripple { 0% { top: 28px; left: 28px; width: 0; height: 0; opacity: 0; } 5% { opacity: 1; } 100% { top: -1px; left: -1px; width: 58px; height: 58px; opacity: 0; } }
-            .mh-loader-11 { width: 50px; height: 50px; border: 3px dashed var(--mh-loader-color); border-radius: 50%; animation: mh-spin 4s linear infinite; display: flex; align-items: center; justify-content: center; } .mh-loader-11 div { width: 20px; height: 20px; background: var(--mh-loader-color); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); animation: mh-spin-reverse 2s linear infinite; }
+            .mh-loader-11 { width: 50px; height: 50px; border: 3px dashed var(--mh-c1); border-radius: 50%; animation: mh-spin 4s linear infinite; display: flex; align-items: center; justify-content: center; } .mh-loader-11 div { width: 20px; height: 20px; background: var(--mh-bg-style); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); animation: mh-spin-reverse 2s linear infinite; }
             @keyframes mh-spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
-            .mh-loader-12 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 50px; height: 50px; } .mh-loader-12 div { background: var(--mh-loader-color); border-radius: 50%; animation: mh-grid-pulse 1.2s infinite ease-in-out; } .mh-loader-12 div:nth-child(1), .mh-loader-12 div:nth-child(5), .mh-loader-12 div:nth-child(9) { animation-delay: 0.4s; } .mh-loader-12 div:nth-child(2), .mh-loader-12 div:nth-child(6), .mh-loader-12 div:nth-child(7) { animation-delay: 0.8s; } .mh-loader-12 div:nth-child(3), .mh-loader-12 div:nth-child(4), .mh-loader-12 div:nth-child(8) { animation-delay: 1.2s; }
+            .mh-loader-12 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 50px; height: 50px; } .mh-loader-12 div { background: var(--mh-bg-style); border-radius: 50%; animation: mh-grid-pulse 1.2s infinite ease-in-out; } .mh-loader-12 div:nth-child(1), .mh-loader-12 div:nth-child(5), .mh-loader-12 div:nth-child(9) { animation-delay: 0.4s; } .mh-loader-12 div:nth-child(2), .mh-loader-12 div:nth-child(6), .mh-loader-12 div:nth-child(7) { animation-delay: 0.8s; } .mh-loader-12 div:nth-child(3), .mh-loader-12 div:nth-child(4), .mh-loader-12 div:nth-child(8) { animation-delay: 1.2s; }
             @keyframes mh-grid-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.5); } }
-            .mh-loader-13 { position: relative; width: 60px; height: 20px; } .mh-loader-13 div { position: absolute; width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; animation: mh-infinity 1.5s infinite ease-in-out; } .mh-loader-13 div:nth-child(2) { animation-delay: -0.75s; }
+            .mh-loader-13 { position: relative; width: 60px; height: 20px; } .mh-loader-13 div { position: absolute; width: 20px; height: 20px; background: var(--mh-bg-style); border-radius: 50%; animation: mh-infinity 1.5s infinite ease-in-out; } .mh-loader-13 div:nth-child(2) { animation-delay: -0.75s; }
             @keyframes mh-infinity { 0% { left: 0; transform: scale(1); z-index: 1; } 25% { transform: scale(1.5); z-index: 2; } 50% { left: 40px; transform: scale(1); z-index: 1; } 75% { transform: scale(0.5); z-index: 0; } 100% { left: 0; transform: scale(1); z-index: 1; } }
-            .mh-loader-14 { position: relative; width: 60px; height: 60px; } .mh-loader-14 div { position: absolute; width: 100%; height: 100%; border: 3px solid transparent; border-top-color: var(--mh-loader-color); border-radius: 50%; animation: mh-spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; } .mh-loader-14 div:nth-child(2) { width: 80%; height: 80%; top: 10%; left: 10%; border-top-color: transparent; border-right-color: var(--mh-loader-color); animation-duration: 1.5s; animation-direction: reverse; } .mh-loader-14 div:nth-child(3) { width: 60%; height: 60%; top: 20%; left: 20%; border-top-color: transparent; border-bottom-color: var(--mh-loader-color); animation-duration: 1s; }
-            .mh-loader-15 { width: 40px; height: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; } .mh-loader-15 div { background: var(--mh-loader-color); animation: mh-cube-split 1.5s infinite ease-in-out; } .mh-loader-15 div:nth-child(1) { transform-origin: bottom right; } .mh-loader-15 div:nth-child(2) { transform-origin: bottom left; } .mh-loader-15 div:nth-child(3) { transform-origin: top right; } .mh-loader-15 div:nth-child(4) { transform-origin: top left; }
+            .mh-loader-14 { position: relative; width: 60px; height: 60px; } .mh-loader-14 div { position: absolute; width: 100%; height: 100%; border: 3px solid transparent; border-top-color: var(--mh-c1); border-radius: 50%; animation: mh-spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; } .mh-loader-14 div:nth-child(2) { width: 80%; height: 80%; top: 10%; left: 10%; border-top-color: transparent; border-right-color: var(--mh-c1); animation-duration: 1.5s; animation-direction: reverse; } .mh-loader-14 div:nth-child(3) { width: 60%; height: 60%; top: 20%; left: 20%; border-top-color: transparent; border-bottom-color: var(--mh-c1); animation-duration: 1s; }
+            .mh-loader-15 { width: 40px; height: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; } .mh-loader-15 div { background: var(--mh-bg-style); animation: mh-cube-split 1.5s infinite ease-in-out; } .mh-loader-15 div:nth-child(1) { transform-origin: bottom right; } .mh-loader-15 div:nth-child(2) { transform-origin: bottom left; } .mh-loader-15 div:nth-child(3) { transform-origin: top right; } .mh-loader-15 div:nth-child(4) { transform-origin: top left; }
             @keyframes mh-cube-split { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.5) rotate(90deg); border-radius: 50%; } }
-            .mh-loader-16 { width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; box-shadow: 0 0 20px 5px var(--mh-loader-color); animation: mh-glow-pulse 1s infinite alternate; }
-            @keyframes mh-glow-pulse { 0% { box-shadow: 0 0 10px 2px var(--mh-loader-color); transform: scale(0.8); } 100% { box-shadow: 0 0 30px 10px var(--mh-loader-color); transform: scale(1.2); } }
-            .mh-loader-17 { width: 50px; height: 50px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: var(--mh-loader-color) transparent; animation: mh-spin 1.2s linear infinite; position: relative; } .mh-loader-17 div { position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: transparent var(--mh-loader-color); animation: mh-spin-reverse 0.6s linear infinite; }
-            .mh-loader-18 { display: flex; gap: 6px; height: 40px; align-items: flex-end; } .mh-loader-18 div { width: 8px; background: var(--mh-loader-color); animation: mh-stairway 1s infinite ease-in-out alternate; } .mh-loader-18 div:nth-child(1) { animation-delay: 0s; } .mh-loader-18 div:nth-child(2) { animation-delay: 0.2s; } .mh-loader-18 div:nth-child(3) { animation-delay: 0.4s; } .mh-loader-18 div:nth-child(4) { animation-delay: 0.6s; }
+            .mh-loader-16 { width: 20px; height: 20px; background: var(--mh-bg-style); border-radius: 50%; box-shadow: 0 0 20px 5px var(--mh-c1); animation: mh-glow-pulse 1s infinite alternate; }
+            @keyframes mh-glow-pulse { 0% { box-shadow: 0 0 10px 2px var(--mh-c1); transform: scale(0.8); } 100% { box-shadow: 0 0 30px 10px var(--mh-c1); transform: scale(1.2); } }
+            .mh-loader-17 { width: 50px; height: 50px; border-radius: 50%; border: 4px solid var(--mh-c1); border-color: var(--mh-c1) transparent; animation: mh-spin 1.2s linear infinite; position: relative; } .mh-loader-17 div { position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border-radius: 50%; border: 4px solid var(--mh-c1); border-color: transparent var(--mh-c1); animation: mh-spin-reverse 0.6s linear infinite; }
+            .mh-loader-18 { display: flex; gap: 6px; height: 40px; align-items: flex-end; } .mh-loader-18 div { width: 8px; background: var(--mh-bg-style); animation: mh-stairway 1s infinite ease-in-out alternate; } .mh-loader-18 div:nth-child(1) { animation-delay: 0s; } .mh-loader-18 div:nth-child(2) { animation-delay: 0.2s; } .mh-loader-18 div:nth-child(3) { animation-delay: 0.4s; } .mh-loader-18 div:nth-child(4) { animation-delay: 0.6s; }
             @keyframes mh-stairway { 0% { height: 10px; } 100% { height: 40px; } }
-            .mh-loader-19 { width: 50px; height: 50px; border-radius: 50%; box-shadow: inset 0 0 0 4px rgba(255,255,255,0.1); position: relative; } .mh-loader-19::after { content: ""; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 50%; border: 4px solid transparent; border-top-color: var(--mh-loader-color); animation: mh-spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
-            .mh-loader-20 { width: 50px; height: 50px; perspective: 150px; } .mh-loader-20 div { width: 100%; height: 100%; border: 6px solid var(--mh-loader-color); border-radius: 50%; animation: mh-hyper-ring 2s linear infinite; }
+            .mh-loader-19 { width: 50px; height: 50px; border-radius: 50%; box-shadow: inset 0 0 0 4px rgba(255,255,255,0.1); position: relative; } .mh-loader-19::after { content: ""; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 50%; border: 4px solid transparent; border-top-color: var(--mh-c1); animation: mh-spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
+            .mh-loader-20 { width: 50px; height: 50px; perspective: 150px; } .mh-loader-20 div { width: 100%; height: 100%; border: 6px solid var(--mh-c1); border-radius: 50%; animation: mh-hyper-ring 2s linear infinite; }
             @keyframes mh-hyper-ring { 0% { transform: rotateX(60deg) rotateZ(0deg); } 100% { transform: rotateX(60deg) rotateZ(360deg); } }
 
             .mh-ecommerce-icon { display: flex; align-items: center; justify-content: center; position: relative; }
-            .mh-svg-icon { width: 50px; height: 50px; fill: none; stroke: var(--mh-loader-color); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+            .mh-svg-icon { width: 50px; height: 50px; fill: none; stroke: var(--mh-svg-stroke); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
             .mh-loader-21 { animation: mh-cart-dash 1.5s infinite ease-in-out; } @keyframes mh-cart-dash { 0% { transform: translateX(-30px) rotate(-15deg); opacity: 0; } 50% { transform: translateX(0) rotate(0deg); opacity: 1; } 100% { transform: translateX(30px) rotate(15deg); opacity: 0; } }
             .mh-loader-22 { animation: mh-bag-drop 1.2s infinite cubic-bezier(0.28, 0.84, 0.42, 1); transform-origin: bottom; } @keyframes mh-bag-drop { 0% { transform: translateY(-30px) scaleY(1.2); opacity: 0; } 50% { transform: translateY(0) scaleY(0.8); opacity: 1; } 70% { transform: translateY(-10px) scaleY(1); } 100% { transform: translateY(0) scaleY(1); opacity: 0; } }
             .mh-loader-23 { animation: mh-tag-flip 1.5s infinite; perspective: 100px; } @keyframes mh-tag-flip { 0% { transform: rotateY(0deg); } 50% { transform: rotateY(180deg); } 100% { transform: rotateY(360deg); } }
             .mh-loader-24 { animation: mh-truck-drive 2s infinite linear; } @keyframes mh-truck-drive { 0% { transform: translateX(-40px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(40px); opacity: 0; } }
             .mh-loader-25 { animation: mh-gift-shake 1.5s infinite; } @keyframes mh-gift-shake { 0%, 100% { transform: rotate(0deg); } 10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); } 20%, 40%, 60%, 80% { transform: rotate(10deg); } }
             .mh-loader-26 .mh-svg-icon { animation: mh-card-swipe 1.5s infinite ease-in-out; } @keyframes mh-card-swipe { 0% { transform: translateY(-20px); opacity: 0; } 50% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(20px); opacity: 0; } }
-            .mh-loader-27 { position: relative; } .mh-scanline { position: absolute; top: 0; left: -10%; width: 120%; height: 3px; background-color: var(--mh-loader-color); animation: mh-scan 1.5s infinite linear; box-shadow: 0 0 8px var(--mh-loader-color); } @keyframes mh-scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+            .mh-loader-27 { position: relative; } .mh-scanline { position: absolute; top: 0; left: -10%; width: 120%; height: 3px; background: var(--mh-bg-style); animation: mh-scan 1.5s infinite linear; box-shadow: 0 0 8px var(--mh-c1); } @keyframes mh-scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
             .mh-loader-28 { animation: mh-coin-drop 1.5s infinite ease-in-out; } @keyframes mh-coin-drop { 0% { transform: translateY(-30px) rotateY(0deg); opacity: 0; } 50% { transform: translateY(0) rotateY(180deg); opacity: 1; } 100% { transform: translateY(20px) rotateY(360deg); opacity: 0; } }
             .mh-loader-29 { animation: mh-box-pulse 1.2s infinite ease-in-out; } @keyframes mh-box-pulse { 0% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 0.5; } }
             .mh-loader-30 { transform-origin: top center; animation: mh-store-swing 2s infinite ease-in-out; } @keyframes mh-store-swing { 0% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } 100% { transform: rotate(-15deg); } }
         </style>';
     }
 
-    // 🚀 NEW: Renders Text, Scale, and Visual Animation
+    // 🚀 NEW: Output SVGs, Text, and Scale Wrappers
     public function render_preloader_html_js() {
         if (is_admin()) return;
         if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return;
@@ -115,29 +121,46 @@ final class MH_Elementor_Loader {
         $settings = get_option('mh_plug_preloader_settings', []);
         if (empty($settings['enable']) || $settings['enable'] !== 'yes') return;
 
-        // Fetch user variables
-        $type         = isset($settings['type']) ? $settings['type'] : 'css';
-        $css_effect   = isset($settings['css_effect']) ? (string)$settings['css_effect'] : '1';
-        $loader_color = !empty($settings['loader_color']) ? $settings['loader_color'] : '#2293e9';
-        $effect_size  = !empty($settings['effect_size']) ? $settings['effect_size'] : '1.0';
+        // Fetch User Vars
+        $type        = isset($settings['type']) ? $settings['type'] : 'css';
+        $css_effect  = isset($settings['css_effect']) ? (string)$settings['css_effect'] : '1';
+        $effect_size = !empty($settings['effect_size']) ? $settings['effect_size'] : '1.0';
         
-        $image     = !empty($settings['image']) ? $settings['image'] : '';
-        $img_width = !empty($settings['img_width']) ? $settings['img_width'] : '150';
-        $delay     = !empty($settings['delay']) ? intval($settings['delay']) : 500;
+        $eff_type    = isset($settings['loader_type']) ? $settings['loader_type'] : 'solid';
+        $eff_c1      = isset($settings['loader_c1']) ? $settings['loader_c1'] : '#2293e9';
+        $eff_c2      = isset($settings['loader_c2']) ? $settings['loader_c2'] : '#00ffd5';
+        $eff_angle   = isset($settings['loader_angle']) ? $settings['loader_angle'] : '90';
+        $eff_bg      = ($eff_type === 'gradient') ? "linear-gradient({$eff_angle}deg, {$eff_c1}, {$eff_c2})" : $eff_c1;
+        $svg_stroke  = ($eff_type === 'gradient') ? 'url(#mh-svg-gradient)' : $eff_c1;
+
+        $image       = !empty($settings['image']) ? $settings['image'] : '';
+        $img_width   = !empty($settings['img_width']) ? $settings['img_width'] : '150';
+        $delay       = !empty($settings['delay']) ? intval($settings['delay']) : 500;
 
         $custom_text = isset($settings['custom_text']) ? $settings['custom_text'] : '';
-        $text_color  = !empty($settings['text_color']) ? $settings['text_color'] : '#2293e9';
+        $text_type   = isset($settings['text_type']) ? $settings['text_type'] : 'solid';
+        $text_c1     = !empty($settings['text_c1']) ? $settings['text_c1'] : '#2293e9';
+        $text_c2     = !empty($settings['text_c2']) ? $settings['text_c2'] : '#00ffd5';
+        $text_angle  = !empty($settings['text_angle']) ? $settings['text_angle'] : '90';
         $text_size   = !empty($settings['text_size']) ? $settings['text_size'] : '16';
         $text_anim   = !empty($settings['text_anim']) ? $settings['text_anim'] : 'pulse';
+        $text_bg     = ($text_type === 'gradient') ? "linear-gradient({$text_angle}deg, {$text_c1}, {$text_c2})" : $text_c1;
+        $text_style  = ($text_type === 'gradient') ? "background: {$text_bg}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;" : "color: {$text_c1};";
 
         echo '<div id="mh-global-preloader">';
+        
+        // Inject SVG Gradient Defs
+        if ($eff_type === 'gradient') {
+            echo '<svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false"><linearGradient id="mh-svg-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="' . esc_attr($eff_c1) . '" /><stop offset="100%" stop-color="' . esc_attr($eff_c2) . '" /></linearGradient></svg>';
+        }
+
         echo '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 25px; z-index: 5;">';
 
-        // 1. Render Visual Loader (With Scale Wrapper)
+        // Render Visual Base
         if ($type === 'image' && !empty($image)) {
             echo '<img src="' . esc_url($image) . '" alt="Loading..." style="width:' . esc_attr($img_width) . 'px; height:auto;" />';
         } else {
-            echo '<div style="transform: scale(' . esc_attr($effect_size) . '); --mh-loader-color: ' . esc_attr($loader_color) . ';">';
+            echo '<div style="transform: scale(' . esc_attr($effect_size) . '); --mh-c1: ' . esc_attr($eff_c1) . '; --mh-bg-style: ' . esc_attr($eff_bg) . '; --mh-svg-stroke: ' . esc_attr($svg_stroke) . ';">';
             switch ($css_effect) {
                 case '1': echo '<div class="mh-loader-1"></div>'; break;
                 case '2': echo '<div class="mh-loader-2"><div></div><div></div><div></div></div>'; break;
@@ -171,12 +194,12 @@ final class MH_Elementor_Loader {
                 case '30': echo '<div class="mh-loader-30 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>'; break;
                 default:  echo '<div class="mh-loader-1"></div>'; break;
             }
-            echo '</div>'; // End Scale Wrapper
+            echo '</div>'; 
         }
 
-        // 2. Render Custom Loading Text
+        // Render Custom Loading Text
         if (!empty(trim($custom_text))) {
-            echo '<div class="mh-text-anim-' . esc_attr($text_anim) . '" style="color: ' . esc_attr($text_color) . '; font-size: ' . esc_attr($text_size) . 'px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-align: center;">' . esc_html($custom_text) . '</div>';
+            echo '<div class="mh-text-anim-' . esc_attr($text_anim) . '" style="' . esc_attr($text_style) . ' font-size: ' . esc_attr($text_size) . 'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center;">' . esc_html($custom_text) . '</div>';
         }
 
         echo '</div>'; // End flex container
