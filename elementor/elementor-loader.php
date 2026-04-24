@@ -24,12 +24,12 @@ final class MH_Elementor_Loader {
         add_action('wp_ajax_mh_get_compare_table', [$this, 'get_compare_table_ajax']);
         add_action('wp_ajax_nopriv_mh_get_compare_table', [$this, 'get_compare_table_ajax']);
 
-        // 🚀 NEW: AJAX Hooks for QUICK VIEW
+        // AJAX Hooks for QUICK VIEW
         add_action('wp_ajax_mh_quick_view', [$this, 'quick_view_ajax']);
         add_action('wp_ajax_nopriv_mh_quick_view', [$this, 'quick_view_ajax']);
     }
 
-    // 🚀 NEW: The AJAX Function that builds the Quick View Popup
+    // 🚀 The AJAX Function that builds the Quick View Popup
     public function quick_view_ajax() {
         if (!isset($_POST['product_id'])) {
             wp_send_json_error(['message' => 'No product ID provided.']);
@@ -38,7 +38,7 @@ final class MH_Elementor_Loader {
         $product_id = intval($_POST['product_id']);
         $template_id = !empty($_POST['template_id']) ? intval($_POST['template_id']) : 0;
 
-        // Force WordPress to recognize this exact product
+        // Force WordPress to recognize this exact product context
         global $post, $product;
         $post = get_post($product_id);
         $product = wc_get_product($product_id);
@@ -47,7 +47,7 @@ final class MH_Elementor_Loader {
         ob_start();
 
         if ($template_id && class_exists('\Elementor\Plugin')) {
-            // Force Elementor to print the CSS for the custom template!
+            // Force Elementor to print the CSS for the custom template
             if ( class_exists( '\Elementor\Core\Files\CSS\Post' ) ) {
                 $css_file = new \Elementor\Core\Files\CSS\Post( $template_id );
                 $css_file->enqueue();
@@ -71,6 +71,7 @@ final class MH_Elementor_Loader {
         wp_send_json_success(['html' => $html]);
     }
 
+    // 🚀 The AJAX Function that builds the Compare Table
     public function get_compare_table_ajax() {
         if (!isset($_POST['product_ids']) || !is_array($_POST['product_ids'])) {
             wp_send_json_error(['html' => '<div class="mh-compare-empty"><h3>No products to compare</h3><p>Return to the shop to add products.</p></div>']);
@@ -81,10 +82,10 @@ final class MH_Elementor_Loader {
         $all_attributes = [];
 
         foreach ($product_ids as $id) {
-            $product = wc_get_product($id);
-            if ($product) {
-                $products[] = $product;
-                foreach ($product->get_attributes() as $attr_name => $attr) {
+            $prod = wc_get_product($id);
+            if ($prod) {
+                $products[] = $prod;
+                foreach ($prod->get_attributes() as $attr_name => $attr) {
                     $label = $attr->is_taxonomy() ? wc_attribute_label($attr_name) : $attr->get_name();
                     $all_attributes[$attr_name] = $label;
                 }
@@ -99,7 +100,13 @@ final class MH_Elementor_Loader {
             <tbody>
                 <tr>
                     <th>Product Details</th>
-                    <?php foreach($products as $product): ?>
+                    <?php foreach($products as $prod_obj): 
+                        // 🚀 THE FIX: Force WooCommerce to recognize the specific product context before drawing the button!
+                        global $product, $post;
+                        $product = $prod_obj;
+                        $post = get_post($prod_obj->get_id());
+                        setup_postdata($post);
+                    ?>
                         <td class="mh-compare-item">
                             <div class="mh-compare-image">
                                 <a href="#" class="mh-remove-compare" data-product-id="<?php echo esc_attr($product->get_id()); ?>" title="Remove"><i class="fas fa-times"></i></a>
@@ -109,21 +116,12 @@ final class MH_Elementor_Loader {
                             <div class="mh-compare-price"><?php echo $product->get_price_html(); ?></div>
                             <div class="mh-compare-add-to-cart">
                                 <?php 
-                                echo sprintf( '<a href="%s" data-quantity="1" class="%s" %s>%s</a>',
-                                    esc_url( $product->add_to_cart_url() ),
-                                    esc_attr( 'button wp-element-button product_type_' . $product->get_type() . ( $product->is_purchasable() && $product->is_in_stock() ? ' add_to_cart_button ajax_add_to_cart' : '' ) ),
-                                    wc_implode_html_attributes( [
-                                        'data-product_id'  => $product->get_id(),
-                                        'data-product_sku' => $product->get_sku(),
-                                        'aria-label'       => $product->add_to_cart_description(),
-                                        'rel'              => 'nofollow',
-                                    ] ),
-                                    esc_html( $product->add_to_cart_text() )
-                                );
+                                // 🚀 Bulletproof native WooCommerce Add to Cart Generation
+                                woocommerce_template_loop_add_to_cart(); 
                                 ?>
                             </div>
                         </td>
-                    <?php endforeach; ?>
+                    <?php endforeach; wp_reset_postdata(); ?>
                 </tr>
                 <tr>
                     <th>Description</th>
