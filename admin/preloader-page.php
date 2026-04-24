@@ -91,10 +91,12 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                             <h3><?php esc_html_e('System Power', 'mh-plug'); ?></h3>
                             <p><?php esc_html_e('Activate the global preloader on your website.', 'mh-plug'); ?></p>
                         </div>
-                        <label class="switch mh-native-switch">
+                        
+                        <label class="switch">
                             <input class="cb mh-live-trigger" type="checkbox" name="mh_plug_preloader_settings[enable]" value="yes" <?php checked($enable, 'yes'); ?> />
                             <span class="toggle"><span class="left">off</span><span class="right">on</span></span>
                         </label>
+                        
                     </div>
                     <div class="mh-divider"></div>
                     <div class="mh-setting-row">
@@ -285,18 +287,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 <style>
     :root { --mh-dark: #004265; --mh-blue: #2293e9; --mh-blue-glow: rgba(34, 147, 233, 0.4); --mh-red: #d63638; --mh-border: #e2e8f0; }
     
-    /* Native MH Switch */
-    .switch.mh-native-switch { position: relative; display: inline-block; width: 70px; height: 32px; margin: 0; }
-    .switch.mh-native-switch input.cb { opacity: 0; width: 0; height: 0; }
-    .switch.mh-native-switch .toggle { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 11px; font-weight: bold; color: white; text-transform: uppercase; overflow: hidden; }
-    .switch.mh-native-switch .toggle:before { position: absolute; content: ""; height: 24px; width: 24px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; z-index: 2; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-    .switch.mh-native-switch input.cb:checked + .toggle { background-color: var(--mh-dark); box-shadow: 0 0 10px var(--mh-blue-glow); }
-    .switch.mh-native-switch input.cb:checked + .toggle:before { transform: translateX(38px); }
-    .switch.mh-native-switch .left { color: #64748b; z-index: 1; transition: 0.3s; }
-    .switch.mh-native-switch input.cb:checked + .toggle .left { opacity: 0; }
-    .switch.mh-native-switch .right { color: white; z-index: 1; opacity: 0; transition: 0.3s; }
-    .switch.mh-native-switch input.cb:checked + .toggle .right { opacity: 1; }
-
     /* Dashboard Grid & Cards */
     .mh-futuristic-dashboard { max-width: 1200px; margin: 20px auto; font-family: 'Segoe UI', Tahoma, sans-serif; }
     .mh-dashboard-header { position: relative; padding: 30px; background: var(--mh-dark); border-radius: 16px; color: white; margin-bottom: 30px; overflow: hidden; }
@@ -357,7 +347,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
     @keyframes mh-text-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     @keyframes mh-text-tracking { 0%, 100% { letter-spacing: 2px; } 50% { letter-spacing: 8px; } }
 
-    /* We use variables so the JS can dynamically inject the CSS gradients! */
     .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-c1); border-radius: 50%; animation: mh-spin 1s linear infinite; } @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background: var(--mh-bg-style); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; } @keyframes mh-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
     .mh-loader-3 { width: 50px; height: 50px; background: var(--mh-bg-style); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); } @keyframes mh-pulse { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
@@ -378,9 +367,8 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
     .mh-loader-18 { display: flex; gap: 6px; height: 40px; align-items: flex-end; } .mh-loader-18 div { width: 8px; background: var(--mh-bg-style); animation: mh-stairway 1s infinite ease-in-out alternate; } .mh-loader-18 div:nth-child(1) { animation-delay: 0s; } .mh-loader-18 div:nth-child(2) { animation-delay: 0.2s; } .mh-loader-18 div:nth-child(3) { animation-delay: 0.4s; } .mh-loader-18 div:nth-child(4) { animation-delay: 0.6s; } @keyframes mh-stairway { 0% { height: 10px; } 100% { height: 40px; } }
     .mh-loader-19 { width: 50px; height: 50px; border-radius: 50%; box-shadow: inset 0 0 0 4px rgba(255,255,255,0.1); position: relative; } .mh-loader-19::after { content: ""; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 50%; border: 4px solid transparent; border-top-color: var(--mh-c1); animation: mh-spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
     .mh-loader-20 { width: 50px; height: 50px; perspective: 150px; } .mh-loader-20 div { width: 100%; height: 100%; border: 6px solid var(--mh-c1); border-radius: 50%; animation: mh-hyper-ring 2s linear infinite; } @keyframes mh-hyper-ring { 0% { transform: rotateX(60deg) rotateZ(0deg); } 100% { transform: rotateX(60deg) rotateZ(360deg); } }
-    
+
     .mh-ecommerce-icon { display: flex; align-items: center; justify-content: center; position: relative; }
-    /* Dynamic SVG Gradient Stroke */
     .mh-svg-icon { width: 50px; height: 50px; fill: none; stroke: var(--mh-svg-stroke); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .mh-loader-21 { animation: mh-cart-dash 1.5s infinite ease-in-out; } @keyframes mh-cart-dash { 0% { transform: translateX(-30px) rotate(-15deg); opacity: 0; } 50% { transform: translateX(0) rotate(0deg); opacity: 1; } 100% { transform: translateX(30px) rotate(15deg); opacity: 0; } }
     .mh-loader-22 { animation: mh-bag-drop 1.2s infinite cubic-bezier(0.28, 0.84, 0.42, 1); transform-origin: bottom; } @keyframes mh-bag-drop { 0% { transform: translateY(-30px) scaleY(1.2); opacity: 0; } 50% { transform: translateY(0) scaleY(0.8); opacity: 1; } 70% { transform: translateY(-10px) scaleY(1); } 100% { transform: translateY(0) scaleY(1); opacity: 0; } }
@@ -497,6 +485,7 @@ jQuery(document).ready(function($){
             if (effect === '18') html = '<div class="mh-loader-18"><div></div><div></div><div></div><div></div></div>';
             if (effect === '19') html = '<div class="mh-loader-19"></div>';
             if (effect === '20') html = '<div class="mh-loader-20"><div></div></div>';
+            // SVGs
             if (effect === '21') html = '<div class="mh-loader-21 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div>';
             if (effect === '22') html = '<div class="mh-loader-22 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></div>';
             if (effect === '23') html = '<div class="mh-loader-23 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div>';
@@ -508,16 +497,14 @@ jQuery(document).ready(function($){
             if (effect === '29') html = '<div class="mh-loader-29 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>';
             if (effect === '30') html = '<div class="mh-loader-30 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>';
 
+            // Wrap in scale block
             $('#mh-loader-visual').html('<div style="transform: scale('+effectScale+'); --mh-c1: '+effC1+'; --mh-bg-style: '+effBgStyle+'; --mh-svg-stroke: '+svgStroke+';">' + html + '</div>');
         }
 
-        // Render Text
+        // Render Text Base
         if(customText.trim() !== '') {
-            var textStyle = (textType === 'gradient') 
-                ? 'background: ' + textBgStyle + '; -webkit-background-clip: text; -webkit-text-fill-color: transparent;' 
-                : 'color: ' + textC1 + ';';
-
-            $('#mh-loader-text-display').html('<div class="mh-text-anim-'+textAnim+'" style="' + textStyle + ' font-size: '+textSize+'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;">' + customText + '</div>').show();
+            var textStyle = (textType === 'gradient') ? 'background: ' + textBgStyle + '; -webkit-background-clip: text; -webkit-text-fill-color: transparent;' : 'color: ' + textC1 + ';';
+            $('#mh-loader-text-display').html('<div class="mh-text-anim-'+textAnim+'" style="' + textStyle + ' font-size: '+textSize+'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center;">' + customText + '</div>').show();
         } else {
             $('#mh-loader-text-display').hide();
         }
@@ -526,7 +513,7 @@ jQuery(document).ready(function($){
     $('.mh-live-trigger').on('change input', updateLivePreview);
     updateLivePreview(); // Init
 
-    // WP Media Library
+    // WP Media Library Handler
     var mediaUploader;
     $('#mh-upload-preloader-btn').click(function(e) {
         e.preventDefault();

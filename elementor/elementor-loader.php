@@ -25,12 +25,10 @@ final class MH_Elementor_Loader {
         add_action('wp_ajax_mh_quick_view', [$this, 'quick_view_ajax']);
         add_action('wp_ajax_nopriv_mh_quick_view', [$this, 'quick_view_ajax']);
 
-        // 🚀 Render Preloader globally
         add_action('wp_head', [$this, 'render_preloader_css']);
         add_action('wp_footer', [$this, 'render_preloader_html_js']);
     }
 
-    // 🚀 Output Global CSS with Full Gradient Support
     public function render_preloader_css() {
         if (is_admin()) return;
         if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return; 
@@ -38,7 +36,6 @@ final class MH_Elementor_Loader {
         $settings = get_option('mh_plug_preloader_settings', []);
         if (empty($settings['enable']) || $settings['enable'] !== 'yes') return;
 
-        // Fetch Background
         $bg_type = isset($settings['bg_type']) ? $settings['bg_type'] : 'solid';
         $bg_c1   = isset($settings['bg_c1']) ? $settings['bg_c1'] : '#0f172a';
         $bg_c2   = isset($settings['bg_c2']) ? $settings['bg_c2'] : '#1e293b';
@@ -51,7 +48,6 @@ final class MH_Elementor_Loader {
             #mh-global-preloader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: ' . esc_attr($global_bg) . '; z-index: 99999999; display: flex; align-items: center; justify-content: center; transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; }
             #mh-global-preloader.mh-preloader-hidden { opacity: 0; visibility: hidden; }
             
-            /* 🚀 TEXT ANIMATIONS */
             .mh-text-anim-blink { animation: mh-text-blink 1.5s infinite; }
             .mh-text-anim-pulse { animation: mh-text-pulse 2s infinite ease-in-out; }
             .mh-text-anim-float { animation: mh-text-float 2s infinite ease-in-out; }
@@ -61,7 +57,6 @@ final class MH_Elementor_Loader {
             @keyframes mh-text-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
             @keyframes mh-text-tracking { 0%, 100% { letter-spacing: 2px; } 50% { letter-spacing: 8px; } }
 
-            /* CSS VISUAL ANIMATIONS */
             .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-c1); border-radius: 50%; animation: mh-spin 1s linear infinite; }
             @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
             .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background: var(--mh-bg-style); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; }
@@ -113,7 +108,6 @@ final class MH_Elementor_Loader {
         </style>';
     }
 
-    // 🚀 NEW: Output SVGs, Text, and Scale Wrappers
     public function render_preloader_html_js() {
         if (is_admin()) return;
         if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return;
@@ -121,7 +115,6 @@ final class MH_Elementor_Loader {
         $settings = get_option('mh_plug_preloader_settings', []);
         if (empty($settings['enable']) || $settings['enable'] !== 'yes') return;
 
-        // Fetch User Vars
         $type        = isset($settings['type']) ? $settings['type'] : 'css';
         $css_effect  = isset($settings['css_effect']) ? (string)$settings['css_effect'] : '1';
         $effect_size = !empty($settings['effect_size']) ? $settings['effect_size'] : '1.0';
@@ -149,17 +142,17 @@ final class MH_Elementor_Loader {
 
         echo '<div id="mh-global-preloader">';
         
-        // Inject SVG Gradient Defs
         if ($eff_type === 'gradient') {
             echo '<svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false"><linearGradient id="mh-svg-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="' . esc_attr($eff_c1) . '" /><stop offset="100%" stop-color="' . esc_attr($eff_c2) . '" /></linearGradient></svg>';
         }
 
         echo '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 25px; z-index: 5;">';
 
-        // Render Visual Base
         if ($type === 'image' && !empty($image)) {
             echo '<img src="' . esc_url($image) . '" alt="Loading..." style="width:' . esc_attr($img_width) . 'px; height:auto;" />';
         } else {
+            // 🚀 FIX: The dynamic wrapper that blocks text overlap!
+            echo '<div style="width: calc(60px * ' . esc_attr($effect_size) . '); height: calc(60px * ' . esc_attr($effect_size) . '); display: flex; align-items: center; justify-content: center;">';
             echo '<div style="transform: scale(' . esc_attr($effect_size) . '); --mh-c1: ' . esc_attr($eff_c1) . '; --mh-bg-style: ' . esc_attr($eff_bg) . '; --mh-svg-stroke: ' . esc_attr($svg_stroke) . ';">';
             switch ($css_effect) {
                 case '1': echo '<div class="mh-loader-1"></div>'; break;
@@ -194,16 +187,14 @@ final class MH_Elementor_Loader {
                 case '30': echo '<div class="mh-loader-30 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>'; break;
                 default:  echo '<div class="mh-loader-1"></div>'; break;
             }
-            echo '</div>'; 
+            echo '</div></div>'; 
         }
 
-        // Render Custom Loading Text
         if (!empty(trim($custom_text))) {
             echo '<div class="mh-text-anim-' . esc_attr($text_anim) . '" style="' . esc_attr($text_style) . ' font-size: ' . esc_attr($text_size) . 'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center;">' . esc_html($custom_text) . '</div>';
         }
 
-        echo '</div>'; // End flex container
-        echo '</div>'; // End global preloader
+        echo '</div></div>';
 
         echo '<script>
             window.addEventListener("load", function() {
@@ -333,7 +324,7 @@ final class MH_Elementor_Loader {
         ];
         if ( class_exists( 'WooCommerce' ) ) {
             $wc_widget_map = [
-                'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php', 'class' => 'MH_Woo_Add_To_Cart_Widget' ],
+             'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php', 'class' => 'MH_Woo_Add_To_Cart_Widget' ],
                 'mh_woo_attributes' => [ 'file' => 'mh-woo-attributes-widget.php', 'class' => 'MH_Woo_Attributes_Widget' ],
                 'mh_product_search' => [ 'file' => 'mh-product-search-widget.php', 'class' => 'MH_Plug_Product_Search_Widget' ],
                 'mh_product_title' => [ 'file' => 'mh-product-title-widget.php', 'class' => 'MH_Product_Title_Widget' ],
@@ -355,6 +346,7 @@ final class MH_Elementor_Loader {
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
+
         foreach ($widget_map as $option_key => $widget_data) {
             $is_enabled = isset($widget_options[$option_key]) ? (bool)$widget_options[$option_key] : true;
             if ($is_enabled) {
@@ -367,12 +359,14 @@ final class MH_Elementor_Loader {
             }
         }
     }
+
     public function mh_plug_register_widget_assets() {
         wp_register_style('mh-widgets-css', MH_PLUG_URL . 'elementor/assets/css/mh-widgets.css', [], MH_PLUG_VERSION);
         wp_register_script('mh-widgets-js', MH_PLUG_URL . 'elementor/assets/js/mh-widgets.js', ['jquery'], MH_PLUG_VERSION, true);
         wp_register_style('mh-nav-menu-css', MH_PLUG_URL . 'elementor/assets/css/mh-nav-menu.css', [], MH_PLUG_VERSION);
         wp_register_script('mh-nav-menu-js', MH_PLUG_URL . 'elementor/assets/js/mh-nav-menu.js', ['jquery'], MH_PLUG_VERSION, true);
     }
+
     public function mh_plug_enqueue_woo_scripts() {
         if (!class_exists('WooCommerce')) return;
         wp_register_script('mh-woo-scripts', MH_PLUG_URL . 'elementor/assets/js/mh-woo-scripts.js', ['jquery'], MH_PLUG_VERSION, true);
@@ -380,7 +374,12 @@ final class MH_Elementor_Loader {
         wp_script_add_data('mh-widgets-js', 'group', 1);
         wp_enqueue_script('mh-woo-scripts');
         if (is_product()) wp_enqueue_script('mh-product-gallery-script');
-        $ajax_data = [ 'ajax_url' => admin_url('admin-ajax.php'), 'login_url' => wc_get_page_permalink('myaccount'), 'wishlist_nonce' => wp_create_nonce('mh_wishlist_nonce') ];
+
+        $ajax_data = [
+            'ajax_url'       => admin_url('admin-ajax.php'),
+            'login_url'      => wc_get_page_permalink('myaccount'),
+            'wishlist_nonce' => wp_create_nonce('mh_wishlist_nonce'),
+        ];
         wp_add_inline_script('mh-woo-scripts', 'var mh_plug_ajax = ' . wp_json_encode($ajax_data) . ';', 'before');
     }
 }
