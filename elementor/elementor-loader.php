@@ -20,12 +20,57 @@ final class MH_Elementor_Loader {
         add_action('wp_enqueue_scripts', [$this, 'mh_plug_enqueue_woo_scripts']);
         add_action('elementor/frontend/after_register_scripts', [$this, 'mh_plug_enqueue_woo_scripts']);
 
-        // AJAX Hooks for the Compare Table
+        // AJAX Hooks for Compare Table
         add_action('wp_ajax_mh_get_compare_table', [$this, 'get_compare_table_ajax']);
         add_action('wp_ajax_nopriv_mh_get_compare_table', [$this, 'get_compare_table_ajax']);
+
+        // 🚀 NEW: AJAX Hooks for QUICK VIEW
+        add_action('wp_ajax_mh_quick_view', [$this, 'quick_view_ajax']);
+        add_action('wp_ajax_nopriv_mh_quick_view', [$this, 'quick_view_ajax']);
     }
 
-    // 🚀 The AJAX Function that builds the Table
+    // 🚀 NEW: The AJAX Function that builds the Quick View Popup
+    public function quick_view_ajax() {
+        if (!isset($_POST['product_id'])) {
+            wp_send_json_error(['message' => 'No product ID provided.']);
+        }
+
+        $product_id = intval($_POST['product_id']);
+        $template_id = !empty($_POST['template_id']) ? intval($_POST['template_id']) : 0;
+
+        // Force WordPress to recognize this exact product
+        global $post, $product;
+        $post = get_post($product_id);
+        $product = wc_get_product($product_id);
+        setup_postdata($post);
+
+        ob_start();
+
+        if ($template_id && class_exists('\Elementor\Plugin')) {
+            // Force Elementor to print the CSS for the custom template!
+            if ( class_exists( '\Elementor\Core\Files\CSS\Post' ) ) {
+                $css_file = new \Elementor\Core\Files\CSS\Post( $template_id );
+                $css_file->enqueue();
+            }
+            // Print the template layout
+            echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display($template_id, true);
+        } else {
+            // Fallback Design if no template is selected
+            echo '<div style="padding:30px; text-align:center; font-family:sans-serif;">';
+            echo $product->get_image('woocommerce_single', ['style' => 'max-width:300px; border-radius:10px; margin-bottom:20px;']);
+            echo '<h2 style="margin:0 0 10px; color:#111;">' . $product->get_title() . '</h2>';
+            echo '<div style="font-size:20px; color:#d63638; font-weight:bold; margin-bottom:20px;">' . $product->get_price_html() . '</div>';
+            echo '<div>';
+            woocommerce_template_single_add_to_cart();
+            echo '</div></div>';
+        }
+
+        $html = ob_get_clean();
+        wp_reset_postdata();
+
+        wp_send_json_success(['html' => $html]);
+    }
+
     public function get_compare_table_ajax() {
         if (!isset($_POST['product_ids']) || !is_array($_POST['product_ids'])) {
             wp_send_json_error(['html' => '<div class="mh-compare-empty"><h3>No products to compare</h3><p>Return to the shop to add products.</p></div>']);
@@ -35,7 +80,6 @@ final class MH_Elementor_Loader {
         $products = [];
         $all_attributes = [];
 
-        // Fetch products & dynamically extract their attributes
         foreach ($product_ids as $id) {
             $product = wc_get_product($id);
             if ($product) {
@@ -65,7 +109,6 @@ final class MH_Elementor_Loader {
                             <div class="mh-compare-price"><?php echo $product->get_price_html(); ?></div>
                             <div class="mh-compare-add-to-cart">
                                 <?php 
-                                // 🚀 FIX: Bulletproof WooCommerce Add to Cart Generation
                                 echo sprintf( '<a href="%s" data-quantity="1" class="%s" %s>%s</a>',
                                     esc_url( $product->add_to_cart_url() ),
                                     esc_attr( 'button wp-element-button product_type_' . $product->get_type() . ( $product->is_purchasable() && $product->is_in_stock() ? ' add_to_cart_button ajax_add_to_cart' : '' ) ),
@@ -82,28 +125,24 @@ final class MH_Elementor_Loader {
                         </td>
                     <?php endforeach; ?>
                 </tr>
-                
                 <tr>
                     <th>Description</th>
                     <?php foreach($products as $product): ?>
                         <td><?php echo wp_trim_words($product->get_short_description(), 15, '...'); ?></td>
                     <?php endforeach; ?>
                 </tr>
-
                 <tr>
                     <th>Rating</th>
                     <?php foreach($products as $product): ?>
                         <td><?php echo wc_get_rating_html($product->get_average_rating()); ?></td>
                     <?php endforeach; ?>
                 </tr>
-
                 <tr>
                     <th>Availability</th>
                     <?php foreach($products as $product): ?>
                         <td><?php echo wc_get_stock_html($product); ?></td>
                     <?php endforeach; ?>
                 </tr>
-
                 <?php foreach($all_attributes as $attr_key => $attr_label): ?>
                     <tr>
                         <th><?php echo esc_html($attr_label); ?></th>
