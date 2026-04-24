@@ -36,9 +36,9 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
                             <h3><?php esc_html_e('System Power', 'mh-plug'); ?></h3>
                             <p><?php esc_html_e('Activate the global preloader on your website.', 'mh-plug'); ?></p>
                         </div>
-                        <label class="mh-cyber-switch">
-                            <input type="checkbox" name="mh_plug_preloader_settings[enable]" value="yes" <?php checked($enable, 'yes'); ?> />
-                            <span class="mh-slider-track"></span>
+                        <label class="switch mh-native-switch">
+                            <input class="cb" type="checkbox" name="mh_plug_preloader_settings[enable]" value="yes" <?php checked($enable, 'yes'); ?> />
+                            <span class="toggle"><span class="left">off</span><span class="right">on</span></span>
                         </label>
                     </div>
                     
@@ -81,28 +81,44 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
                     <h3><i class="fas fa-magic"></i> <?php esc_html_e('Animation Protocol', 'mh-plug'); ?></h3>
                     
                     <div class="mh-field-group">
-                        <label><?php esc_html_e('Select Sequence', 'mh-plug'); ?></label>
+                        <label><?php esc_html_e('Select Sequence (30 Total)', 'mh-plug'); ?></label>
                         <select name="mh_plug_preloader_settings[css_effect]" id="mh_css_effect_select" class="mh-cyber-select">
-                            <option value="1" <?php selected($css_effect, '1'); ?>>1. Classic Spinner</option>
-                            <option value="2" <?php selected($css_effect, '2'); ?>>2. Bouncing Dots</option>
-                            <option value="3" <?php selected($css_effect, '3'); ?>>3. Pulse Circle</option>
-                            <option value="4" <?php selected($css_effect, '4'); ?>>4. Flipping Square</option>
-                            <option value="5" <?php selected($css_effect, '5'); ?>>5. Double Bounce</option>
-                            <option value="6" <?php selected($css_effect, '6'); ?>>6. Bar Wave</option>
-                            <option value="7" <?php selected($css_effect, '7'); ?>>7. Radar Scan</option>
-                            <option value="8" <?php selected($css_effect, '8'); ?>>8. Morphing Hex</option>
-                            <option value="9" <?php selected($css_effect, '9'); ?>>9. Orbiting Spheres</option>
-                            <option value="10" <?php selected($css_effect, '10'); ?>>10. Ripple Rings</option>
-                            <option value="11" <?php selected($css_effect, '11'); ?>>11. Quantum Triangle</option>
-                            <option value="12" <?php selected($css_effect, '12'); ?>>12. Grid Matrix</option>
-                            <option value="13" <?php selected($css_effect, '13'); ?>>13. Infinity Loop</option>
-                            <option value="14" <?php selected($css_effect, '14'); ?>>14. Arc Reactor</option>
-                            <option value="15" <?php selected($css_effect, '15'); ?>>15. Cube Split</option>
-                            <option value="16" <?php selected($css_effect, '16'); ?>>16. Glow Pulse</option>
-                            <option value="17" <?php selected($css_effect, '17'); ?>>17. Rotating Portal</option>
-                            <option value="18" <?php selected($css_effect, '18'); ?>>18. Stairway</option>
-                            <option value="19" <?php selected($css_effect, '19'); ?>>19. Shooting Star</option>
-                            <option value="20" <?php selected($css_effect, '20'); ?>>20. Hyper Ring</option>
+                            <optgroup label="Basic Shapes">
+                                <option value="1" <?php selected($css_effect, '1'); ?>>1. Classic Spinner</option>
+                                <option value="2" <?php selected($css_effect, '2'); ?>>2. Bouncing Dots</option>
+                                <option value="3" <?php selected($css_effect, '3'); ?>>3. Pulse Circle</option>
+                                <option value="4" <?php selected($css_effect, '4'); ?>>4. Flipping Square</option>
+                                <option value="5" <?php selected($css_effect, '5'); ?>>5. Double Bounce</option>
+                                <option value="6" <?php selected($css_effect, '6'); ?>>6. Bar Wave</option>
+                            </optgroup>
+                            <optgroup label="Futuristic Designs">
+                                <option value="7" <?php selected($css_effect, '7'); ?>>7. Radar Scan</option>
+                                <option value="8" <?php selected($css_effect, '8'); ?>>8. Morphing Hex</option>
+                                <option value="9" <?php selected($css_effect, '9'); ?>>9. Orbiting Spheres</option>
+                                <option value="10" <?php selected($css_effect, '10'); ?>>10. Ripple Rings</option>
+                                <option value="11" <?php selected($css_effect, '11'); ?>>11. Quantum Triangle</option>
+                                <option value="12" <?php selected($css_effect, '12'); ?>>12. Grid Matrix</option>
+                                <option value="13" <?php selected($css_effect, '13'); ?>>13. Infinity Loop</option>
+                                <option value="14" <?php selected($css_effect, '14'); ?>>14. Arc Reactor</option>
+                                <option value="15" <?php selected($css_effect, '15'); ?>>15. Cube Split</option>
+                                <option value="16" <?php selected($css_effect, '16'); ?>>16. Glow Pulse</option>
+                                <option value="17" <?php selected($css_effect, '17'); ?>>17. Rotating Portal</option>
+                                <option value="18" <?php selected($css_effect, '18'); ?>>18. Stairway</option>
+                                <option value="19" <?php selected($css_effect, '19'); ?>>19. Shooting Star</option>
+                                <option value="20" <?php selected($css_effect, '20'); ?>>20. Hyper Ring</option>
+                            </optgroup>
+                            <optgroup label="E-Commerce Specials 🚀">
+                                <option value="21" <?php selected($css_effect, '21'); ?>>21. Shopping Cart Dash</option>
+                                <option value="22" <?php selected($css_effect, '22'); ?>>22. Shopping Bag Drop</option>
+                                <option value="23" <?php selected($css_effect, '23'); ?>>23. Price Tag Flip</option>
+                                <option value="24" <?php selected($css_effect, '24'); ?>>24. Delivery Truck</option>
+                                <option value="25" <?php selected($css_effect, '25'); ?>>25. Gift Box Shake</option>
+                                <option value="26" <?php selected($css_effect, '26'); ?>>26. Credit Card Swipe</option>
+                                <option value="27" <?php selected($css_effect, '27'); ?>>27. Barcode Scan</option>
+                                <option value="28" <?php selected($css_effect, '28'); ?>>28. Coin Spin</option>
+                                <option value="29" <?php selected($css_effect, '29'); ?>>29. Package Pulse</option>
+                                <option value="30" <?php selected($css_effect, '30'); ?>>30. Storefront Swing</option>
+                            </optgroup>
                         </select>
                     </div>
 
@@ -184,7 +200,6 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
 </div>
 
 <style>
-    /* Base Variables & Dashboard Layout */
     :root {
         --mh-dark: #004265;
         --mh-blue: #2293e9;
@@ -195,6 +210,20 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
         --mh-text: #334155;
         --mh-border: #e2e8f0;
     }
+    
+    /* 🚀 NATIVE MH PLUG TOGGLE SWITCH CSS */
+    .switch.mh-native-switch { position: relative; display: inline-block; width: 70px; height: 32px; margin: 0; }
+    .switch.mh-native-switch input.cb { opacity: 0; width: 0; height: 0; }
+    .switch.mh-native-switch .toggle { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 11px; font-weight: bold; color: white; text-transform: uppercase; overflow: hidden; }
+    .switch.mh-native-switch .toggle:before { position: absolute; content: ""; height: 24px; width: 24px; left: 4px; bottom: 4px; background-color: white; transition: .4s cubic-bezier(0.68, -0.55, 0.265, 1.55); border-radius: 50%; z-index: 2; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .switch.mh-native-switch input.cb:checked + .toggle { background-color: var(--mh-dark); box-shadow: 0 0 10px var(--mh-blue-glow); }
+    .switch.mh-native-switch input.cb:checked + .toggle:before { transform: translateX(38px); }
+    .switch.mh-native-switch .left { color: #64748b; z-index: 1; transition: 0.3s; }
+    .switch.mh-native-switch input.cb:checked + .toggle .left { opacity: 0; }
+    .switch.mh-native-switch .right { color: white; z-index: 1; opacity: 0; transition: 0.3s; }
+    .switch.mh-native-switch input.cb:checked + .toggle .right { opacity: 1; }
+
+    /* Dashboard Layout */
     .mh-futuristic-dashboard { max-width: 1200px; margin: 20px auto; font-family: 'Segoe UI', Tahoma, sans-serif; }
     .mh-dashboard-header { position: relative; padding: 30px; background: var(--mh-dark); border-radius: 16px; color: white; margin-bottom: 30px; overflow: hidden; box-shadow: 0 15px 35px rgba(0, 66, 101, 0.2); }
     .mh-dashboard-header h1 { color: white; margin: 0 0 10px 0; font-size: 28px; font-weight: 800; position: relative; z-index: 2; }
@@ -216,12 +245,7 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
     .mh-field-group { margin-bottom: 20px; }
     .mh-field-group:last-child { margin-bottom: 0; }
     .mh-field-group label { display: block; font-weight: 600; color: var(--mh-text); margin-bottom: 10px; }
-    .mh-cyber-switch { position: relative; display: inline-block; width: 60px; height: 30px; }
-    .mh-cyber-switch input { opacity: 0; width: 0; height: 0; }
-    .mh-slider-track { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 30px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
-    .mh-slider-track:before { position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-    .mh-cyber-switch input:checked + .mh-slider-track { background-color: var(--mh-blue); box-shadow: 0 0 15px var(--mh-blue-glow); }
-    .mh-cyber-switch input:checked + .mh-slider-track:before { transform: translateX(30px); }
+    
     .mh-cyber-radio-group { display: flex; gap: 15px; }
     .mh-cyber-radio { cursor: pointer; flex: 1; }
     .mh-cyber-radio input { display: none; }
@@ -252,63 +276,80 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
     .mh-hud-overlay::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px); pointer-events: none; }
     .mh-preview-box { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 5; transition: background-color 0.3s; }
 
-    /* ALL 20 PRELOADER CSS ANIMATIONS */
+    /* ALL 30 PRELOADER CSS ANIMATIONS */
     #mh-css-preloader-preview-box { --mh-loader-color: <?php echo esc_attr($loader_color); ?>; }
     
-    /* 1. Spinner */ .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; }
+    .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; }
     @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    
-    /* 2. Dots */ .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; }
+    .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; }
     @keyframes mh-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
-    
-    /* 3. Pulse */ .mh-loader-3 { width: 50px; height: 50px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); }
+    .mh-loader-3 { width: 50px; height: 50px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); }
     @keyframes mh-pulse { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-    
-    /* 4. Flip */ .mh-loader-4 { width: 40px; height: 40px; background-color: var(--mh-loader-color); animation: mh-flip 1.2s infinite ease-in-out; }
+    .mh-loader-4 { width: 40px; height: 40px; background-color: var(--mh-loader-color); animation: mh-flip 1.2s infinite ease-in-out; }
     @keyframes mh-flip { 0% { transform: perspective(120px) rotateX(0deg) rotateY(0deg); } 50% { transform: perspective(120px) rotateX(-180deg) rotateY(0deg); } 100% { transform: perspective(120px) rotateX(-180deg) rotateY(-180deg); } }
-    
-    /* 5. Dbl Bounce */ .mh-loader-5 { width: 50px; height: 50px; position: relative; } .mh-loader-5 div { width: 100%; height: 100%; border-radius: 50%; background-color: var(--mh-loader-color); opacity: 0.6; position: absolute; top: 0; left: 0; animation: mh-bounce2 2s infinite ease-in-out; } .mh-loader-5 div:nth-child(2) { animation-delay: -1.0s; }
+    .mh-loader-5 { width: 50px; height: 50px; position: relative; } .mh-loader-5 div { width: 100%; height: 100%; border-radius: 50%; background-color: var(--mh-loader-color); opacity: 0.6; position: absolute; top: 0; left: 0; animation: mh-bounce2 2s infinite ease-in-out; } .mh-loader-5 div:nth-child(2) { animation-delay: -1.0s; }
     @keyframes mh-bounce2 { 0%, 100% { transform: scale(0); } 50% { transform: scale(1); } }
-    
-    /* 6. Bar Wave */ .mh-loader-6 { display: flex; gap: 5px; height: 40px; align-items: center; } .mh-loader-6 div { width: 6px; height: 100%; background-color: var(--mh-loader-color); animation: mh-wave 1.2s infinite ease-in-out; } .mh-loader-6 div:nth-child(2) { animation-delay: -1.1s; } .mh-loader-6 div:nth-child(3) { animation-delay: -1.0s; } .mh-loader-6 div:nth-child(4) { animation-delay: -0.9s; } .mh-loader-6 div:nth-child(5) { animation-delay: -0.8s; }
+    .mh-loader-6 { display: flex; gap: 5px; height: 40px; align-items: center; } .mh-loader-6 div { width: 6px; height: 100%; background-color: var(--mh-loader-color); animation: mh-wave 1.2s infinite ease-in-out; } .mh-loader-6 div:nth-child(2) { animation-delay: -1.1s; } .mh-loader-6 div:nth-child(3) { animation-delay: -1.0s; } .mh-loader-6 div:nth-child(4) { animation-delay: -0.9s; } .mh-loader-6 div:nth-child(5) { animation-delay: -0.8s; }
     @keyframes mh-wave { 0%, 40%, 100% { transform: scaleY(0.4); } 20% { transform: scaleY(1); } }
-
-    /* 7. Radar Scan */ .mh-loader-7 { width: 50px; height: 50px; border-radius: 50%; background: conic-gradient(transparent 60%, var(--mh-loader-color)); animation: mh-spin 1s linear infinite; }
-    
-    /* 8. Morph Hex */ .mh-loader-8 { width: 40px; height: 40px; background: var(--mh-loader-color); animation: mh-morph 2s infinite ease-in-out; }
+    .mh-loader-7 { width: 50px; height: 50px; border-radius: 50%; background: conic-gradient(transparent 60%, var(--mh-loader-color)); animation: mh-spin 1s linear infinite; }
+    .mh-loader-8 { width: 40px; height: 40px; background: var(--mh-loader-color); animation: mh-morph 2s infinite ease-in-out; }
     @keyframes mh-morph { 0% { border-radius: 0%; transform: rotate(0deg); } 50% { border-radius: 50%; transform: rotate(180deg); } 100% { border-radius: 0%; transform: rotate(360deg); } }
-    
-    /* 9. Orbiting Spheres */ .mh-loader-9 { width: 50px; height: 50px; position: relative; animation: mh-spin 2s linear infinite; } .mh-loader-9 div { position: absolute; width: 15px; height: 15px; background: var(--mh-loader-color); border-radius: 50%; top: 0; left: 50%; transform: translateX(-50%); } .mh-loader-9 div:nth-child(2) { top: auto; bottom: 0; }
-    
-    /* 10. Ripple Rings */ .mh-loader-10 { position: relative; width: 60px; height: 60px; } .mh-loader-10 div { position: absolute; border: 4px solid var(--mh-loader-color); opacity: 1; border-radius: 50%; animation: mh-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite; } .mh-loader-10 div:nth-child(2) { animation-delay: -0.5s; }
+    .mh-loader-9 { width: 50px; height: 50px; position: relative; animation: mh-spin 2s linear infinite; } .mh-loader-9 div { position: absolute; width: 15px; height: 15px; background: var(--mh-loader-color); border-radius: 50%; top: 0; left: 50%; transform: translateX(-50%); } .mh-loader-9 div:nth-child(2) { top: auto; bottom: 0; }
+    .mh-loader-10 { position: relative; width: 60px; height: 60px; } .mh-loader-10 div { position: absolute; border: 4px solid var(--mh-loader-color); opacity: 1; border-radius: 50%; animation: mh-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite; } .mh-loader-10 div:nth-child(2) { animation-delay: -0.5s; }
     @keyframes mh-ripple { 0% { top: 28px; left: 28px; width: 0; height: 0; opacity: 0; } 5% { opacity: 1; } 100% { top: -1px; left: -1px; width: 58px; height: 58px; opacity: 0; } }
-
-    /* 11. Quantum Triangle */ .mh-loader-11 { width: 50px; height: 50px; border: 3px dashed var(--mh-loader-color); border-radius: 50%; animation: mh-spin 4s linear infinite; display: flex; align-items: center; justify-content: center; } .mh-loader-11 div { width: 20px; height: 20px; background: var(--mh-loader-color); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); animation: mh-spin-reverse 2s linear infinite; }
+    .mh-loader-11 { width: 50px; height: 50px; border: 3px dashed var(--mh-loader-color); border-radius: 50%; animation: mh-spin 4s linear infinite; display: flex; align-items: center; justify-content: center; } .mh-loader-11 div { width: 20px; height: 20px; background: var(--mh-loader-color); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); animation: mh-spin-reverse 2s linear infinite; }
     @keyframes mh-spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
-
-    /* 12. Grid Matrix */ .mh-loader-12 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 50px; height: 50px; } .mh-loader-12 div { background: var(--mh-loader-color); border-radius: 50%; animation: mh-grid-pulse 1.2s infinite ease-in-out; } .mh-loader-12 div:nth-child(1), .mh-loader-12 div:nth-child(5), .mh-loader-12 div:nth-child(9) { animation-delay: 0.4s; } .mh-loader-12 div:nth-child(2), .mh-loader-12 div:nth-child(6), .mh-loader-12 div:nth-child(7) { animation-delay: 0.8s; } .mh-loader-12 div:nth-child(3), .mh-loader-12 div:nth-child(4), .mh-loader-12 div:nth-child(8) { animation-delay: 1.2s; }
+    .mh-loader-12 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 50px; height: 50px; } .mh-loader-12 div { background: var(--mh-loader-color); border-radius: 50%; animation: mh-grid-pulse 1.2s infinite ease-in-out; } .mh-loader-12 div:nth-child(1), .mh-loader-12 div:nth-child(5), .mh-loader-12 div:nth-child(9) { animation-delay: 0.4s; } .mh-loader-12 div:nth-child(2), .mh-loader-12 div:nth-child(6), .mh-loader-12 div:nth-child(7) { animation-delay: 0.8s; } .mh-loader-12 div:nth-child(3), .mh-loader-12 div:nth-child(4), .mh-loader-12 div:nth-child(8) { animation-delay: 1.2s; }
     @keyframes mh-grid-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.5); } }
-
-    /* 13. Infinity Loop */ .mh-loader-13 { position: relative; width: 60px; height: 20px; } .mh-loader-13 div { position: absolute; width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; animation: mh-infinity 1.5s infinite ease-in-out; } .mh-loader-13 div:nth-child(2) { animation-delay: -0.75s; }
+    .mh-loader-13 { position: relative; width: 60px; height: 20px; } .mh-loader-13 div { position: absolute; width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; animation: mh-infinity 1.5s infinite ease-in-out; } .mh-loader-13 div:nth-child(2) { animation-delay: -0.75s; }
     @keyframes mh-infinity { 0% { left: 0; transform: scale(1); z-index: 1; } 25% { transform: scale(1.5); z-index: 2; } 50% { left: 40px; transform: scale(1); z-index: 1; } 75% { transform: scale(0.5); z-index: 0; } 100% { left: 0; transform: scale(1); z-index: 1; } }
-
-    /* 14. Arc Reactor */ .mh-loader-14 { position: relative; width: 60px; height: 60px; } .mh-loader-14 div { position: absolute; width: 100%; height: 100%; border: 3px solid transparent; border-top-color: var(--mh-loader-color); border-radius: 50%; animation: mh-spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; } .mh-loader-14 div:nth-child(2) { width: 80%; height: 80%; top: 10%; left: 10%; border-top-color: transparent; border-right-color: var(--mh-loader-color); animation-duration: 1.5s; animation-direction: reverse; } .mh-loader-14 div:nth-child(3) { width: 60%; height: 60%; top: 20%; left: 20%; border-top-color: transparent; border-bottom-color: var(--mh-loader-color); animation-duration: 1s; }
-
-    /* 15. Cube Split */ .mh-loader-15 { width: 40px; height: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; } .mh-loader-15 div { background: var(--mh-loader-color); animation: mh-cube-split 1.5s infinite ease-in-out; } .mh-loader-15 div:nth-child(1) { transform-origin: bottom right; } .mh-loader-15 div:nth-child(2) { transform-origin: bottom left; } .mh-loader-15 div:nth-child(3) { transform-origin: top right; } .mh-loader-15 div:nth-child(4) { transform-origin: top left; }
+    .mh-loader-14 { position: relative; width: 60px; height: 60px; } .mh-loader-14 div { position: absolute; width: 100%; height: 100%; border: 3px solid transparent; border-top-color: var(--mh-loader-color); border-radius: 50%; animation: mh-spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; } .mh-loader-14 div:nth-child(2) { width: 80%; height: 80%; top: 10%; left: 10%; border-top-color: transparent; border-right-color: var(--mh-loader-color); animation-duration: 1.5s; animation-direction: reverse; } .mh-loader-14 div:nth-child(3) { width: 60%; height: 60%; top: 20%; left: 20%; border-top-color: transparent; border-bottom-color: var(--mh-loader-color); animation-duration: 1s; }
+    .mh-loader-15 { width: 40px; height: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; } .mh-loader-15 div { background: var(--mh-loader-color); animation: mh-cube-split 1.5s infinite ease-in-out; } .mh-loader-15 div:nth-child(1) { transform-origin: bottom right; } .mh-loader-15 div:nth-child(2) { transform-origin: bottom left; } .mh-loader-15 div:nth-child(3) { transform-origin: top right; } .mh-loader-15 div:nth-child(4) { transform-origin: top left; }
     @keyframes mh-cube-split { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.5) rotate(90deg); border-radius: 50%; } }
-
-    /* 16. Glow Pulse */ .mh-loader-16 { width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; box-shadow: 0 0 20px 5px var(--mh-loader-color); animation: mh-glow-pulse 1s infinite alternate; }
+    .mh-loader-16 { width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; box-shadow: 0 0 20px 5px var(--mh-loader-color); animation: mh-glow-pulse 1s infinite alternate; }
     @keyframes mh-glow-pulse { 0% { box-shadow: 0 0 10px 2px var(--mh-loader-color); transform: scale(0.8); } 100% { box-shadow: 0 0 30px 10px var(--mh-loader-color); transform: scale(1.2); } }
-
-    /* 17. Rotating Portal */ .mh-loader-17 { width: 50px; height: 50px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: var(--mh-loader-color) transparent; animation: mh-spin 1.2s linear infinite; position: relative; } .mh-loader-17 div { position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: transparent var(--mh-loader-color); animation: mh-spin-reverse 0.6s linear infinite; }
-
-    /* 18. Stairway */ .mh-loader-18 { display: flex; gap: 6px; height: 40px; align-items: flex-end; } .mh-loader-18 div { width: 8px; background: var(--mh-loader-color); animation: mh-stairway 1s infinite ease-in-out alternate; } .mh-loader-18 div:nth-child(1) { animation-delay: 0s; } .mh-loader-18 div:nth-child(2) { animation-delay: 0.2s; } .mh-loader-18 div:nth-child(3) { animation-delay: 0.4s; } .mh-loader-18 div:nth-child(4) { animation-delay: 0.6s; }
+    .mh-loader-17 { width: 50px; height: 50px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: var(--mh-loader-color) transparent; animation: mh-spin 1.2s linear infinite; position: relative; } .mh-loader-17 div { position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: transparent var(--mh-loader-color); animation: mh-spin-reverse 0.6s linear infinite; }
+    .mh-loader-18 { display: flex; gap: 6px; height: 40px; align-items: flex-end; } .mh-loader-18 div { width: 8px; background: var(--mh-loader-color); animation: mh-stairway 1s infinite ease-in-out alternate; } .mh-loader-18 div:nth-child(1) { animation-delay: 0s; } .mh-loader-18 div:nth-child(2) { animation-delay: 0.2s; } .mh-loader-18 div:nth-child(3) { animation-delay: 0.4s; } .mh-loader-18 div:nth-child(4) { animation-delay: 0.6s; }
     @keyframes mh-stairway { 0% { height: 10px; } 100% { height: 40px; } }
-
-    /* 19. Shooting Star */ .mh-loader-19 { width: 50px; height: 50px; border-radius: 50%; box-shadow: inset 0 0 0 4px rgba(255,255,255,0.1); position: relative; } .mh-loader-19::after { content: ''; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 50%; border: 4px solid transparent; border-top-color: var(--mh-loader-color); animation: mh-spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
-
-    /* 20. Hyper Ring */ .mh-loader-20 { width: 50px; height: 50px; perspective: 150px; } .mh-loader-20 div { width: 100%; height: 100%; border: 6px solid var(--mh-loader-color); border-radius: 50%; animation: mh-hyper-ring 2s linear infinite; }
+    .mh-loader-19 { width: 50px; height: 50px; border-radius: 50%; box-shadow: inset 0 0 0 4px rgba(255,255,255,0.1); position: relative; } .mh-loader-19::after { content: ""; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 50%; border: 4px solid transparent; border-top-color: var(--mh-loader-color); animation: mh-spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
+    .mh-loader-20 { width: 50px; height: 50px; perspective: 150px; } .mh-loader-20 div { width: 100%; height: 100%; border: 6px solid var(--mh-loader-color); border-radius: 50%; animation: mh-hyper-ring 2s linear infinite; }
     @keyframes mh-hyper-ring { 0% { transform: rotateX(60deg) rotateZ(0deg); } 100% { transform: rotateX(60deg) rotateZ(360deg); } }
+
+    /* 🚀 10 E-COMMERCE SPECIFIC ANIMATIONS */
+    .mh-ecommerce-icon { display: flex; align-items: center; justify-content: center; }
+    .mh-ecommerce-icon i { font-size: 45px; color: var(--mh-loader-color); }
+    
+    .mh-loader-21 { animation: mh-cart-dash 1.5s infinite ease-in-out; }
+    @keyframes mh-cart-dash { 0% { transform: translateX(-30px) rotate(-15deg); opacity: 0; } 50% { transform: translateX(0) rotate(0deg); opacity: 1; } 100% { transform: translateX(30px) rotate(15deg); opacity: 0; } }
+
+    .mh-loader-22 { animation: mh-bag-drop 1.2s infinite cubic-bezier(0.28, 0.84, 0.42, 1); transform-origin: bottom; }
+    @keyframes mh-bag-drop { 0% { transform: translateY(-30px) scaleY(1.2); opacity: 0; } 50% { transform: translateY(0) scaleY(0.8); opacity: 1; } 70% { transform: translateY(-10px) scaleY(1); } 100% { transform: translateY(0) scaleY(1); opacity: 0; } }
+
+    .mh-loader-23 { animation: mh-tag-flip 1.5s infinite; perspective: 100px; }
+    @keyframes mh-tag-flip { 0% { transform: rotateY(0deg); } 50% { transform: rotateY(180deg); } 100% { transform: rotateY(360deg); } }
+
+    .mh-loader-24 { animation: mh-truck-drive 2s infinite linear; }
+    @keyframes mh-truck-drive { 0% { transform: translateX(-40px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(40px); opacity: 0; } }
+
+    .mh-loader-25 { animation: mh-gift-shake 1.5s infinite; }
+    @keyframes mh-gift-shake { 0%, 100% { transform: rotate(0deg); } 10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); } 20%, 40%, 60%, 80% { transform: rotate(10deg); } }
+
+    .mh-loader-26 i { animation: mh-card-swipe 1.5s infinite ease-in-out; }
+    @keyframes mh-card-swipe { 0% { transform: translateY(-20px); opacity: 0; } 50% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(20px); opacity: 0; } }
+
+    .mh-loader-27 { position: relative; }
+    .mh-scanline { position: absolute; top: 0; left: -10%; width: 120%; height: 3px; background-color: var(--mh-loader-color); animation: mh-scan 1.5s infinite linear; box-shadow: 0 0 8px var(--mh-loader-color); }
+    @keyframes mh-scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+
+    .mh-loader-28 { animation: mh-coin-drop 1.5s infinite ease-in-out; }
+    @keyframes mh-coin-drop { 0% { transform: translateY(-30px) rotateY(0deg); opacity: 0; } 50% { transform: translateY(0) rotateY(180deg); opacity: 1; } 100% { transform: translateY(20px) rotateY(360deg); opacity: 0; } }
+
+    .mh-loader-29 { animation: mh-box-pulse 1.2s infinite ease-in-out; }
+    @keyframes mh-box-pulse { 0% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 0.5; } }
+
+    .mh-loader-30 { transform-origin: top center; animation: mh-store-swing 2s infinite ease-in-out; }
+    @keyframes mh-store-swing { 0% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } 100% { transform: rotate(-15deg); } }
+
 </style>
 
 <script>
@@ -355,6 +396,18 @@ jQuery(document).ready(function($){
         if (effect === '18') html = '<div class="mh-loader-18"><div></div><div></div><div></div><div></div></div>';
         if (effect === '19') html = '<div class="mh-loader-19"></div>';
         if (effect === '20') html = '<div class="mh-loader-20"><div></div></div>';
+        
+        // E-Commerce Elements
+        if (effect === '21') html = '<div class="mh-loader-21 mh-ecommerce-icon"><i class="fas fa-shopping-cart"></i></div>';
+        if (effect === '22') html = '<div class="mh-loader-22 mh-ecommerce-icon"><i class="fas fa-shopping-bag"></i></div>';
+        if (effect === '23') html = '<div class="mh-loader-23 mh-ecommerce-icon"><i class="fas fa-tags"></i></div>';
+        if (effect === '24') html = '<div class="mh-loader-24 mh-ecommerce-icon"><i class="fas fa-truck"></i></div>';
+        if (effect === '25') html = '<div class="mh-loader-25 mh-ecommerce-icon"><i class="fas fa-gift"></i></div>';
+        if (effect === '26') html = '<div class="mh-loader-26 mh-ecommerce-icon"><i class="fas fa-credit-card"></i></div>';
+        if (effect === '27') html = '<div class="mh-loader-27 mh-ecommerce-icon"><i class="fas fa-barcode"></i><div class="mh-scanline"></div></div>';
+        if (effect === '28') html = '<div class="mh-loader-28 mh-ecommerce-icon"><i class="fas fa-coins"></i></div>';
+        if (effect === '29') html = '<div class="mh-loader-29 mh-ecommerce-icon"><i class="fas fa-box-open"></i></div>';
+        if (effect === '30') html = '<div class="mh-loader-30 mh-ecommerce-icon"><i class="fas fa-store"></i></div>';
 
         $('#mh-css-preloader-preview-box').html(html).css({ '--mh-loader-color': loaderColor, 'background-color': bgColor });
         $('.mh-image-preview-wrapper').css('background-color', bgColor);
