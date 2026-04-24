@@ -385,3 +385,59 @@
     });
 
 }(jQuery));
+
+// =======================================================
+// MH Plug - Cache-Proof Compare Engine (Local Storage)
+// =======================================================
+jQuery(document).ready(function($) {
+    
+    // 1. Function to sync the UI with Local Storage
+    function mhSyncCompareUI() {
+        let compareList = JSON.parse(localStorage.getItem('mh_compare_list')) || [];
+        
+        // Update all Header Counter badges
+        $('.mh-compare-count').text(compareList.length);
+
+        // Update all Compare Buttons (Grid & Single Product)
+        $('.mh-compare-btn').each(function() {
+            let pid = $(this).data('product-id');
+            if (compareList.includes(pid)) {
+                $(this).addClass('added');
+                $(this).find('.mh-compare-text').text('Added to Compare'); // For single product text
+            } else {
+                $(this).removeClass('added');
+                $(this).find('.mh-compare-text').text('Add to Compare');
+            }
+        });
+    }
+
+    // Initialize on page load
+    mhSyncCompareUI();
+
+    // 2. Handle Click Events
+    $(document).on('click', '.mh-compare-btn', function(e) {
+        e.preventDefault();
+        
+        let productId = $(this).data('product-id');
+        if (!productId) return;
+
+        let compareList = JSON.parse(localStorage.getItem('mh_compare_list')) || [];
+
+        // If already in list, remove it
+        if (compareList.includes(productId)) {
+            compareList = compareList.filter(id => id !== productId);
+        } 
+        // If not in list, add it (Limit to 4 products to prevent UI breaking)
+        else {
+            if (compareList.length >= 4) {
+                alert('You can only compare up to 4 products at a time!');
+                return;
+            }
+            compareList.push(productId);
+        }
+
+        // Save back to browser storage and instantly update the UI
+        localStorage.setItem('mh_compare_list', JSON.stringify(compareList));
+        mhSyncCompareUI();
+    });
+});
