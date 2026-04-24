@@ -25,12 +25,11 @@ final class MH_Elementor_Loader {
         add_action('wp_ajax_mh_quick_view', [$this, 'quick_view_ajax']);
         add_action('wp_ajax_nopriv_mh_quick_view', [$this, 'quick_view_ajax']);
 
-        // 🚀 Render Preloader globally
         add_action('wp_head', [$this, 'render_preloader_css']);
         add_action('wp_footer', [$this, 'render_preloader_html_js']);
     }
 
-    // 🚀 FIXED: Dynamic Color Variables Injection
+    // 🚀 Output all 30 Preloader CSS Styles
     public function render_preloader_css() {
         if (is_admin()) return;
         if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return; 
@@ -38,53 +37,81 @@ final class MH_Elementor_Loader {
         $settings = get_option('mh_plug_preloader_settings', []);
         if (empty($settings['enable']) || $settings['enable'] !== 'yes') return;
 
-        $bg_color     = !empty($settings['bg_color']) ? $settings['bg_color'] : '#ffffff';
+        $bg_color     = !empty($settings['bg_color']) ? $settings['bg_color'] : '#0f172a';
         $img_width    = !empty($settings['img_width']) ? $settings['img_width'] : '150';
         $transition   = !empty($settings['transition']) ? intval($settings['transition']) : 500;
-        $loader_color = !empty($settings['loader_color']) ? $settings['loader_color'] : '#d63638';
+        $loader_color = !empty($settings['loader_color']) ? $settings['loader_color'] : '#2293e9';
 
         echo '<style>
-            #mh-global-preloader { 
-                --mh-loader-color: ' . esc_attr($loader_color) . '; 
-                position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-                background-color: ' . esc_attr($bg_color) . '; z-index: 99999999; 
-                display: flex; align-items: center; justify-content: center; 
-                transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; 
-            }
+            #mh-global-preloader { --mh-loader-color: ' . esc_attr($loader_color) . '; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: ' . esc_attr($bg_color) . '; z-index: 99999999; display: flex; align-items: center; justify-content: center; transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; }
             #mh-global-preloader.mh-preloader-hidden { opacity: 0; visibility: hidden; }
             #mh-global-preloader img { width: ' . esc_attr($img_width) . 'px; height: auto; }
             
-            .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(0,0,0,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; }
+            .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; }
             @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-            .mh-loader-2 { display: flex; gap: 8px; }
-            .mh-loader-2 div { width: 16px; height: 16px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; }
-            .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; }
-            .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; }
+            .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; }
             @keyframes mh-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
-
             .mh-loader-3 { width: 50px; height: 50px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); }
             @keyframes mh-pulse { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-
             .mh-loader-4 { width: 40px; height: 40px; background-color: var(--mh-loader-color); animation: mh-flip 1.2s infinite ease-in-out; }
             @keyframes mh-flip { 0% { transform: perspective(120px) rotateX(0deg) rotateY(0deg); } 50% { transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg); } 100% { transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
-
-            .mh-loader-5 { width: 50px; height: 50px; position: relative; }
-            .mh-loader-5 div { width: 100%; height: 100%; border-radius: 50%; background-color: var(--mh-loader-color); opacity: 0.6; position: absolute; top: 0; left: 0; animation: mh-bounce2 2s infinite ease-in-out; }
-            .mh-loader-5 div:nth-child(2) { animation-delay: -1.0s; }
+            .mh-loader-5 { width: 50px; height: 50px; position: relative; } .mh-loader-5 div { width: 100%; height: 100%; border-radius: 50%; background-color: var(--mh-loader-color); opacity: 0.6; position: absolute; top: 0; left: 0; animation: mh-bounce2 2s infinite ease-in-out; } .mh-loader-5 div:nth-child(2) { animation-delay: -1.0s; }
             @keyframes mh-bounce2 { 0%, 100% { transform: scale(0); } 50% { transform: scale(1); } }
-
-            .mh-loader-6 { display: flex; gap: 5px; height: 40px; align-items: center; }
-            .mh-loader-6 div { width: 6px; height: 100%; background-color: var(--mh-loader-color); animation: mh-wave 1.2s infinite ease-in-out; }
-            .mh-loader-6 div:nth-child(2) { animation-delay: -1.1s; }
-            .mh-loader-6 div:nth-child(3) { animation-delay: -1.0s; }
-            .mh-loader-6 div:nth-child(4) { animation-delay: -0.9s; }
-            .mh-loader-6 div:nth-child(5) { animation-delay: -0.8s; }
+            .mh-loader-6 { display: flex; gap: 5px; height: 40px; align-items: center; } .mh-loader-6 div { width: 6px; height: 100%; background-color: var(--mh-loader-color); animation: mh-wave 1.2s infinite ease-in-out; } .mh-loader-6 div:nth-child(2) { animation-delay: -1.1s; } .mh-loader-6 div:nth-child(3) { animation-delay: -1.0s; } .mh-loader-6 div:nth-child(4) { animation-delay: -0.9s; } .mh-loader-6 div:nth-child(5) { animation-delay: -0.8s; }
             @keyframes mh-wave { 0%, 40%, 100% { transform: scaleY(0.4); } 20% { transform: scaleY(1); } }
+            .mh-loader-7 { width: 50px; height: 50px; border-radius: 50%; background: conic-gradient(transparent 60%, var(--mh-loader-color)); animation: mh-spin 1s linear infinite; }
+            .mh-loader-8 { width: 40px; height: 40px; background: var(--mh-loader-color); animation: mh-morph 2s infinite ease-in-out; }
+            @keyframes mh-morph { 0% { border-radius: 0%; transform: rotate(0deg); } 50% { border-radius: 50%; transform: rotate(180deg); } 100% { border-radius: 0%; transform: rotate(360deg); } }
+            .mh-loader-9 { width: 50px; height: 50px; position: relative; animation: mh-spin 2s linear infinite; } .mh-loader-9 div { position: absolute; width: 15px; height: 15px; background: var(--mh-loader-color); border-radius: 50%; top: 0; left: 50%; transform: translateX(-50%); } .mh-loader-9 div:nth-child(2) { top: auto; bottom: 0; }
+            .mh-loader-10 { position: relative; width: 60px; height: 60px; } .mh-loader-10 div { position: absolute; border: 4px solid var(--mh-loader-color); opacity: 1; border-radius: 50%; animation: mh-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite; } .mh-loader-10 div:nth-child(2) { animation-delay: -0.5s; }
+            @keyframes mh-ripple { 0% { top: 28px; left: 28px; width: 0; height: 0; opacity: 0; } 5% { opacity: 1; } 100% { top: -1px; left: -1px; width: 58px; height: 58px; opacity: 0; } }
+            .mh-loader-11 { width: 50px; height: 50px; border: 3px dashed var(--mh-loader-color); border-radius: 50%; animation: mh-spin 4s linear infinite; display: flex; align-items: center; justify-content: center; } .mh-loader-11 div { width: 20px; height: 20px; background: var(--mh-loader-color); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); animation: mh-spin-reverse 2s linear infinite; }
+            @keyframes mh-spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+            .mh-loader-12 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 50px; height: 50px; } .mh-loader-12 div { background: var(--mh-loader-color); border-radius: 50%; animation: mh-grid-pulse 1.2s infinite ease-in-out; } .mh-loader-12 div:nth-child(1), .mh-loader-12 div:nth-child(5), .mh-loader-12 div:nth-child(9) { animation-delay: 0.4s; } .mh-loader-12 div:nth-child(2), .mh-loader-12 div:nth-child(6), .mh-loader-12 div:nth-child(7) { animation-delay: 0.8s; } .mh-loader-12 div:nth-child(3), .mh-loader-12 div:nth-child(4), .mh-loader-12 div:nth-child(8) { animation-delay: 1.2s; }
+            @keyframes mh-grid-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.5); } }
+            .mh-loader-13 { position: relative; width: 60px; height: 20px; } .mh-loader-13 div { position: absolute; width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; animation: mh-infinity 1.5s infinite ease-in-out; } .mh-loader-13 div:nth-child(2) { animation-delay: -0.75s; }
+            @keyframes mh-infinity { 0% { left: 0; transform: scale(1); z-index: 1; } 25% { transform: scale(1.5); z-index: 2; } 50% { left: 40px; transform: scale(1); z-index: 1; } 75% { transform: scale(0.5); z-index: 0; } 100% { left: 0; transform: scale(1); z-index: 1; } }
+            .mh-loader-14 { position: relative; width: 60px; height: 60px; } .mh-loader-14 div { position: absolute; width: 100%; height: 100%; border: 3px solid transparent; border-top-color: var(--mh-loader-color); border-radius: 50%; animation: mh-spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; } .mh-loader-14 div:nth-child(2) { width: 80%; height: 80%; top: 10%; left: 10%; border-top-color: transparent; border-right-color: var(--mh-loader-color); animation-duration: 1.5s; animation-direction: reverse; } .mh-loader-14 div:nth-child(3) { width: 60%; height: 60%; top: 20%; left: 20%; border-top-color: transparent; border-bottom-color: var(--mh-loader-color); animation-duration: 1s; }
+            .mh-loader-15 { width: 40px; height: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; } .mh-loader-15 div { background: var(--mh-loader-color); animation: mh-cube-split 1.5s infinite ease-in-out; } .mh-loader-15 div:nth-child(1) { transform-origin: bottom right; } .mh-loader-15 div:nth-child(2) { transform-origin: bottom left; } .mh-loader-15 div:nth-child(3) { transform-origin: top right; } .mh-loader-15 div:nth-child(4) { transform-origin: top left; }
+            @keyframes mh-cube-split { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.5) rotate(90deg); border-radius: 50%; } }
+            .mh-loader-16 { width: 20px; height: 20px; background: var(--mh-loader-color); border-radius: 50%; box-shadow: 0 0 20px 5px var(--mh-loader-color); animation: mh-glow-pulse 1s infinite alternate; }
+            @keyframes mh-glow-pulse { 0% { box-shadow: 0 0 10px 2px var(--mh-loader-color); transform: scale(0.8); } 100% { box-shadow: 0 0 30px 10px var(--mh-loader-color); transform: scale(1.2); } }
+            .mh-loader-17 { width: 50px; height: 50px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: var(--mh-loader-color) transparent; animation: mh-spin 1.2s linear infinite; position: relative; } .mh-loader-17 div { position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border-radius: 50%; border: 4px solid var(--mh-loader-color); border-color: transparent var(--mh-loader-color); animation: mh-spin-reverse 0.6s linear infinite; }
+            .mh-loader-18 { display: flex; gap: 6px; height: 40px; align-items: flex-end; } .mh-loader-18 div { width: 8px; background: var(--mh-loader-color); animation: mh-stairway 1s infinite ease-in-out alternate; } .mh-loader-18 div:nth-child(1) { animation-delay: 0s; } .mh-loader-18 div:nth-child(2) { animation-delay: 0.2s; } .mh-loader-18 div:nth-child(3) { animation-delay: 0.4s; } .mh-loader-18 div:nth-child(4) { animation-delay: 0.6s; }
+            @keyframes mh-stairway { 0% { height: 10px; } 100% { height: 40px; } }
+            .mh-loader-19 { width: 50px; height: 50px; border-radius: 50%; box-shadow: inset 0 0 0 4px rgba(255,255,255,0.1); position: relative; } .mh-loader-19::after { content: ""; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 50%; border: 4px solid transparent; border-top-color: var(--mh-loader-color); animation: mh-spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
+            .mh-loader-20 { width: 50px; height: 50px; perspective: 150px; } .mh-loader-20 div { width: 100%; height: 100%; border: 6px solid var(--mh-loader-color); border-radius: 50%; animation: mh-hyper-ring 2s linear infinite; }
+            @keyframes mh-hyper-ring { 0% { transform: rotateX(60deg) rotateZ(0deg); } 100% { transform: rotateX(60deg) rotateZ(360deg); } }
+
+            /* 🚀 NATIVE INLINE SVG STYLES (Fixes FontAwesome Dependency) */
+            .mh-ecommerce-icon { display: flex; align-items: center; justify-content: center; position: relative; }
+            .mh-svg-icon { width: 50px; height: 50px; fill: none; stroke: var(--mh-loader-color); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+            
+            .mh-loader-21 { animation: mh-cart-dash 1.5s infinite ease-in-out; }
+            @keyframes mh-cart-dash { 0% { transform: translateX(-30px) rotate(-15deg); opacity: 0; } 50% { transform: translateX(0) rotate(0deg); opacity: 1; } 100% { transform: translateX(30px) rotate(15deg); opacity: 0; } }
+            .mh-loader-22 { animation: mh-bag-drop 1.2s infinite cubic-bezier(0.28, 0.84, 0.42, 1); transform-origin: bottom; }
+            @keyframes mh-bag-drop { 0% { transform: translateY(-30px) scaleY(1.2); opacity: 0; } 50% { transform: translateY(0) scaleY(0.8); opacity: 1; } 70% { transform: translateY(-10px) scaleY(1); } 100% { transform: translateY(0) scaleY(1); opacity: 0; } }
+            .mh-loader-23 { animation: mh-tag-flip 1.5s infinite; perspective: 100px; }
+            @keyframes mh-tag-flip { 0% { transform: rotateY(0deg); } 50% { transform: rotateY(180deg); } 100% { transform: rotateY(360deg); } }
+            .mh-loader-24 { animation: mh-truck-drive 2s infinite linear; }
+            @keyframes mh-truck-drive { 0% { transform: translateX(-40px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(40px); opacity: 0; } }
+            .mh-loader-25 { animation: mh-gift-shake 1.5s infinite; }
+            @keyframes mh-gift-shake { 0%, 100% { transform: rotate(0deg); } 10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); } 20%, 40%, 60%, 80% { transform: rotate(10deg); } }
+            .mh-loader-26 .mh-svg-icon { animation: mh-card-swipe 1.5s infinite ease-in-out; }
+            @keyframes mh-card-swipe { 0% { transform: translateY(-20px); opacity: 0; } 50% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(20px); opacity: 0; } }
+            .mh-loader-27 { position: relative; }
+            .mh-scanline { position: absolute; top: 0; left: -10%; width: 120%; height: 3px; background-color: var(--mh-loader-color); animation: mh-scan 1.5s infinite linear; box-shadow: 0 0 8px var(--mh-loader-color); }
+            @keyframes mh-scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+            .mh-loader-28 { animation: mh-coin-drop 1.5s infinite ease-in-out; }
+            @keyframes mh-coin-drop { 0% { transform: translateY(-30px) rotateY(0deg); opacity: 0; } 50% { transform: translateY(0) rotateY(180deg); opacity: 1; } 100% { transform: translateY(20px) rotateY(360deg); opacity: 0; } }
+            .mh-loader-29 { animation: mh-box-pulse 1.2s infinite ease-in-out; }
+            @keyframes mh-box-pulse { 0% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 0.5; } }
+            .mh-loader-30 { transform-origin: top center; animation: mh-store-swing 2s infinite ease-in-out; }
+            @keyframes mh-store-swing { 0% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } 100% { transform: rotate(-15deg); } }
         </style>';
     }
 
-    // 🚀 FIXED: Switch logic to ensure the correct loader always prints
+    // 🚀 NEW: Output SVG HTML properly
     public function render_preloader_html_js() {
         if (is_admin()) return;
         if (isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor')) return;
@@ -102,7 +129,6 @@ final class MH_Elementor_Loader {
         if ($type === 'image') {
             echo '<img src="' . esc_url($image) . '" alt="Loading..." />';
         } else {
-            // Bulletproof rendering
             switch ($css_effect) {
                 case '1': echo '<div class="mh-loader-1"></div>'; break;
                 case '2': echo '<div class="mh-loader-2"><div></div><div></div><div></div></div>'; break;
@@ -110,6 +136,31 @@ final class MH_Elementor_Loader {
                 case '4': echo '<div class="mh-loader-4"></div>'; break;
                 case '5': echo '<div class="mh-loader-5"><div></div><div></div></div>'; break;
                 case '6': echo '<div class="mh-loader-6"><div></div><div></div><div></div><div></div><div></div></div>'; break;
+                case '7': echo '<div class="mh-loader-7"></div>'; break;
+                case '8': echo '<div class="mh-loader-8"></div>'; break;
+                case '9': echo '<div class="mh-loader-9"><div></div><div></div></div>'; break;
+                case '10': echo '<div class="mh-loader-10"><div></div><div></div></div>'; break;
+                case '11': echo '<div class="mh-loader-11"><div></div></div>'; break;
+                case '12': echo '<div class="mh-loader-12"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'; break;
+                case '13': echo '<div class="mh-loader-13"><div></div><div></div></div>'; break;
+                case '14': echo '<div class="mh-loader-14"><div></div><div></div><div></div></div>'; break;
+                case '15': echo '<div class="mh-loader-15"><div></div><div></div><div></div><div></div></div>'; break;
+                case '16': echo '<div class="mh-loader-16"></div>'; break;
+                case '17': echo '<div class="mh-loader-17"><div></div></div>'; break;
+                case '18': echo '<div class="mh-loader-18"><div></div><div></div><div></div><div></div></div>'; break;
+                case '19': echo '<div class="mh-loader-19"></div>'; break;
+                case '20': echo '<div class="mh-loader-20"><div></div></div>'; break;
+                // 🚀 Injecting Raw SVGs so they work 100% perfectly with no FontAwesome needed
+                case '21': echo '<div class="mh-loader-21 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div>'; break;
+                case '22': echo '<div class="mh-loader-22 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></div>'; break;
+                case '23': echo '<div class="mh-loader-23 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div>'; break;
+                case '24': echo '<div class="mh-loader-24 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></div>'; break;
+                case '25': echo '<div class="mh-loader-25 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg></div>'; break;
+                case '26': echo '<div class="mh-loader-26 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg></div>'; break;
+                case '27': echo '<div class="mh-loader-27 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 5v14M8 5v14M12 5v14M17 5v14M21 5v14"></path></svg><div class="mh-scanline"></div></div>'; break;
+                case '28': echo '<div class="mh-loader-28 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M9 12h6"></path></svg></div>'; break;
+                case '29': echo '<div class="mh-loader-29 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>'; break;
+                case '30': echo '<div class="mh-loader-30 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>'; break;
                 default:  echo '<div class="mh-loader-1"></div>'; break;
             }
         }
