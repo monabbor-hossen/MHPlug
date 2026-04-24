@@ -9,134 +9,266 @@ $settings     = get_option('mh_plug_preloader_settings', []);
 $enable       = isset($settings['enable']) ? $settings['enable'] : 'no';
 $type         = isset($settings['type']) ? $settings['type'] : 'css';
 $css_effect   = isset($settings['css_effect']) ? $settings['css_effect'] : '1';
-$loader_color = isset($settings['loader_color']) ? $settings['loader_color'] : '#d63638';
+$loader_color = isset($settings['loader_color']) ? $settings['loader_color'] : '#2293e9';
 $image        = isset($settings['image']) ? $settings['image'] : '';
-$bg_color     = isset($settings['bg_color']) ? $settings['bg_color'] : '#ffffff';
-$img_width    = isset($settings['img_width']) ? $settings['img_width'] : '150';
+$bg_color     = isset($settings['bg_color']) ? $settings['bg_color'] : '#0f172a';
+$img_width    = isset($settings['img_width']) ? $settings['img_width'] : '100';
 $delay        = isset($settings['delay']) ? $settings['delay'] : '500';
 $transition   = isset($settings['transition']) ? $settings['transition'] : '500';
 ?>
 
-<div class="wrap mh-plug-admin-wrap mh-main-settings-wrap">
-    <h1><?php esc_html_e('Preloader Settings', 'mh-plug'); ?></h1>
+<div class="wrap mh-plug-admin-wrap mh-futuristic-dashboard">
+    <div class="mh-dashboard-header">
+        <div class="mh-header-glow"></div>
+        <h1><i class="fas fa-space-shuttle"></i> <?php esc_html_e('Preloader Engine', 'mh-plug'); ?></h1>
+        <p><?php esc_html_e('Configure your global loading screen with futuristic precision.', 'mh-plug'); ?></p>
+    </div>
 
     <form method="post" action="options.php">
         <?php settings_fields('mh_plug_preloader_group'); ?>
 
-        <div class="mh-accordion">
-            <div class="mh-accordion-item">
-                <div class="mh-accordion-header">
-                    <span class="mh-accordion-title"><?php esc_html_e('Preloader Customization', 'mh-plug'); ?></span>
-                </div>
-                
-                <div class="mh-accordion-content" style="display: block; padding: 30px;">
+        <div class="mh-settings-grid">
+
+            <div class="mh-futuristic-card mh-card-wide">
+                <div class="mh-card-inner">
+                    <div class="mh-setting-row">
+                        <div class="mh-setting-info">
+                            <h3><?php esc_html_e('System Power', 'mh-plug'); ?></h3>
+                            <p><?php esc_html_e('Activate the global preloader on your website.', 'mh-plug'); ?></p>
+                        </div>
+                        <label class="mh-cyber-switch">
+                            <input type="checkbox" name="mh_plug_preloader_settings[enable]" value="yes" <?php checked($enable, 'yes'); ?> />
+                            <span class="mh-slider-track"></span>
+                        </label>
+                    </div>
                     
-                    <div class="mh-settings-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                    <div class="mh-divider"></div>
 
-                        <div class="mh-widget-card">
-                            <div class="mh-widget-card-header">
-                                <div class="mh-widget-title"><?php esc_html_e('Enable Preloader', 'mh-plug'); ?></div>
-                                <label class="switch">
-                                    <input class="cb" type="checkbox" name="mh_plug_preloader_settings[enable]" value="yes" <?php checked($enable, 'yes'); ?> />
-                                    <span class="toggle"><span class="left">off</span><span class="right">on</span></span>
-                                </label>
-                            </div>
+                    <div class="mh-setting-row">
+                        <div class="mh-setting-info">
+                            <h3><?php esc_html_e('Render Engine Type', 'mh-plug'); ?></h3>
+                            <p><?php esc_html_e('Choose between CSS animations or custom media.', 'mh-plug'); ?></p>
                         </div>
-
-                        <div class="mh-widget-card">
-                            <div class="mh-widget-card-header" style="flex-direction: column; align-items: stretch; gap: 10px;">
-                                <div class="mh-widget-title"><?php esc_html_e('Preloader Type', 'mh-plug'); ?></div>
-                                <select name="mh_plug_preloader_settings[type]" class="mh-loader-type" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #c3c4c7;">
-                                    <option value="css" <?php selected($type, 'css'); ?>><?php esc_html_e('Default Animations', 'mh-plug'); ?></option>
-                                    <option value="image" <?php selected($type, 'image'); ?>><?php esc_html_e('Custom Image (GIF/PNG)', 'mh-plug'); ?></option>
-                                </select>
-                            </div>
+                        <div class="mh-cyber-radio-group">
+                            <label class="mh-cyber-radio">
+                                <input type="radio" name="mh_plug_preloader_settings[type]" value="css" class="mh-loader-type" <?php checked($type, 'css'); ?>> 
+                                <span><i class="fas fa-code"></i> CSS Animations</span>
+                            </label>
+                            <label class="mh-cyber-radio">
+                                <input type="radio" name="mh_plug_preloader_settings[type]" value="image" class="mh-loader-type" <?php checked($type, 'image'); ?>> 
+                                <span><i class="fas fa-image"></i> Custom Media</span>
+                            </label>
                         </div>
-
-                        <div class="mh-widget-card mh-css-settings" style="grid-column: 1 / -1; display: <?php echo ($type === 'css') ? 'block' : 'none'; ?>;">
-                            <div class="mh-widget-card-header" style="flex-direction: column; align-items: center; gap: 15px; padding: 30px;">
-                                <div class="mh-widget-title" style="margin-bottom: 10px;"><?php esc_html_e('Live Animation Preview', 'mh-plug'); ?></div>
-                                <div id="mh-css-preloader-preview-box" style="width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; background: <?php echo esc_attr($bg_color); ?>; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e4e7;">
-                                    </div>
-                            </div>
-                        </div>
-
-                        <div class="mh-widget-card mh-image-settings" style="grid-column: 1 / -1; display: <?php echo ($type === 'image') ? 'block' : 'none'; ?>;">
-                            <div class="mh-widget-card-header" style="flex-direction: column; align-items: center; gap: 15px; padding: 30px;">
-                                <div class="mh-widget-title" style="margin-bottom: 10px;"><?php esc_html_e('Live Image Preview', 'mh-plug'); ?></div>
-                                <div class="mh-image-preview-wrapper" style="width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; background: <?php echo esc_attr($bg_color); ?>; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e4e7;">
-                                    <img id="mh-preloader-preview" src="<?php echo esc_url($image); ?>" style="max-width: 100px; max-height: 100px; display: <?php echo empty($image) ? 'none' : 'block'; ?>;" />
-                                </div>
-                                <input type="hidden" id="mh-preloader-image-url" name="mh_plug_preloader_settings[image]" value="<?php echo esc_attr($image); ?>" />
-                                <div style="display:flex; gap: 10px; margin-top: 10px;">
-                                    <button type="button" class="button button-primary" id="mh-upload-preloader-btn"><i class="dashicons dashicons-format-image" style="vertical-align: middle;"></i> <?php esc_html_e('Choose Image', 'mh-plug'); ?></button>
-                                    <button type="button" class="button" id="mh-remove-preloader-btn" style="color: #d63638; border-color: #d63638; display: <?php echo empty($image) ? 'none' : 'inline-block'; ?>;"><?php esc_html_e('Remove', 'mh-plug'); ?></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mh-widget-card mh-css-settings" style="display: <?php echo ($type === 'css') ? 'block' : 'none'; ?>;">
-                            <div class="mh-widget-card-header" style="flex-direction: column; align-items: stretch; gap: 10px;">
-                                <div class="mh-widget-title"><?php esc_html_e('Select Animation', 'mh-plug'); ?></div>
-                                <select name="mh_plug_preloader_settings[css_effect]" id="mh_css_effect_select" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #c3c4c7;">
-                                    <option value="1" <?php selected($css_effect, '1'); ?>><?php esc_html_e('1. Classic Spinner', 'mh-plug'); ?></option>
-                                    <option value="2" <?php selected($css_effect, '2'); ?>><?php esc_html_e('2. Bouncing Dots', 'mh-plug'); ?></option>
-                                    <option value="3" <?php selected($css_effect, '3'); ?>><?php esc_html_e('3. Pulse Circle', 'mh-plug'); ?></option>
-                                    <option value="4" <?php selected($css_effect, '4'); ?>><?php esc_html_e('4. Flipping Square', 'mh-plug'); ?></option>
-                                    <option value="5" <?php selected($css_effect, '5'); ?>><?php esc_html_e('5. Double Bounce', 'mh-plug'); ?></option>
-                                    <option value="6" <?php selected($css_effect, '6'); ?>><?php esc_html_e('6. Bar Wave', 'mh-plug'); ?></option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="mh-widget-card mh-css-settings" style="display: <?php echo ($type === 'css') ? 'block' : 'none'; ?>;">
-                            <div class="mh-widget-card-header" style="flex-direction: column; align-items: stretch; gap: 10px;">
-                                <div class="mh-widget-title"><?php esc_html_e('Animation Color', 'mh-plug'); ?></div>
-                                <input type="color" id="mh_loader_color_picker" name="mh_plug_preloader_settings[loader_color]" value="<?php echo esc_attr($loader_color); ?>" style="width: 100%; height: 40px; border-radius: 6px; border: 1px solid #c3c4c7; cursor: pointer; padding: 2px;" />
-                            </div>
-                        </div>
-
-                        <div class="mh-widget-card mh-image-settings" style="display: <?php echo ($type === 'image') ? 'block' : 'none'; ?>;">
-                            <div class="mh-widget-card-header" style="flex-direction: column; align-items: stretch; gap: 10px;">
-                                <div class="mh-widget-title"><?php esc_html_e('Image Width (px)', 'mh-plug'); ?></div>
-                                <input type="number" name="mh_plug_preloader_settings[img_width]" value="<?php echo esc_attr($img_width); ?>" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #c3c4c7;" />
-                            </div>
-                        </div>
-
-                        <div class="mh-widget-card">
-                            <div class="mh-widget-card-header" style="flex-direction: column; align-items: stretch; gap: 10px;">
-                                <div class="mh-widget-title"><?php esc_html_e('Background Color', 'mh-plug'); ?></div>
-                                <input type="color" id="mh_bg_color_picker" name="mh_plug_preloader_settings[bg_color]" value="<?php echo esc_attr($bg_color); ?>" style="width: 100%; height: 40px; border-radius: 6px; border: 1px solid #c3c4c7; cursor: pointer; padding: 2px;" />
-                            </div>
-                        </div>
-
-                        <div class="mh-widget-card">
-                            <div class="mh-widget-card-header" style="flex-direction: column; align-items: stretch; gap: 10px;">
-                                <div class="mh-widget-title"><?php esc_html_e('Display Time (ms)', 'mh-plug'); ?> <span style="font-weight:normal; color:#888; font-size:12px;">(e.g., 500 = 0.5s)</span></div>
-                                <input type="number" name="mh_plug_preloader_settings[delay]" value="<?php echo esc_attr($delay); ?>" step="100" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #c3c4c7;" />
-                            </div>
-                        </div>
-
-                        <div class="mh-widget-card">
-                            <div class="mh-widget-card-header" style="flex-direction: column; align-items: stretch; gap: 10px;">
-                                <div class="mh-widget-title"><?php esc_html_e('Fade Speed (ms)', 'mh-plug'); ?> <span style="font-weight:normal; color:#888; font-size:12px;">(Smoothness)</span></div>
-                                <input type="number" name="mh_plug_preloader_settings[transition]" value="<?php echo esc_attr($transition); ?>" step="100" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #c3c4c7;" />
-                            </div>
-                        </div>
-
-                    </div> </div>
+                    </div>
+                </div>
             </div>
+
+            <div class="mh-futuristic-card mh-preview-card">
+                <div class="mh-card-inner">
+                    <h3><i class="fas fa-eye"></i> <?php esc_html_e('Live Hologram Preview', 'mh-plug'); ?></h3>
+                    <div class="mh-hud-container">
+                        <div class="mh-hud-overlay"></div>
+                        <div id="mh-css-preloader-preview-box" class="mh-preview-box mh-css-settings" style="display: <?php echo ($type === 'css') ? 'flex' : 'none'; ?>; background: <?php echo esc_attr($bg_color); ?>;"></div>
+                        <div class="mh-preview-box mh-image-settings mh-image-preview-wrapper" style="display: <?php echo ($type === 'image') ? 'flex' : 'none'; ?>; background: <?php echo esc_attr($bg_color); ?>;">
+                            <img id="mh-preloader-preview" src="<?php echo esc_url($image); ?>" style="width: <?php echo esc_attr($img_width); ?>px; display: <?php echo empty($image) ? 'none' : 'block'; ?>;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mh-futuristic-card mh-css-settings" style="display: <?php echo ($type === 'css') ? 'block' : 'none'; ?>;">
+                <div class="mh-card-inner">
+                    <h3><i class="fas fa-magic"></i> <?php esc_html_e('Animation Protocol', 'mh-plug'); ?></h3>
+                    
+                    <div class="mh-field-group">
+                        <label><?php esc_html_e('Select Sequence', 'mh-plug'); ?></label>
+                        <select name="mh_plug_preloader_settings[css_effect]" id="mh_css_effect_select" class="mh-cyber-select">
+                            <option value="1" <?php selected($css_effect, '1'); ?>>1. Classic Spinner</option>
+                            <option value="2" <?php selected($css_effect, '2'); ?>>2. Bouncing Dots</option>
+                            <option value="3" <?php selected($css_effect, '3'); ?>>3. Pulse Circle</option>
+                            <option value="4" <?php selected($css_effect, '4'); ?>>4. Flipping Square</option>
+                            <option value="5" <?php selected($css_effect, '5'); ?>>5. Double Bounce</option>
+                            <option value="6" <?php selected($css_effect, '6'); ?>>6. Bar Wave</option>
+                        </select>
+                    </div>
+
+                    <div class="mh-field-group">
+                        <label><?php esc_html_e('Energy Color', 'mh-plug'); ?></label>
+                        <div class="mh-color-picker-wrap">
+                            <input type="color" id="mh_loader_color_picker" name="mh_plug_preloader_settings[loader_color]" value="<?php echo esc_attr($loader_color); ?>" />
+                            <div class="mh-color-overlay" style="background-color: <?php echo esc_attr($loader_color); ?>;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mh-futuristic-card mh-image-settings" style="display: <?php echo ($type === 'image') ? 'block' : 'none'; ?>;">
+                <div class="mh-card-inner">
+                    <h3><i class="fas fa-file-upload"></i> <?php esc_html_e('Media Protocol', 'mh-plug'); ?></h3>
+                    
+                    <div class="mh-field-group">
+                        <label><?php esc_html_e('Upload Asset (GIF/PNG)', 'mh-plug'); ?></label>
+                        <input type="hidden" id="mh-preloader-image-url" name="mh_plug_preloader_settings[image]" value="<?php echo esc_attr($image); ?>" />
+                        <div class="mh-action-buttons">
+                            <button type="button" class="mh-cyber-btn mh-btn-blue" id="mh-upload-preloader-btn">
+                                <i class="fas fa-cloud-upload-alt"></i> <?php esc_html_e('Inject Media', 'mh-plug'); ?>
+                            </button>
+                            <button type="button" class="mh-cyber-btn mh-btn-red" id="mh-remove-preloader-btn" style="display: <?php echo empty($image) ? 'none' : 'inline-flex'; ?>;">
+                                <i class="fas fa-trash"></i> <?php esc_html_e('Purge', 'mh-plug'); ?>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mh-field-group">
+                        <label><?php esc_html_e('Asset Scale (Width px)', 'mh-plug'); ?></label>
+                        <div class="mh-range-slider">
+                            <input type="range" id="mh_img_width_range" name="mh_plug_preloader_settings[img_width]" min="20" max="300" value="<?php echo esc_attr($img_width); ?>" />
+                            <span class="mh-range-badge"><span id="mh_img_width_val"><?php echo esc_attr($img_width); ?></span>px</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mh-futuristic-card">
+                <div class="mh-card-inner">
+                    <h3><i class="fas fa-globe"></i> <?php esc_html_e('Environment Variables', 'mh-plug'); ?></h3>
+                    
+                    <div class="mh-field-group">
+                        <label><?php esc_html_e('Backdrop Atmosphere (Color)', 'mh-plug'); ?></label>
+                        <div class="mh-color-picker-wrap">
+                            <input type="color" id="mh_bg_color_picker" name="mh_plug_preloader_settings[bg_color]" value="<?php echo esc_attr($bg_color); ?>" />
+                            <div class="mh-color-overlay" style="background-color: <?php echo esc_attr($bg_color); ?>;"></div>
+                        </div>
+                    </div>
+
+                    <div class="mh-field-group">
+                        <label><?php esc_html_e('Retention Time (Delay ms)', 'mh-plug'); ?></label>
+                        <div class="mh-range-slider">
+                            <input type="range" name="mh_plug_preloader_settings[delay]" min="0" max="3000" step="100" value="<?php echo esc_attr($delay); ?>" oninput="this.nextElementSibling.querySelector('span').innerText = this.value" />
+                            <span class="mh-range-badge"><span><?php echo esc_attr($delay); ?></span>ms</span>
+                        </div>
+                    </div>
+
+                    <div class="mh-field-group">
+                        <label><?php esc_html_e('Dissolve Speed (Fade ms)', 'mh-plug'); ?></label>
+                        <div class="mh-range-slider">
+                            <input type="range" name="mh_plug_preloader_settings[transition]" min="100" max="2000" step="100" value="<?php echo esc_attr($transition); ?>" oninput="this.nextElementSibling.querySelector('span').innerText = this.value" />
+                            <span class="mh-range-badge"><span><?php echo esc_attr($transition); ?></span>ms</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <div style="padding: 20px 0;">
-            <?php submit_button('Save Preloader Settings', 'primary', 'submit', false); ?>
+        <div class="mh-save-dock">
+            <button type="submit" class="mh-cyber-btn mh-btn-save">
+                <i class="fas fa-save"></i> <?php esc_html_e('Initialize Settings', 'mh-plug'); ?>
+            </button>
         </div>
     </form>
 </div>
 
 <style>
+    /* MH Plug Theme Variables */
+    :root {
+        --mh-dark: #004265;
+        --mh-blue: #2293e9;
+        --mh-blue-glow: rgba(34, 147, 233, 0.4);
+        --mh-red: #d63638;
+        --mh-bg: #f0f4f8;
+        --mh-card: #ffffff;
+        --mh-text: #334155;
+        --mh-border: #e2e8f0;
+    }
+
+    .mh-futuristic-dashboard {
+        max-width: 1200px;
+        margin: 20px auto;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Header */
+    .mh-dashboard-header { position: relative; padding: 30px; background: var(--mh-dark); border-radius: 16px; color: white; margin-bottom: 30px; overflow: hidden; box-shadow: 0 15px 35px rgba(0, 66, 101, 0.2); }
+    .mh-dashboard-header h1 { color: white; margin: 0 0 10px 0; font-size: 28px; font-weight: 800; position: relative; z-index: 2; }
+    .mh-dashboard-header p { margin: 0; font-size: 16px; color: #94a3b8; position: relative; z-index: 2; }
+    .mh-header-glow { position: absolute; right: -50px; top: -50px; width: 250px; height: 250px; background: radial-gradient(circle, var(--mh-blue-glow) 0%, transparent 70%); z-index: 1; }
+
+    /* Grid Layout */
+    .mh-settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; }
+    .mh-card-wide { grid-column: 1 / -1; }
+
+    /* Futuristic Cards */
+    .mh-futuristic-card { background: var(--mh-card); border-radius: 16px; border: 1px solid var(--mh-border); box-shadow: 0 10px 25px rgba(0,0,0,0.03); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s; position: relative; overflow: hidden; }
+    .mh-futuristic-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(34, 147, 233, 0.12); border-color: var(--mh-blue); }
+    .mh-futuristic-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--mh-dark), var(--mh-blue)); opacity: 0; transition: opacity 0.3s; }
+    .mh-futuristic-card:hover::before { opacity: 1; }
+    .mh-card-inner { padding: 25px; }
+    .mh-futuristic-card h3 { margin: 0 0 20px 0; color: var(--mh-dark); font-size: 18px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--mh-border); padding-bottom: 15px; }
+    .mh-futuristic-card h3 i { color: var(--mh-blue); }
+
+    /* Setting Rows */
+    .mh-setting-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+    .mh-setting-info h3 { border: none; padding: 0; margin: 0 0 5px 0; font-size: 16px; }
+    .mh-setting-info p { margin: 0; font-size: 13px; color: #64748b; }
+    .mh-divider { height: 1px; background: var(--mh-border); margin: 25px 0; }
+    .mh-field-group { margin-bottom: 20px; }
+    .mh-field-group:last-child { margin-bottom: 0; }
+    .mh-field-group label { display: block; font-weight: 600; color: var(--mh-text); margin-bottom: 10px; }
+
+    /* Cyber Switch */
+    .mh-cyber-switch { position: relative; display: inline-block; width: 60px; height: 30px; }
+    .mh-cyber-switch input { opacity: 0; width: 0; height: 0; }
+    .mh-slider-track { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 30px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
+    .mh-slider-track:before { position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 4px; background-color: white; transition: .4s cubic-bezier(0.68, -0.55, 0.265, 1.55); border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    .mh-cyber-switch input:checked + .mh-slider-track { background-color: var(--mh-blue); box-shadow: 0 0 15px var(--mh-blue-glow); }
+    .mh-cyber-switch input:checked + .mh-slider-track:before { transform: translateX(30px); }
+
+    /* Cyber Radio Buttons */
+    .mh-cyber-radio-group { display: flex; gap: 15px; }
+    .mh-cyber-radio { cursor: pointer; flex: 1; }
+    .mh-cyber-radio input { display: none; }
+    .mh-cyber-radio span { display: block; text-align: center; padding: 12px; background: #f8fafc; border: 2px solid var(--mh-border); border-radius: 10px; font-weight: 600; color: #64748b; transition: all 0.3s; }
+    .mh-cyber-radio input:checked + span { background: rgba(34, 147, 233, 0.05); border-color: var(--mh-blue); color: var(--mh-blue); box-shadow: 0 5px 15px var(--mh-blue-glow); transform: translateY(-2px); }
+
+    /* Futuristic Inputs & Selects */
+    .mh-cyber-select { width: 100%; padding: 12px 15px; border-radius: 10px; border: 2px solid var(--mh-border); background: #f8fafc; font-weight: 600; color: var(--mh-dark); outline: none; transition: 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); }
+    .mh-cyber-select:focus { border-color: var(--mh-blue); box-shadow: 0 0 0 4px var(--mh-blue-glow); }
+
+    /* Range Sliders */
+    .mh-range-slider { display: flex; align-items: center; gap: 15px; background: #f8fafc; padding: 10px 15px; border-radius: 10px; border: 1px solid var(--mh-border); }
+    .mh-range-slider input[type="range"] { flex: 1; -webkit-appearance: none; height: 6px; background: var(--mh-border); border-radius: 5px; outline: none; }
+    .mh-range-slider input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--mh-blue); cursor: pointer; box-shadow: 0 0 10px var(--mh-blue-glow); transition: 0.2s; }
+    .mh-range-slider input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    .mh-range-badge { background: var(--mh-dark); color: white; padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; min-width: 65px; text-align: center; box-shadow: 0 4px 10px rgba(0, 66, 101, 0.3); }
+
+    /* Color Picker */
+    .mh-color-picker-wrap { position: relative; width: 100%; height: 50px; border-radius: 10px; overflow: hidden; border: 2px solid var(--mh-border); transition: 0.3s; cursor: pointer; }
+    .mh-color-picker-wrap:focus-within, .mh-color-picker-wrap:hover { border-color: var(--mh-blue); box-shadow: 0 0 15px var(--mh-blue-glow); transform: translateY(-2px); }
+    .mh-color-picker-wrap input[type="color"] { position: absolute; width: 150%; height: 150%; top: -25%; left: -25%; cursor: pointer; opacity: 0; z-index: 2; }
+    .mh-color-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; transition: background-color 0.1s; }
+
+    /* Action Buttons */
+    .mh-action-buttons { display: flex; gap: 10px; }
+    .mh-cyber-btn { border: none; padding: 12px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .mh-btn-blue { background: var(--mh-blue); color: white; box-shadow: 0 5px 15px var(--mh-blue-glow); }
+    .mh-btn-blue:hover { background: #1b7ccc; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(34, 147, 233, 0.6); }
+    .mh-btn-red { background: transparent; border: 2px solid var(--mh-red); color: var(--mh-red); }
+    .mh-btn-red:hover { background: var(--mh-red); color: white; box-shadow: 0 5px 15px rgba(214, 54, 56, 0.4); transform: translateY(-2px); }
+    
+    .mh-save-dock { margin-top: 30px; text-align: right; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); border: 1px solid var(--mh-border); }
+    .mh-btn-save { background: var(--mh-dark); color: white; display: inline-flex; padding: 15px 40px; font-size: 16px; }
+    .mh-btn-save:hover { background: var(--mh-blue); transform: translateY(-3px); box-shadow: 0 10px 25px var(--mh-blue-glow); }
+
+    /* Live HUD Preview */
+    .mh-hud-container { position: relative; width: 100%; height: 250px; border-radius: 12px; overflow: hidden; border: 2px solid var(--mh-blue); box-shadow: inset 0 0 30px var(--mh-blue-glow); background: #000; display: flex; align-items: center; justify-content: center; }
+    .mh-hud-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(34,147,233,0.05) 0%, rgba(34,147,233,0.1) 50%, rgba(34,147,233,0.05) 100%); pointer-events: none; z-index: 10; }
+    .mh-hud-overlay::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px); pointer-events: none; }
+    .mh-preview-box { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 5; transition: background-color 0.3s; }
+
+    /* CSS Preloader Animations */
     #mh-css-preloader-preview-box { --mh-loader-color: <?php echo esc_attr($loader_color); ?>; }
-    .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(0,0,0,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; }
+    .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-loader-color); border-radius: 50%; animation: mh-spin 1s linear infinite; }
     @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .mh-loader-2 { display: flex; gap: 8px; }
     .mh-loader-2 div { width: 16px; height: 16px; background-color: var(--mh-loader-color); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; }
@@ -162,6 +294,8 @@ $transition   = isset($settings['transition']) ? $settings['transition'] : '500'
 
 <script>
 jQuery(document).ready(function($){
+    
+    // Type Toggle (CSS vs Image)
     $('.mh-loader-type').change(function() {
         if ($(this).val() === 'css') {
             $('.mh-image-settings').hide();
@@ -172,11 +306,22 @@ jQuery(document).ready(function($){
         }
     });
 
-    function updateCssPreview() {
+    // Live Settings Updater
+    function updateLivePreview() {
         var effect = $('#mh_css_effect_select').val();
         var loaderColor = $('#mh_loader_color_picker').val();
         var bgColor = $('#mh_bg_color_picker').val();
+        var imgWidth = $('#mh_img_width_range').val();
         
+        // Update Colors in UI overlays
+        $('#mh_loader_color_picker').siblings('.mh-color-overlay').css('background-color', loaderColor);
+        $('#mh_bg_color_picker').siblings('.mh-color-overlay').css('background-color', bgColor);
+
+        // Update Image Width
+        $('#mh_img_width_val').text(imgWidth);
+        $('#mh-preloader-preview').css('width', imgWidth + 'px');
+
+        // Render CSS HTML
         var html = '';
         if (effect === '1') html = '<div class="mh-loader-1"></div>';
         if (effect === '2') html = '<div class="mh-loader-2"><div></div><div></div><div></div></div>';
@@ -185,23 +330,26 @@ jQuery(document).ready(function($){
         if (effect === '5') html = '<div class="mh-loader-5"><div></div><div></div></div>';
         if (effect === '6') html = '<div class="mh-loader-6"><div></div><div></div><div></div><div></div><div></div></div>';
 
+        // Apply styles to HUD
         $('#mh-css-preloader-preview-box').html(html).css({ '--mh-loader-color': loaderColor, 'background-color': bgColor });
         $('.mh-image-preview-wrapper').css('background-color', bgColor);
     }
 
-    $('#mh_css_effect_select, #mh_loader_color_picker, #mh_bg_color_picker').on('change input', updateCssPreview);
-    updateCssPreview();
+    // Bind inputs to updater
+    $('#mh_css_effect_select, #mh_loader_color_picker, #mh_bg_color_picker, #mh_img_width_range').on('change input', updateLivePreview);
+    updateLivePreview(); // Run initially
 
+    // WP Media Library Handler
     var mediaUploader;
     $('#mh-upload-preloader-btn').click(function(e) {
         e.preventDefault();
         if (mediaUploader) { mediaUploader.open(); return; }
-        mediaUploader = wp.media.frames.file_frame = wp.media({ title: 'Choose Preloader Image', button: { text: 'Choose Image' }, multiple: false });
+        mediaUploader = wp.media.frames.file_frame = wp.media({ title: 'Select Asset', button: { text: 'Inject Asset' }, multiple: false });
         mediaUploader.on('select', function() {
             var attachment = mediaUploader.state().get('selection').first().toJSON();
             $('#mh-preloader-image-url').val(attachment.url);
             $('#mh-preloader-preview').attr('src', attachment.url).show();
-            $('#mh-remove-preloader-btn').show();
+            $('#mh-remove-preloader-btn').css('display', 'inline-flex');
         });
         mediaUploader.open();
     });
