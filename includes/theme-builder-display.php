@@ -1,14 +1,12 @@
 <?php
 /**
- * MH Plug - Universal Theme Builder Display Logic (Server Cache Override)
+ * MH Plug - Universal Theme Builder Display Logic (Editor Fix)
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 🚀 THE MAGIC FIX: FORCE HOSTINGER SERVER CACHE TO FLUSH!
-// Since the LiteSpeed plugin is gone, the server cache got "stuck".
-// This forces Hostinger to serve the fresh, working page to logged-out users!
+// 🚀 FORCE HOSTINGER SERVER CACHE TO FLUSH
 // ─────────────────────────────────────────────────────────────────────────────
 add_action( 'send_headers', function() {
     if ( ! is_admin() ) {
@@ -28,7 +26,7 @@ if ( ! function_exists( 'mh_plug_get_active_template' ) ) {
             'post_status'      => 'publish',
             'posts_per_page'   => 1,
             'no_found_rows'    => true,
-            'suppress_filters' => true, // 🚀 Guarantees no other plugins hide this from logged-out users!
+            'suppress_filters' => true, 
             'meta_query'       => [
                 'relation' => 'AND',
                 [
@@ -72,7 +70,7 @@ if ( ! function_exists( 'mh_plug_universal_router' ) ) {
             return $template;
         }
 
-        // When Elementor opens the editor, force our blank canvas so it has a clean workspace
+        // When Elementor opens the editor FOR A THEME TEMPLATE, force our blank canvas
         if ( is_singular( 'mh_templates' ) ) {
             $canvas = MH_PLUG_PATH . 'includes/templates/mh-canvas.php';
             if ( file_exists( $canvas ) ) {
@@ -80,12 +78,15 @@ if ( ! function_exists( 'mh_plug_universal_router' ) ) {
             }
         }
 
-        // Do not interfere with standard Elementor edits
-        if ( isset( $_GET['elementor-preview'] ) || ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) ) {
+        // 🚀 NEW FIX: If the user explicitly sets the page to "Elementor Canvas" (No Header/Footer), respect it.
+        if ( get_post_meta( get_the_ID(), '_wp_page_template', true ) === 'elementor_canvas' ) {
             return $template;
         }
 
-        // Apply our universal design wrapper to the live website
+        // 🚀 THE BYPASS WAS DELETED HERE.
+        // Elementor Editor will now correctly load the universal wrapper below!
+
+        // Apply our universal design wrapper to the live website AND inside the editor
         $wrapper = MH_PLUG_PATH . 'includes/templates/mh-universal-wrapper.php';
         if ( file_exists( $wrapper ) ) {
             return $wrapper;
