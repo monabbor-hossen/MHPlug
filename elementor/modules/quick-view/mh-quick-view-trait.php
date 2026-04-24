@@ -67,59 +67,80 @@ trait MH_Quick_View_Trait {
             'condition' => [ 'show_quick_view' => 'yes' ]
         ]);
 
+        // 🚀 FIX: Locked the slider to 'px' so the CSS doesn't break
         $this->add_responsive_control( 'qv_icon_size', [
             'label'     => __( 'Icon Size', 'mh-plug' ),
             'type'      => Controls_Manager::SLIDER,
-            'selectors' => [ '{{WRAPPER}} .mh-quick-view-trigger i' => 'font-size: {{SIZE}}px !important;', '{{WRAPPER}} .mh-quick-view-trigger svg' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important;' ]
+            'range'     => [ 'px' => [ 'min' => 10, 'max' => 100 ] ],
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger i' => 'font-size: {{SIZE}}px !important;', 
+                '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger svg' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important;' 
+            ]
         ]);
 
+        // 🚀 FIX: Locked the slider to 'px' so the CSS doesn't break
         $this->add_responsive_control( 'qv_box_size', [
             'label'     => __( 'Button Size', 'mh-plug' ),
             'type'      => Controls_Manager::SLIDER,
-            'selectors' => [ '{{WRAPPER}} .mh-quick-view-trigger' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important; min-width: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' ]
+            'range'     => [ 'px' => [ 'min' => 20, 'max' => 150 ] ],
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important; min-width: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' 
+            ]
         ]);
 
         $this->add_responsive_control( 'qv_radius', [
             'label'      => __( 'Border Radius', 'mh-plug' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-quick-view-trigger' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ]
+            'selectors'  => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ]
         ]);
 
         $this->start_controls_tabs( 'tabs_qv_style' );
 
-        // Normal
+        // Normal State
         $this->start_controls_tab( 'tab_qv_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        
+        // 🚀 FIX: Hyper-specific target so it overrides the default plugin CSS
         $this->add_control( 'qv_color', [
             'label'     => __( 'Icon Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
-            'selectors' => [ '{{WRAPPER}} .mh-quick-view-trigger' => 'color: {{VALUE}} !important; fill: {{VALUE}} !important;' ]
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger' => 'color: {{VALUE}} !important;',
+                '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger i' => 'color: {{VALUE}} !important;',
+                '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger svg' => 'fill: {{VALUE}} !important;'
+            ]
         ]);
         $this->add_group_control( Group_Control_Background::get_type(), [
             'name'     => 'qv_bg',
-            'label'    => __( 'Background (Supports Gradient)', 'mh-plug' ),
+            'label'    => __( 'Background', 'mh-plug' ),
             'types'    => [ 'classic', 'gradient' ],
-            'selector' => '{{WRAPPER}} .mh-quick-view-trigger'
+            'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger'
         ]);
-        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'qv_border', 'selector' => '{{WRAPPER}} .mh-quick-view-trigger' ] );
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'qv_shadow', 'selector' => '{{WRAPPER}} .mh-quick-view-trigger' ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'qv_border', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger' ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'qv_shadow', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger' ] );
         $this->end_controls_tab();
 
-        // Hover
+        // Hover State
         $this->start_controls_tab( 'tab_qv_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        
+        // 🚀 FIX: Hyper-specific target for Hover
         $this->add_control( 'qv_hover_color', [
             'label'     => __( 'Icon Hover Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
-            'selectors' => [ '{{WRAPPER}} .mh-quick-view-trigger:hover' => 'color: {{VALUE}} !important; fill: {{VALUE}} !important;' ]
+            'selectors' => [ 
+                '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger:hover' => 'color: {{VALUE}} !important;',
+                '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger:hover i' => 'color: {{VALUE}} !important;',
+                '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger:hover svg' => 'fill: {{VALUE}} !important;' 
+            ]
         ]);
         $this->add_group_control( Group_Control_Background::get_type(), [
             'name'     => 'qv_hover_bg',
             'label'    => __( 'Hover Background', 'mh-plug' ),
             'types'    => [ 'classic', 'gradient' ],
-            'selector' => '{{WRAPPER}} .mh-quick-view-trigger:hover'
+            'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger:hover'
         ]);
-        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'qv_hover_border', 'selector' => '{{WRAPPER}} .mh-quick-view-trigger:hover' ] );
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'qv_hover_shadow', 'selector' => '{{WRAPPER}} .mh-quick-view-trigger:hover' ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'qv_hover_border', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger:hover' ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'qv_hover_shadow', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger:hover' ] );
         $this->add_control( 'qv_hover_anim', [ 'label' => __( 'Hover Animation', 'mh-plug' ), 'type'  => Controls_Manager::HOVER_ANIMATION ] );
         $this->end_controls_tab();
         $this->end_controls_tabs();
@@ -128,7 +149,7 @@ trait MH_Quick_View_Trait {
             'label'     => __( 'Transition Speed (s)', 'mh-plug' ),
             'type'      => Controls_Manager::SLIDER,
             'default'   => [ 'size' => 0.3 ],
-            'selectors' => [ '{{WRAPPER}} .mh-quick-view-trigger' => 'transition: all {{SIZE}}s ease !important;' ],
+            'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger' => 'transition: all {{SIZE}}s ease !important;' ],
             'separator' => 'before'
         ]);
         $this->end_controls_section();
@@ -149,7 +170,7 @@ trait MH_Quick_View_Trait {
             if ( !empty( $settings['quick_view_icon']['value'] ) ) {
                 \Elementor\Icons_Manager::render_icon( $settings['quick_view_icon'], [ 'aria-hidden' => 'true' ] );
             } else {
-                echo '<i class="fas fa-shopping-bag"></i>';
+                echo '<i class="fas fa-shopping-bag" aria-hidden="true"></i>';
             }
             ?>
         </a>
