@@ -67,10 +67,11 @@ trait MH_Quick_View_Trait {
             'condition' => [ 'show_quick_view' => 'yes' ]
         ]);
 
-        // 🚀 FIX: Locked the slider to 'px' so the CSS doesn't break
+        // 🚀 FIX: Added Default 16px size to prevent vanishing icon
         $this->add_responsive_control( 'qv_icon_size', [
             'label'     => __( 'Icon Size', 'mh-plug' ),
             'type'      => Controls_Manager::SLIDER,
+            'default'   => [ 'size' => 16 ],
             'range'     => [ 'px' => [ 'min' => 10, 'max' => 100 ] ],
             'selectors' => [ 
                 '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger i' => 'font-size: {{SIZE}}px !important;', 
@@ -78,32 +79,34 @@ trait MH_Quick_View_Trait {
             ]
         ]);
 
-        // 🚀 FIX: Locked the slider to 'px' so the CSS doesn't break
+        // 🚀 FIX: Added Default 40px width/height to prevent 0x0 collapse
         $this->add_responsive_control( 'qv_box_size', [
             'label'     => __( 'Button Size', 'mh-plug' ),
             'type'      => Controls_Manager::SLIDER,
+            'default'   => [ 'size' => 40 ],
             'range'     => [ 'px' => [ 'min' => 20, 'max' => 150 ] ],
             'selectors' => [ 
                 '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important; min-width: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' 
             ]
         ]);
 
+        // 🚀 FIX: Added Default 50% border radius to make it a perfect circle immediately
         $this->add_responsive_control( 'qv_radius', [
             'label'      => __( 'Border Radius', 'mh-plug' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
+            'default'    => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => '%' ],
             'selectors'  => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ]
         ]);
 
         $this->start_controls_tabs( 'tabs_qv_style' );
 
-        // Normal State
+        // Normal
         $this->start_controls_tab( 'tab_qv_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        
-        // 🚀 FIX: Hyper-specific target so it overrides the default plugin CSS
         $this->add_control( 'qv_color', [
             'label'     => __( 'Icon Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
+            'default'   => '#333333',
             'selectors' => [ 
                 '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger' => 'color: {{VALUE}} !important;',
                 '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger i' => 'color: {{VALUE}} !important;',
@@ -112,7 +115,7 @@ trait MH_Quick_View_Trait {
         ]);
         $this->add_group_control( Group_Control_Background::get_type(), [
             'name'     => 'qv_bg',
-            'label'    => __( 'Background', 'mh-plug' ),
+            'label'    => __( 'Background (Supports Gradient)', 'mh-plug' ),
             'types'    => [ 'classic', 'gradient' ],
             'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger'
         ]);
@@ -120,13 +123,12 @@ trait MH_Quick_View_Trait {
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'qv_shadow', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger' ] );
         $this->end_controls_tab();
 
-        // Hover State
+        // Hover
         $this->start_controls_tab( 'tab_qv_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
-        
-        // 🚀 FIX: Hyper-specific target for Hover
         $this->add_control( 'qv_hover_color', [
             'label'     => __( 'Icon Hover Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
+            'default'   => '#ffffff',
             'selectors' => [ 
                 '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger:hover' => 'color: {{VALUE}} !important;',
                 '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger:hover i' => 'color: {{VALUE}} !important;',
@@ -156,7 +158,9 @@ trait MH_Quick_View_Trait {
     }
 
     protected function render_quick_view_button( $product_id, $settings ) {
-        if ( !isset($settings['show_quick_view']) || $settings['show_quick_view'] !== 'yes' ) return;
+        // Fallback for unset widget values
+        $show_qv = isset( $settings['show_quick_view'] ) ? $settings['show_quick_view'] : 'yes';
+        if ( $show_qv !== 'yes' ) return;
 
         $template_id = !empty( $settings['quick_view_template'] ) ? $settings['quick_view_template'] : '';
         $animation   = !empty( $settings['qv_hover_anim'] ) ? ' elementor-animation-' . $settings['qv_hover_anim'] : '';
@@ -167,8 +171,14 @@ trait MH_Quick_View_Trait {
            title="<?php esc_html_e( 'Quick View', 'mh-plug' ); ?>"
            style="display:flex; align-items:center; justify-content:center;">
             <?php 
-            if ( !empty( $settings['quick_view_icon']['value'] ) ) {
-                \Elementor\Icons_Manager::render_icon( $settings['quick_view_icon'], [ 'aria-hidden' => 'true' ] );
+            // 🚀 FIX: Bulletproof Icon injection. Avoids Elementor render_icon glitches entirely.
+            $icon = isset($settings['quick_view_icon']) ? $settings['quick_view_icon'] : [];
+            if ( !empty( $icon['value'] ) ) {
+                if ( isset($icon['library']) && $icon['library'] === 'svg' ) {
+                    \Elementor\Icons_Manager::render_icon( $icon, [ 'aria-hidden' => 'true' ] );
+                } else {
+                    echo '<i class="' . esc_attr( $icon['value'] ) . '" aria-hidden="true"></i>';
+                }
             } else {
                 echo '<i class="fas fa-shopping-bag" aria-hidden="true"></i>';
             }
