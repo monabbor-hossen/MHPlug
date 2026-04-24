@@ -1,6 +1,6 @@
 <?php
 /**
- * MH Plug - Universal Theme Wrapper (Bulletproof CSS Version)
+ * MH Plug - Universal Theme Wrapper (Anti-Cache & Global CSS Fix)
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
@@ -14,7 +14,6 @@ $is_woo_single   = false;
 $is_woo_archive  = false;
 
 if ( is_tax( 'product_cat' ) || is_category() ) {
-    
     $term_id = get_queried_object_id();
     $custom_cat_template_id = get_term_meta( $term_id, '_mh_category_template', true );
     
@@ -23,7 +22,6 @@ if ( is_tax( 'product_cat' ) || is_category() ) {
     } else {
         $cat_type = is_tax( 'product_cat' ) ? 'product_category' : 'post_category';
         $active_template = mh_plug_get_active_template( $cat_type );
-        
         if ( ! $active_template ) {
             $archive_type = is_tax( 'product_cat' ) ? 'archive_product' : 'archive_post';
             $active_template = mh_plug_get_active_template( $archive_type );
@@ -53,6 +51,13 @@ if ( class_exists('WooCommerce') ) {
     $custom_body_classes[] = 'woocommerce';
     $custom_body_classes[] = 'woocommerce-page';
 }
+
+// 🚀 FIX 2: Force Elementor Core Styles to load (Even if the base page is not an Elementor page)
+add_action( 'wp_enqueue_scripts', function() {
+    if ( class_exists( '\Elementor\Plugin' ) ) {
+        \Elementor\Plugin::$instance->frontend->enqueue_styles();
+    }
+}, 1 );
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -62,10 +67,18 @@ if ( class_exists('WooCommerce') ) {
     <?php wp_head(); ?>
 
     <?php
-    // 🚀 FIX 2: BRUTE-FORCE CSS INJECTION
-    // This physically prints the Elementor CSS files into the HTML <head>.
-    // Caching plugins cannot strip this, guaranteeing the layout NEVER breaks!
+    // 🚀 FIX 3: THE ULTIMATE ANTI-CACHE CSS INJECTION
+    // LiteSpeed cannot block this. We forcefully inject Global & Template CSS directly.
     if ( class_exists( '\Elementor\Core\Files\CSS\Post' ) ) {
+        
+        // Inject Global CSS (Fixes broken columns and huge fonts)
+        if ( class_exists( '\Elementor\Core\Files\CSS\Global_CSS' ) ) {
+            $global_css = new \Elementor\Core\Files\CSS\Global_CSS();
+            $global_css->enqueue();
+            echo '<link rel="stylesheet" href="' . esc_url( $global_css->get_url() ) . '" type="text/css" media="all" data-no-optimize="1" data-no-minify="1" data-cfasync="false">' . "\n";
+        }
+
+        // Inject Active Templates CSS
         $templates_to_load = [];
         if ( $header ) $templates_to_load[] = $header->ID;
         if ( $footer ) $templates_to_load[] = $footer->ID;
@@ -73,10 +86,8 @@ if ( class_exists('WooCommerce') ) {
 
         foreach ( array_unique($templates_to_load) as $tid ) {
             $css_file = new \Elementor\Core\Files\CSS\Post( $tid );
-            // Ensure Elementor generates the file if it's missing
             $css_file->enqueue(); 
-            // Physically print the link tag
-            echo '<link rel="stylesheet" id="mh-elementor-post-' . $tid . '-css" href="' . esc_url( $css_file->get_url() ) . '" type="text/css" media="all">' . "\n";
+            echo '<link rel="stylesheet" id="mh-elementor-post-' . $tid . '-css" href="' . esc_url( $css_file->get_url() ) . '" type="text/css" media="all" data-no-optimize="1" data-no-minify="1" data-cfasync="false">' . "\n";
         }
     }
     ?>
