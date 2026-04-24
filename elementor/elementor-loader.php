@@ -48,14 +48,36 @@ final class MH_Elementor_Loader {
             #mh-global-preloader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: ' . esc_attr($global_bg) . '; z-index: 99999999; display: flex; align-items: center; justify-content: center; transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; }
             #mh-global-preloader.mh-preloader-hidden { opacity: 0; visibility: hidden; }
             
+            /* 🚀 14 TEXT ANIMATIONS */
             .mh-text-anim-blink { animation: mh-text-blink 1.5s infinite; }
             .mh-text-anim-pulse { animation: mh-text-pulse 2s infinite ease-in-out; }
             .mh-text-anim-float { animation: mh-text-float 2s infinite ease-in-out; }
             .mh-text-anim-tracking { animation: mh-text-tracking 2s infinite ease-in-out; }
+            .mh-text-anim-bounce { animation: mh-text-bounce 1s infinite cubic-bezier(0.28, 0.84, 0.42, 1); }
+            .mh-text-anim-blur { animation: mh-text-blur 2s infinite alternate; }
+            .mh-text-anim-neon { animation: mh-text-neon 1.5s infinite alternate; }
+            .mh-text-anim-shake { animation: mh-text-shake 0.5s infinite; }
+            .mh-text-anim-flip-y { animation: mh-text-flip-y 2s infinite; perspective: 400px; display: inline-block; }
+            .mh-text-anim-slide-fade { animation: mh-text-slide-fade 2s infinite; }
+            .mh-text-anim-zoom { animation: mh-text-zoom 2s infinite; }
+            .mh-text-anim-jello { animation: mh-text-jello 2s infinite; transform-origin: center; }
+            .mh-text-anim-swing { animation: mh-text-swing 2s infinite ease-in-out; transform-origin: top center; }
+            .mh-text-anim-glitch { animation: mh-text-glitch 2s infinite; display: inline-block; }
+
             @keyframes mh-text-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
             @keyframes mh-text-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.7; } }
             @keyframes mh-text-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
             @keyframes mh-text-tracking { 0%, 100% { letter-spacing: 2px; } 50% { letter-spacing: 8px; } }
+            @keyframes mh-text-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+            @keyframes mh-text-blur { 0% { filter: blur(0px); opacity: 1; } 100% { filter: blur(4px); opacity: 0.5; } }
+            @keyframes mh-text-neon { 0% { text-shadow: 0 0 5px currentColor, 0 0 10px currentColor; } 100% { text-shadow: 0 0 20px currentColor, 0 0 40px currentColor, 0 0 60px currentColor; } }
+            @keyframes mh-text-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-5deg); } 75% { transform: translateX(5px) rotate(5deg); } }
+            @keyframes mh-text-flip-y { 0% { transform: rotateY(0deg); } 50% { transform: rotateY(180deg); } 100% { transform: rotateY(360deg); } }
+            @keyframes mh-text-slide-fade { 0% { opacity: 0; transform: translateY(20px); } 50% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-20px); } }
+            @keyframes mh-text-zoom { 0% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.5); } }
+            @keyframes mh-text-jello { 0%, 100% { transform: scale3d(1, 1, 1); } 30% { transform: scale3d(1.25, 0.75, 1); } 40% { transform: scale3d(0.75, 1.25, 1); } 50% { transform: scale3d(1.15, 0.85, 1); } 65% { transform: scale3d(0.95, 1.05, 1); } 75% { transform: scale3d(1.05, 0.95, 1); } }
+            @keyframes mh-text-swing { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } }
+            @keyframes mh-text-glitch { 0%, 100% { transform: translate(0); skew(0deg); } 20% { transform: translate(-2px, 2px); skew(-10deg); } 40% { transform: translate(-2px, -2px); skew(10deg); } 60% { transform: translate(2px, 2px); skew(-10deg); } 80% { transform: translate(2px, -2px); skew(10deg); } }
 
             .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-c1); border-radius: 50%; animation: mh-spin 1s linear infinite; }
             @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -151,7 +173,6 @@ final class MH_Elementor_Loader {
         if ($type === 'image' && !empty($image)) {
             echo '<img src="' . esc_url($image) . '" alt="Loading..." style="width:' . esc_attr($img_width) . 'px; height:auto;" />';
         } else {
-            // 🚀 FIX: The Mathematical Protective Shield Wrapper (calc 100px * scale) ensures text is always safely below the icon
             echo '<div style="width: calc(100px * ' . esc_attr($effect_size) . '); height: calc(100px * ' . esc_attr($effect_size) . '); display: flex; align-items: center; justify-content: center;">';
             echo '<div style="transform: scale(' . esc_attr($effect_size) . '); --mh-c1: ' . esc_attr($eff_c1) . '; --mh-bg-style: ' . esc_attr($eff_bg) . '; --mh-svg-stroke: ' . esc_attr($svg_stroke) . ';">';
             switch ($css_effect) {

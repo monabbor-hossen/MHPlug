@@ -36,7 +36,6 @@ $text_angle      = isset($settings['text_angle']) ? $settings['text_angle'] : '9
 $delay      = isset($settings['delay']) ? $settings['delay'] : '500';
 $transition = isset($settings['transition']) ? $settings['transition'] : '500';
 
-// Reusable Elementor-Style Gradient UI Component
 function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val, $angle_val) {
     ?>
     <div class="mh-field-group">
@@ -91,10 +90,12 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                             <h3><?php esc_html_e('System Power', 'mh-plug'); ?></h3>
                             <p><?php esc_html_e('Activate the global preloader on your website.', 'mh-plug'); ?></p>
                         </div>
-                        <label class="switch mh-native-switch">
+                        
+                        <label class="switch">
                             <input class="cb mh-live-trigger" type="checkbox" name="mh_plug_preloader_settings[enable]" value="yes" <?php checked($enable, 'yes'); ?> />
                             <span class="toggle"><span class="left">off</span><span class="right">on</span></span>
                         </label>
+                        
                     </div>
                     <div class="mh-divider"></div>
                     <div class="mh-setting-row">
@@ -232,13 +233,23 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                             <option value="pulse" <?php selected($text_anim, 'pulse'); ?>>Pulse Grow</option>
                             <option value="float" <?php selected($text_anim, 'float'); ?>>Floating</option>
                             <option value="tracking" <?php selected($text_anim, 'tracking'); ?>>Tracking (Spacing Expand)</option>
+                            <option value="bounce" <?php selected($text_anim, 'bounce'); ?>>Bounce</option>
+                            <option value="blur" <?php selected($text_anim, 'blur'); ?>>Blur Pulse</option>
+                            <option value="neon" <?php selected($text_anim, 'neon'); ?>>Neon Glow</option>
+                            <option value="shake" <?php selected($text_anim, 'shake'); ?>>Shake</option>
+                            <option value="flip-y" <?php selected($text_anim, 'flip-y'); ?>>Flip 3D</option>
+                            <option value="slide-fade" <?php selected($text_anim, 'slide-fade'); ?>>Slide & Fade</option>
+                            <option value="zoom" <?php selected($text_anim, 'zoom'); ?>>Zoom In/Out</option>
+                            <option value="jello" <?php selected($text_anim, 'jello'); ?>>Jello Wobble</option>
+                            <option value="swing" <?php selected($text_anim, 'swing'); ?>>Pendulum Swing</option>
+                            <option value="glitch" <?php selected($text_anim, 'glitch'); ?>>Cyber Glitch</option>
                         </select>
                     </div>
 
                     <div class="mh-field-group">
                         <label><?php esc_html_e('Text Size (px)', 'mh-plug'); ?></label>
                         <div class="mh-range-slider">
-                            <input type="range" id="mh_text_size_range" name="mh_plug_preloader_settings[text_size]" min="10" max="40" value="<?php echo esc_attr($text_size); ?>" class="mh-live-trigger" />
+                            <input type="range" id="mh_text_size_range" name="mh_plug_preloader_settings[text_size]" min="10" max="60" value="<?php echo esc_attr($text_size); ?>" class="mh-live-trigger" />
                             <span class="mh-range-badge"><span class="mh-text-size-val"><?php echo esc_attr($text_size); ?></span>px</span>
                         </div>
                     </div>
@@ -283,17 +294,8 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 
 <style>
     :root { --mh-dark: #004265; --mh-blue: #2293e9; --mh-blue-glow: rgba(34, 147, 233, 0.4); --mh-red: #d63638; --mh-border: #e2e8f0; }
-    
-    .switch.mh-native-switch { position: relative; display: inline-block; width: 70px; height: 32px; margin: 0; }
-    .switch.mh-native-switch input.cb { opacity: 0; width: 0; height: 0; }
-    .switch.mh-native-switch .toggle { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 11px; font-weight: bold; color: white; text-transform: uppercase; overflow: hidden; }
-    .switch.mh-native-switch .toggle:before { position: absolute; content: ""; height: 24px; width: 24px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; z-index: 2; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-    .switch.mh-native-switch input.cb:checked + .toggle { background-color: var(--mh-dark); box-shadow: 0 0 10px var(--mh-blue-glow); }
-    .switch.mh-native-switch input.cb:checked + .toggle:before { transform: translateX(38px); }
-    .switch.mh-native-switch .left { color: #64748b; z-index: 1; transition: 0.3s; }
-    .switch.mh-native-switch input.cb:checked + .toggle .left { opacity: 0; }
-    .switch.mh-native-switch .right { color: white; z-index: 1; opacity: 0; transition: 0.3s; }
-    .switch.mh-native-switch input.cb:checked + .toggle .right { opacity: 1; }
+
+    /* Custom Switch CSS REMOVED - Relies 100% on Native admin-styles.css now! */
 
     .mh-futuristic-dashboard { max-width: 1200px; margin: 20px auto; font-family: 'Segoe UI', Tahoma, sans-serif; }
     .mh-dashboard-header { position: relative; padding: 30px; background: var(--mh-dark); border-radius: 16px; color: white; margin-bottom: 30px; overflow: hidden; }
@@ -341,15 +343,38 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
     .mh-hud-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(34,147,233,0.05) 0%, rgba(34,147,233,0.1) 50%, rgba(34,147,233,0.05) 100%); pointer-events: none; z-index: 10; }
     .mh-preview-box { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 5; transition: 0.3s; }
 
+    /* 🚀 14 TEXT ANIMATIONS */
     .mh-text-anim-blink { animation: mh-text-blink 1.5s infinite; }
     .mh-text-anim-pulse { animation: mh-text-pulse 2s infinite ease-in-out; }
     .mh-text-anim-float { animation: mh-text-float 2s infinite ease-in-out; }
     .mh-text-anim-tracking { animation: mh-text-tracking 2s infinite ease-in-out; }
+    .mh-text-anim-bounce { animation: mh-text-bounce 1s infinite cubic-bezier(0.28, 0.84, 0.42, 1); }
+    .mh-text-anim-blur { animation: mh-text-blur 2s infinite alternate; }
+    .mh-text-anim-neon { animation: mh-text-neon 1.5s infinite alternate; }
+    .mh-text-anim-shake { animation: mh-text-shake 0.5s infinite; }
+    .mh-text-anim-flip-y { animation: mh-text-flip-y 2s infinite; perspective: 400px; display: inline-block; }
+    .mh-text-anim-slide-fade { animation: mh-text-slide-fade 2s infinite; }
+    .mh-text-anim-zoom { animation: mh-text-zoom 2s infinite; }
+    .mh-text-anim-jello { animation: mh-text-jello 2s infinite; transform-origin: center; }
+    .mh-text-anim-swing { animation: mh-text-swing 2s infinite ease-in-out; transform-origin: top center; }
+    .mh-text-anim-glitch { animation: mh-text-glitch 2s infinite; display: inline-block; }
+
     @keyframes mh-text-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     @keyframes mh-text-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.7; } }
     @keyframes mh-text-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     @keyframes mh-text-tracking { 0%, 100% { letter-spacing: 2px; } 50% { letter-spacing: 8px; } }
+    @keyframes mh-text-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    @keyframes mh-text-blur { 0% { filter: blur(0px); opacity: 1; } 100% { filter: blur(4px); opacity: 0.5; } }
+    @keyframes mh-text-neon { 0% { text-shadow: 0 0 5px currentColor, 0 0 10px currentColor; } 100% { text-shadow: 0 0 20px currentColor, 0 0 40px currentColor, 0 0 60px currentColor; } }
+    @keyframes mh-text-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-5deg); } 75% { transform: translateX(5px) rotate(5deg); } }
+    @keyframes mh-text-flip-y { 0% { transform: rotateY(0deg); } 50% { transform: rotateY(180deg); } 100% { transform: rotateY(360deg); } }
+    @keyframes mh-text-slide-fade { 0% { opacity: 0; transform: translateY(20px); } 50% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-20px); } }
+    @keyframes mh-text-zoom { 0% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.5); } }
+    @keyframes mh-text-jello { 0%, 100% { transform: scale3d(1, 1, 1); } 30% { transform: scale3d(1.25, 0.75, 1); } 40% { transform: scale3d(0.75, 1.25, 1); } 50% { transform: scale3d(1.15, 0.85, 1); } 65% { transform: scale3d(0.95, 1.05, 1); } 75% { transform: scale3d(1.05, 0.95, 1); } }
+    @keyframes mh-text-swing { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } }
+    @keyframes mh-text-glitch { 0%, 100% { transform: translate(0); skew(0deg); } 20% { transform: translate(-2px, 2px); skew(-10deg); } 40% { transform: translate(-2px, -2px); skew(10deg); } 60% { transform: translate(2px, 2px); skew(-10deg); } 80% { transform: translate(2px, -2px); skew(10deg); } }
 
+    /* Loader Visual CSS (All 30 omitted for brevity in CSS section, JS will inject SVG/CSS) */
     .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-c1); border-radius: 50%; animation: mh-spin 1s linear infinite; } @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background: var(--mh-bg-style); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; } @keyframes mh-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
     .mh-loader-3 { width: 50px; height: 50px; background: var(--mh-bg-style); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); } @keyframes mh-pulse { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
@@ -370,7 +395,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
     .mh-loader-18 { display: flex; gap: 6px; height: 40px; align-items: flex-end; } .mh-loader-18 div { width: 8px; background: var(--mh-bg-style); animation: mh-stairway 1s infinite ease-in-out alternate; } .mh-loader-18 div:nth-child(1) { animation-delay: 0s; } .mh-loader-18 div:nth-child(2) { animation-delay: 0.2s; } .mh-loader-18 div:nth-child(3) { animation-delay: 0.4s; } .mh-loader-18 div:nth-child(4) { animation-delay: 0.6s; } @keyframes mh-stairway { 0% { height: 10px; } 100% { height: 40px; } }
     .mh-loader-19 { width: 50px; height: 50px; border-radius: 50%; box-shadow: inset 0 0 0 4px rgba(255,255,255,0.1); position: relative; } .mh-loader-19::after { content: ""; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 50%; border: 4px solid transparent; border-top-color: var(--mh-c1); animation: mh-spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
     .mh-loader-20 { width: 50px; height: 50px; perspective: 150px; } .mh-loader-20 div { width: 100%; height: 100%; border: 6px solid var(--mh-c1); border-radius: 50%; animation: mh-hyper-ring 2s linear infinite; } @keyframes mh-hyper-ring { 0% { transform: rotateX(60deg) rotateZ(0deg); } 100% { transform: rotateX(60deg) rotateZ(360deg); } }
-
     .mh-ecommerce-icon { display: flex; align-items: center; justify-content: center; position: relative; }
     .mh-svg-icon { width: 50px; height: 50px; fill: none; stroke: var(--mh-svg-stroke); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .mh-loader-21 { animation: mh-cart-dash 1.5s infinite ease-in-out; } @keyframes mh-cart-dash { 0% { transform: translateX(-30px) rotate(-15deg); opacity: 0; } 50% { transform: translateX(0) rotate(0deg); opacity: 1; } 100% { transform: translateX(30px) rotate(15deg); opacity: 0; } }
@@ -388,7 +412,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 <script>
 jQuery(document).ready(function($){
     
-    // Type Toggle
     $('.mh-loader-type').change(function() {
         if ($(this).val() === 'css') {
             $('.mh-image-settings').hide();
@@ -399,15 +422,12 @@ jQuery(document).ready(function($){
         }
     });
 
-    // Elementor-Style Tab Switching
     $('.mh-tab').click(function(){
         var type = $(this).data('type');
         var target = $(this).data('target');
-        
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
         $('#' + target + '_type').val(type);
-        
         if(type === 'gradient') {
             $(this).closest('.mh-elementor-color-group').find('.mh-gradient-controls').slideDown();
         } else {
@@ -420,41 +440,26 @@ jQuery(document).ready(function($){
         $(this).siblings('.mh-range-badge').find('span').text($(this).val());
     });
 
-    // 🚀 Master Preview Updater (WITH PROTECTIVE SHIELD FOR SCALING)
     function updateLivePreview() {
         var type = $('.mh-loader-type:checked').val();
-        
-        var bgType = $('#bg_type').val();
-        var bgC1 = $('#bg_c1').val();
-        var bgC2 = $('#bg_c2').val();
-        var bgAngle = $('#bg_angle').val();
+        var bgType = $('#bg_type').val(), bgC1 = $('#bg_c1').val(), bgC2 = $('#bg_c2').val(), bgAngle = $('#bg_angle').val();
         var bgStyle = (bgType === 'gradient') ? 'linear-gradient(' + bgAngle + 'deg, ' + bgC1 + ', ' + bgC2 + ')' : bgC1;
         $('#mh-live-preview-box').css('background', bgStyle);
 
         var effect = $('#mh_css_effect_select').val();
-        var effType = $('#loader_type').val();
-        var effC1 = $('#loader_c1').val();
-        var effC2 = $('#loader_c2').val();
-        var effAngle = $('#loader_angle').val();
+        var effType = $('#loader_type').val(), effC1 = $('#loader_c1').val(), effC2 = $('#loader_c2').val(), effAngle = $('#loader_angle').val();
         var effBgStyle = (effType === 'gradient') ? 'linear-gradient(' + effAngle + 'deg, ' + effC1 + ', ' + effC2 + ')' : effC1;
         var effectScale = $('#mh_effect_size_range').val();
         var svgStroke = (effType === 'gradient') ? 'url(#mh-svg-gradient)' : effC1;
 
-        var customText = $('#mh_custom_text_input').val();
-        var textAnim = $('#mh_text_anim_select').val();
-        var textSize = $('#mh_text_size_range').val();
-        var textType = $('#text_type').val();
-        var textC1 = $('#text_c1').val();
-        var textC2 = $('#text_c2').val();
-        var textAngle = $('#text_angle').val();
+        var customText = $('#mh_custom_text_input').val(), textAnim = $('#mh_text_anim_select').val(), textSize = $('#mh_text_size_range').val();
+        var textType = $('#text_type').val(), textC1 = $('#text_c1').val(), textC2 = $('#text_c2').val(), textAngle = $('#text_angle').val();
         var textBgStyle = (textType === 'gradient') ? 'linear-gradient(' + textAngle + 'deg, ' + textC1 + ', ' + textC2 + ')' : textC1;
 
         $('#mh_loader_color_picker').siblings('.mh-color-overlay').css('background-color', effC1);
         $('#mh_bg_color_picker').siblings('.mh-color-overlay').css('background-color', bgC1);
         $('#mh_text_color_picker').siblings('.mh-color-overlay').css('background-color', textC1);
-        
-        $('#mh-svg-c1').attr('stop-color', effC1);
-        $('#mh-svg-c2').attr('stop-color', effC2);
+        $('#mh-svg-c1').attr('stop-color', effC1); $('#mh-svg-c2').attr('stop-color', effC2);
 
         if(type === 'image') {
             var imgUrl = $('#mh-preloader-image-url').val();
@@ -497,8 +502,8 @@ jQuery(document).ready(function($){
             if (effect === '29') html = '<div class="mh-loader-29 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>';
             if (effect === '30') html = '<div class="mh-loader-30 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>';
 
-            // 🚀 FIX: The Mathematical Protective Shield Wrapper (calc 100px * scale)
-            $('#mh-loader-visual').html('<div style="width: calc(40px * '+effectScale+'); height: calc(40px * '+effectScale+'); display: flex; align-items: center; justify-content: center;"><div style="transform: scale('+effectScale+'); --mh-c1: '+effC1+'; --mh-bg-style: '+effBgStyle+'; --mh-svg-stroke: '+svgStroke+';">' + html + '</div></div>');
+            // Fixed Shield Wrapper
+            $('#mh-loader-visual').html('<div style="width: calc(100px * '+effectScale+'); height: calc(100px * '+effectScale+'); display: flex; align-items: center; justify-content: center;"><div style="transform: scale('+effectScale+'); --mh-c1: '+effC1+'; --mh-bg-style: '+effBgStyle+'; --mh-svg-stroke: '+svgStroke+';">' + html + '</div></div>');
         }
 
         if(customText.trim() !== '') {
