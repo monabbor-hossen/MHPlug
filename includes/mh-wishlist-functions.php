@@ -98,8 +98,8 @@ function mh_wishlist_has_product( $product_id ) {
  * Handles both logged-in users and guests.
  */
 function mh_wishlist_ajax_add() {
-    // Nonce verification
-    if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'nonce', false ) ) {
+    // 🚀 FIX: Look for 'security' instead of 'nonce' to match JavaScript
+    if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'security', false ) ) {
         wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug' ) ], 403 );
     }
 
@@ -170,7 +170,8 @@ add_action( 'wp_ajax_nopriv_mh_wishlist_add', 'mh_wishlist_ajax_add' );
  * AJAX: Remove a product from the wishlist.
  */
 function mh_wishlist_ajax_remove() {
-    if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'nonce', false ) ) {
+    // 🚀 FIX: Look for 'security'
+    if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'security', false ) ) {
         wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug' ) ], 403 );
     }
 
@@ -208,10 +209,10 @@ add_action( 'wp_ajax_nopriv_mh_wishlist_remove', 'mh_wishlist_ajax_remove' );
 
 /**
  * AJAX: Unified toggle — adds if absent, removes if present.
- * Action: mh_toggle_wishlist (sent from JS).
  */
 function mh_wishlist_ajax_toggle() {
-    if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'nonce', false ) ) {
+    // 🚀 FIX: Look for 'security'
+    if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'security', false ) ) {
         wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug' ) ], 403 );
     }
 
@@ -293,14 +294,16 @@ function mh_wishlist_ajax_toggle() {
         'message' => __( 'Added to wishlist!', 'mh-plug' ),
     ] );
 }
-add_action( 'wp_ajax_mh_toggle_wishlist',        'mh_wishlist_ajax_toggle' );
-add_action( 'wp_ajax_nopriv_mh_toggle_wishlist', 'mh_wishlist_ajax_toggle' );
+// 🚀 FIX: Sync Action names with the JS file (mh_wishlist_toggle)
+add_action( 'wp_ajax_mh_wishlist_toggle',        'mh_wishlist_ajax_toggle' );
+add_action( 'wp_ajax_nopriv_mh_wishlist_toggle', 'mh_wishlist_ajax_toggle' );
 
 /**
  * AJAX: Return the full wishlist data (for dynamic rendering).
  */
 function mh_wishlist_ajax_load() {
-    if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'nonce', false ) ) {
+    // 🚀 FIX: Look for 'security'
+    if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'security', false ) ) {
         wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug' ) ], 403 );
     }
 
@@ -337,13 +340,6 @@ add_action( 'wp_ajax_nopriv_mh_wishlist_load', 'mh_wishlist_ajax_load' );
 
 /**
  * Render the Add to Wishlist button HTML.
- *
- * Outputs a Neumorphic circular <button> containing a FontAwesome heart icon.
- * The .mh-added class (applied by JS) triggers the filled-heart state.
- * The .mh-adding class (applied by JS during AJAX) triggers the pulse animation.
- *
- * @param int    $product_id  The WooCommerce product ID.
- * @param string $context     'single' | 'loop'
  */
 function mh_wishlist_render_button( $product_id, $context = 'single' ) {
     $in_wishlist = mh_wishlist_has_product( $product_id );
