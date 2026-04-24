@@ -20,12 +20,12 @@ final class MH_Elementor_Loader {
         add_action('wp_enqueue_scripts', [$this, 'mh_plug_enqueue_woo_scripts']);
         add_action('elementor/frontend/after_register_scripts', [$this, 'mh_plug_enqueue_woo_scripts']);
 
-        // 🚀 NEW: AJAX Hooks for the Compare Table
+        // AJAX Hooks for the Compare Table
         add_action('wp_ajax_mh_get_compare_table', [$this, 'get_compare_table_ajax']);
         add_action('wp_ajax_nopriv_mh_get_compare_table', [$this, 'get_compare_table_ajax']);
     }
 
-    // 🚀 NEW: The AJAX Function that builds the Table
+    // 🚀 The AJAX Function that builds the Table
     public function get_compare_table_ajax() {
         if (!isset($_POST['product_ids']) || !is_array($_POST['product_ids'])) {
             wp_send_json_error(['html' => '<div class="mh-compare-empty"><h3>No products to compare</h3><p>Return to the shop to add products.</p></div>']);
@@ -63,7 +63,22 @@ final class MH_Elementor_Loader {
                             </div>
                             <h3 class="mh-compare-title"><a href="<?php echo $product->get_permalink(); ?>"><?php echo $product->get_title(); ?></a></h3>
                             <div class="mh-compare-price"><?php echo $product->get_price_html(); ?></div>
-                            <div class="mh-compare-add-to-cart"><?php woocommerce_template_loop_add_to_cart(['product' => $product]); ?></div>
+                            <div class="mh-compare-add-to-cart">
+                                <?php 
+                                // 🚀 FIX: Bulletproof WooCommerce Add to Cart Generation
+                                echo sprintf( '<a href="%s" data-quantity="1" class="%s" %s>%s</a>',
+                                    esc_url( $product->add_to_cart_url() ),
+                                    esc_attr( 'button wp-element-button product_type_' . $product->get_type() . ( $product->is_purchasable() && $product->is_in_stock() ? ' add_to_cart_button ajax_add_to_cart' : '' ) ),
+                                    wc_implode_html_attributes( [
+                                        'data-product_id'  => $product->get_id(),
+                                        'data-product_sku' => $product->get_sku(),
+                                        'aria-label'       => $product->add_to_cart_description(),
+                                        'rel'              => 'nofollow',
+                                    ] ),
+                                    esc_html( $product->add_to_cart_text() )
+                                );
+                                ?>
+                            </div>
                         </td>
                     <?php endforeach; ?>
                 </tr>
@@ -159,7 +174,6 @@ final class MH_Elementor_Loader {
                 'mh_product_grid' => [ 'file' => 'mh-product-grid-widget.php', 'class' => 'MH_Product_Grid_Widget' ],
                 'mh_header_compare' => [ 'file' => 'mh-header-compare-widget.php', 'class' => 'MH_Header_Compare_Widget' ],
                 'mh_product_compare_btn' => [ 'file' => 'mh-product-compare-btn-widget.php', 'class' => 'MH_Product_Compare_Btn_Widget' ],
-                // 🚀 NEW: Add the Compare Table Widget
                 'mh_compare_table' => [ 'file' => 'mh-compare-table-widget.php', 'class' => 'MH_Compare_Table_Widget' ],
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
