@@ -3,6 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
+use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Border;
 
 class MH_Compare_Table_Widget extends Widget_Base {
 
@@ -13,19 +15,108 @@ class MH_Compare_Table_Widget extends Widget_Base {
     public function get_script_depends() { return [ 'mh-widgets-js' ]; }
 
     protected function register_controls() {
-        $this->start_controls_section('section_style', ['label' => __('Table Style', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
+        
+        // TABLE STRUCTURE
+        $this->start_controls_section('section_style', ['label' => __('Table Structure', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
         $this->add_control('header_bg', [
-            'label' => __('Header Background', 'mh-plug'),
+            'label' => __('Left Heading Background', 'mh-plug'),
             'type' => Controls_Manager::COLOR,
-            'default' => '#f8f9fa',
             'selectors' => ['{{WRAPPER}} .mh-compare-table th' => 'background-color: {{VALUE}};']
+        ]);
+        $this->add_control('content_bg', [
+            'label' => __('Content Background', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-compare-table td' => 'background-color: {{VALUE}};']
         ]);
         $this->add_control('border_color', [
             'label' => __('Border Color', 'mh-plug'),
             'type' => Controls_Manager::COLOR,
-            'default' => '#eaeaea',
-            'selectors' => ['{{WRAPPER}} .mh-compare-table th, {{WRAPPER}} .mh-compare-table td' => 'border: 1px solid {{VALUE}};']
+            'selectors' => ['{{WRAPPER}} .mh-compare-table th, {{WRAPPER}} .mh-compare-table td' => 'border-color: {{VALUE}};']
         ]);
+        $this->add_responsive_control('cell_padding', [
+            'label' => __('Cell Padding', 'mh-plug'),
+            'type' => Controls_Manager::DIMENSIONS,
+            'selectors' => ['{{WRAPPER}} .mh-compare-table th, {{WRAPPER}} .mh-compare-table td' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'],
+        ]);
+        $this->end_controls_section();
+
+        // TYPOGRAPHY
+        $this->start_controls_section('section_typo', ['label' => __('Typography & Colors', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
+        
+        $this->add_control('heading_th', ['label' => __('Headings (Left Column)', 'mh-plug'), 'type' => Controls_Manager::HEADING]);
+        $this->add_control('th_color', [
+            'label' => __('Color', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-compare-table th' => 'color: {{VALUE}};']
+        ]);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'th_typo', 'selector' => '{{WRAPPER}} .mh-compare-table th']);
+
+        $this->add_control('heading_title', ['label' => __('Product Title', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before']);
+        $this->add_control('title_color', [
+            'label' => __('Color', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-compare-title a' => 'color: {{VALUE}};']
+        ]);
+        $this->add_control('title_hover_color', [
+            'label' => __('Hover Color', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-compare-title a:hover' => 'color: {{VALUE}};']
+        ]);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'title_typo', 'selector' => '{{WRAPPER}} .mh-compare-title']);
+
+        $this->add_control('heading_price', ['label' => __('Price', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before']);
+        $this->add_control('price_color', [
+            'label' => __('Color', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-compare-price' => 'color: {{VALUE}};']
+        ]);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'price_typo', 'selector' => '{{WRAPPER}} .mh-compare-price']);
+        
+        $this->end_controls_section();
+
+        // BUTTONS & ICONS
+        $this->start_controls_section('section_buttons', ['label' => __('Buttons & Remove Icon', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
+        
+        $this->add_control('heading_remove', ['label' => __('Remove Icon (X)', 'mh-plug'), 'type' => Controls_Manager::HEADING]);
+        $this->add_control('remove_color', [
+            'label' => __('Icon Color', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-remove-compare' => 'color: {{VALUE}};']
+        ]);
+        $this->add_control('remove_bg', [
+            'label' => __('Background', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-remove-compare' => 'background-color: {{VALUE}};']
+        ]);
+        $this->add_control('remove_hover_color', [
+            'label' => __('Hover Icon Color', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-remove-compare:hover' => 'color: {{VALUE}};']
+        ]);
+        $this->add_control('remove_hover_bg', [
+            'label' => __('Hover Background', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-remove-compare:hover' => 'background-color: {{VALUE}};']
+        ]);
+        
+        $this->add_control('heading_cart_btn', ['label' => __('Add to Cart Button', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before']);
+        $this->add_control('btn_color', [
+            'label' => __('Text Color', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-compare-add-to-cart .button' => 'color: {{VALUE}};']
+        ]);
+        $this->add_control('btn_bg', [
+            'label' => __('Background', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-compare-add-to-cart .button' => 'background-color: {{VALUE}};']
+        ]);
+        $this->add_control('btn_hover_bg', [
+            'label' => __('Hover Background', 'mh-plug'),
+            'type' => Controls_Manager::COLOR,
+            'selectors' => ['{{WRAPPER}} .mh-compare-add-to-cart .button:hover' => 'background-color: {{VALUE}};']
+        ]);
+        $this->add_group_control(Group_Control_Border::get_type(), ['name' => 'btn_border', 'selector' => '{{WRAPPER}} .mh-compare-add-to-cart .button']);
+        
         $this->end_controls_section();
     }
 
@@ -41,7 +132,7 @@ class MH_Compare_Table_Widget extends Widget_Base {
         <style>
             .mh-compare-table-wrapper { overflow-x: auto; width: 100%; }
             .mh-compare-table { width: 100%; border-collapse: collapse; min-width: 900px; background: #fff; }
-            .mh-compare-table th, .mh-compare-table td { border: 1px solid #eaeaea; padding: 25px; text-align: center; vertical-align: top; }
+            .mh-compare-table th, .mh-compare-table td { border: 1px solid #eaeaea; padding: 25px; text-align: center; vertical-align: top; transition: 0.3s; }
             .mh-compare-table th { background: #f8f9fa; font-weight: 600; width: 20%; text-align: left; vertical-align: middle; color: #222; text-transform: uppercase; font-size: 14px; }
             .mh-compare-image { display: block; margin-bottom: 15px; position: relative; }
             .mh-compare-image img { max-width: 100%; height: auto; border-radius: 8px; }
@@ -49,10 +140,10 @@ class MH_Compare_Table_Widget extends Widget_Base {
             .mh-compare-title a { color: #111; text-decoration: none; transition: 0.3s; }
             .mh-compare-title a:hover { color: #d63638; }
             .mh-compare-price { font-size: 18px; font-weight: bold; color: #d63638; margin-bottom: 15px; }
-            .mh-remove-compare { color: #999; position: absolute; top: 10px; right: 10px; font-size: 18px; background: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.3s; z-index: 10; text-decoration: none; }
-            .mh-remove-compare:hover { color: #fff; background: #d63638; }
-            .mh-compare-add-to-cart .button { background: #004265; color: #fff; border-radius: 4px; padding: 12px 24px; border: none; text-decoration: none; display: inline-block; font-weight: 600; transition: 0.3s; }
-            .mh-compare-add-to-cart .button:hover { background: #002b42; }
+            .mh-remove-compare { color: #999; position: absolute; top: 10px; right: 10px; font-size: 18px; background: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.3s ease; z-index: 10; text-decoration: none; }
+            .mh-remove-compare:hover { color: #fff; background: #d63638; transform: scale(1.1); }
+            .mh-compare-add-to-cart .button { background: #004265; color: #fff; border-radius: 4px; padding: 12px 24px; border: none; text-decoration: none; display: inline-block; font-weight: 600; transition: 0.3s ease; }
+            .mh-compare-add-to-cart .button:hover { background: #002b42; transform: translateY(-2px); }
             .mh-compare-empty { padding: 60px; text-align: center; border: 2px dashed #ccc; border-radius: 8px; }
             .mh-compare-empty h3 { color: #333; margin-bottom: 10px; }
         </style>
