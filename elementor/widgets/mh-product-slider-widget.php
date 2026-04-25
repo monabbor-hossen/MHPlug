@@ -2,7 +2,7 @@
 /**
  * MH Product Slider Widget
  * Inherits all powerful features of the Product Grid but displays them in a highly customizable slider.
- * Fixed: CSS Comma Selector bug breaking the Wishlist button size & added SVG fill colors.
+ * Fixed: Quick View SVG & Icon color inheritance explicitly solved.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -188,21 +188,19 @@ class MH_Product_Slider_Widget extends Widget_Base {
         $this->end_controls_section();
 
         // ----------------------------------------------------
-        // STYLE: GENERAL ACTION BUTTONS (Excluding Quick View)
+        // STYLE: GENERAL ACTION BUTTONS (Excluding Quick View from colors, but matching width/height)
         // ----------------------------------------------------
         $this->start_controls_section( 'section_style_buttons', [ 'label' => __( 'General Action Buttons', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
         
         $btn_target = '{{WRAPPER}} .mh-compare-btn, {{WRAPPER}} .mh-advanced-wishlist-btn, {{WRAPPER}} .mh-action-btn[title="Read More"]';
         $btn_hover_target = '{{WRAPPER}} .mh-compare-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn.added, {{WRAPPER}} .mh-action-btn[title="Read More"]:hover';
         
-        // 🚀 FIX: Apply the child selectors cleanly so they don't break string formatting!
         $icon_target = '{{WRAPPER}} .mh-compare-btn i, {{WRAPPER}} .mh-advanced-wishlist-btn i, {{WRAPPER}} .mh-action-btn[title="Read More"] i';
         $svg_target = '{{WRAPPER}} .mh-compare-btn svg, {{WRAPPER}} .mh-advanced-wishlist-btn svg, {{WRAPPER}} .mh-action-btn[title="Read More"] svg';
 
         $this->add_responsive_control( 'btn_width', [ 'label' => __( 'Button Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ $btn_target => 'width: {{SIZE}}px !important; min-width: {{SIZE}}px !important;' ] ] );
         $this->add_responsive_control( 'btn_height', [ 'label' => __( 'Button Height', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ $btn_target => 'height: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' ] ] );
         
-        // 🚀 FIX: Correctly mapped icon sizing
         $this->add_responsive_control( 'btn_icon_size', [ 
             'label' => __( 'Icon Size', 'mh-plug' ), 
             'type' => Controls_Manager::SLIDER, 
@@ -325,8 +323,12 @@ class MH_Product_Slider_Widget extends Widget_Base {
             .mh-product-slider .slick-dots button:before { content: ''; display: block; width: 100%; height: 100%; border-radius: 50%; background-color: var(--mh-dot-color, #cccccc); transition: 0.3s; opacity: 1; position: static; }
             .mh-product-slider .slick-dots .slick-active button:before { background-color: var(--mh-dot-active-color, #2293e9); transform: scale(1.3); }
 
-            /* Default fallback fill for SVG so it inherits the text color */
+            /* Default fallback fill for General SVGs */
             .mh-advanced-wishlist-btn svg { fill: currentColor; }
+
+            /* 🚀 QUICK VIEW ICON COLOR FIX: Forces the Quick View icon to inherit its button's color */
+            .mh-product-slider-wrapper .mh-quick-view-trigger i { color: inherit !important; }
+            .mh-product-slider-wrapper .mh-quick-view-trigger svg { fill: currentColor !important; color: inherit !important; }
         </style>
 
         <div class="mh-product-slider-wrapper mh-product-grid">
