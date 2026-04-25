@@ -2,7 +2,7 @@
 /**
  * MH Product Slider Widget
  * Inherits all powerful features of the Product Grid but displays them in a highly customizable slider.
- * Fixed: Isolated Quick View Button styling so Trait controls work perfectly.
+ * Fixed: Added SVG `fill` properties so Wishlist icons change color properly.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -195,7 +195,6 @@ class MH_Product_Slider_Widget extends Widget_Base {
         // ----------------------------------------------------
         $this->start_controls_section( 'section_style_buttons', [ 'label' => __( 'General Action Buttons', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
         
-        // 🚀 FIX: Explicit selectors that DO NOT target the quick view button, allowing the Trait to style it perfectly!
         $btn_target = '{{WRAPPER}} .mh-compare-btn, {{WRAPPER}} .mh-advanced-wishlist-btn, {{WRAPPER}} .mh-action-btn[title="Read More"]';
         $btn_hover_target = '{{WRAPPER}} .mh-compare-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn.added, {{WRAPPER}} .mh-action-btn[title="Read More"]:hover';
 
@@ -206,15 +205,38 @@ class MH_Product_Slider_Widget extends Widget_Base {
         $this->add_responsive_control( 'btn_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'default' => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => '%' ], 'selectors' => [ $btn_target => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ] ] );
 
         $this->start_controls_tabs( 'tabs_btn_style' );
+        
         $this->start_controls_tab( 'tab_btn_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'btn_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ $btn_target => 'color: {{VALUE}} !important;' ] ] );
+        
+        // 🚀 FIX: SVG fill properties added here
+        $this->add_control( 'btn_color', [ 
+            'label' => __( 'Icon Color', 'mh-plug' ), 
+            'type' => Controls_Manager::COLOR, 
+            'default' => '#333333', 
+            'selectors' => [ 
+                $btn_target => 'color: {{VALUE}} !important;',
+                $btn_target . ' svg' => 'fill: {{VALUE}} !important;',
+            ] 
+        ] );
+        
         $this->add_control( 'btn_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ $btn_target => 'background-color: {{VALUE}} !important;' ] ] );
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_border', 'selector' => $btn_target ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_shadow', 'selector' => $btn_target ] );
         $this->end_controls_tab();
 
         $this->start_controls_tab( 'tab_btn_hover', [ 'label' => __( 'Hover & Active', 'mh-plug' ) ] );
-        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ $btn_hover_target => 'color: {{VALUE}} !important;' ] ] );
+        
+        // 🚀 FIX: SVG fill properties added here
+        $this->add_control( 'btn_hover_color', [ 
+            'label' => __( 'Icon Color', 'mh-plug' ), 
+            'type' => Controls_Manager::COLOR, 
+            'default' => '#ffffff', 
+            'selectors' => [ 
+                $btn_hover_target => 'color: {{VALUE}} !important;',
+                $btn_hover_target . ' svg' => 'fill: {{VALUE}} !important;',
+            ] 
+        ] );
+        
         $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ $btn_hover_target => 'background-color: {{VALUE}} !important;' ] ] );
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => $btn_hover_target ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => $btn_hover_target ] );
@@ -296,7 +318,6 @@ class MH_Product_Slider_Widget extends Widget_Base {
         ?>
         
         <style>
-            /* 🚀 Added .mh-product-grid as a structural spoof so the Trait can easily attach its CSS */
             .mh-product-slider-wrapper.mh-product-grid { display: block !important; width: 100%; position: relative; grid-template-columns: none !important; gap: 0 !important; }
             .mh-product-slider .slick-track { display: flex; }
             .mh-product-slider .slick-slide { height: auto; display: flex; outline: none; }
