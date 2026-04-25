@@ -2,7 +2,7 @@
 /**
  * MH Taxonomy Slider Widget
  * Displays multiple Categories, Brands, Tags, or Custom Content in a highly customizable slider.
- * Fully responsive and updated to eliminate common double-icon display issues.
+ * Fully responsive with fixed icon sizes and beautifully rebuilt navigation dots.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -413,45 +413,54 @@ class MH_Plug_Taxonomy_Slider_Widget extends Widget_Base {
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
-        // Arrows
+        // 🚀 FIXED ARROWS
         $this->add_control( 'heading_arrows', [ 'label' => __( 'Arrows', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'condition' => [ 'show_arrows' => 'yes' ] ] );
         
         $this->start_controls_tabs( 'tabs_arrows_style', [ 'condition' => [ 'show_arrows' => 'yes' ] ] );
         $this->start_controls_tab( 'tab_arrows_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'arrow_color', [
-            'label'     => __( 'Color', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#333333',
-            'selectors' => [
-                '{{WRAPPER}} .slick-arrow i' => 'color: {{VALUE}};', // Target icon for user color choice.
-                '{{WRAPPER}} .slick-arrow:before, {{WRAPPER}} .slick-arrow:after' => 'content: none !important;', // 🚀 THE FIX: Eliminate double theme icons.
-            ],
+        $this->add_control( 'arrow_color', [ 
+            'label' => __( 'Icon Color', 'mh-plug' ), 
+            'type' => Controls_Manager::COLOR, 
+            'default' => '#333333', 
+            'selectors' => [ '{{WRAPPER}} .slick-arrow i' => 'color: {{VALUE}} !important;' ] 
         ] );
         $this->add_control( 'arrow_bg', [ 'label' => __( 'Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .slick-arrow' => 'background-color: {{VALUE}};' ] ] );
         $this->end_controls_tab();
         $this->start_controls_tab( 'tab_arrows_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
-        $this->add_control( 'arrow_color_hover', [
-            'label'     => __( 'Color', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#ffffff',
-            'selectors' => [
-                '{{WRAPPER}} .slick-arrow:hover i' => 'color: {{VALUE}};' // Target icon for hover color choice.
-            ],
-        ] );
+        $this->add_control( 'arrow_color_hover', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .slick-arrow:hover i' => 'color: {{VALUE}} !important;' ] ] );
         $this->add_control( 'arrow_bg_hover', [ 'label' => __( 'Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#2293e9', 'selectors' => [ '{{WRAPPER}} .slick-arrow:hover' => 'background-color: {{VALUE}};' ] ] );
         $this->end_controls_tab();
         $this->end_controls_tabs();
 
-        $this->add_responsive_control( 'arrow_size', [
-            'label' => __( 'Arrow Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'range' => [ 'px' => [ 'min' => 20, 'max' => 80 ] ], 'default' => [ 'size' => 40 ],
-            'selectors' => [ '{{WRAPPER}} .slick-arrow' => 'width: {{SIZE}}px; height: {{SIZE}}px; line-height: {{SIZE}}px;' ],
+        // 🚀 Separate Button Box Size from Icon Size
+        $this->add_responsive_control( 'arrow_box_size', [
+            'label' => __( 'Arrow Button Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'range' => [ 'px' => [ 'min' => 20, 'max' => 80 ] ], 'default' => [ 'size' => 40 ],
+            'selectors' => [ '{{WRAPPER}} .slick-arrow' => 'width: {{SIZE}}px; height: {{SIZE}}px;' ],
             'condition' => [ 'show_arrows' => 'yes' ], 'separator' => 'before'
         ] );
 
-        // Dots
+        $this->add_responsive_control( 'arrow_icon_size', [
+            'label' => __( 'Arrow Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'range' => [ 'px' => [ 'min' => 10, 'max' => 50 ] ], 'default' => [ 'size' => 16 ],
+            'selectors' => [ '{{WRAPPER}} .slick-arrow i' => 'font-size: {{SIZE}}px !important;' ],
+            'condition' => [ 'show_arrows' => 'yes' ],
+        ] );
+
+        // 🚀 FIXED DOTS
         $this->add_control( 'heading_dots', [ 'label' => __( 'Dots', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before', 'condition' => [ 'show_dots' => 'yes' ] ] );
-        $this->add_control( 'dot_color', [ 'label' => __( 'Dot Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#cccccc', 'selectors' => [ '{{WRAPPER}} .slick-dots li button:before' => 'color: {{VALUE}};' ], 'condition' => [ 'show_dots' => 'yes' ] ] );
-        $this->add_control( 'dot_active_color', [ 'label' => __( 'Active Dot Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#2293e9', 'selectors' => [ '{{WRAPPER}} .slick-dots li.slick-active button:before' => 'color: {{VALUE}};' ], 'condition' => [ 'show_dots' => 'yes' ] ] );
+        $this->add_control( 'dot_color', [ 
+            'label' => __( 'Dot Color', 'mh-plug' ), 
+            'type' => Controls_Manager::COLOR, 
+            'default' => '#cccccc', 
+            'selectors' => [ '{{WRAPPER}} .mh-tax-slider' => '--mh-dot-color: {{VALUE}};' ], 
+            'condition' => [ 'show_dots' => 'yes' ] 
+        ] );
+        $this->add_control( 'dot_active_color', [ 
+            'label' => __( 'Active Dot Color', 'mh-plug' ), 
+            'type' => Controls_Manager::COLOR, 
+            'default' => '#2293e9', 
+            'selectors' => [ '{{WRAPPER}} .mh-tax-slider' => '--mh-dot-active-color: {{VALUE}};' ], 
+            'condition' => [ 'show_dots' => 'yes' ] 
+        ] );
 
         $this->end_controls_section();
     }
@@ -483,8 +492,8 @@ class MH_Plug_Taxonomy_Slider_Widget extends Widget_Base {
             'speed'          => $settings['slider_speed'] ? absint($settings['slider_speed']) : 500,
             'arrows'         => $settings['show_arrows'] === 'yes',
             'dots'           => $settings['show_dots'] === 'yes',
-            'prevArrow'      => '<button type="button" class="slick-prev"><i class="fas fa-chevron-left"></i></button>',
-            'nextArrow'      => '<button type="button" class="slick-next"><i class="fas fa-chevron-right"></i></button>',
+            'prevArrow'      => '<button type="button" class="slick-prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>',
+            'nextArrow'      => '<button type="button" class="slick-next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>',
             'responsive'     => [
                 [ 'breakpoint' => 1025, 'settings' => [ 'slidesToShow' => $show_tablet, 'slidesToScroll' => $scroll_tablet ] ],
                 [ 'breakpoint' => 768,  'settings' => [ 'slidesToShow' => $show_mobile, 'slidesToScroll' => $scroll_mobile ] ]
@@ -515,11 +524,18 @@ class MH_Plug_Taxonomy_Slider_Widget extends Widget_Base {
             .mh-tax-slider .slick-slide { height: auto; display: flex; outline: none; }
             .mh-tax-slider .slick-slide > div { width: 100%; display: flex; }
             
-            /* Arrow Adjustments */
-            .mh-tax-slider .slick-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 20; border-radius: 50%; border: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+            /* 🚀 ARROWS FIX */
+            .mh-tax-slider .slick-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 20; border-radius: 50%; border: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 0; outline: none; }
+            .mh-tax-slider .slick-arrow:before, .mh-tax-slider .slick-arrow:after { content: none !important; display: none !important; } /* Crushes theme injected font icons */
             .mh-tax-slider .slick-prev { left: -15px; }
             .mh-tax-slider .slick-next { right: -15px; }
-            .mh-tax-slider .slick-arrow i { font-size: 16px; margin: 0; padding: 0; line-height: 1; }
+            
+            /* 🚀 DOTS FIX - Hardcoded structure so it never breaks */
+            .mh-tax-slider .slick-dots { display: flex !important; justify-content: center; list-style: none; padding: 0; margin: 20px 0 0 0; gap: 8px; position: relative; bottom: auto; }
+            .mh-tax-slider .slick-dots li { margin: 0; padding: 0; width: auto; height: auto; }
+            .mh-tax-slider .slick-dots button { font-size: 0; line-height: 0; display: block; width: 12px; height: 12px; padding: 0; cursor: pointer; color: transparent; border: 0; outline: none; background: transparent; }
+            .mh-tax-slider .slick-dots button:before { content: ''; display: block; width: 100%; height: 100%; border-radius: 50%; background-color: var(--mh-dot-color, #cccccc); transition: 0.3s; opacity: 1; position: static; }
+            .mh-tax-slider .slick-dots .slick-active button:before { background-color: var(--mh-dot-active-color, #2293e9); transform: scale(1.3); }
 
             <?php
             $breakpoints = [
@@ -609,7 +625,6 @@ class MH_Plug_Taxonomy_Slider_Widget extends Widget_Base {
                             </div>
 
                             <?php 
-                            // Only apply the full-card clickable overlay if the Button is DISABLED!
                             if ( ! empty( $link ) && $settings['show_button'] !== 'yes' ) : ?>
                                 <a href="<?php echo esc_url( $link ); ?>" class="mh-tax-card-link-overlay" <?php echo $target . $nofollow; ?> aria-label="<?php echo esc_attr( $title ); ?>"></a>
                             <?php endif; ?>
