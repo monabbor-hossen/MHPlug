@@ -75,10 +75,10 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         /* ==========================================
            🎨 STYLE: STANDARD LAYOUT
            ========================================== */
+        // 🚀 FIX: Removed the condition so this panel is always available for responsive styling
         $this->start_controls_section( 'style_standard_section', [
             'label' => __( '🎨 Standard Layout Styles', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
-            'condition' => [ 'search_layout' => 'standard' ]
         ] );
 
         $this->add_control( 'std_input_bg', [
@@ -137,10 +137,10 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         /* ==========================================
            🎨 STYLE: EXPANDABLE DROPDOWN
            ========================================== */
+        // 🚀 FIX: Removed the condition so this panel is always available for responsive styling
         $this->start_controls_section( 'style_expandable_section', [
             'label' => __( '🎨 Expandable Layout Styles', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
-            'condition' => [ 'search_layout' => 'expandable' ]
         ] );
 
         // --- TRIGGER BUTTON STYLES ---
@@ -249,19 +249,19 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
 
         $this->add_group_control( Group_Control_Border::get_type(), [
             'name'      => 'exp_box_border',
-            'selector'  => '{{WRAPPER}} .mh-desk-expandable .mh-search-expandable-container',
+            'selector'  => '{{WRAPPER}} .mh-desk-expandable .mh-search-expandable-container, {{WRAPPER}} .mh-tab-expandable .mh-search-expandable-container, {{WRAPPER}} .mh-mob-expandable .mh-search-expandable-container',
         ] );
 
         $this->add_responsive_control( 'exp_box_radius', [
             'label'      => __( 'Border Radius', 'mh-plug' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-desk-expandable .mh-search-expandable-container' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-desk-expandable .mh-search-expandable-container, {{WRAPPER}} .mh-tab-expandable .mh-search-expandable-container, {{WRAPPER}} .mh-mob-expandable .mh-search-expandable-container' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
             'name'      => 'exp_box_shadow',
-            'selector'  => '{{WRAPPER}} .mh-desk-expandable .mh-search-expandable-container',
+            'selector'  => '{{WRAPPER}} .mh-desk-expandable .mh-search-expandable-container, {{WRAPPER}} .mh-tab-expandable .mh-search-expandable-container, {{WRAPPER}} .mh-mob-expandable .mh-search-expandable-container',
         ] );
 
 
@@ -289,14 +289,14 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
 
         $this->add_group_control( Group_Control_Border::get_type(), [
             'name'      => 'exp_in_border',
-            'selector'  => '{{WRAPPER}} .mh-desk-expandable .mh-search-input',
+            'selector'  => '{{WRAPPER}} .mh-desk-expandable .mh-search-input, {{WRAPPER}} .mh-tab-expandable .mh-search-input, {{WRAPPER}} .mh-mob-expandable .mh-search-input',
         ] );
 
         $this->add_responsive_control( 'exp_in_radius', [
             'label'      => __( 'Border Radius', 'mh-plug' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-desk-expandable .mh-search-input' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-desk-expandable .mh-search-input, {{WRAPPER}} .mh-tab-expandable .mh-search-input, {{WRAPPER}} .mh-mob-expandable .mh-search-input' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
         $this->end_controls_section();
@@ -304,10 +304,10 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         /* ==========================================
            🎨 STYLE: MORPHING SLIDER
            ========================================== */
+        // 🚀 FIX: Removed the condition so this panel is always available for responsive styling
         $this->start_controls_section( 'style_morphing_section', [
             'label' => __( '🎨 Morphing Layout Styles', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
-            'condition' => [ 'search_layout' => 'slide_out' ]
         ] );
 
         $this->add_responsive_control( 'mor_expanded_width', [
@@ -335,7 +335,7 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         $this->add_responsive_control( 'mor_trig_s', [ 'label' => __( 'Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px', 'em', 'rem'], 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-s: {{SIZE}}{{UNIT}};' ], 'separator' => 'before' ] );
         
         $this->add_responsive_control( 'mor_trig_pad', [ 
-            'label'      => __( 'Padding', 'mh-plug' ), 
+            'label'      => __( 'Closed Button Padding', 'mh-plug' ), 
             'type'       => Controls_Manager::DIMENSIONS, 
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [ 
@@ -355,7 +355,7 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
         $this->add_responsive_control( 'mor_ic_s', [
             'label'      => __( 'Inside Icon Size', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
-            'size_units' => [ 'px', 'em', 'rem' ],
+            'size_units' => [ 'px' ],
             'selectors'  => [ '{{WRAPPER}}' => '--mor-ic-s: {{SIZE}}{{UNIT}};' ],
         ] );
 
@@ -366,9 +366,9 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
             'selectors'  => [ '{{WRAPPER}}' => '--mor-in-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
-        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'mor_expanded_border', 'selector' => '{{WRAPPER}} .mh-desk-slide_out.mh-search-is-open .mh-search-form' ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'mor_expanded_border', 'selector' => '{{WRAPPER}} .mh-desk-slide_out.mh-search-is-open .mh-search-form, {{WRAPPER}} .mh-tab-slide_out.mh-search-is-open .mh-search-form, {{WRAPPER}} .mh-mob-slide_out.mh-search-is-open .mh-search-form' ] );
         $this->add_responsive_control( 'mor_in_r', [ 'label' => __( 'Expanded Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%'], 'selectors' => [ '{{WRAPPER}}' => '--mor-in-r: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'mor_expanded_shadow', 'selector' => '{{WRAPPER}} .mh-desk-slide_out.mh-search-is-open .mh-search-form' ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'mor_expanded_shadow', 'selector' => '{{WRAPPER}} .mh-desk-slide_out.mh-search-is-open .mh-search-form, {{WRAPPER}} .mh-tab-slide_out.mh-search-is-open .mh-search-form, {{WRAPPER}} .mh-mob-slide_out.mh-search-is-open .mh-search-form' ] );
 
         $this->end_controls_section();
 
@@ -501,7 +501,6 @@ class MH_Plug_Product_Search_Widget extends Widget_Base {
                 echo "{$prefix}-expandable .mh-search-trigger:hover { color: var(--exp-tr-hc, #d63638) !important; fill: var(--exp-tr-hc, #d63638) !important; background-color: var(--exp-tr-hbg, transparent) !important; }\n";
                 echo "{$prefix}-expandable .mh-search-trigger i, {$prefix}-expandable .mh-search-trigger svg { font-size: var(--exp-tr-s, 20px) !important; width: var(--exp-tr-s, 20px) !important; height: var(--exp-tr-s, 20px) !important; }\n";
                 
-                // 🚀 THE FIX: Advanced X/Y Positioning logic via calc()
                 echo "{$prefix}-expandable .mh-search-expandable-container { position: absolute !important; top: calc(100% + var(--exp-pos-y, 15px)) !important; right: calc(0px - var(--exp-pos-x, 0px)) !important; opacity: 0 !important; visibility: hidden !important; transform: translateY(10px) !important; background-color: var(--exp-box-bg, #ffffff) !important; padding: var(--exp-box-p, 15px) !important; max-width: 90vw !important; width: var(--exp-box-w, 320px) !important; z-index: 9999 !important; display: block; }\n";
                 
                 echo "{$prefix}-expandable.mh-search-is-open .mh-search-expandable-container { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; }\n";
