@@ -362,6 +362,7 @@ final class MH_Elementor_Loader {
             'mh_breadcrumb' => [ 'file' => 'mh-breadcrumb-widget.php', 'class' => 'MH_Breadcrumb_Widget' ],
             // 🚀 NEW: Register FAQ Widget
             'mh_faq' => [ 'file' => 'mh-faq-widget.php', 'class' => 'MH_FAQ_Widget' ],
+            'mh_taxonomy_slider' => ['file' => 'mh-taxonomy-slider-widget.php', 'class' => 'MH_Plug_Taxonomy_Slider_Widget'],
         ];
         
         if ( class_exists( 'WooCommerce' ) ) {

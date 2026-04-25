@@ -65,6 +65,7 @@ class MH_Admin_Menu {
         'mh_header_compare'             => 'Header Compare Icon',
         'mh_product_compare_btn'        => 'Product Compare Button',
         'mh_compare_table'              => 'Compare Table', 
+        'mh_taxonomy_slider'            => 'Taxonomy Card Slider'
     ];
 
     public function __construct() {
