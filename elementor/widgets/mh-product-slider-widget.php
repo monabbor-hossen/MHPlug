@@ -2,6 +2,7 @@
 /**
  * MH Product Slider Widget
  * Inherits all powerful features of the Product Grid but displays them in a highly customizable slider.
+ * Fixed: Isolated Quick View Button styling so Trait controls work perfectly.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -96,6 +97,7 @@ class MH_Product_Slider_Widget extends Widget_Base {
         $this->add_control( 'show_compare', [ 'label' => __( 'Show Compare Button', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
         $this->end_controls_section();
 
+        // 🚀 INJECT QUICK VIEW CONTROLS
         $this->register_quick_view_controls();
 
         // ----------------------------------------------------
@@ -189,29 +191,35 @@ class MH_Product_Slider_Widget extends Widget_Base {
         $this->end_controls_section();
 
         // ----------------------------------------------------
-        // STYLE: GENERAL ACTION BUTTONS 
+        // STYLE: GENERAL ACTION BUTTONS (Excluding Quick View)
         // ----------------------------------------------------
         $this->start_controls_section( 'section_style_buttons', [ 'label' => __( 'General Action Buttons', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
-        $this->add_responsive_control( 'btn_width', [ 'label' => __( 'Button Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger)' => 'width: {{SIZE}}px !important; min-width: {{SIZE}}px !important;' ] ] );
-        $this->add_responsive_control( 'btn_height', [ 'label' => __( 'Button Height', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger)' => 'height: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' ] ] );
-        $this->add_responsive_control( 'btn_icon_size', [ 'label' => __( 'Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 16 ], 'selectors' => [ '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger) i' => 'font-size: {{SIZE}}px !important;', '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger) svg' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important;' ] ] );
+        
+        // 🚀 FIX: Explicit selectors that DO NOT target the quick view button, allowing the Trait to style it perfectly!
+        $btn_target = '{{WRAPPER}} .mh-compare-btn, {{WRAPPER}} .mh-advanced-wishlist-btn, {{WRAPPER}} .mh-action-btn[title="Read More"]';
+        $btn_hover_target = '{{WRAPPER}} .mh-compare-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn.added, {{WRAPPER}} .mh-action-btn[title="Read More"]:hover';
+
+        $this->add_responsive_control( 'btn_width', [ 'label' => __( 'Button Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ $btn_target => 'width: {{SIZE}}px !important; min-width: {{SIZE}}px !important;' ] ] );
+        $this->add_responsive_control( 'btn_height', [ 'label' => __( 'Button Height', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ $btn_target => 'height: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' ] ] );
+        $this->add_responsive_control( 'btn_icon_size', [ 'label' => __( 'Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 16 ], 'selectors' => [ $btn_target . ' i' => 'font-size: {{SIZE}}px !important;', $btn_target . ' svg' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important;' ] ] );
         $this->add_responsive_control( 'btn_gap', [ 'label' => __( 'Gap Between Buttons', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 8 ], 'selectors' => [ '{{WRAPPER}} .mh-product-actions' => 'gap: {{SIZE}}px;' ] ] );
-        $this->add_responsive_control( 'btn_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'default' => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => '%' ], 'selectors' => [ '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger)' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ] ] );
+        $this->add_responsive_control( 'btn_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'default' => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => '%' ], 'selectors' => [ $btn_target => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ] ] );
 
         $this->start_controls_tabs( 'tabs_btn_style' );
         $this->start_controls_tab( 'tab_btn_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'btn_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger)' => 'color: {{VALUE}} !important;' ] ] );
-        $this->add_control( 'btn_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger)' => 'background-color: {{VALUE}} !important;' ] ] );
-        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_border', 'selector' => '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger)' ] );
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_shadow', 'selector' => '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger)' ] );
+        $this->add_control( 'btn_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ $btn_target => 'color: {{VALUE}} !important;' ] ] );
+        $this->add_control( 'btn_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ $btn_target => 'background-color: {{VALUE}} !important;' ] ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_border', 'selector' => $btn_target ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_shadow', 'selector' => $btn_target ] );
         $this->end_controls_tab();
 
         $this->start_controls_tab( 'tab_btn_hover', [ 'label' => __( 'Hover & Active', 'mh-plug' ) ] );
-        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-slider .mh-action-btn.added' => 'color: {{VALUE}} !important;' ] ] );
-        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-slider .mh-action-btn.added' => 'background-color: {{VALUE}} !important;' ] ] );
-        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-slider .mh-action-btn.added' ] );
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => '{{WRAPPER}} .mh-product-slider .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-slider .mh-action-btn.added' ] );
+        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ $btn_hover_target => 'color: {{VALUE}} !important;' ] ] );
+        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ $btn_hover_target => 'background-color: {{VALUE}} !important;' ] ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => $btn_hover_target ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => $btn_hover_target ] );
         $this->end_controls_tab();
+
         $this->end_controls_tabs();
         $this->end_controls_section();
     }
@@ -267,7 +275,6 @@ class MH_Product_Slider_Widget extends Widget_Base {
             return; 
         }
 
-        // Slick Slider Config
         $slider_id = 'mh-prod-slider-' . $this->get_id();
         $slider_options = [
             'slidesToShow'   => $settings['slides_to_show']['size'] ?? 4,
@@ -289,20 +296,19 @@ class MH_Product_Slider_Widget extends Widget_Base {
         ?>
         
         <style>
-            .mh-product-slider-wrapper { display: block; width: 100%; position: relative; }
+            /* 🚀 Added .mh-product-grid as a structural spoof so the Trait can easily attach its CSS */
+            .mh-product-slider-wrapper.mh-product-grid { display: block !important; width: 100%; position: relative; grid-template-columns: none !important; gap: 0 !important; }
             .mh-product-slider .slick-track { display: flex; }
             .mh-product-slider .slick-slide { height: auto; display: flex; outline: none; }
             .mh-product-slider .slick-slide > div { width: 100%; display: flex; }
             .mh-product-card { width: 100%; display: flex; flex-direction: column; }
             
-            /* 🚀 ARROWS FIX */
             .mh-product-slider .slick-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 20; border-radius: 50%; border: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 0; outline: none; }
             .mh-product-slider .slick-arrow:before, .mh-product-slider .slick-arrow:after { content: none !important; display: none !important; }
             .mh-product-slider .slick-prev { left: -15px; }
             .mh-product-slider .slick-next { right: -15px; }
             .mh-product-slider .slick-arrow i { margin: 0; padding: 0; line-height: 1; }
             
-            /* 🚀 DOTS FIX */
             .mh-product-slider .slick-dots { display: flex !important; justify-content: center; list-style: none; padding: 0; margin: 20px 0 0 0; gap: 8px; position: relative; bottom: auto; }
             .mh-product-slider .slick-dots li { margin: 0; padding: 0; width: auto; height: auto; }
             .mh-product-slider .slick-dots button { font-size: 0; line-height: 0; display: block; width: 12px; height: 12px; padding: 0; cursor: pointer; color: transparent; border: 0; outline: none; background: transparent; }
@@ -310,7 +316,7 @@ class MH_Product_Slider_Widget extends Widget_Base {
             .mh-product-slider .slick-dots .slick-active button:before { background-color: var(--mh-dot-active-color, #2293e9); transform: scale(1.3); }
         </style>
 
-        <div class="mh-product-slider-wrapper">
+        <div class="mh-product-slider-wrapper mh-product-grid">
             <div id="<?php echo esc_attr( $slider_id ); ?>" class="mh-product-slider" data-slick='<?php echo wp_json_encode( $slider_options ); ?>'>
                 <?php
                 while ( $loop->have_posts() ) : $loop->the_post();
@@ -406,7 +412,6 @@ class MH_Product_Slider_Widget extends Widget_Base {
             };
             initProductSlider();
 
-            // Hook for Elementor Editor initialization
             if (typeof elementorFrontend !== 'undefined') {
                 elementorFrontend.hooks.addAction('frontend/element_ready/mh_product_slider.default', initProductSlider);
             }
