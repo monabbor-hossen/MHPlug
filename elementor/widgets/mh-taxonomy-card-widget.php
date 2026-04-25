@@ -1,7 +1,7 @@
 <?php
 /**
  * MH Taxonomy Card Widget
- * Displays Categories, Brands, Tags, or Custom Content with WooCommerce Dependency Checks.
+ * Displays Categories, Brands, Tags, or Custom Content with WooCommerce Dependency Checks and a Call to Action Button.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,6 +13,7 @@ use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Background;
 use Elementor\Group_Control_Box_Shadow;
+use Elementor\Group_Control_Border;
 
 class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
 
@@ -37,7 +38,6 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
 
     protected function register_controls() {
 
-        // 🚀 THE FIX: Conditionally build the Data Source options based on WooCommerce!
         $source_options = [
             'custom'   => __( 'Custom Content', 'mh-plug' ),
             'category' => __( 'Post Category', 'mh-plug' ),
@@ -104,9 +104,10 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
         ] );
 
         $this->add_control( 'custom_link', [
-            'label'     => __( 'Link', 'mh-plug' ),
+            'label'     => __( 'Custom Link', 'mh-plug' ),
             'type'      => Controls_Manager::URL,
             'condition' => [ 'source_type' => 'custom' ],
+            'description' => __( 'If using a taxonomy, the link is generated automatically.', 'mh-plug' ),
         ] );
 
         $this->add_control( 'show_description', [
@@ -115,6 +116,22 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
             'return_value' => 'yes',
             'default'      => 'yes',
             'separator'    => 'before',
+        ] );
+
+        // 🚀 NEW: Button Controls
+        $this->add_control( 'show_button', [
+            'label'        => __( 'Show Button', 'mh-plug' ),
+            'type'         => Controls_Manager::SWITCHER,
+            'return_value' => 'yes',
+            'default'      => 'no',
+            'separator'    => 'before',
+        ] );
+
+        $this->add_control( 'button_text', [
+            'label'     => __( 'Button Text', 'mh-plug' ),
+            'type'      => Controls_Manager::TEXT,
+            'default'   => __( 'Shop Now', 'mh-plug' ),
+            'condition' => [ 'show_button' => 'yes' ],
         ] );
 
         $this->end_controls_section();
@@ -191,6 +208,20 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
             'default'      => 'yes',
         ] );
 
+        $this->add_control( 'transition_time', [
+            'label'      => __( 'Hover Transition Time (s)', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 's' ],
+            'range'      => [ 's' => [ 'min' => 0.1, 'max' => 2.0, 'step' => 0.1 ] ],
+            'default'    => [ 'size' => 0.4, 'unit' => 's' ],
+            'selectors'  => [ 
+                '{{WRAPPER}} .mh-tax-card-bg' => 'transition-duration: {{SIZE}}s;',
+                '{{WRAPPER}} .mh-tax-card-overlay' => 'transition-duration: {{SIZE}}s;',
+                '{{WRAPPER}} .mh-tax-card-title' => 'transition-duration: {{SIZE}}s;',
+                '{{WRAPPER}} .mh-tax-card-btn' => 'transition-duration: {{SIZE}}s;'
+            ],
+        ] );
+
         $this->end_controls_section();
 
         /* ── STYLE: BACKGROUND & OVERLAY ── */
@@ -254,6 +285,97 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
         $this->add_control( 'heading_desc', [ 'label' => __( 'Description', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
         $this->add_control( 'desc_color', [ 'label' => __( 'Description Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#eeeeee', 'selectors' => [ '{{WRAPPER}} .mh-tax-card-desc' => 'color: {{VALUE}};' ] ] );
         $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'desc_typography', 'selector' => '{{WRAPPER}} .mh-tax-card-desc' ] );
+        $this->add_responsive_control( 'desc_margin', [ 'label' => __( 'Margin', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}} .mh-tax-card-desc' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+
+        $this->end_controls_section();
+
+
+        /* 🚀 NEW: STYLE: BUTTON ── */
+        $this->start_controls_section( 'section_style_button', [
+            'label'     => __( 'Button Styles', 'mh-plug' ),
+            'tab'       => Controls_Manager::TAB_STYLE,
+            'condition' => [ 'show_button' => 'yes' ],
+        ] );
+
+        $this->add_group_control( Group_Control_Typography::get_type(), [
+            'name'     => 'button_typography',
+            'selector' => '{{WRAPPER}} .mh-tax-card-btn',
+        ] );
+
+        $this->start_controls_tabs( 'tabs_button_style' );
+
+        $this->start_controls_tab( 'tab_button_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->add_control( 'button_text_color', [
+            'label'     => __( 'Text Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#1d2327',
+            'selectors' => [ '{{WRAPPER}} .mh-tax-card-btn' => 'color: {{VALUE}};' ],
+        ] );
+        $this->add_control( 'button_bg_color', [
+            'label'     => __( 'Background Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#ffffff',
+            'selectors' => [ '{{WRAPPER}} .mh-tax-card-btn' => 'background-color: {{VALUE}};' ],
+        ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [
+            'name'      => 'button_border',
+            'selector'  => '{{WRAPPER}} .mh-tax-card-btn',
+        ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
+            'name'     => 'button_shadow',
+            'selector' => '{{WRAPPER}} .mh-tax-card-btn',
+        ] );
+        $this->end_controls_tab();
+
+        $this->start_controls_tab( 'tab_button_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->add_control( 'button_text_color_hover', [
+            'label'     => __( 'Text Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#ffffff',
+            'selectors' => [ '{{WRAPPER}} .mh-tax-card:hover .mh-tax-card-btn' => 'color: {{VALUE}};' ],
+        ] );
+        $this->add_control( 'button_bg_color_hover', [
+            'label'     => __( 'Background Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#2293e9',
+            'selectors' => [ '{{WRAPPER}} .mh-tax-card:hover .mh-tax-card-btn' => 'background-color: {{VALUE}};' ],
+        ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [
+            'name'      => 'button_border_hover',
+            'selector'  => '{{WRAPPER}} .mh-tax-card:hover .mh-tax-card-btn',
+        ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
+            'name'     => 'button_shadow_hover',
+            'selector' => '{{WRAPPER}} .mh-tax-card:hover .mh-tax-card-btn',
+        ] );
+        $this->end_controls_tab();
+
+        $this->end_controls_tabs();
+
+        $this->add_responsive_control( 'button_padding', [
+            'label'      => __( 'Padding', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', 'em', '%' ],
+            'default'    => [ 'top' => 12, 'right' => 25, 'bottom' => 12, 'left' => 25, 'unit' => 'px' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-tax-card-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+            'separator'  => 'before',
+        ] );
+
+        $this->add_responsive_control( 'button_radius', [
+            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', '%' ],
+            'default'    => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => 'px' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-tax-card-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+        ] );
+        
+        $this->add_responsive_control( 'button_margin', [
+            'label'      => __( 'Margin', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', 'em', '%' ],
+            'default'    => [ 'top' => 15, 'right' => 0, 'bottom' => 0, 'left' => 0, 'unit' => 'px' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-tax-card-btn-wrap' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+        ] );
 
         $this->end_controls_section();
     }
@@ -282,8 +404,6 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
                     $link  = get_term_link( $term );
 
                     if ( in_array( $source, [ 'product_cat', 'product_brand' ] ) ) {
-                        // Safe to use get_term_meta here, it's a standard WP function 
-                        // even if WooCommerce is deactivated, though the source will never be product_cat
                         $thumbnail_id = get_term_meta( $term_id, 'thumbnail_id', true );
                         if ( $thumbnail_id ) {
                             $bg_url = wp_get_attachment_image_url( $thumbnail_id, 'full' );
@@ -301,17 +421,22 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
         ?>
 
         <style>
-            .mh-tax-card { position: relative; display: flex; flex-direction: column; width: 100%; overflow: hidden; text-decoration: none; box-sizing: border-box; }
+            .mh-tax-card { position: relative; display: flex; flex-direction: column; width: 100%; overflow: hidden; box-sizing: border-box; }
             .mh-tax-card-bg-fallback { position: absolute; inset: 0; z-index: 1; }
-            .mh-tax-card-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 2; }
+            .mh-tax-card-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition-property: transform; transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 2; }
             .mh-tax-card.mh-hover-zoom:hover .mh-tax-card-bg { transform: scale(1.1); }
-            .mh-tax-card-overlay { position: absolute; inset: 0; z-index: 3; transition: all 0.4s ease; background-color: rgba(0,0,0,0.4); }
+            .mh-tax-card-overlay { position: absolute; inset: 0; z-index: 3; transition-property: background-color; transition-timing-function: ease; background-color: rgba(0,0,0,0.4); }
             
-            .mh-tax-card-content { position: relative; z-index: 4; width: 100%; transition: all 0.4s ease; display: flex; flex-direction: column; }
+            .mh-tax-card-content { position: relative; z-index: 4; width: 100%; display: flex; flex-direction: column; pointer-events: none; }
             
-            .mh-tax-card-title { margin: 0 0 10px 0; transition: color 0.3s ease; }
+            .mh-tax-card-title { margin: 0 0 10px 0; transition-property: color; transition-timing-function: ease; }
             .mh-tax-card-desc { margin: 0; }
-            .mh-tax-card-link-overlay { position: absolute; inset: 0; z-index: 10; }
+            
+            .mh-tax-card-btn-wrap { display: inline-block; pointer-events: auto; z-index: 11; position: relative; }
+            .mh-tax-card-btn { display: inline-block; text-decoration: none; font-weight: 600; text-align: center; border: none; cursor: pointer; transition-property: color, background-color, border-color, box-shadow; transition-timing-function: ease; }
+            
+            /* The absolute overlay makes the entire box clickable EXCEPT the button if it exists */
+            .mh-tax-card-link-overlay { position: absolute; inset: 0; z-index: 10; text-decoration: none; }
 
             /* =======================================
                BULLETPROOF DYNAMIC RESPONSIVE ALIGNMENT ENGINE
@@ -362,9 +487,19 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
                 <?php if ( ! empty( $desc ) && $settings['show_description'] === 'yes' ) : ?>
                     <div class="mh-tax-card-desc"><?php echo wp_kses_post( $desc ); ?></div>
                 <?php endif; ?>
+
+                <?php if ( $settings['show_button'] === 'yes' && ! empty( $link ) ) : ?>
+                    <div class="mh-tax-card-btn-wrap">
+                        <a href="<?php echo esc_url( $link ); ?>" class="mh-tax-card-btn" <?php echo $target . $nofollow; ?>>
+                            <?php echo esc_html( $settings['button_text'] ); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
             </div>
 
-            <?php if ( ! empty( $link ) ) : ?>
+            <?php 
+            // The Box Link Overlay (ensures the whole card is clickable if they want)
+            if ( ! empty( $link ) ) : ?>
                 <a href="<?php echo esc_url( $link ); ?>" class="mh-tax-card-link-overlay" <?php echo $target . $nofollow; ?> aria-label="<?php echo esc_attr( $title ); ?>"></a>
             <?php endif; ?>
 
