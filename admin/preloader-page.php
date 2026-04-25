@@ -11,19 +11,16 @@ $image        = isset($settings['image']) ? $settings['image'] : '';
 $img_width    = isset($settings['img_width']) ? $settings['img_width'] : '100';
 $effect_size  = isset($settings['effect_size']) ? $settings['effect_size'] : '1.0';
 
-// Loader Gradient Settings
 $loader_color_type = isset($settings['loader_color_type']) ? $settings['loader_color_type'] : 'solid';
 $loader_c1         = isset($settings['loader_c1']) ? $settings['loader_c1'] : '#2293e9';
 $loader_c2         = isset($settings['loader_c2']) ? $settings['loader_c2'] : '#004265';
 $loader_angle      = isset($settings['loader_angle']) ? $settings['loader_angle'] : '90';
 
-// Background Gradient Settings
 $bg_color_type = isset($settings['bg_color_type']) ? $settings['bg_color_type'] : 'solid';
 $bg_c1         = isset($settings['bg_c1']) ? $settings['bg_c1'] : '#0f172a';
 $bg_c2         = isset($settings['bg_c2']) ? $settings['bg_c2'] : '#1e293b';
 $bg_angle      = isset($settings['bg_angle']) ? $settings['bg_angle'] : '90';
 
-// Text Gradient Settings
 $custom_text   = isset($settings['custom_text']) ? $settings['custom_text'] : 'SYSTEM LOADING...';
 $text_size     = isset($settings['text_size']) ? $settings['text_size'] : '16';
 $text_anim     = isset($settings['text_anim']) ? $settings['text_anim'] : 'pulse';
@@ -32,7 +29,6 @@ $text_c1         = isset($settings['text_c1']) ? $settings['text_c1'] : '#2293e9
 $text_c2         = isset($settings['text_c2']) ? $settings['text_c2'] : '#00ffd5';
 $text_angle      = isset($settings['text_angle']) ? $settings['text_angle'] : '90';
 
-// Timers
 $delay      = isset($settings['delay']) ? $settings['delay'] : '500';
 $transition = isset($settings['transition']) ? $settings['transition'] : '500';
 
@@ -52,7 +48,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                     <span class="mh-picker-label">Color 1</span>
                     <input type="color" id="<?php echo $name_prefix; ?>_c1" name="mh_plug_preloader_settings[<?php echo $name_prefix; ?>_c1]" value="<?php echo esc_attr($c1_val); ?>" class="mh-live-trigger" />
                 </div>
-                
                 <div class="mh-gradient-controls" style="display: <?php echo $type_val === 'gradient' ? 'block' : 'none'; ?>;">
                     <div class="mh-color-picker-wrap" style="margin-top: 10px;">
                         <span class="mh-picker-label">Color 2</span>
@@ -80,9 +75,7 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 
     <form method="post" action="options.php">
         <?php settings_fields('mh_plug_preloader_group'); ?>
-
         <div class="mh-settings-grid">
-
             <div class="mh-futuristic-card mh-card-wide">
                 <div class="mh-card-inner">
                     <div class="mh-setting-row">
@@ -90,12 +83,10 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                             <h3><?php esc_html_e('System Power', 'mh-plug'); ?></h3>
                             <p><?php esc_html_e('Activate the global preloader on your website.', 'mh-plug'); ?></p>
                         </div>
-                        
                         <label class="switch">
                             <input class="cb mh-live-trigger" type="checkbox" name="mh_plug_preloader_settings[enable]" value="yes" <?php checked($enable, 'yes'); ?> />
                             <span class="toggle"><span class="left">off</span><span class="right">on</span></span>
                         </label>
-                        
                     </div>
                     <div class="mh-divider"></div>
                     <div class="mh-setting-row">
@@ -190,7 +181,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                             <span class="mh-range-badge"><span class="mh-scale-val"><?php echo esc_attr($effect_size); ?></span>x</span>
                         </div>
                     </div>
-
                     <?php mh_render_color_group('loader', 'Effect Color / Gradient', $loader_color_type, $loader_c1, $loader_c2, $loader_angle); ?>
                 </div>
             </div>
@@ -243,6 +233,7 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                             <option value="jello" <?php selected($text_anim, 'jello'); ?>>Jello Wobble</option>
                             <option value="swing" <?php selected($text_anim, 'swing'); ?>>Pendulum Swing</option>
                             <option value="glitch" <?php selected($text_anim, 'glitch'); ?>>Cyber Glitch</option>
+                            <option value="typing" <?php selected($text_anim, 'typing'); ?>>Typewriter (Typing Effect)</option>
                         </select>
                     </div>
 
@@ -281,7 +272,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="mh-save-dock">
@@ -294,8 +284,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 
 <style>
     :root { --mh-dark: #004265; --mh-blue: #2293e9; --mh-blue-glow: rgba(34, 147, 233, 0.4); --mh-red: #d63638; --mh-border: #e2e8f0; }
-
-    /* Custom Switch CSS REMOVED - Relies 100% on Native admin-styles.css now! */
 
     .mh-futuristic-dashboard { max-width: 1200px; margin: 20px auto; font-family: 'Segoe UI', Tahoma, sans-serif; }
     .mh-dashboard-header { position: relative; padding: 30px; background: var(--mh-dark); border-radius: 16px; color: white; margin-bottom: 30px; overflow: hidden; }
@@ -343,7 +331,7 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
     .mh-hud-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(34,147,233,0.05) 0%, rgba(34,147,233,0.1) 50%, rgba(34,147,233,0.05) 100%); pointer-events: none; z-index: 10; }
     .mh-preview-box { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 5; transition: 0.3s; }
 
-    /* 🚀 14 TEXT ANIMATIONS */
+    /* 🚀 15 TEXT ANIMATIONS (ADDED TYPING EFFECT) */
     .mh-text-anim-blink { animation: mh-text-blink 1.5s infinite; }
     .mh-text-anim-pulse { animation: mh-text-pulse 2s infinite ease-in-out; }
     .mh-text-anim-float { animation: mh-text-float 2s infinite ease-in-out; }
@@ -358,7 +346,12 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
     .mh-text-anim-jello { animation: mh-text-jello 2s infinite; transform-origin: center; }
     .mh-text-anim-swing { animation: mh-text-swing 2s infinite ease-in-out; transform-origin: top center; }
     .mh-text-anim-glitch { animation: mh-text-glitch 2s infinite; display: inline-block; }
+    
+    /* The Typing Effect Protocol */
+    .mh-text-anim-typing { position: relative; display: inline-block; white-space: nowrap; margin: 0 auto; }
+    .mh-text-anim-typing::after { content: ""; position: absolute; right: 0; top: 0; height: 100%; width: 100%; background: var(--mh-bg-style); border-left: 3px solid var(--mh-c1); animation: mh-typing-cover 3.5s steps(20, end) infinite; }
 
+    @keyframes mh-typing-cover { 0%, 20% { width: 100%; } 80%, 100% { width: 0%; } }
     @keyframes mh-text-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     @keyframes mh-text-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.7; } }
     @keyframes mh-text-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
@@ -374,7 +367,6 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
     @keyframes mh-text-swing { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } }
     @keyframes mh-text-glitch { 0%, 100% { transform: translate(0); skew(0deg); } 20% { transform: translate(-2px, 2px); skew(-10deg); } 40% { transform: translate(-2px, -2px); skew(10deg); } 60% { transform: translate(2px, 2px); skew(-10deg); } 80% { transform: translate(2px, -2px); skew(10deg); } }
 
-    /* Loader Visual CSS (All 30 omitted for brevity in CSS section, JS will inject SVG/CSS) */
     .mh-loader-1 { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--mh-c1); border-radius: 50%; animation: mh-spin 1s linear infinite; } @keyframes mh-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .mh-loader-2 { display: flex; gap: 8px; } .mh-loader-2 div { width: 16px; height: 16px; background: var(--mh-bg-style); border-radius: 50%; animation: mh-bounce 1.4s infinite ease-in-out both; } .mh-loader-2 div:nth-child(1) { animation-delay: -0.32s; } .mh-loader-2 div:nth-child(2) { animation-delay: -0.16s; } @keyframes mh-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
     .mh-loader-3 { width: 50px; height: 50px; background: var(--mh-bg-style); border-radius: 50%; animation: mh-pulse 1.2s infinite cubic-bezier(0.2, 0.6, 0.2, 1); } @keyframes mh-pulse { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
@@ -395,6 +387,7 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
     .mh-loader-18 { display: flex; gap: 6px; height: 40px; align-items: flex-end; } .mh-loader-18 div { width: 8px; background: var(--mh-bg-style); animation: mh-stairway 1s infinite ease-in-out alternate; } .mh-loader-18 div:nth-child(1) { animation-delay: 0s; } .mh-loader-18 div:nth-child(2) { animation-delay: 0.2s; } .mh-loader-18 div:nth-child(3) { animation-delay: 0.4s; } .mh-loader-18 div:nth-child(4) { animation-delay: 0.6s; } @keyframes mh-stairway { 0% { height: 10px; } 100% { height: 40px; } }
     .mh-loader-19 { width: 50px; height: 50px; border-radius: 50%; box-shadow: inset 0 0 0 4px rgba(255,255,255,0.1); position: relative; } .mh-loader-19::after { content: ""; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 50%; border: 4px solid transparent; border-top-color: var(--mh-c1); animation: mh-spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
     .mh-loader-20 { width: 50px; height: 50px; perspective: 150px; } .mh-loader-20 div { width: 100%; height: 100%; border: 6px solid var(--mh-c1); border-radius: 50%; animation: mh-hyper-ring 2s linear infinite; } @keyframes mh-hyper-ring { 0% { transform: rotateX(60deg) rotateZ(0deg); } 100% { transform: rotateX(60deg) rotateZ(360deg); } }
+
     .mh-ecommerce-icon { display: flex; align-items: center; justify-content: center; position: relative; }
     .mh-svg-icon { width: 50px; height: 50px; fill: none; stroke: var(--mh-svg-stroke); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .mh-loader-21 { animation: mh-cart-dash 1.5s infinite ease-in-out; } @keyframes mh-cart-dash { 0% { transform: translateX(-30px) rotate(-15deg); opacity: 0; } 50% { transform: translateX(0) rotate(0deg); opacity: 1; } 100% { transform: translateX(30px) rotate(15deg); opacity: 0; } }
@@ -442,6 +435,7 @@ jQuery(document).ready(function($){
 
     function updateLivePreview() {
         var type = $('.mh-loader-type:checked').val();
+        
         var bgType = $('#bg_type').val(), bgC1 = $('#bg_c1').val(), bgC2 = $('#bg_c2').val(), bgAngle = $('#bg_angle').val();
         var bgStyle = (bgType === 'gradient') ? 'linear-gradient(' + bgAngle + 'deg, ' + bgC1 + ', ' + bgC2 + ')' : bgC1;
         $('#mh-live-preview-box').css('background', bgStyle);
@@ -502,13 +496,15 @@ jQuery(document).ready(function($){
             if (effect === '29') html = '<div class="mh-loader-29 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>';
             if (effect === '30') html = '<div class="mh-loader-30 mh-ecommerce-icon"><svg class="mh-svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>';
 
-            // Fixed Shield Wrapper
             $('#mh-loader-visual').html('<div style="width: calc(100px * '+effectScale+'); height: calc(100px * '+effectScale+'); display: flex; align-items: center; justify-content: center;"><div style="transform: scale('+effectScale+'); --mh-c1: '+effC1+'; --mh-bg-style: '+effBgStyle+'; --mh-svg-stroke: '+svgStroke+';">' + html + '</div></div>');
         }
 
+        // 🚀 THE TYPING EFFECT LOGIC
         if(customText.trim() !== '') {
             var textStyle = (textType === 'gradient') ? 'background: ' + textBgStyle + '; -webkit-background-clip: text; -webkit-text-fill-color: transparent;' : 'color: ' + textC1 + ';';
-            $('#mh-loader-text-display').html('<div class="mh-text-anim-'+textAnim+'" style="' + textStyle + ' font-size: '+textSize+'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-top: 15px;">' + customText + '</div>').show();
+            var typingVars = '--mh-bg-style: ' + bgStyle + '; --mh-c1: ' + textC1 + ';';
+            
+            $('#mh-loader-text-display').html('<div class="mh-text-anim-'+textAnim+'" style="' + typingVars + ' font-size: '+textSize+'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-top: 15px;"><span style="'+textStyle+'">' + customText + '</span></div>').show();
         } else {
             $('#mh-loader-text-display').hide();
         }

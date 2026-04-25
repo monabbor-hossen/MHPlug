@@ -48,7 +48,7 @@ final class MH_Elementor_Loader {
             #mh-global-preloader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: ' . esc_attr($global_bg) . '; z-index: 99999999; display: flex; align-items: center; justify-content: center; transition: opacity ' . esc_attr($transition) . 'ms ease, visibility ' . esc_attr($transition) . 'ms ease; }
             #mh-global-preloader.mh-preloader-hidden { opacity: 0; visibility: hidden; }
             
-            /* 🚀 14 TEXT ANIMATIONS */
+            /* 🚀 15 TEXT ANIMATIONS (ADDED TYPING EFFECT) */
             .mh-text-anim-blink { animation: mh-text-blink 1.5s infinite; }
             .mh-text-anim-pulse { animation: mh-text-pulse 2s infinite ease-in-out; }
             .mh-text-anim-float { animation: mh-text-float 2s infinite ease-in-out; }
@@ -63,7 +63,12 @@ final class MH_Elementor_Loader {
             .mh-text-anim-jello { animation: mh-text-jello 2s infinite; transform-origin: center; }
             .mh-text-anim-swing { animation: mh-text-swing 2s infinite ease-in-out; transform-origin: top center; }
             .mh-text-anim-glitch { animation: mh-text-glitch 2s infinite; display: inline-block; }
+            
+            /* The Typing Effect Protocol */
+            .mh-text-anim-typing { position: relative; display: inline-block; white-space: nowrap; margin: 0 auto; }
+            .mh-text-anim-typing::after { content: ""; position: absolute; right: 0; top: 0; height: 100%; width: 100%; background: var(--mh-bg-style); border-left: 3px solid var(--mh-c1); animation: mh-typing-cover 3.5s steps(20, end) infinite; }
 
+            @keyframes mh-typing-cover { 0%, 20% { width: 100%; } 80%, 100% { width: 0%; } }
             @keyframes mh-text-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
             @keyframes mh-text-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.7; } }
             @keyframes mh-text-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
@@ -148,6 +153,12 @@ final class MH_Elementor_Loader {
         $eff_bg      = ($eff_type === 'gradient') ? "linear-gradient({$eff_angle}deg, {$eff_c1}, {$eff_c2})" : $eff_c1;
         $svg_stroke  = ($eff_type === 'gradient') ? 'url(#mh-svg-gradient)' : $eff_c1;
 
+        $bg_type   = isset($settings['bg_type']) ? $settings['bg_type'] : 'solid';
+        $bg_c1     = isset($settings['bg_c1']) ? $settings['bg_c1'] : '#0f172a';
+        $bg_c2     = isset($settings['bg_c2']) ? $settings['bg_c2'] : '#1e293b';
+        $bg_ang    = isset($settings['bg_angle']) ? $settings['bg_angle'] : '90';
+        $global_bg = ($bg_type === 'gradient') ? "linear-gradient({$bg_ang}deg, {$bg_c1}, {$bg_c2})" : $bg_c1;
+
         $image       = !empty($settings['image']) ? $settings['image'] : '';
         $img_width   = !empty($settings['img_width']) ? $settings['img_width'] : '150';
         $delay       = !empty($settings['delay']) ? intval($settings['delay']) : 500;
@@ -161,6 +172,9 @@ final class MH_Elementor_Loader {
         $text_anim   = !empty($settings['text_anim']) ? $settings['text_anim'] : 'pulse';
         $text_bg     = ($text_type === 'gradient') ? "linear-gradient({$text_angle}deg, {$text_c1}, {$text_c2})" : $text_c1;
         $text_style  = ($text_type === 'gradient') ? "background: {$text_bg}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;" : "color: {$text_c1};";
+
+        // 🚀 Dynamic wrapper variables specifically so the Typing effect knows what color to cover the text with!
+        $typing_vars = "--mh-bg-style: {$global_bg}; --mh-c1: {$text_c1};";
 
         echo '<div id="mh-global-preloader">';
         
@@ -211,8 +225,9 @@ final class MH_Elementor_Loader {
             echo '</div></div>'; 
         }
 
+        // 🚀 FIX: The Text animation wrapper safely wraps the span to allow independent gradients and the typing cover!
         if (!empty(trim($custom_text))) {
-            echo '<div class="mh-text-anim-' . esc_attr($text_anim) . '" style="' . esc_attr($text_style) . ' font-size: ' . esc_attr($text_size) . 'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-top: 15px;">' . esc_html($custom_text) . '</div>';
+            echo '<div class="mh-text-anim-' . esc_attr($text_anim) . '" style="' . esc_attr($typing_vars) . ' font-size: ' . esc_attr($text_size) . 'px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-top: 15px;"><span style="' . esc_attr($text_style) . '">' . esc_html($custom_text) . '</span></div>';
         }
 
         echo '</div></div>';
@@ -227,6 +242,7 @@ final class MH_Elementor_Loader {
         </script>';
     }
 
+    // -- OMITTED UNCHANGED WIDGET REGISTRATION METHODS FOR BREVITY --
     public function quick_view_ajax() {
         if (!isset($_POST['product_id'])) { wp_send_json_error(['message' => 'No product ID provided.']); }
         $product_id = intval($_POST['product_id']);
@@ -321,6 +337,8 @@ final class MH_Elementor_Loader {
 
     public function register_widget_category($elements_manager) { $elements_manager->add_category('mh-plug-widgets', ['title' => esc_html__('MH Plug', 'mh-plug'), 'icon' => 'eicon-plug']); }
     public function print_inline_editor_styles() { echo '<style id="mh-plug-editor-badge-styles"> .elementor-element-wrapper [class^="mhi-"] { position: relative !important; } .elementor-element-wrapper [class^="mhi-"]::after { content: "MH"; position: absolute; top: -10px; right: -45px; z-index: 10; background-color: #2293e9ff; color: #ffffff; padding: 2px 6px; font-size: 10px; line-height: 1; font-weight: 600; border-radius: 4px; text-transform: uppercase; box-shadow: 0 1px 2px rgba(0,0,0,0.2); } </style>'; }
+    
+    // Continue below...
     public function register_widgets($widgets_manager) {
         $widget_options = get_option('mh_plug_widgets_settings', []);
         $widget_map = [
@@ -343,6 +361,7 @@ final class MH_Elementor_Loader {
             'mh_taxonomy_card' => ['file' => 'mh-taxonomy-card-widget.php', 'class' => 'MH_Plug_Taxonomy_Card_Widget'],
             'mh_breadcrumb' => [ 'file' => 'mh-breadcrumb-widget.php', 'class' => 'MH_Breadcrumb_Widget' ],
         ];
+        
         if ( class_exists( 'WooCommerce' ) ) {
             $wc_widget_map = [
                 'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php', 'class' => 'MH_Woo_Add_To_Cart_Widget' ],
@@ -367,6 +386,7 @@ final class MH_Elementor_Loader {
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
+        
         foreach ($widget_map as $option_key => $widget_data) {
             $is_enabled = isset($widget_options[$option_key]) ? (bool)$widget_options[$option_key] : true;
             if ($is_enabled) {
@@ -379,12 +399,14 @@ final class MH_Elementor_Loader {
             }
         }
     }
+
     public function mh_plug_register_widget_assets() {
         wp_register_style('mh-widgets-css', MH_PLUG_URL . 'elementor/assets/css/mh-widgets.css', [], MH_PLUG_VERSION);
         wp_register_script('mh-widgets-js', MH_PLUG_URL . 'elementor/assets/js/mh-widgets.js', ['jquery'], MH_PLUG_VERSION, true);
         wp_register_style('mh-nav-menu-css', MH_PLUG_URL . 'elementor/assets/css/mh-nav-menu.css', [], MH_PLUG_VERSION);
         wp_register_script('mh-nav-menu-js', MH_PLUG_URL . 'elementor/assets/js/mh-nav-menu.js', ['jquery'], MH_PLUG_VERSION, true);
     }
+
     public function mh_plug_enqueue_woo_scripts() {
         if (!class_exists('WooCommerce')) return;
         wp_register_script('mh-woo-scripts', MH_PLUG_URL . 'elementor/assets/js/mh-woo-scripts.js', ['jquery'], MH_PLUG_VERSION, true);
@@ -392,10 +414,12 @@ final class MH_Elementor_Loader {
         wp_script_add_data('mh-widgets-js', 'group', 1);
         wp_enqueue_script('mh-woo-scripts');
         if (is_product()) wp_enqueue_script('mh-product-gallery-script');
+        
         $ajax_data = [ 'ajax_url' => admin_url('admin-ajax.php'), 'login_url' => wc_get_page_permalink('myaccount'), 'wishlist_nonce' => wp_create_nonce('mh_wishlist_nonce') ];
         wp_add_inline_script('mh-woo-scripts', 'var mh_plug_ajax = ' . wp_json_encode($ajax_data) . ';', 'before');
     }
 }
+
 MH_Elementor_Loader::instance();
 
 function mh_plug_enqueue_editor_icons() {
@@ -404,5 +428,6 @@ function mh_plug_enqueue_editor_icons() {
     wp_enqueue_script('mh-brush-color-filter-script', MH_PLUG_URL . 'elementor/assets/js/brush-color-filter.js', ['jquery'], MH_PLUG_VERSION, true);
     wp_enqueue_script('slick-js', MH_PLUG_URL . 'assets/slick/slick.min.js', ['jquery'], MH_PLUG_VERSION, true);
 }
+
 add_action('elementor/editor/before_enqueue_scripts', 'mh_plug_enqueue_editor_icons');
 add_action('elementor/frontend/after_register_scripts', 'mh_plug_enqueue_editor_icons');
