@@ -76,7 +76,6 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
             'separator' => 'before',
         ] );
 
-        // 🚀 NEW: Custom Icons for Plus/Minus Buttons
         $this->add_control( 'heading_qty_icons', [
             'label'     => __( 'Quantity Icons', 'mh-plug' ),
             'type'      => Controls_Manager::HEADING,
@@ -160,7 +159,7 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
         $this->end_controls_section();
 
 
-        /* 🚀 NEW: STYLE: QUANTITY WRAPPER ─────────────────────────────── */
+        /* ── STYLE: QUANTITY WRAPPER ─────────────────────────────── */
         $this->start_controls_section( 'style_qty_wrapper', [
             'label' => __( 'Quantity: Main Wrapper', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
@@ -174,7 +173,7 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
             'default'    => [ 'size' => 46, 'unit' => 'px' ],
             'selectors'  => [
                 '{{WRAPPER}} .mh-qty-wrapper' => 'height: {{SIZE}}{{UNIT}};',
-                '{{WRAPPER}} .mh-qty-btn'     => 'height: {{SIZE}}{{UNIT}}; line-height: {{SIZE}}{{UNIT}};',
+                '{{WRAPPER}} .mh-qty-btn'     => 'height: {{SIZE}}{{UNIT}};',
                 '{{WRAPPER}} .mh-qty-input.qty' => 'height: {{SIZE}}{{UNIT}};',
             ],
         ] );
@@ -207,7 +206,7 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
         $this->end_controls_section();
 
 
-        /* 🚀 NEW: STYLE: QUANTITY INPUT (NUMBER) ─────────────────────────────── */
+        /* ── STYLE: QUANTITY INPUT (NUMBER) ─────────────────────────────── */
         $this->start_controls_section( 'style_qty_input', [
             'label' => __( 'Quantity: Number Input', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
@@ -229,7 +228,6 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
 
         $this->start_controls_tabs( 'qty_input_tabs' );
         
-        // Normal Input Tab
         $this->start_controls_tab( 'qty_input_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
         $this->add_control( 'qty_input_color', [
             'label'     => __( 'Text Color', 'mh-plug' ),
@@ -249,7 +247,6 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
         ] );
         $this->end_controls_tab();
 
-        // Focus Input Tab
         $this->start_controls_tab( 'qty_input_focus', [ 'label' => __( 'Focus', 'mh-plug' ) ] );
         $this->add_control( 'qty_input_color_focus', [
             'label'     => __( 'Text Color', 'mh-plug' ),
@@ -279,7 +276,7 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
         $this->end_controls_section();
 
 
-        /* 🚀 NEW: STYLE: QUANTITY BUTTONS (+ / -) ─────────────────────────────── */
+        /* ── STYLE: QUANTITY BUTTONS (+ / -) ─────────────────────────────── */
         $this->start_controls_section( 'style_qty_buttons', [
             'label' => __( 'Quantity: ± Buttons', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
@@ -291,30 +288,34 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
             'size_units' => [ 'px', '%' ],
             'range'      => [ 'px' => [ 'min' => 20, 'max' => 80 ] ],
             'default'    => [ 'size' => 40, 'unit' => 'px' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-qty-btn' => 'width: {{SIZE}}{{UNIT}} !important;' ],
+            'selectors'  => [ 
+                // 🚀 FIX: Display Flex ensures perfectly centered icons no matter the width
+                '{{WRAPPER}} .mh-qty-btn' => 'width: {{SIZE}}{{UNIT}} !important; display: flex; align-items: center; justify-content: center;' 
+            ],
         ] );
 
+        // 🚀 FIX: Hyper-specific selectors with !important to overpower default WooCommerce CSS
         $this->add_responsive_control( 'qty_btn_icon_size', [
             'label'      => __( 'Icon / Text Size', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
-            'size_units' => [ 'px', 'em' ],
+            'size_units' => [ 'px', 'em', 'rem' ],
             'range'      => [ 'px' => [ 'min' => 10, 'max' => 50 ] ],
             'selectors'  => [ 
-                '{{WRAPPER}} .mh-qty-btn i' => 'font-size: {{SIZE}}{{UNIT}};', 
-                '{{WRAPPER}} .mh-qty-btn svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};', 
-                '{{WRAPPER}} .mh-qty-btn span' => 'font-size: {{SIZE}}{{UNIT}};' 
+                '{{WRAPPER}} .mh-qty-btn i' => 'font-size: {{SIZE}}{{UNIT}} !important;', 
+                '{{WRAPPER}} .mh-qty-btn svg' => 'width: {{SIZE}}{{UNIT}} !important; height: {{SIZE}}{{UNIT}} !important; fill: currentColor;', 
+                '{{WRAPPER}} .mh-qty-btn span' => 'font-size: {{SIZE}}{{UNIT}} !important;',
+                '{{WRAPPER}} .mh-qty-btn' => 'font-size: {{SIZE}}{{UNIT}} !important;' // Fallback
             ],
         ] );
 
         $this->start_controls_tabs( 'qty_btn_tabs' );
         
-        // Normal Button Tab
         $this->start_controls_tab( 'qty_btn_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
         $this->add_control( 'qty_btn_color', [
             'label'     => __( 'Icon / Text Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
-            'selectors' => [ '{{WRAPPER}} .mh-qty-btn' => 'color: {{VALUE}}; fill: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-qty-btn' => 'color: {{VALUE}} !important; fill: {{VALUE}} !important;' ],
         ] );
         $this->add_control( 'qty_btn_bg', [
             'label'     => __( 'Background Color', 'mh-plug' ),
@@ -332,13 +333,12 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
         ] );
         $this->end_controls_tab();
 
-        // Hover Button Tab
         $this->start_controls_tab( 'qty_btn_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
         $this->add_control( 'qty_btn_color_hover', [
             'label'     => __( 'Icon / Text Color', 'mh-plug' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
-            'selectors' => [ '{{WRAPPER}} .mh-qty-btn:hover' => 'color: {{VALUE}}; fill: {{VALUE}};' ],
+            'selectors' => [ '{{WRAPPER}} .mh-qty-btn:hover' => 'color: {{VALUE}} !important; fill: {{VALUE}} !important;' ],
         ] );
         $this->add_control( 'qty_btn_bg_hover', [
             'label'     => __( 'Background Color', 'mh-plug' ),
@@ -449,7 +449,6 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
 
             </form>
         </div>
-
         <?php
     }
 }
