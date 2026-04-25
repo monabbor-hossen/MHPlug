@@ -2,6 +2,7 @@
 /**
  * MH Taxonomy Slider Widget
  * Displays multiple Categories, Brands, Tags, or Custom Content in a highly customizable slider.
+ * Fully responsive and updated to eliminate common double-icon display issues.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +25,6 @@ class MH_Plug_Taxonomy_Slider_Widget extends Widget_Base {
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
     public function get_script_depends() {
-        // Relies on the slick-js you already registered in the loader
         return [ 'slick-js' ]; 
     }
 
@@ -90,7 +90,7 @@ class MH_Plug_Taxonomy_Slider_Widget extends Widget_Base {
 
         $repeater->add_control( 'custom_title', [
             'label'     => __( 'Title', 'mh-plug' ),
-            'type'      => Controls_Manager::TEXT,
+            'type'        => Controls_Manager::TEXT,
             'default'   => __( 'Card Title', 'mh-plug' ),
             'condition' => [ 'source_type' => 'custom' ],
         ] );
@@ -418,11 +418,26 @@ class MH_Plug_Taxonomy_Slider_Widget extends Widget_Base {
         
         $this->start_controls_tabs( 'tabs_arrows_style', [ 'condition' => [ 'show_arrows' => 'yes' ] ] );
         $this->start_controls_tab( 'tab_arrows_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'arrow_color', [ 'label' => __( 'Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ '{{WRAPPER}} .slick-arrow' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'arrow_color', [
+            'label'     => __( 'Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#333333',
+            'selectors' => [
+                '{{WRAPPER}} .slick-arrow i' => 'color: {{VALUE}};', // Target icon for user color choice.
+                '{{WRAPPER}} .slick-arrow:before, {{WRAPPER}} .slick-arrow:after' => 'content: none !important;', // 🚀 THE FIX: Eliminate double theme icons.
+            ],
+        ] );
         $this->add_control( 'arrow_bg', [ 'label' => __( 'Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .slick-arrow' => 'background-color: {{VALUE}};' ] ] );
         $this->end_controls_tab();
         $this->start_controls_tab( 'tab_arrows_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
-        $this->add_control( 'arrow_color_hover', [ 'label' => __( 'Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .slick-arrow:hover' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'arrow_color_hover', [
+            'label'     => __( 'Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#ffffff',
+            'selectors' => [
+                '{{WRAPPER}} .slick-arrow:hover i' => 'color: {{VALUE}};' // Target icon for hover color choice.
+            ],
+        ] );
         $this->add_control( 'arrow_bg_hover', [ 'label' => __( 'Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#2293e9', 'selectors' => [ '{{WRAPPER}} .slick-arrow:hover' => 'background-color: {{VALUE}};' ] ] );
         $this->end_controls_tab();
         $this->end_controls_tabs();
@@ -593,7 +608,9 @@ class MH_Plug_Taxonomy_Slider_Widget extends Widget_Base {
                                 <?php endif; ?>
                             </div>
 
-                            <?php if ( ! empty( $link ) && $settings['show_button'] !== 'yes' ) : ?>
+                            <?php 
+                            // Only apply the full-card clickable overlay if the Button is DISABLED!
+                            if ( ! empty( $link ) && $settings['show_button'] !== 'yes' ) : ?>
                                 <a href="<?php echo esc_url( $link ); ?>" class="mh-tax-card-link-overlay" <?php echo $target . $nofollow; ?> aria-label="<?php echo esc_attr( $title ); ?>"></a>
                             <?php endif; ?>
 
