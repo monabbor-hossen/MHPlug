@@ -386,6 +386,7 @@ final class MH_Elementor_Loader {
                 'mh_header_compare' => [ 'file' => 'mh-header-compare-widget.php', 'class' => 'MH_Header_Compare_Widget' ],
                 'mh_product_compare_btn' => [ 'file' => 'mh-product-compare-btn-widget.php', 'class' => 'MH_Product_Compare_Btn_Widget' ],
                 'mh_compare_table' => [ 'file' => 'mh-compare-table-widget.php', 'class' => 'MH_Compare_Table_Widget' ],
+                'mh_product_slider' => [ 'file' => 'mh-product-slider-widget.php', 'class' => 'MH_Product_Slider_Widget' ],
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }

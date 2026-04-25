@@ -65,7 +65,8 @@ class MH_Admin_Menu {
         'mh_header_compare'             => 'Header Compare Icon',
         'mh_product_compare_btn'        => 'Product Compare Button',
         'mh_compare_table'              => 'Compare Table', 
-        'mh_taxonomy_slider'            => 'Taxonomy Card Slider'
+        'mh_taxonomy_slider'            => 'Taxonomy Card Slider',
+        'mh_product_slider' => 'Product Slider',
     ];
 
     public function __construct() {
@@ -230,6 +231,7 @@ class MH_Admin_Menu {
                 'mh_header_compare',
                 'mh_product_compare_btn',
                 'mh_compare_table',
+                'mh_product_slider',
                 
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
