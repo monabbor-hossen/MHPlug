@@ -34,9 +34,6 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
         return [ 'woocommerce-general', 'mh-woo-add-to-cart', 'mh-widgets-css' ];
     }
 
-    // =========================================================
-    // CONTROLS
-    // =========================================================
     protected function register_controls() {
 
         /* ── CONTENT ─────────────────────────────────────────── */
@@ -288,23 +285,20 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
             'size_units' => [ 'px', '%' ],
             'range'      => [ 'px' => [ 'min' => 20, 'max' => 80 ] ],
             'default'    => [ 'size' => 40, 'unit' => 'px' ],
-            'selectors'  => [ 
-                // 🚀 FIX: Display Flex ensures perfectly centered icons no matter the width
-                '{{WRAPPER}} .mh-qty-btn' => 'width: {{SIZE}}{{UNIT}} !important; display: flex; align-items: center; justify-content: center;' 
-            ],
+            'selectors'  => [ '{{WRAPPER}} .mh-qty-btn' => 'width: {{SIZE}}{{UNIT}} !important;' ],
         ] );
 
-        // 🚀 FIX: Hyper-specific selectors with !important to overpower default WooCommerce CSS
+        // 🚀 THE FIX: Hyper-specific selectors to crush default theme CSS, forcing the icon size changes!
         $this->add_responsive_control( 'qty_btn_icon_size', [
             'label'      => __( 'Icon / Text Size', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em', 'rem' ],
             'range'      => [ 'px' => [ 'min' => 10, 'max' => 50 ] ],
             'selectors'  => [ 
-                '{{WRAPPER}} .mh-qty-btn i' => 'font-size: {{SIZE}}{{UNIT}} !important;', 
-                '{{WRAPPER}} .mh-qty-btn svg' => 'width: {{SIZE}}{{UNIT}} !important; height: {{SIZE}}{{UNIT}} !important; fill: currentColor;', 
-                '{{WRAPPER}} .mh-qty-btn span' => 'font-size: {{SIZE}}{{UNIT}} !important;',
-                '{{WRAPPER}} .mh-qty-btn' => 'font-size: {{SIZE}}{{UNIT}} !important;' // Fallback
+                '{{WRAPPER}} .mh-atc-widget .mh-qty-wrapper button.mh-qty-btn' => 'font-size: {{SIZE}}{{UNIT}} !important;',
+                '{{WRAPPER}} .mh-atc-widget .mh-qty-wrapper button.mh-qty-btn i' => 'font-size: {{SIZE}}{{UNIT}} !important;',
+                '{{WRAPPER}} .mh-atc-widget .mh-qty-wrapper button.mh-qty-btn span' => 'font-size: {{SIZE}}{{UNIT}} !important;',
+                '{{WRAPPER}} .mh-atc-widget .mh-qty-wrapper button.mh-qty-btn svg' => 'width: {{SIZE}}{{UNIT}} !important; height: {{SIZE}}{{UNIT}} !important;',
             ],
         ] );
 
@@ -390,7 +384,6 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
         $max_qty = $product->get_max_purchase_quantity();
         $max_attr = ( $max_qty > 0 ) ? 'max="' . esc_attr( $max_qty ) . '"' : '';
 
-        // Pre-fetch the checkout URL for the Buy Now redirect
         $checkout_url = function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : '';
 
         ?>
@@ -401,7 +394,7 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
 
                     <div class="mh-qty-wrapper" role="group" aria-label="<?php esc_attr_e( 'Product quantity', 'mh-plug' ); ?>">
                         
-                        <button type="button" class="mh-qty-btn mh-qty-minus" aria-label="<?php esc_attr_e( 'Decrease quantity', 'mh-plug' ); ?>">
+                        <button type="button" class="mh-qty-btn mh-qty-minus" style="display:flex; align-items:center; justify-content:center; padding:0;" aria-label="<?php esc_attr_e( 'Decrease quantity', 'mh-plug' ); ?>">
                             <?php 
                             if ( ! empty( $settings['minus_icon']['value'] ) ) {
                                 \Elementor\Icons_Manager::render_icon( $settings['minus_icon'], [ 'aria-hidden' => 'true' ] );
@@ -423,7 +416,7 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
                             aria-label="<?php esc_attr_e( 'Quantity', 'mh-plug' ); ?>"
                         />
                         
-                        <button type="button" class="mh-qty-btn mh-qty-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'mh-plug' ); ?>">
+                        <button type="button" class="mh-qty-btn mh-qty-plus" style="display:flex; align-items:center; justify-content:center; padding:0;" aria-label="<?php esc_attr_e( 'Increase quantity', 'mh-plug' ); ?>">
                             <?php 
                             if ( ! empty( $settings['plus_icon']['value'] ) ) {
                                 \Elementor\Icons_Manager::render_icon( $settings['plus_icon'], [ 'aria-hidden' => 'true' ] );
