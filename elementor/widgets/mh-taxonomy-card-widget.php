@@ -118,7 +118,6 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
             'separator'    => 'before',
         ] );
 
-        // 🚀 NEW: Button Controls
         $this->add_control( 'show_button', [
             'label'        => __( 'Show Button', 'mh-plug' ),
             'type'         => Controls_Manager::SWITCHER,
@@ -290,7 +289,7 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
         $this->end_controls_section();
 
 
-        /* 🚀 NEW: STYLE: BUTTON ── */
+        /* ── STYLE: BUTTON ── */
         $this->start_controls_section( 'section_style_button', [
             'label'     => __( 'Button Styles', 'mh-plug' ),
             'tab'       => Controls_Manager::TAB_STYLE,
@@ -498,8 +497,8 @@ class MH_Plug_Taxonomy_Card_Widget extends Widget_Base {
             </div>
 
             <?php 
-            // The Box Link Overlay (ensures the whole card is clickable if they want)
-            if ( ! empty( $link ) ) : ?>
+            // 🚀 THE FIX: Only apply the full-card clickable overlay if the Button is DISABLED!
+            if ( ! empty( $link ) && $settings['show_button'] !== 'yes' ) : ?>
                 <a href="<?php echo esc_url( $link ); ?>" class="mh-tax-card-link-overlay" <?php echo $target . $nofollow; ?> aria-label="<?php echo esc_attr( $title ); ?>"></a>
             <?php endif; ?>
 
