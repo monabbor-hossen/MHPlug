@@ -360,6 +360,8 @@ final class MH_Elementor_Loader {
             'mh_copyright' => ['file' => 'mh-copyright-widget.php', 'class' => 'MH_Copyright_Widget'],
             'mh_taxonomy_card' => ['file' => 'mh-taxonomy-card-widget.php', 'class' => 'MH_Plug_Taxonomy_Card_Widget'],
             'mh_breadcrumb' => [ 'file' => 'mh-breadcrumb-widget.php', 'class' => 'MH_Breadcrumb_Widget' ],
+            // 🚀 NEW: Register FAQ Widget
+            'mh_faq' => [ 'file' => 'mh-faq-widget.php', 'class' => 'MH_FAQ_Widget' ],
         ];
         
         if ( class_exists( 'WooCommerce' ) ) {

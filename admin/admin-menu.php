@@ -31,6 +31,8 @@ class MH_Admin_Menu {
         'mh_button'         => 'Button',
         'mh_stacked_carousel' => 'Stacked Carousel',
         'mh_breadcrumb'         => 'Breadcrumb',
+        // 🚀 NEW: Added FAQ Widget
+        'mh_faq'            => 'Animated FAQ',
 
         // Elementor WooCommerce Wishlist Widgets
         'mh_wishlist_button' => 'MH Wishlist Button',
@@ -227,6 +229,7 @@ class MH_Admin_Menu {
                 'mh_header_compare',
                 'mh_product_compare_btn',
                 'mh_compare_table',
+                
             ], true ) ) {
                 $section_id = 'mh_plug_woocommerce_section';
             }
