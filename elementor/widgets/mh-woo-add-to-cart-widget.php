@@ -76,6 +76,25 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
             'separator' => 'before',
         ] );
 
+        // 🚀 NEW: Custom Icons for Plus/Minus Buttons
+        $this->add_control( 'heading_qty_icons', [
+            'label'     => __( 'Quantity Icons', 'mh-plug' ),
+            'type'      => Controls_Manager::HEADING,
+            'separator' => 'before',
+        ] );
+
+        $this->add_control( 'minus_icon', [
+            'label'       => __( 'Minus Icon', 'mh-plug' ),
+            'type'        => Controls_Manager::ICONS,
+            'default'     => [ 'value' => 'fas fa-minus', 'library' => 'fa-solid' ],
+        ] );
+
+        $this->add_control( 'plus_icon', [
+            'label'       => __( 'Plus Icon', 'mh-plug' ),
+            'type'        => Controls_Manager::ICONS,
+            'default'     => [ 'value' => 'fas fa-plus', 'library' => 'fa-solid' ],
+        ] );
+
         $this->add_responsive_control( 'layout_align', [
             'label'     => __( 'Alignment', 'mh-plug' ),
             'type'      => Controls_Manager::CHOOSE,
@@ -85,9 +104,8 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
                 'flex-end'   => [ 'title' => __( 'Right',  'mh-plug' ), 'icon' => 'eicon-h-align-right' ],
             ],
             'default'   => 'flex-start',
-            'selectors' => [
-                '{{WRAPPER}} .mh-atc-wrap' => 'justify-content: {{VALUE}};',
-            ],
+            'selectors' => [ '{{WRAPPER}} .mh-atc-wrap' => 'justify-content: {{VALUE}};', ],
+            'separator' => 'before',
         ] );
 
         $this->add_control( 'gap', [
@@ -96,228 +114,60 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
             'size_units' => [ 'px' ],
             'range'      => [ 'px' => [ 'min' => 0, 'max' => 50 ] ],
             'default'    => [ 'size' => 12, 'unit' => 'px' ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-atc-wrap' => 'gap: {{SIZE}}{{UNIT}};',
-            ],
+            'selectors'  => [ '{{WRAPPER}} .mh-atc-wrap' => 'gap: {{SIZE}}{{UNIT}};', ],
         ] );
 
         $this->end_controls_section();
+
 
         /* ── STYLE: ADD TO CART BUTTON ───────────────────────── */
-        $this->start_controls_section( 'style_btn', [
-            'label' => __( 'Add to Cart Button', 'mh-plug' ),
-            'tab'   => Controls_Manager::TAB_STYLE,
-        ] );
-
-        $this->add_group_control( Group_Control_Typography::get_type(), [
-            'name'     => 'btn_typography',
-            'selector' => '{{WRAPPER}} .mh-atc-btn',
-        ] );
-
+        $this->start_controls_section( 'style_btn', [ 'label' => __( 'Add to Cart Button', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
+        $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'btn_typography', 'selector' => '{{WRAPPER}} .mh-atc-btn' ] );
         $this->start_controls_tabs( 'btn_tabs' );
-
         $this->start_controls_tab( 'btn_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'btn_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#ffffff',
-            'selectors' => [ '{{WRAPPER}} .mh-atc-btn' => 'color: {{VALUE}};' ],
-        ] );
-        $this->add_control( 'btn_bg', [
-            'label'     => __( 'Background', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#1d2327',
-            'selectors' => [ '{{WRAPPER}} .mh-atc-btn' => 'background-color: {{VALUE}};' ],
-        ] );
+        $this->add_control( 'btn_color', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-atc-btn' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'btn_bg', [ 'label' => __( 'Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#1d2327', 'selectors' => [ '{{WRAPPER}} .mh-atc-btn' => 'background-color: {{VALUE}};' ] ] );
         $this->end_controls_tab();
-
         $this->start_controls_tab( 'btn_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
-        $this->add_control( 'btn_color_hover', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#ffffff',
-            'selectors' => [ '{{WRAPPER}} .mh-atc-btn:hover' => 'color: {{VALUE}};' ],
-        ] );
-        $this->add_control( 'btn_bg_hover', [
-            'label'     => __( 'Background', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#333333',
-            'selectors' => [ '{{WRAPPER}} .mh-atc-btn:hover' => 'background-color: {{VALUE}};' ],
-        ] );
+        $this->add_control( 'btn_color_hover', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-atc-btn:hover' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'btn_bg_hover', [ 'label' => __( 'Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ '{{WRAPPER}} .mh-atc-btn:hover' => 'background-color: {{VALUE}};' ] ] );
         $this->end_controls_tab();
         $this->end_controls_tabs();
-
-        $this->add_group_control( Group_Control_Border::get_type(), [
-            'name'      => 'btn_border',
-            'selector'  => '{{WRAPPER}} .mh-atc-btn',
-            'separator' => 'before',
-        ] );
-
-        $this->add_control( 'btn_border_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
-            'type'       => Controls_Manager::DIMENSIONS,
-            'size_units' => [ 'px', '%' ],
-            'default'    => [ 'top' => 6, 'right' => 6, 'bottom' => 6, 'left' => 6, 'unit' => 'px' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-atc-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ],
-        ] );
-
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
-            'name'     => 'btn_shadow',
-            'selector' => '{{WRAPPER}} .mh-atc-btn',
-        ] );
-
-        $this->add_responsive_control( 'btn_padding', [
-            'label'      => __( 'Padding', 'mh-plug' ),
-            'type'       => Controls_Manager::DIMENSIONS,
-            'size_units' => [ 'px', 'em' ],
-            'default'    => [ 'top' => 12, 'right' => 24, 'bottom' => 12, 'left' => 24, 'unit' => 'px' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-atc-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ],
-            'separator' => 'before',
-        ] );
-
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_border', 'selector' => '{{WRAPPER}} .mh-atc-btn', 'separator' => 'before' ] );
+        $this->add_control( 'btn_border_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'default' => [ 'top' => 6, 'right' => 6, 'bottom' => 6, 'left' => 6, 'unit' => 'px' ], 'selectors' => [ '{{WRAPPER}} .mh-atc-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_shadow', 'selector' => '{{WRAPPER}} .mh-atc-btn' ] );
+        $this->add_responsive_control( 'btn_padding', [ 'label' => __( 'Padding', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', 'em' ], 'default' => [ 'top' => 12, 'right' => 24, 'bottom' => 12, 'left' => 24, 'unit' => 'px' ], 'selectors' => [ '{{WRAPPER}} .mh-atc-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], 'separator' => 'before' ] );
         $this->end_controls_section();
+
 
         /* ── STYLE: BUY NOW BUTTON ───────────────────────── */
-        $this->start_controls_section( 'style_buy_now_btn', [
-            'label'     => __( 'Buy Now Button', 'mh-plug' ),
-            'tab'       => Controls_Manager::TAB_STYLE,
-            'condition' => [ 'show_buy_now' => 'yes' ],
-        ] );
-
-        $this->add_group_control( Group_Control_Typography::get_type(), [
-            'name'     => 'buy_now_typography',
-            'selector' => '{{WRAPPER}} .mh-buy-now-btn',
-        ] );
-
+        $this->start_controls_section( 'style_buy_now_btn', [ 'label' => __( 'Buy Now Button', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE, 'condition' => [ 'show_buy_now' => 'yes' ] ] );
+        $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'buy_now_typography', 'selector' => '{{WRAPPER}} .mh-buy-now-btn' ] );
         $this->start_controls_tabs( 'buy_now_tabs' );
-
         $this->start_controls_tab( 'buy_now_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'buy_now_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#ffffff',
-            'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn' => 'color: {{VALUE}};' ],
-        ] );
-        $this->add_control( 'buy_now_bg', [
-            'label'     => __( 'Background', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#d63638', // Distinct Accent color
-            'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn' => 'background-color: {{VALUE}};' ],
-        ] );
+        $this->add_control( 'buy_now_color', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'buy_now_bg', [ 'label' => __( 'Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn' => 'background-color: {{VALUE}};' ] ] );
         $this->end_controls_tab();
-
         $this->start_controls_tab( 'buy_now_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
-        $this->add_control( 'buy_now_color_hover', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#ffffff',
-            'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn:hover' => 'color: {{VALUE}};' ],
-        ] );
-        $this->add_control( 'buy_now_bg_hover', [
-            'label'     => __( 'Background', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#a82a2b',
-            'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn:hover' => 'background-color: {{VALUE}};' ],
-        ] );
+        $this->add_control( 'buy_now_color_hover', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn:hover' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'buy_now_bg_hover', [ 'label' => __( 'Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#a82a2b', 'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn:hover' => 'background-color: {{VALUE}};' ] ] );
         $this->end_controls_tab();
         $this->end_controls_tabs();
-
-        $this->add_group_control( Group_Control_Border::get_type(), [
-            'name'      => 'buy_now_border',
-            'selector'  => '{{WRAPPER}} .mh-buy-now-btn',
-            'separator' => 'before',
-        ] );
-
-        $this->add_control( 'buy_now_border_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
-            'type'       => Controls_Manager::DIMENSIONS,
-            'size_units' => [ 'px', '%' ],
-            'default'    => [ 'top' => 6, 'right' => 6, 'bottom' => 6, 'left' => 6, 'unit' => 'px' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-buy-now-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ],
-        ] );
-
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
-            'name'     => 'buy_now_shadow',
-            'selector' => '{{WRAPPER}} .mh-buy-now-btn',
-        ] );
-
-        $this->add_responsive_control( 'buy_now_padding', [
-            'label'      => __( 'Padding', 'mh-plug' ),
-            'type'       => Controls_Manager::DIMENSIONS,
-            'size_units' => [ 'px', 'em' ],
-            'default'    => [ 'top' => 12, 'right' => 24, 'bottom' => 12, 'left' => 24, 'unit' => 'px' ],
-            'selectors'  => [ '{{WRAPPER}} .mh-buy-now-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ],
-            'separator' => 'before',
-        ] );
-
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'buy_now_border', 'selector' => '{{WRAPPER}} .mh-buy-now-btn', 'separator' => 'before' ] );
+        $this->add_control( 'buy_now_border_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'default' => [ 'top' => 6, 'right' => 6, 'bottom' => 6, 'left' => 6, 'unit' => 'px' ], 'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'buy_now_shadow', 'selector' => '{{WRAPPER}} .mh-buy-now-btn' ] );
+        $this->add_responsive_control( 'buy_now_padding', [ 'label' => __( 'Padding', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', 'em' ], 'default' => [ 'top' => 12, 'right' => 24, 'bottom' => 12, 'left' => 24, 'unit' => 'px' ], 'selectors' => [ '{{WRAPPER}} .mh-buy-now-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], 'separator' => 'before' ] );
         $this->end_controls_section();
 
-        /* ── STYLE: QUANTITY BOX ─────────────────────────────── */
-        $this->start_controls_section( 'style_qty', [
-            'label' => __( 'Quantity Selector', 'mh-plug' ),
+
+        /* 🚀 NEW: STYLE: QUANTITY WRAPPER ─────────────────────────────── */
+        $this->start_controls_section( 'style_qty_wrapper', [
+            'label' => __( 'Quantity: Main Wrapper', 'mh-plug' ),
             'tab'   => Controls_Manager::TAB_STYLE,
-        ] );
-
-        $this->add_group_control( Group_Control_Typography::get_type(), [
-            'name'     => 'qty_typography',
-            'selector' => '{{WRAPPER}} .mh-qty-input, {{WRAPPER}} .mh-qty-btn',
-        ] );
-
-        $this->add_control( 'qty_color', [
-            'label'     => __( 'Text / Icon Color', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#1d2327',
-            'selectors' => [
-                '{{WRAPPER}} .mh-qty-input' => 'color: {{VALUE}};',
-                '{{WRAPPER}} .mh-qty-btn'   => 'color: {{VALUE}};',
-            ],
-        ] );
-
-        $this->add_control( 'qty_bg', [
-            'label'     => __( 'Background Color', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#f5f5f5',
-            'selectors' => [
-                '{{WRAPPER}} .mh-qty-wrapper' => 'background-color: {{VALUE}};',
-            ],
-        ] );
-
-        $this->add_control( 'qty_btn_bg', [
-            'label'     => __( '±  Button Background', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#e8e8e8',
-            'selectors' => [
-                '{{WRAPPER}} .mh-qty-btn' => 'background-color: {{VALUE}};',
-            ],
-        ] );
-
-        $this->add_control( 'qty_btn_bg_hover', [
-            'label'     => __( '±  Button Hover BG', 'mh-plug' ),
-            'type'      => Controls_Manager::COLOR,
-            'default'   => '#d63638',
-            'selectors' => [
-                '{{WRAPPER}} .mh-qty-btn:hover' => 'background-color: {{VALUE}}; color: #fff;',
-            ],
-        ] );
-
-        $this->add_group_control( Group_Control_Border::get_type(), [
-            'name'      => 'qty_border',
-            'selector'  => '{{WRAPPER}} .mh-qty-wrapper',
-            'separator' => 'before',
-        ] );
-
-        $this->add_control( 'qty_border_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
-            'type'       => Controls_Manager::DIMENSIONS,
-            'size_units' => [ 'px', '%' ],
-            'default'    => [ 'top' => 6, 'right' => 6, 'bottom' => 6, 'left' => 6, 'unit' => 'px' ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-qty-wrapper' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-            ],
         ] );
 
         $this->add_responsive_control( 'qty_height', [
-            'label'      => __( 'Height', 'mh-plug' ),
+            'label'      => __( 'Overall Height', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'range'      => [ 'px' => [ 'min' => 30, 'max' => 80 ] ],
@@ -325,31 +175,194 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
             'selectors'  => [
                 '{{WRAPPER}} .mh-qty-wrapper' => 'height: {{SIZE}}{{UNIT}};',
                 '{{WRAPPER}} .mh-qty-btn'     => 'height: {{SIZE}}{{UNIT}}; line-height: {{SIZE}}{{UNIT}};',
-                '{{WRAPPER}} .mh-qty-input'   => 'height: {{SIZE}}{{UNIT}};',
+                '{{WRAPPER}} .mh-qty-input.qty' => 'height: {{SIZE}}{{UNIT}};',
             ],
-            'separator' => 'before',
         ] );
 
-        $this->add_responsive_control( 'qty_btn_width', [
-            'label'      => __( '±  Button Width', 'mh-plug' ),
-            'type'       => Controls_Manager::SLIDER,
-            'size_units' => [ 'px' ],
-            'range'      => [ 'px' => [ 'min' => 20, 'max' => 80 ] ],
-            'default'    => [ 'size' => 40, 'unit' => 'px' ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-qty-btn' => 'width: {{SIZE}}{{UNIT}};',
-            ],
+        $this->add_control( 'qty_wrapper_bg', [
+            'label'     => __( 'Background Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#f5f5f5',
+            'selectors' => [ '{{WRAPPER}} .mh-qty-wrapper' => 'background-color: {{VALUE}};' ],
+        ] );
+
+        $this->add_group_control( Group_Control_Border::get_type(), [
+            'name'      => 'qty_wrapper_border',
+            'selector'  => '{{WRAPPER}} .mh-qty-wrapper',
+        ] );
+
+        $this->add_control( 'qty_wrapper_border_radius', [
+            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', '%' ],
+            'default'    => [ 'top' => 6, 'right' => 6, 'bottom' => 6, 'left' => 6, 'unit' => 'px' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-qty-wrapper' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}; overflow: hidden;' ],
+        ] );
+
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
+            'name'     => 'qty_wrapper_shadow',
+            'selector' => '{{WRAPPER}} .mh-qty-wrapper',
+        ] );
+
+        $this->end_controls_section();
+
+
+        /* 🚀 NEW: STYLE: QUANTITY INPUT (NUMBER) ─────────────────────────────── */
+        $this->start_controls_section( 'style_qty_input', [
+            'label' => __( 'Quantity: Number Input', 'mh-plug' ),
+            'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_responsive_control( 'qty_input_width', [
             'label'      => __( 'Input Width', 'mh-plug' ),
             'type'       => Controls_Manager::SLIDER,
-            'size_units' => [ 'px' ],
-            'range'      => [ 'px' => [ 'min' => 30, 'max' => 120 ] ],
-            'default'    => [ 'size' => 56, 'unit' => 'px' ],
-            'selectors'  => [
-                '{{WRAPPER}} .mh-qty-input' => 'width: {{SIZE}}{{UNIT}};',
+            'size_units' => [ 'px', '%' ],
+            'range'      => [ 'px' => [ 'min' => 30, 'max' => 150 ] ],
+            'default'    => [ 'size' => 50, 'unit' => 'px' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-qty-input.qty' => 'width: {{SIZE}}{{UNIT}} !important; max-width: {{SIZE}}{{UNIT}} !important;' ],
+        ] );
+
+        $this->add_group_control( Group_Control_Typography::get_type(), [
+            'name'     => 'qty_input_typography',
+            'selector' => '{{WRAPPER}} .mh-qty-input.qty',
+        ] );
+
+        $this->start_controls_tabs( 'qty_input_tabs' );
+        
+        // Normal Input Tab
+        $this->start_controls_tab( 'qty_input_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->add_control( 'qty_input_color', [
+            'label'     => __( 'Text Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#1d2327',
+            'selectors' => [ '{{WRAPPER}} .mh-qty-input.qty' => 'color: {{VALUE}};' ],
+        ] );
+        $this->add_control( 'qty_input_bg', [
+            'label'     => __( 'Background Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => 'transparent',
+            'selectors' => [ '{{WRAPPER}} .mh-qty-input.qty' => 'background-color: {{VALUE}};' ],
+        ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [
+            'name'      => 'qty_input_border',
+            'selector'  => '{{WRAPPER}} .mh-qty-input.qty',
+        ] );
+        $this->end_controls_tab();
+
+        // Focus Input Tab
+        $this->start_controls_tab( 'qty_input_focus', [ 'label' => __( 'Focus', 'mh-plug' ) ] );
+        $this->add_control( 'qty_input_color_focus', [
+            'label'     => __( 'Text Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'selectors' => [ '{{WRAPPER}} .mh-qty-input.qty:focus' => 'color: {{VALUE}};' ],
+        ] );
+        $this->add_control( 'qty_input_bg_focus', [
+            'label'     => __( 'Background Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'selectors' => [ '{{WRAPPER}} .mh-qty-input.qty:focus' => 'background-color: {{VALUE}};' ],
+        ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [
+            'name'      => 'qty_input_border_focus',
+            'selector'  => '{{WRAPPER}} .mh-qty-input.qty:focus',
+        ] );
+        $this->end_controls_tab();
+        $this->end_controls_tabs();
+
+        $this->add_control( 'qty_input_radius', [
+            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', '%' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-qty-input.qty' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+            'separator'  => 'before',
+        ] );
+
+        $this->end_controls_section();
+
+
+        /* 🚀 NEW: STYLE: QUANTITY BUTTONS (+ / -) ─────────────────────────────── */
+        $this->start_controls_section( 'style_qty_buttons', [
+            'label' => __( 'Quantity: ± Buttons', 'mh-plug' ),
+            'tab'   => Controls_Manager::TAB_STYLE,
+        ] );
+
+        $this->add_responsive_control( 'qty_btn_width', [
+            'label'      => __( 'Button Width', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px', '%' ],
+            'range'      => [ 'px' => [ 'min' => 20, 'max' => 80 ] ],
+            'default'    => [ 'size' => 40, 'unit' => 'px' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-qty-btn' => 'width: {{SIZE}}{{UNIT}} !important;' ],
+        ] );
+
+        $this->add_responsive_control( 'qty_btn_icon_size', [
+            'label'      => __( 'Icon / Text Size', 'mh-plug' ),
+            'type'       => Controls_Manager::SLIDER,
+            'size_units' => [ 'px', 'em' ],
+            'range'      => [ 'px' => [ 'min' => 10, 'max' => 50 ] ],
+            'selectors'  => [ 
+                '{{WRAPPER}} .mh-qty-btn i' => 'font-size: {{SIZE}}{{UNIT}};', 
+                '{{WRAPPER}} .mh-qty-btn svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};', 
+                '{{WRAPPER}} .mh-qty-btn span' => 'font-size: {{SIZE}}{{UNIT}};' 
             ],
+        ] );
+
+        $this->start_controls_tabs( 'qty_btn_tabs' );
+        
+        // Normal Button Tab
+        $this->start_controls_tab( 'qty_btn_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->add_control( 'qty_btn_color', [
+            'label'     => __( 'Icon / Text Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#1d2327',
+            'selectors' => [ '{{WRAPPER}} .mh-qty-btn' => 'color: {{VALUE}}; fill: {{VALUE}};' ],
+        ] );
+        $this->add_control( 'qty_btn_bg', [
+            'label'     => __( 'Background Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => 'transparent',
+            'selectors' => [ '{{WRAPPER}} .mh-qty-btn' => 'background-color: {{VALUE}};' ],
+        ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [
+            'name'      => 'qty_btn_border',
+            'selector'  => '{{WRAPPER}} .mh-qty-btn',
+        ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
+            'name'     => 'qty_btn_shadow',
+            'selector' => '{{WRAPPER}} .mh-qty-btn',
+        ] );
+        $this->end_controls_tab();
+
+        // Hover Button Tab
+        $this->start_controls_tab( 'qty_btn_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->add_control( 'qty_btn_color_hover', [
+            'label'     => __( 'Icon / Text Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#ffffff',
+            'selectors' => [ '{{WRAPPER}} .mh-qty-btn:hover' => 'color: {{VALUE}}; fill: {{VALUE}};' ],
+        ] );
+        $this->add_control( 'qty_btn_bg_hover', [
+            'label'     => __( 'Background Color', 'mh-plug' ),
+            'type'      => Controls_Manager::COLOR,
+            'default'   => '#d63638',
+            'selectors' => [ '{{WRAPPER}} .mh-qty-btn:hover' => 'background-color: {{VALUE}};' ],
+        ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [
+            'name'      => 'qty_btn_border_hover',
+            'selector'  => '{{WRAPPER}} .mh-qty-btn:hover',
+        ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [
+            'name'     => 'qty_btn_shadow_hover',
+            'selector' => '{{WRAPPER}} .mh-qty-btn:hover',
+        ] );
+        $this->end_controls_tab();
+        $this->end_controls_tabs();
+
+        $this->add_control( 'qty_btn_radius', [
+            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'type'       => Controls_Manager::DIMENSIONS,
+            'size_units' => [ 'px', '%' ],
+            'selectors'  => [ '{{WRAPPER}} .mh-qty-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
+            'separator'  => 'before',
         ] );
 
         $this->end_controls_section();
@@ -387,8 +400,15 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
                 <div class="mh-atc-wrap">
 
                     <div class="mh-qty-wrapper" role="group" aria-label="<?php esc_attr_e( 'Product quantity', 'mh-plug' ); ?>">
+                        
                         <button type="button" class="mh-qty-btn mh-qty-minus" aria-label="<?php esc_attr_e( 'Decrease quantity', 'mh-plug' ); ?>">
-                            <span aria-hidden="true">&#8722;</span>
+                            <?php 
+                            if ( ! empty( $settings['minus_icon']['value'] ) ) {
+                                \Elementor\Icons_Manager::render_icon( $settings['minus_icon'], [ 'aria-hidden' => 'true' ] );
+                            } else {
+                                echo '<span aria-hidden="true">&#8722;</span>';
+                            }
+                            ?>
                         </button>
                         
                         <input
@@ -404,8 +424,15 @@ class MH_Woo_Add_To_Cart_Widget extends Widget_Base {
                         />
                         
                         <button type="button" class="mh-qty-btn mh-qty-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'mh-plug' ); ?>">
-                            <span aria-hidden="true">&#43;</span>
+                            <?php 
+                            if ( ! empty( $settings['plus_icon']['value'] ) ) {
+                                \Elementor\Icons_Manager::render_icon( $settings['plus_icon'], [ 'aria-hidden' => 'true' ] );
+                            } else {
+                                echo '<span aria-hidden="true">&#43;</span>';
+                            }
+                            ?>
                         </button>
+
                     </div>
 
                     <button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="single_add_to_cart_button button alt mh-atc-btn">
