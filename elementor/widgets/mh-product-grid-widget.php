@@ -4,6 +4,7 @@
  * Removed Add to Cart Button. Added powerful Quick View customization via Trait.
  * Fixed: Explicitly forced Hover colors onto nested SVGs and <i> icons.
  * Added: Responsive Number of Products & Price Margin Controls.
+ * Fixed: Killed WooCommerce default star-rating floats to fix alignment.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -147,7 +148,7 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $this->add_control( 'price_color', [ 'label' => __( 'Regular/Sale Price Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-price, {{WRAPPER}} .mh-post-date' => 'color: {{VALUE}};' ] ] );
         $this->add_control( 'old_price_color', [ 'label' => __( 'Old Price Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#aaaaaa', 'selectors' => [ '{{WRAPPER}} .mh-product-price del' => 'color: {{VALUE}};' ] ] );
         $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'price_typo', 'selector' => '{{WRAPPER}} .mh-product-price, {{WRAPPER}} .mh-post-date' ] );
-        // 🚀 NEW: Price Margin Control
+        
         $this->add_responsive_control( 'price_margin', [ 
             'label'      => __( 'Margin', 'mh-plug' ), 
             'type'       => Controls_Manager::DIMENSIONS, 
@@ -308,6 +309,11 @@ class MH_Product_Grid_Widget extends Widget_Base {
             .mh-action-btn i { transition: color 0.3s ease; }
             .mh-product-grid .mh-quick-view-trigger i { color: inherit !important; }
             .mh-product-grid .mh-quick-view-trigger svg { fill: currentColor !important; color: inherit !important; }
+
+            /* 🚀 RATING & PRICE ALIGNMENT FIX: Kills Woo default float right */
+            .mh-product-info .mh-product-rating { display: block; width: 100%; clear: both; line-height: 1; }
+            .mh-product-info .mh-product-rating .star-rating { float: none !important; display: inline-block !important; vertical-align: middle; }
+            .mh-product-info .mh-product-price { display: block; width: 100%; clear: both; }
 
             /* 🚀 RESPONSIVE PRODUCT HIDING LOGIC */
             @media (min-width: 1025px) {
