@@ -3,6 +3,7 @@
  * MH Product Grid Widget
  * Removed Add to Cart Button. Added powerful Quick View customization via Trait.
  * Fixed: Explicitly forced Hover colors onto nested SVGs and <i> icons.
+ * Added: Responsive Number of Products (Smart CSS Hiding).
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -66,7 +67,18 @@ class MH_Product_Grid_Widget extends Widget_Base {
             'separator'    => 'after',
         ] );
         
-        $this->add_control( 'posts_per_page', [ 'label' => __( 'Number of Products', 'mh-plug' ), 'type' => Controls_Manager::NUMBER, 'default' => 8, 'min' => 1, 'max' => 50 ] );
+        // 🚀 THE FIX: Made posts_per_page Responsive
+        $this->add_responsive_control( 'posts_per_page', [ 
+            'label'          => __( 'Number of Products', 'mh-plug' ), 
+            'type'           => Controls_Manager::NUMBER, 
+            'default'        => 8, 
+            'tablet_default' => 6, 
+            'mobile_default' => 4, 
+            'min'            => 1, 
+            'max'            => 50,
+            'description'    => __( 'You can set different product counts for Desktop, Tablet, and Mobile.', 'mh-plug' ),
+        ] );
+        
         $this->add_responsive_control( 'columns', [ 'label' => __( 'Columns', 'mh-plug' ), 'type' => Controls_Manager::SELECT, 'default' => '4', 'tablet_default' => '2', 'mobile_default' => '1', 'options' => [ '1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6' ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid' => 'grid-template-columns: repeat({{VALUE}}, 1fr); display: grid;' ], ] );
         $this->end_controls_section();
 
@@ -139,7 +151,6 @@ class MH_Product_Grid_Widget extends Widget_Base {
         // ----------------------------------------------------
         $this->start_controls_section( 'section_style_buttons', [ 'label' => __( 'General Action Buttons', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
         
-        // 🚀 BULLETPROOF SELECTOR MAPPING
         $btn_a = '{{WRAPPER}} .mh-compare-btn, {{WRAPPER}} .mh-advanced-wishlist-btn, {{WRAPPER}} .mh-action-btn[title="Read More"]';
         $btn_i = '{{WRAPPER}} .mh-compare-btn i, {{WRAPPER}} .mh-advanced-wishlist-btn i, {{WRAPPER}} .mh-action-btn[title="Read More"] i';
         $btn_svg = '{{WRAPPER}} .mh-compare-btn svg, {{WRAPPER}} .mh-advanced-wishlist-btn svg, {{WRAPPER}} .mh-action-btn[title="Read More"] svg';
@@ -190,7 +201,7 @@ class MH_Product_Grid_Widget extends Widget_Base {
             'selectors' => [ 
                 $btn_hover_a => 'color: {{VALUE}} !important;',
                 $btn_hover_i => 'color: {{VALUE}} !important;',
-                $btn_hover_svg => 'fill: {{VALUE}} !important;' // 🚀 Forcing SVG Fill on Hover!
+                $btn_hover_svg => 'fill: {{VALUE}} !important;'
             ] 
         ] );
         $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ $btn_hover_a => 'background-color: {{VALUE}} !important;' ] ] );
@@ -213,15 +224,22 @@ class MH_Product_Grid_Widget extends Widget_Base {
             wp_enqueue_style( 'photoswipe-default-skin' );
         }
 
+        // 🚀 SMART RESPONSIVE PRODUCT COUNT CALCULATION
+        $desktop_count = !empty($settings['posts_per_page']) ? intval($settings['posts_per_page']) : 8;
+        $tablet_count  = !empty($settings['posts_per_page_tablet']) ? intval($settings['posts_per_page_tablet']) : $desktop_count;
+        $mobile_count  = !empty($settings['posts_per_page_mobile']) ? intval($settings['posts_per_page_mobile']) : $tablet_count;
+        
+        // We MUST query the maximum number of items required for any screen size, then hide the extras via CSS.
+        $max_posts = max($desktop_count, $tablet_count, $mobile_count);
+
         $post_type = 'product'; 
         $args = [ 
             'post_status'         => 'publish', 
             'ignore_sticky_posts' => 1, 
-            'posts_per_page'      => $settings['posts_per_page'],
+            'posts_per_page'      => $max_posts,
             'tax_query'           => [ 'relation' => 'AND' ] 
         ];
 
-        // Smart Detection for Combo Slugs
         $combo_slugs = [ 'wooco', 'combo', 'bundle', 'woosb', 'yith_bundle', 'woosg' ];
 
         if ( $settings['query_type'] === 'combo_offers' && class_exists('WooCommerce') ) {
@@ -231,7 +249,6 @@ class MH_Product_Grid_Widget extends Widget_Base {
                 'terms'    => $combo_slugs,
             ];
         } else {
-            // Standard Queries
             if ( $settings['query_type'] === 'current_query' ) {
                 $queried_object = get_queried_object();
                 if ( $queried_object instanceof \WP_Term ) {
@@ -255,7 +272,6 @@ class MH_Product_Grid_Widget extends Widget_Base {
                 $args['orderby'] = 'date'; $args['order'] = 'DESC';
             }
 
-            // Smart Exclusion
             if ( $settings['exclude_combo'] === 'yes' && class_exists('WooCommerce') ) {
                 $args['tax_query'][] = [
                     'taxonomy' => 'product_type',
@@ -273,19 +289,30 @@ class MH_Product_Grid_Widget extends Widget_Base {
             echo '<p>' . esc_html__( 'No items found matching this criteria.', 'mh-plug' ) . '</p>'; 
             return; 
         }
+        
+        $grid_id = 'mh-grid-' . $this->get_id();
         ?>
         
         <style>
             /* Base structural styles for icons */
             .mh-action-btn svg { width: 16px; height: 16px; display: inline-block; transition: fill 0.3s ease; }
             .mh-action-btn i { transition: color 0.3s ease; }
-            
-            /* Quick View Icon inheritance fix */
             .mh-product-grid .mh-quick-view-trigger i { color: inherit !important; }
             .mh-product-grid .mh-quick-view-trigger svg { fill: currentColor !important; color: inherit !important; }
+
+            /* 🚀 RESPONSIVE PRODUCT HIDING LOGIC */
+            @media (min-width: 1025px) {
+                #<?php echo esc_attr($grid_id); ?> .mh-product-card:nth-child(n+<?php echo $desktop_count + 1; ?>) { display: none !important; }
+            }
+            @media (min-width: 768px) and (max-width: 1024px) {
+                #<?php echo esc_attr($grid_id); ?> .mh-product-card:nth-child(n+<?php echo $tablet_count + 1; ?>) { display: none !important; }
+            }
+            @media (max-width: 767px) {
+                #<?php echo esc_attr($grid_id); ?> .mh-product-card:nth-child(n+<?php echo $mobile_count + 1; ?>) { display: none !important; }
+            }
         </style>
         
-        <div class="mh-product-grid">
+        <div class="mh-product-grid" id="<?php echo esc_attr($grid_id); ?>">
             <?php
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $post;
