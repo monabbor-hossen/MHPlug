@@ -2,7 +2,7 @@
 /**
  * MH Product Grid Widget
  * Removed Add to Cart Button. Added powerful Quick View customization via Trait.
- * Fixed: Smart detection for "Combo Offers" & Explicit SVG dimensions for Wishlist.
+ * Fixed: Explicitly forced Hover colors onto nested SVGs and <i> icons.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -139,38 +139,63 @@ class MH_Product_Grid_Widget extends Widget_Base {
         // ----------------------------------------------------
         $this->start_controls_section( 'section_style_buttons', [ 'label' => __( 'General Action Buttons', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
         
-        $btn_target = '{{WRAPPER}} .mh-compare-btn, {{WRAPPER}} .mh-advanced-wishlist-btn, {{WRAPPER}} .mh-action-btn[title="Read More"]';
-        $btn_hover_target = '{{WRAPPER}} .mh-compare-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn.added, {{WRAPPER}} .mh-action-btn[title="Read More"]:hover';
+        // 🚀 BULLETPROOF SELECTOR MAPPING
+        $btn_a = '{{WRAPPER}} .mh-compare-btn, {{WRAPPER}} .mh-advanced-wishlist-btn, {{WRAPPER}} .mh-action-btn[title="Read More"]';
+        $btn_i = '{{WRAPPER}} .mh-compare-btn i, {{WRAPPER}} .mh-advanced-wishlist-btn i, {{WRAPPER}} .mh-action-btn[title="Read More"] i';
+        $btn_svg = '{{WRAPPER}} .mh-compare-btn svg, {{WRAPPER}} .mh-advanced-wishlist-btn svg, {{WRAPPER}} .mh-action-btn[title="Read More"] svg';
 
-        $this->add_responsive_control( 'btn_width', [ 'label' => __( 'Button Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ $btn_target => 'width: {{SIZE}}px !important; min-width: {{SIZE}}px !important;' ] ] );
-        $this->add_responsive_control( 'btn_height', [ 'label' => __( 'Button Height', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ $btn_target => 'height: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' ] ] );
+        $btn_hover_a = '{{WRAPPER}} .mh-compare-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn.added, {{WRAPPER}} .mh-action-btn[title="Read More"]:hover';
+        $btn_hover_i = '{{WRAPPER}} .mh-compare-btn:hover i, {{WRAPPER}} .mh-advanced-wishlist-btn:hover i, {{WRAPPER}} .mh-advanced-wishlist-btn.added i, {{WRAPPER}} .mh-action-btn[title="Read More"]:hover i';
+        $btn_hover_svg = '{{WRAPPER}} .mh-compare-btn:hover svg, {{WRAPPER}} .mh-advanced-wishlist-btn:hover svg, {{WRAPPER}} .mh-advanced-wishlist-btn.added svg, {{WRAPPER}} .mh-action-btn[title="Read More"]:hover svg';
+
+        $this->add_responsive_control( 'btn_width', [ 'label' => __( 'Button Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ $btn_a => 'width: {{SIZE}}px !important; min-width: {{SIZE}}px !important;' ] ] );
+        $this->add_responsive_control( 'btn_height', [ 'label' => __( 'Button Height', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ $btn_a => 'height: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' ] ] );
         
         $this->add_responsive_control( 'btn_icon_size', [ 
             'label' => __( 'Icon Size', 'mh-plug' ), 
             'type' => Controls_Manager::SLIDER, 
             'default' => [ 'size' => 16 ], 
             'selectors' => [ 
-                $btn_target . ' i' => 'font-size: {{SIZE}}px !important;', 
-                $btn_target . ' svg' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important;' 
+                $btn_i => 'font-size: {{SIZE}}px !important;', 
+                $btn_svg => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important;' 
             ] 
         ] );
 
         $this->add_responsive_control( 'btn_gap', [ 'label' => __( 'Gap Between Buttons', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 8 ], 'selectors' => [ '{{WRAPPER}} .mh-product-actions' => 'gap: {{SIZE}}px;' ] ] );
-        $this->add_responsive_control( 'btn_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'default' => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => '%' ], 'selectors' => [ $btn_target => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ] ] );
+        $this->add_responsive_control( 'btn_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'default' => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => '%' ], 'selectors' => [ $btn_a => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ] ] );
 
         $this->start_controls_tabs( 'tabs_btn_style' );
+        
         $this->start_controls_tab( 'tab_btn_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'btn_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ $btn_target => 'color: {{VALUE}} !important;' ] ] );
-        $this->add_control( 'btn_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ $btn_target => 'background-color: {{VALUE}} !important;' ] ] );
-        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_border', 'selector' => $btn_target ] );
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_shadow', 'selector' => $btn_target ] );
+        $this->add_control( 'btn_color', [ 
+            'label' => __( 'Icon Color', 'mh-plug' ), 
+            'type' => Controls_Manager::COLOR, 
+            'default' => '#333333', 
+            'selectors' => [ 
+                $btn_a => 'color: {{VALUE}} !important;',
+                $btn_i => 'color: {{VALUE}} !important;',
+                $btn_svg => 'fill: {{VALUE}} !important;'
+            ] 
+        ] );
+        $this->add_control( 'btn_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ $btn_a => 'background-color: {{VALUE}} !important;' ] ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_border', 'selector' => $btn_a ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_shadow', 'selector' => $btn_a ] );
         $this->end_controls_tab();
 
         $this->start_controls_tab( 'tab_btn_hover', [ 'label' => __( 'Hover & Active', 'mh-plug' ) ] );
-        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ $btn_hover_target => 'color: {{VALUE}} !important;' ] ] );
-        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ $btn_hover_target => 'background-color: {{VALUE}} !important;' ] ] );
-        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => $btn_hover_target ] );
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => $btn_hover_target ] );
+        $this->add_control( 'btn_hover_color', [ 
+            'label' => __( 'Icon Color', 'mh-plug' ), 
+            'type' => Controls_Manager::COLOR, 
+            'default' => '#ffffff', 
+            'selectors' => [ 
+                $btn_hover_a => 'color: {{VALUE}} !important;',
+                $btn_hover_i => 'color: {{VALUE}} !important;',
+                $btn_hover_svg => 'fill: {{VALUE}} !important;' // 🚀 Forcing SVG Fill on Hover!
+            ] 
+        ] );
+        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ $btn_hover_a => 'background-color: {{VALUE}} !important;' ] ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => $btn_hover_a ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => $btn_hover_a ] );
         $this->end_controls_tab();
 
         $this->end_controls_tabs();
@@ -206,6 +231,7 @@ class MH_Product_Grid_Widget extends Widget_Base {
                 'terms'    => $combo_slugs,
             ];
         } else {
+            // Standard Queries
             if ( $settings['query_type'] === 'current_query' ) {
                 $queried_object = get_queried_object();
                 if ( $queried_object instanceof \WP_Term ) {
@@ -229,6 +255,7 @@ class MH_Product_Grid_Widget extends Widget_Base {
                 $args['orderby'] = 'date'; $args['order'] = 'DESC';
             }
 
+            // Smart Exclusion
             if ( $settings['exclude_combo'] === 'yes' && class_exists('WooCommerce') ) {
                 $args['tax_query'][] = [
                     'taxonomy' => 'product_type',
@@ -249,8 +276,11 @@ class MH_Product_Grid_Widget extends Widget_Base {
         ?>
         
         <style>
-            /* 🚀 VISIBILITY FIX: Prevents SVGs from collapsing and forces color inheritance */
-            .mh-action-btn svg { width: 16px; height: 16px; fill: currentColor; display: inline-block; }
+            /* Base structural styles for icons */
+            .mh-action-btn svg { width: 16px; height: 16px; display: inline-block; transition: fill 0.3s ease; }
+            .mh-action-btn i { transition: color 0.3s ease; }
+            
+            /* Quick View Icon inheritance fix */
             .mh-product-grid .mh-quick-view-trigger i { color: inherit !important; }
             .mh-product-grid .mh-quick-view-trigger svg { fill: currentColor !important; color: inherit !important; }
         </style>
@@ -298,8 +328,8 @@ class MH_Product_Grid_Widget extends Widget_Base {
                                 <?php endif; ?>
 
                                 <a href="#" class="mh-action-btn mh-advanced-wishlist-btn <?php echo $in_wishlist ? 'added' : ''; ?>" data-product-id="<?php echo esc_attr($post_id); ?>" data-behavior="toggle" title="<?php esc_html_e('Wishlist', 'mh-plug'); ?>" style="display:flex; align-items:center; justify-content:center;">
-                                    <span class="mh-icon-normal" style="display:flex; align-items:center; justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="currentColor"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 429.3l175.2-161.3c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z"/></svg></span>
-                                    <span class="mh-icon-added" style="display:none; align-items:center; justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="currentColor"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg></span>
+                                    <span class="mh-icon-normal" style="display:flex; align-items:center; justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 429.3l175.2-161.3c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z"/></svg></span>
+                                    <span class="mh-icon-added" style="display:none; align-items:center; justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg></span>
                                 </a>
                             <?php else : ?>
                                 <a href="<?php the_permalink(); ?>" class="mh-action-btn" title="<?php esc_html_e( 'Read More', 'mh-plug' ); ?>" style="display:flex; align-items:center; justify-content:center;">
