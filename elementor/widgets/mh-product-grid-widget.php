@@ -2,6 +2,7 @@
 /**
  * MH Product Grid Widget
  * Removed Add to Cart Button. Added powerful Quick View customization via Trait.
+ * Added Combo Offer query capabilities and exclusion filters.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -43,15 +44,38 @@ class MH_Product_Grid_Widget extends Widget_Base {
             'default' => 'latest', 
             'options' => [ 
                 'current_query' => __( 'Current Archive (Category/Tag/Brand)', 'mh-plug' ), 
-                'latest' => __( 'Latest', 'mh-plug' ), 
-                'best_sellers' => __( 'Best Sellers', 'mh-plug' ), 
-                'top_rated' => __( 'Top Rated', 'mh-plug' ), 
-                'sale' => __( 'On Sale', 'mh-plug' ), 
-                'featured' => __( 'Featured', 'mh-plug' ), 
+                'latest'        => __( 'Latest', 'mh-plug' ), 
+                'best_sellers'  => __( 'Best Sellers', 'mh-plug' ), 
+                'top_rated'     => __( 'Top Rated', 'mh-plug' ), 
+                'sale'          => __( 'On Sale', 'mh-plug' ), 
+                'featured'      => __( 'Featured', 'mh-plug' ), 
+                'combo_offers'  => __( 'Combo Offers', 'mh-plug' ), // 🚀 NEW: Combo Offers Option
             ], 
         ] );
+
+        // 🚀 NEW: Combo Offer Definition
+        $this->add_control( 'combo_slug', [
+            'label'       => __( 'Combo Offer Slug', 'mh-plug' ),
+            'type'        => Controls_Manager::TEXT,
+            'default'     => 'combo-offer',
+            'description' => __( 'Enter the Category or Tag slug you use to mark Combo products.', 'mh-plug' ),
+        ] );
+
+        // 🚀 NEW: Combo Offer Exclusion Toggle (Only shows if NOT querying combos directly)
+        $this->add_control( 'exclude_combo', [
+            'label'        => __( 'Hide Combo Offers Here', 'mh-plug' ),
+            'type'         => Controls_Manager::SWITCHER,
+            'label_on'     => __( 'Hide', 'mh-plug' ),
+            'label_off'    => __( 'Show', 'mh-plug' ),
+            'return_value' => 'yes',
+            'default'      => 'no',
+            'description'  => __( 'Turn this ON to hide Combo Offer products from this specific grid.', 'mh-plug' ),
+            'condition'    => [
+                'query_type!' => 'combo_offers',
+            ],
+        ] );
         
-        $this->add_control( 'posts_per_page', [ 'label' => __( 'Number of Products', 'mh-plug' ), 'type' => Controls_Manager::NUMBER, 'default' => 8, 'min' => 1, 'max' => 50, ] );
+        $this->add_control( 'posts_per_page', [ 'label' => __( 'Number of Products', 'mh-plug' ), 'type' => Controls_Manager::NUMBER, 'default' => 8, 'min' => 1, 'max' => 50, 'separator' => 'before' ] );
         $this->add_responsive_control( 'columns', [ 'label' => __( 'Columns', 'mh-plug' ), 'type' => Controls_Manager::SELECT, 'default' => '4', 'tablet_default' => '2', 'mobile_default' => '1', 'options' => [ '1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6' ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid' => 'grid-template-columns: repeat({{VALUE}}, 1fr);' ], ] );
         $this->end_controls_section();
 
@@ -165,21 +189,32 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $args = [ 
             'post_status'         => 'publish', 
             'ignore_sticky_posts' => 1, 
-            'posts_per_page'      => $settings['posts_per_page'] 
+            'posts_per_page'      => $settings['posts_per_page'],
+            'tax_query'           => [ 'relation' => 'AND' ] // 🚀 Setup for Combo Query Logic
         ];
 
-        if ( $settings['query_type'] === 'current_query' ) {
-            $queried_object = get_queried_object();
-            if ( $queried_object instanceof \WP_Term ) {
-                if ( $queried_object->taxonomy === 'category' || $queried_object->taxonomy === 'post_tag' ) {
-                    $post_type = 'post';
-                }
-                $args['tax_query'] = [ [ 'taxonomy' => $queried_object->taxonomy, 'field' => 'term_id', 'terms' => $queried_object->term_id ] ];
-            } elseif ( is_search() ) {
-                $args['s'] = get_search_query();
-            }
+        $combo_slug = !empty($settings['combo_slug']) ? sanitize_title($settings['combo_slug']) : 'combo-offer';
+
+        if ( $settings['query_type'] === 'combo_offers' && class_exists('WooCommerce') ) {
+            // 🚀 Force query only products with this Category or Tag
+            $args['tax_query'][] = [
+                'relation' => 'OR',
+                [ 'taxonomy' => 'product_cat', 'field' => 'slug', 'terms' => $combo_slug ],
+                [ 'taxonomy' => 'product_tag', 'field' => 'slug', 'terms' => $combo_slug ],
+            ];
         } else {
-            if ( $settings['query_type'] === 'best_sellers' ) {
+            // Standard Queries
+            if ( $settings['query_type'] === 'current_query' ) {
+                $queried_object = get_queried_object();
+                if ( $queried_object instanceof \WP_Term ) {
+                    if ( $queried_object->taxonomy === 'category' || $queried_object->taxonomy === 'post_tag' ) {
+                        $post_type = 'post';
+                    }
+                    $args['tax_query'][] = [ 'taxonomy' => $queried_object->taxonomy, 'field' => 'term_id', 'terms' => $queried_object->term_id ];
+                } elseif ( is_search() ) {
+                    $args['s'] = get_search_query();
+                }
+            } elseif ( $settings['query_type'] === 'best_sellers' ) {
                 $args['meta_key'] = 'total_sales'; $args['orderby'] = 'meta_value_num';
             } elseif ( $settings['query_type'] === 'top_rated' ) {
                 $args['meta_key'] = '_wc_average_rating'; $args['orderby'] = 'meta_value_num';
@@ -187,9 +222,15 @@ class MH_Product_Grid_Widget extends Widget_Base {
                 $product_ids_on_sale = wc_get_product_ids_on_sale(); 
                 $args['post__in'] = !empty($product_ids_on_sale) ? $product_ids_on_sale : [0];
             } elseif ( $settings['query_type'] === 'featured' ) {
-                $args['tax_query'] = [['taxonomy' => 'product_visibility', 'field' => 'name', 'terms' => 'featured', 'operator' => 'IN']];
+                $args['tax_query'][] = [['taxonomy' => 'product_visibility', 'field' => 'name', 'terms' => 'featured', 'operator' => 'IN']];
             } elseif ( $settings['query_type'] === 'latest' ) {
                 $args['orderby'] = 'date'; $args['order'] = 'DESC';
+            }
+
+            // 🚀 EXCLUSION LOGIC: Remove Combo Offers from this specific query if requested
+            if ( $settings['exclude_combo'] === 'yes' && class_exists('WooCommerce') ) {
+                $args['tax_query'][] = [ 'taxonomy' => 'product_cat', 'field' => 'slug', 'terms' => $combo_slug, 'operator' => 'NOT IN' ];
+                $args['tax_query'][] = [ 'taxonomy' => 'product_tag', 'field' => 'slug', 'terms' => $combo_slug, 'operator' => 'NOT IN' ];
             }
         }
 
@@ -197,7 +238,7 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $loop = new \WP_Query( $args );
         
         if ( ! $loop->have_posts() ) { 
-            echo '<p>' . esc_html__( 'No items found in this category.', 'mh-plug' ) . '</p>'; 
+            echo '<p>' . esc_html__( 'No items found matching this criteria.', 'mh-plug' ) . '</p>'; 
             return; 
         }
         ?>
