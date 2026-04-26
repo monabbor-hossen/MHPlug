@@ -3,7 +3,7 @@
  * MH Product Grid Widget
  * Removed Add to Cart Button. Added powerful Quick View customization via Trait.
  * Fixed: Explicitly forced Hover colors onto nested SVGs and <i> icons.
- * Added: Responsive Number of Products (Smart CSS Hiding).
+ * Added: Responsive Number of Products & Price Margin Controls.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -67,7 +67,6 @@ class MH_Product_Grid_Widget extends Widget_Base {
             'separator'    => 'after',
         ] );
         
-        // 🚀 THE FIX: Made posts_per_page Responsive
         $this->add_responsive_control( 'posts_per_page', [ 
             'label'          => __( 'Number of Products', 'mh-plug' ), 
             'type'           => Controls_Manager::NUMBER, 
@@ -126,24 +125,35 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $this->start_controls_section( 'section_style_content', [ 'label' => __( 'Content Area (Text)', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
         $this->add_responsive_control( 'content_padding', [ 'label' => __( 'Content Padding', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', 'em', '%' ], 'default' => [ 'top' => 20, 'right' => 20, 'bottom' => 20, 'left' => 20, 'isLinked' => true ], 'selectors' => [ '{{WRAPPER}} .mh-product-info' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], ] );
         $this->add_responsive_control( 'content_align', [ 'label' => __( 'Alignment', 'mh-plug' ), 'type' => Controls_Manager::CHOOSE, 'options' => [ 'left' => [ 'title' => 'Left', 'icon' => 'eicon-text-align-left' ], 'center' => [ 'title' => 'Center', 'icon' => 'eicon-text-align-center' ], 'right' => [ 'title' => 'Right', 'icon' => 'eicon-text-align-right' ] ], 'default' => 'left', 'selectors' => [ '{{WRAPPER}} .mh-product-info' => 'text-align: {{VALUE}};' ], ] );
+        
         $this->add_control( 'heading_cat_style', [ 'label' => __( 'Category', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
         $this->add_control( 'cat_color', [ 'label' => __( 'Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#888888', 'selectors' => [ '{{WRAPPER}} .mh-product-cat, {{WRAPPER}} .mh-product-cat a' => 'color: {{VALUE}};' ] ] );
         $this->add_control( 'cat_hover_color', [ 'label' => __( 'Hover Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-cat a:hover' => 'color: {{VALUE}};' ] ] );
         $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'cat_typo', 'selector' => '{{WRAPPER}} .mh-product-cat' ] );
         $this->add_responsive_control( 'cat_margin', [ 'label' => __( 'Margin Bottom', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-product-cat' => 'margin-bottom: {{SIZE}}{{UNIT}};' ] ] );
+        
         $this->add_control( 'heading_title_style', [ 'label' => __( 'Title', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
         $this->add_control( 'title_color', [ 'label' => __( 'Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#111111', 'selectors' => [ '{{WRAPPER}} .mh-product-title a' => 'color: {{VALUE}};' ] ] );
         $this->add_control( 'title_hover_color', [ 'label' => __( 'Hover Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-title a:hover' => 'color: {{VALUE}};' ] ] );
         $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'title_typo', 'selector' => '{{WRAPPER}} .mh-product-title' ] );
         $this->add_responsive_control( 'title_margin', [ 'label' => __( 'Margin Bottom', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-product-title' => 'margin-bottom: {{SIZE}}{{UNIT}};' ] ] );
+        
         $this->add_control( 'heading_rating_style', [ 'label' => __( 'Rating Stars', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
         $this->add_control( 'star_color', [ 'label' => __( 'Star Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#f5b223', 'selectors' => [ '{{WRAPPER}} .mh-product-rating .star-rating' => 'color: {{VALUE}};' ] ] );
         $this->add_responsive_control( 'star_size', [ 'label' => __( 'Star Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-product-rating .star-rating' => 'font-size: {{SIZE}}{{UNIT}};' ] ] );
         $this->add_responsive_control( 'rating_margin', [ 'label' => __( 'Margin Bottom', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-product-rating' => 'margin-bottom: {{SIZE}}{{UNIT}};' ] ] );
+        
         $this->add_control( 'heading_price_style', [ 'label' => __( 'Price / Date', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
         $this->add_control( 'price_color', [ 'label' => __( 'Regular/Sale Price Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-price, {{WRAPPER}} .mh-post-date' => 'color: {{VALUE}};' ] ] );
         $this->add_control( 'old_price_color', [ 'label' => __( 'Old Price Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#aaaaaa', 'selectors' => [ '{{WRAPPER}} .mh-product-price del' => 'color: {{VALUE}};' ] ] );
         $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'price_typo', 'selector' => '{{WRAPPER}} .mh-product-price, {{WRAPPER}} .mh-post-date' ] );
+        // 🚀 NEW: Price Margin Control
+        $this->add_responsive_control( 'price_margin', [ 
+            'label'      => __( 'Margin', 'mh-plug' ), 
+            'type'       => Controls_Manager::DIMENSIONS, 
+            'size_units' => [ 'px', 'em', '%' ], 
+            'selectors'  => [ '{{WRAPPER}} .mh-product-price, {{WRAPPER}} .mh-post-date' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] 
+        ] );
         $this->end_controls_section();
 
         // ----------------------------------------------------
@@ -229,7 +239,6 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $tablet_count  = !empty($settings['posts_per_page_tablet']) ? intval($settings['posts_per_page_tablet']) : $desktop_count;
         $mobile_count  = !empty($settings['posts_per_page_mobile']) ? intval($settings['posts_per_page_mobile']) : $tablet_count;
         
-        // We MUST query the maximum number of items required for any screen size, then hide the extras via CSS.
         $max_posts = max($desktop_count, $tablet_count, $mobile_count);
 
         $post_type = 'product'; 
