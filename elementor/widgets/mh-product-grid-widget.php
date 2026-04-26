@@ -2,7 +2,9 @@
 /**
  * MH Product Grid Widget
  * Removed Add to Cart Button. Added powerful Quick View customization via Trait.
- * Fixed: Fully synchronized with mh-wishlist.js (uses .mh-wishlist-btn, .mh-added, and SVG CSS toggling).
+ * Fixed: Explicitly forced Hover colors onto nested SVGs and <i> icons.
+ * Added: Responsive Number of Products & Price Margin Controls.
+ * Fixed: Added URL Interceptor so the grid reacts to the MH Product Filter Widget.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -154,12 +156,10 @@ class MH_Product_Grid_Widget extends Widget_Base {
         // ----------------------------------------------------
         $this->start_controls_section( 'section_style_buttons', [ 'label' => __( 'General Action Buttons', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
         
-        // 🚀 THE FIX: Target .mh-wishlist-btn (not advanced)
         $btn_a = '{{WRAPPER}} .mh-compare-btn, {{WRAPPER}} .mh-wishlist-btn, {{WRAPPER}} .mh-action-btn[title="Read More"]';
         $btn_i = '{{WRAPPER}} .mh-compare-btn i, {{WRAPPER}} .mh-wishlist-btn i, {{WRAPPER}} .mh-action-btn[title="Read More"] i';
         $btn_svg = '{{WRAPPER}} .mh-compare-btn svg, {{WRAPPER}} .mh-wishlist-btn svg, {{WRAPPER}} .mh-action-btn[title="Read More"] svg';
 
-        // 🚀 THE FIX: Target .mh-added (not .added)
         $btn_hover_a = '{{WRAPPER}} .mh-compare-btn:hover, {{WRAPPER}} .mh-wishlist-btn:hover, {{WRAPPER}} .mh-wishlist-btn.mh-added, {{WRAPPER}} .mh-action-btn[title="Read More"]:hover';
         $btn_hover_i = '{{WRAPPER}} .mh-compare-btn:hover i, {{WRAPPER}} .mh-wishlist-btn:hover i, {{WRAPPER}} .mh-wishlist-btn.mh-added i, {{WRAPPER}} .mh-action-btn[title="Read More"]:hover i';
         $btn_hover_svg = '{{WRAPPER}} .mh-compare-btn:hover svg, {{WRAPPER}} .mh-wishlist-btn:hover svg, {{WRAPPER}} .mh-wishlist-btn.mh-added svg, {{WRAPPER}} .mh-action-btn[title="Read More"]:hover svg';
@@ -183,32 +183,14 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $this->start_controls_tabs( 'tabs_btn_style' );
         
         $this->start_controls_tab( 'tab_btn_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'btn_color', [ 
-            'label' => __( 'Icon Color', 'mh-plug' ), 
-            'type' => Controls_Manager::COLOR, 
-            'default' => '#333333', 
-            'selectors' => [ 
-                $btn_a => 'color: {{VALUE}} !important;',
-                $btn_i => 'color: {{VALUE}} !important;',
-                $btn_svg => 'fill: {{VALUE}} !important;'
-            ] 
-        ] );
+        $this->add_control( 'btn_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ $btn_a => 'color: {{VALUE}} !important;', $btn_i => 'color: {{VALUE}} !important;', $btn_svg => 'fill: {{VALUE}} !important;' ] ] );
         $this->add_control( 'btn_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ $btn_a => 'background-color: {{VALUE}} !important;' ] ] );
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_border', 'selector' => $btn_a ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_shadow', 'selector' => $btn_a ] );
         $this->end_controls_tab();
 
         $this->start_controls_tab( 'tab_btn_hover', [ 'label' => __( 'Hover & Active', 'mh-plug' ) ] );
-        $this->add_control( 'btn_hover_color', [ 
-            'label' => __( 'Icon Color', 'mh-plug' ), 
-            'type' => Controls_Manager::COLOR, 
-            'default' => '#ffffff', 
-            'selectors' => [ 
-                $btn_hover_a => 'color: {{VALUE}} !important;',
-                $btn_hover_i => 'color: {{VALUE}} !important;',
-                $btn_hover_svg => 'fill: {{VALUE}} !important;'
-            ] 
-        ] );
+        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ $btn_hover_a => 'color: {{VALUE}} !important;', $btn_hover_i => 'color: {{VALUE}} !important;', $btn_hover_svg => 'fill: {{VALUE}} !important;' ] ] );
         $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ $btn_hover_a => 'background-color: {{VALUE}} !important;' ] ] );
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => $btn_hover_a ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => $btn_hover_a ] );
@@ -285,6 +267,41 @@ class MH_Product_Grid_Widget extends Widget_Base {
             }
         }
 
+        // 🚀 THE FIX: Listen to the Filter Widget's URL parameters and instantly override the Elementor Query
+        if ( isset( $_GET['orderby'] ) ) {
+            $orderby_param = wc_clean( $_GET['orderby'] );
+            switch ( $orderby_param ) {
+                case 'price':
+                    $args['meta_key'] = '_price';
+                    $args['orderby']  = 'meta_value_num';
+                    $args['order']    = 'ASC';
+                    break;
+                case 'price-desc':
+                    $args['meta_key'] = '_price';
+                    $args['orderby']  = 'meta_value_num';
+                    $args['order']    = 'DESC';
+                    break;
+                case 'popularity':
+                    $args['meta_key'] = 'total_sales';
+                    $args['orderby']  = 'meta_value_num';
+                    $args['order']    = 'DESC';
+                    break;
+                case 'rating':
+                    $args['meta_key'] = '_wc_average_rating';
+                    $args['orderby']  = 'meta_value_num';
+                    $args['order']    = 'DESC';
+                    break;
+                case 'date':
+                    $args['orderby']  = 'date';
+                    $args['order']    = 'DESC';
+                    break;
+                case 'menu_order':
+                    $args['orderby']  = 'menu_order title';
+                    $args['order']    = 'ASC';
+                    break;
+            }
+        }
+
         $args['post_type'] = $post_type;
         $loop = new \WP_Query( $args );
         
@@ -306,12 +323,10 @@ class MH_Product_Grid_Widget extends Widget_Base {
             .mh-product-info .mh-product-rating .star-rating { float: none !important; display: inline-block !important; vertical-align: middle; }
             .mh-product-info .mh-product-price { display: block; width: 100%; clear: both; }
 
-            /* 🚀 THE FIX: CSS toggle logic bridging the JS state (.mh-added) to your SVG HTML */
             .mh-wishlist-btn .mh-icon-added { display: none !important; }
             .mh-wishlist-btn.mh-added .mh-icon-normal { display: none !important; }
             .mh-wishlist-btn.mh-added .mh-icon-added { display: flex !important; }
             
-            /* Loading State from mh-wishlist.js */
             .mh-wishlist-btn.mh-adding { opacity: 0.6; pointer-events: none; animation: mh-pulse 1s infinite; }
             @keyframes mh-pulse { 0% { transform: scale(1); } 50% { transform: scale(0.9); } 100% { transform: scale(1); } }
 
