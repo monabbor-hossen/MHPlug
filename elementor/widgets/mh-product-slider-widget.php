@@ -2,7 +2,7 @@
 /**
  * MH Product Slider Widget
  * Inherits all powerful features of the Product Grid but displays them in a highly customizable slider.
- * Fixed: Quick View SVG & Icon color inheritance explicitly solved.
+ * Fixed: Quick View SVG & Icon color inheritance explicitly solved. Added Related Products query.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -42,12 +42,14 @@ class MH_Product_Slider_Widget extends Widget_Base {
             'type' => Controls_Manager::SELECT, 
             'default' => 'latest', 
             'options' => [ 
-                'current_query' => __( 'Current Archive (Category/Tag/Brand)', 'mh-plug' ), 
+                'current_query' => __( 'Current Archive (Category/Tag)', 'mh-plug' ), 
                 'latest' => __( 'Latest', 'mh-plug' ), 
                 'best_sellers' => __( 'Best Sellers', 'mh-plug' ), 
                 'top_rated' => __( 'Top Rated', 'mh-plug' ), 
                 'sale' => __( 'On Sale', 'mh-plug' ), 
                 'featured' => __( 'Featured', 'mh-plug' ), 
+                // 🚀 NEW: Related Products Query
+                'related_products' => __( 'Related Products (Single Product Page)', 'mh-plug' ), 
             ], 
         ] );
         
@@ -251,7 +253,28 @@ class MH_Product_Slider_Widget extends Widget_Base {
             'posts_per_page'      => $settings['posts_per_page'] 
         ];
 
-        if ( $settings['query_type'] === 'current_query' ) {
+        // 🚀 RELATED PRODUCTS LOGIC INJECTION
+        if ( $settings['query_type'] === 'related_products' && class_exists('WooCommerce') ) {
+            global $product;
+            $current_product_id = 0;
+            if ( is_product() && is_a( $product, 'WC_Product' ) ) {
+                $current_product_id = $product->get_id();
+            } elseif ( get_post_type() === 'product' ) {
+                $current_product_id = get_the_ID();
+            }
+
+            if ( $current_product_id ) {
+                $related_ids = wc_get_related_products( $current_product_id, $settings['posts_per_page'] );
+                if ( ! empty( $related_ids ) ) {
+                    $args['post__in'] = $related_ids;
+                    $args['orderby']  = 'post__in'; 
+                } else {
+                    $args['post__in'] = [0]; 
+                }
+            } else {
+                $args['post__in'] = [0]; 
+            }
+        } elseif ( $settings['query_type'] === 'current_query' ) {
             $queried_object = get_queried_object();
             if ( $queried_object instanceof \WP_Term ) {
                 if ( $queried_object->taxonomy === 'category' || $queried_object->taxonomy === 'post_tag' ) {
@@ -280,8 +303,7 @@ class MH_Product_Slider_Widget extends Widget_Base {
         $loop = new \WP_Query( $args );
         
         if ( ! $loop->have_posts() ) { 
-            echo '<p>' . esc_html__( 'No items found.', 'mh-plug' ) . '</p>'; 
-            return; 
+            return; // Fail silently if no related products are found so we don't break page layouts
         }
 
         $slider_id = 'mh-prod-slider-' . $this->get_id();
@@ -326,7 +348,7 @@ class MH_Product_Slider_Widget extends Widget_Base {
             /* Default fallback fill for General SVGs */
             .mh-advanced-wishlist-btn svg { fill: currentColor; }
 
-            /* 🚀 QUICK VIEW ICON COLOR FIX: Forces the Quick View icon to inherit its button's color */
+            /* 🚀 QUICK VIEW ICON COLOR FIX */
             .mh-product-slider-wrapper .mh-quick-view-trigger i { color: inherit !important; }
             .mh-product-slider-wrapper .mh-quick-view-trigger svg { fill: currentColor !important; color: inherit !important; }
         </style>
