@@ -2,7 +2,7 @@
 /**
  * MH Product Grid Widget
  * Removed Add to Cart Button. Added powerful Quick View customization via Trait.
- * Added Native WooCommerce Product Type (Combo Offer) query and exclusion filters.
+ * Fixed: Smart detection for "Combo Offers WooCommerce" plugin without requiring manual slugs.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,20 +48,11 @@ class MH_Product_Grid_Widget extends Widget_Base {
                 'top_rated'     => __( 'Top Rated', 'mh-plug' ), 
                 'sale'          => __( 'On Sale', 'mh-plug' ), 
                 'featured'      => __( 'Featured', 'mh-plug' ), 
-                // 🚀 NEW: Product Type Query
-                'combo_offers'  => __( 'Product Type: Combo Offer', 'mh-plug' ), 
+                'combo_offers'  => __( 'Product Type: Combo Offers', 'mh-plug' ), // 🚀 Combo Filter
             ], 
         ] );
 
-        // 🚀 NEW: Exact Product Type Slug Definition
-        $this->add_control( 'combo_slug', [
-            'label'       => __( 'Product Type Slug', 'mh-plug' ),
-            'type'        => Controls_Manager::TEXT,
-            'default'     => 'woosb', // Default for WPC Product Bundles
-            'description' => __( 'Enter the exact slug for your Combo Product Type (e.g., "bundle", "woosb", or "combo").', 'mh-plug' ),
-        ] );
-
-        // 🚀 NEW: Exclude Product Type Toggle
+        // 🚀 EXCLUSION TOGGLE (Auto-Hides Combo products from standard grids)
         $this->add_control( 'exclude_combo', [
             'label'        => __( 'Hide Combo Offers Here', 'mh-plug' ),
             'type'         => Controls_Manager::SWITCHER,
@@ -69,13 +60,14 @@ class MH_Product_Grid_Widget extends Widget_Base {
             'label_off'    => __( 'Show', 'mh-plug' ),
             'return_value' => 'yes',
             'default'      => 'no',
-            'description'  => __( 'Turn this ON to hide Combo Offer products from standard queries (Latest, Best Sellers, etc).', 'mh-plug' ),
+            'description'  => __( 'Turn this ON to automatically hide any Combo/Bundle products from this grid.', 'mh-plug' ),
             'condition'    => [
                 'query_type!' => 'combo_offers',
             ],
+            'separator'    => 'after',
         ] );
         
-        $this->add_control( 'posts_per_page', [ 'label' => __( 'Number of Products', 'mh-plug' ), 'type' => Controls_Manager::NUMBER, 'default' => 8, 'min' => 1, 'max' => 50, 'separator' => 'before' ] );
+        $this->add_control( 'posts_per_page', [ 'label' => __( 'Number of Products', 'mh-plug' ), 'type' => Controls_Manager::NUMBER, 'default' => 8, 'min' => 1, 'max' => 50 ] );
         $this->add_responsive_control( 'columns', [ 'label' => __( 'Columns', 'mh-plug' ), 'type' => Controls_Manager::SELECT, 'default' => '4', 'tablet_default' => '2', 'mobile_default' => '1', 'options' => [ '1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6' ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid' => 'grid-template-columns: repeat({{VALUE}}, 1fr);' ], ] );
         $this->end_controls_section();
 
@@ -147,25 +139,29 @@ class MH_Product_Grid_Widget extends Widget_Base {
         // STYLE: GENERAL ACTION BUTTONS 
         // ----------------------------------------------------
         $this->start_controls_section( 'section_style_buttons', [ 'label' => __( 'General Action Buttons', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
-        $this->add_responsive_control( 'btn_width', [ 'label' => __( 'Button Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger)' => 'width: {{SIZE}}px !important; min-width: {{SIZE}}px !important;' ] ] );
-        $this->add_responsive_control( 'btn_height', [ 'label' => __( 'Button Height', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger)' => 'height: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' ] ] );
-        $this->add_responsive_control( 'btn_icon_size', [ 'label' => __( 'Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 16 ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger) i' => 'font-size: {{SIZE}}px !important;', '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger) svg' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important;' ] ] );
+        
+        $btn_target = '{{WRAPPER}} .mh-compare-btn, {{WRAPPER}} .mh-advanced-wishlist-btn, {{WRAPPER}} .mh-action-btn[title="Read More"]';
+        $btn_hover_target = '{{WRAPPER}} .mh-compare-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn:hover, {{WRAPPER}} .mh-advanced-wishlist-btn.added, {{WRAPPER}} .mh-action-btn[title="Read More"]:hover';
+        
+        $this->add_responsive_control( 'btn_width', [ 'label' => __( 'Button Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ $btn_target => 'width: {{SIZE}}px !important; min-width: {{SIZE}}px !important;' ] ] );
+        $this->add_responsive_control( 'btn_height', [ 'label' => __( 'Button Height', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 40 ], 'selectors' => [ $btn_target => 'height: {{SIZE}}px !important; min-height: {{SIZE}}px !important;' ] ] );
+        $this->add_responsive_control( 'btn_icon_size', [ 'label' => __( 'Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 16 ], 'selectors' => [ $btn_target . ' i' => 'font-size: {{SIZE}}px !important;', $btn_target . ' svg' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important;' ] ] );
         $this->add_responsive_control( 'btn_gap', [ 'label' => __( 'Gap Between Buttons', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'default' => [ 'size' => 8 ], 'selectors' => [ '{{WRAPPER}} .mh-product-actions' => 'gap: {{SIZE}}px;' ] ] );
-        $this->add_responsive_control( 'btn_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'default' => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => '%' ], 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger)' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ] ] );
+        $this->add_responsive_control( 'btn_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%' ], 'default' => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => '%' ], 'selectors' => [ $btn_target => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ] ] );
 
         $this->start_controls_tabs( 'tabs_btn_style' );
         $this->start_controls_tab( 'tab_btn_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'btn_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger)' => 'color: {{VALUE}} !important;' ] ] );
-        $this->add_control( 'btn_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger)' => 'background-color: {{VALUE}} !important;' ] ] );
-        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_border', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger)' ] );
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_shadow', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger)' ] );
+        $this->add_control( 'btn_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ $btn_target => 'color: {{VALUE}} !important;' ] ] );
+        $this->add_control( 'btn_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ $btn_target => 'background-color: {{VALUE}} !important;' ] ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_border', 'selector' => $btn_target ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_shadow', 'selector' => $btn_target ] );
         $this->end_controls_tab();
 
         $this->start_controls_tab( 'tab_btn_hover', [ 'label' => __( 'Hover & Active', 'mh-plug' ) ] );
-        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' => 'color: {{VALUE}} !important;' ] ] );
-        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' => 'background-color: {{VALUE}} !important;' ] ] );
-        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' ] );
-        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn:not(.mh-quick-view-trigger):hover, {{WRAPPER}} .mh-product-grid .mh-action-btn.added' ] );
+        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ $btn_hover_target => 'color: {{VALUE}} !important;' ] ] );
+        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#d63638', 'selectors' => [ $btn_hover_target => 'background-color: {{VALUE}} !important;' ] ] );
+        $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => $btn_hover_target ] );
+        $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => $btn_hover_target ] );
         $this->end_controls_tab();
 
         $this->end_controls_tabs();
@@ -191,18 +187,17 @@ class MH_Product_Grid_Widget extends Widget_Base {
             'tax_query'           => [ 'relation' => 'AND' ] 
         ];
 
-        // 🚀 Grab custom slug input
-        $combo_slug = !empty($settings['combo_slug']) ? sanitize_title($settings['combo_slug']) : 'woosb';
+        // 🚀 SMART DETECTION ARRAY: Checks for all common Combo plugin slugs automatically!
+        $combo_slugs = [ 'wooco', 'combo', 'bundle', 'woosb', 'yith_bundle', 'woosg' ];
 
-        // 🚀 THE FIX: Target the exact WooCommerce 'product_type' taxonomy
         if ( $settings['query_type'] === 'combo_offers' && class_exists('WooCommerce') ) {
             $args['tax_query'][] = [
                 'taxonomy' => 'product_type',
                 'field'    => 'slug',
-                'terms'    => $combo_slug,
+                'terms'    => $combo_slugs,
             ];
         } else {
-            // Standard queries
+            // Standard Queries
             if ( $settings['query_type'] === 'current_query' ) {
                 $queried_object = get_queried_object();
                 if ( $queried_object instanceof \WP_Term ) {
@@ -221,17 +216,21 @@ class MH_Product_Grid_Widget extends Widget_Base {
                 $product_ids_on_sale = wc_get_product_ids_on_sale(); 
                 $args['post__in'] = !empty($product_ids_on_sale) ? $product_ids_on_sale : [0];
             } elseif ( $settings['query_type'] === 'featured' ) {
-                $args['tax_query'][] = [['taxonomy' => 'product_visibility', 'field' => 'name', 'terms' => 'featured', 'operator' => 'IN']];
+                $args['tax_query'][] = [
+                    'taxonomy' => 'product_visibility',
+                    'field'    => 'name',
+                    'terms'    => 'featured',
+                ];
             } elseif ( $settings['query_type'] === 'latest' ) {
                 $args['orderby'] = 'date'; $args['order'] = 'DESC';
             }
 
-            // 🚀 Apply Exclusion if requested on standard queries
+            // 🚀 SMART EXCLUSION: Hides combo products from "Latest", "Best Sellers", etc.
             if ( $settings['exclude_combo'] === 'yes' && class_exists('WooCommerce') ) {
                 $args['tax_query'][] = [
                     'taxonomy' => 'product_type',
                     'field'    => 'slug',
-                    'terms'    => $combo_slug,
+                    'terms'    => $combo_slugs,
                     'operator' => 'NOT IN',
                 ];
             }
@@ -241,10 +240,16 @@ class MH_Product_Grid_Widget extends Widget_Base {
         $loop = new \WP_Query( $args );
         
         if ( ! $loop->have_posts() ) { 
-            echo '<p>' . esc_html__( 'No items found in this category.', 'mh-plug' ) . '</p>'; 
+            echo '<p>' . esc_html__( 'No items found matching this criteria.', 'mh-plug' ) . '</p>'; 
             return; 
         }
         ?>
+        
+        <style>
+            /* Default fallback fill for General SVGs */
+            .mh-advanced-wishlist-btn svg { fill: currentColor; }
+        </style>
+        
         <div class="mh-product-grid">
             <?php
             while ( $loop->have_posts() ) : $loop->the_post();
@@ -288,11 +293,11 @@ class MH_Product_Grid_Widget extends Widget_Base {
                                 <?php endif; ?>
 
                                 <a href="#" class="mh-action-btn mh-advanced-wishlist-btn <?php echo $in_wishlist ? 'added' : ''; ?>" data-product-id="<?php echo esc_attr($post_id); ?>" data-behavior="toggle" title="<?php esc_html_e('Wishlist', 'mh-plug'); ?>" style="display:flex; align-items:center; justify-content:center;">
-                                    <span class="mh-icon-normal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 429.3l175.2-161.3c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z"/></svg></span>
-                                    <span class="mh-icon-added" style="display:none;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg></span>
+                                    <span class="mh-icon-normal" style="display:flex; align-items:center; justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 429.3l175.2-161.3c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z"/></svg></span>
+                                    <span class="mh-icon-added" style="display:none; align-items:center; justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg></span>
                                 </a>
                             <?php else : ?>
-                                <a href="<?php the_permalink(); ?>" class="mh-action-btn" title="<?php esc_html_e( 'Read More', 'mh-plug' ); ?>">
+                                <a href="<?php the_permalink(); ?>" class="mh-action-btn" title="<?php esc_html_e( 'Read More', 'mh-plug' ); ?>" style="display:flex; align-items:center; justify-content:center;">
                                     <i class="fas fa-arrow-right"></i>
                                 </a>
                             <?php endif; ?>
