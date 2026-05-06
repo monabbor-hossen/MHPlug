@@ -24,6 +24,26 @@
 </head>
 <body class="bg-[#01040a] relative">
 
+  <!-- ═══ PRO PRELOADER ═══ -->
+  <div class="preloader">
+    <img src="MH-icon.png" alt="MH" class="loader-logo" />
+    <div class="loader-bar-bg">
+      <div class="loader-bar-fill"></div>
+    </div>
+    <div class="mt-4 text-[9px] font-black uppercase tracking-[0.4em] text-white/30">Initializing Core Engine</div>
+  </div>
+
+  <!-- ═══ QUICK NAV ═══ -->
+  <div class="quick-nav hidden lg:flex">
+    <a href="#hero" class="q-dot active" title="Top"></a>
+    <a href="#bento" class="q-dot" title="Architecture"></a>
+    <a href="#visualizer" class="q-dot" title="Live Visualizer"></a>
+    <a href="#engine" class="q-dot" title="Engine"></a>
+    <a href="#widgets" class="q-dot" title="Widgets"></a>
+    <a href="#performance" class="q-dot" title="Performance"></a>
+    <a href="#faq" class="q-dot" title="FAQ"></a>
+  </div>
+
   <!-- Abstract Background Shapes -->
   <div class="shape-blob shape-1"></div>
   <div class="shape-blob shape-2"></div>
@@ -44,7 +64,7 @@
   </nav>
 
   <!-- ═══ TYPOGRAPHY HERO ═══ -->
-  <section class="relative min-h-[90vh] flex flex-col items-center justify-center pt-32 pb-20 px-6 text-center z-10">
+  <section id="hero" class="relative min-h-[90vh] flex flex-col items-center justify-center pt-32 pb-20 px-6 text-center z-10">
     <div class="rv-up">
       <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full glass-panel border border-brand-accent/30 mb-10">
         <span class="live-dot"></span>
@@ -140,17 +160,69 @@
         <div class="mt-6 text-4xl text-brand-light font-black opacity-50">18+</div>
       </div>
 
-      <!-- Bento 4: Preloader -->
+      <!-- Bento 4: Ajax Mini Cart -->
       <div class="bento-item col-span-4 lg:col-span-1 glass-panel p-8 flex flex-col justify-between rv-scale" style="transition-delay: 0.3s;">
         <div>
-          <h3 class="text-xl font-black text-white mb-2">Preloader v2</h3>
-          <p class="text-sm text-white/50">30+ CSS animations, gradient backgrounds, and holographic text effects.</p>
+          <h3 class="text-xl font-black text-white mb-2">Ajax Mini Cart</h3>
+          <p class="text-sm text-white/50">Update quantities and remove items without page refreshes. Pure performance.</p>
         </div>
-        <div class="mt-6 w-full h-2 bg-white/5 rounded-full overflow-hidden">
-          <div class="w-[70%] h-full bg-brand-accent animate-[pulse_2s_infinite]"></div>
+        <div class="mt-6 flex items-center justify-center">
+           <div class="w-12 h-12 rounded-full border-2 border-brand-accent/30 flex items-center justify-center">
+             <span class="text-brand-accent text-xs font-bold">1</span>
+           </div>
         </div>
       </div>
 
+    </div>
+  </section>
+
+  <!-- ═══ THEME BUILDER LIVE VISUALIZER ═══ -->
+  <section id="visualizer" class="py-32 px-6 z-10 relative bg-white/[0.02]">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-20 items-center">
+        <div class="rv-left">
+          <span class="text-brand-accent text-xs font-black uppercase tracking-[0.5em] mb-6 block">Interactive Demo</span>
+          <h2 class="font-display font-black text-5xl lg:text-6xl text-white mb-8">One Layout.<br/><span class="text-gradient">Infinite Faces.</span></h2>
+          <p class="text-white/40 text-lg leading-relaxed mb-10">Test the power of the MH Theme Builder. Click the buttons to swap global headers instantly. This is what complete design freedom looks like.</p>
+          
+          <div class="flex flex-wrap gap-4">
+            <button onclick="switchHeader('h1')" id="btn-h1" class="viz-btn active">Corporate Header</button>
+            <button onclick="switchHeader('h2')" id="btn-h2" class="viz-btn">Neon Agency</button>
+            <button onclick="switchHeader('h3')" id="btn-h3" class="viz-btn">Minimalist</button>
+          </div>
+          
+          <div class="mt-12 p-6 glass-panel rounded-2xl border-l-4 border-brand-accent">
+            <p class="text-sm text-white/60 italic">"The condition-based logic allowed us to deploy 50+ unique landing page headers in minutes, not days."</p>
+            <p class="mt-4 text-[10px] font-black uppercase tracking-widest text-brand-accent">— Lead Architect, DevAgency</p>
+          </div>
+        </div>
+
+        <div class="rv-right">
+          <div class="viz-stage active-h1" id="viz-stage">
+            <div class="viz-header viz-h-1">
+              <div class="w-8 h-8 bg-white/20 rounded-lg"></div>
+              <div class="ml-auto flex gap-4"><div class="w-12 h-2 bg-white/20 rounded"></div><div class="w-12 h-2 bg-white/20 rounded"></div></div>
+            </div>
+            <div class="viz-header viz-h-2">
+              <div class="w-24 h-4 bg-brand-accent/40 rounded-full"></div>
+              <div class="ml-auto flex gap-4"><div class="w-8 h-8 bg-brand-accent rounded-full"></div></div>
+            </div>
+            <div class="viz-header viz-h-3">
+              <div class="w-4 h-4 bg-white/40 rounded-full"></div>
+              <div class="mx-auto flex gap-8"><div class="w-10 h-1 bg-white/10 rounded"></div><div class="w-10 h-1 bg-white/10 rounded"></div></div>
+            </div>
+            
+            <div class="p-12 pt-32 space-y-8">
+              <div class="h-4 w-3/4 bg-white/5 rounded"></div>
+              <div class="h-4 w-1/2 bg-white/5 rounded"></div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="h-32 bg-white/5 rounded-2xl"></div>
+                <div class="h-32 bg-white/5 rounded-2xl"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -163,6 +235,7 @@
         <div class="code-window shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
           <div class="code-header">
             <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <button onclick="copyCode(this)" class="ml-auto text-[9px] font-black uppercase tracking-widest text-white/30 hover:text-brand-accent transition-colors">Copy Code</button>
           </div>
           <div class="code-body">
 <pre><code><span class="c-comment">// MH Plug Conditional Asset Loader</span>
@@ -208,17 +281,286 @@
 
     </div>
   </section>
+  <!-- ═══ WIDGET LAB (INTERACTIVE SHOWCASE) ═══ -->
+  <section id="widgets" class="py-32 px-6 relative z-10">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-20 rv-up">
+        <div class="max-w-2xl">
+          <span class="text-brand-accent text-xs font-black uppercase tracking-[0.5em] mb-4 block">Visual Library</span>
+          <h2 class="font-display font-black text-5xl md:text-6xl text-white mb-6">The Widget <span class="text-brand-light">Laboratory.</span></h2>
+          <p class="text-white/40 text-lg">A small sample of our 45+ elite components. Engineered for the next generation of web design.</p>
+        </div>
+        <a href="#" class="text-brand-accent font-black uppercase tracking-widest text-[11px] mb-2 border-b-2 border-brand-accent/20 hover:border-brand-accent transition-all">View All 45+ Widgets →</a>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Lab Item 1 -->
+        <div class="bento-item glass-panel rv-scale">
+          <div class="lab-card">
+            <div class="lab-preview text-gradient">Brush Text</div>
+          </div>
+          <div class="p-8 border-t border-white/5 bg-black/20">
+            <h4 class="text-white font-bold mb-2">Organic Typography</h4>
+            <p class="text-white/40 text-sm">Add artistic brush-stroke effects to any text element with one click.</p>
+          </div>
+        </div>
+        <!-- Lab Item 2 -->
+        <div class="bento-item glass-panel rv-scale" style="transition-delay: 0.1s;">
+          <div class="lab-card">
+            <div class="lab-preview">Slide <span class="text-brand-accent">UI</span></div>
+          </div>
+          <div class="p-8 border-t border-white/5 bg-black/20">
+            <h4 class="text-white font-bold mb-2">Stacked Carousel</h4>
+            <p class="text-white/40 text-sm">A unique card-stacking animation engine for testimonials and features.</p>
+          </div>
+        </div>
+        <!-- Lab Item 3 -->
+        <div class="bento-item glass-panel rv-scale" style="transition-delay: 0.2s;">
+          <div class="lab-card">
+            <div class="lab-preview text-outline">Glow Node</div>
+          </div>
+          <div class="p-8 border-t border-white/5 bg-black/20">
+            <h4 class="text-white font-bold mb-2">Feature Nodes</h4>
+            <p class="text-white/40 text-sm">Interactive nodes that pulse and respond to hover with dynamic glows.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SETUP PROTOCOL (STEP BY STEP) ═══ -->
+  <section id="setup" class="py-32 px-6 relative z-10 bg-black/20">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+      <div class="rv-up">
+        <h2 class="font-display font-black text-5xl text-white mb-10">Deployment <span class="text-brand-accent">Protocol.</span></h2>
+        
+        <div class="space-y-12">
+          <div class="setup-step">
+            <div class="setup-num"></div>
+            <h4 class="text-white font-black uppercase tracking-widest text-sm mb-3">01. Initialization</h4>
+            <p class="text-white/50">Upload <code class="text-brand-accent">mh-plug.zip</code> to your WordPress dashboard. Our engine core initializes without a single database query.</p>
+          </div>
+          <div class="setup-step">
+            <div class="setup-num"></div>
+            <h4 class="text-white font-black uppercase tracking-widest text-sm mb-3">02. Module Selection</h4>
+            <p class="text-white/50">Enable only the widgets you need. MH Plug's dynamic loader ignores dormant code, keeping your site feather-light.</p>
+          </div>
+          <div class="setup-step">
+            <div class="setup-num"></div>
+            <h4 class="text-white font-black uppercase tracking-widest text-sm mb-3">03. Visual Crafting</h4>
+            <p class="text-white/50">Launch Elementor and start building. Access 45+ elite tools and the full Theme Builder suite instantly.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rv-scale relative">
+        <div class="absolute -inset-4 bg-brand-accent/10 blur-[100px] rounded-full"></div>
+        <div class="glass-panel rounded-[40px] p-10 border border-white/10 relative z-10">
+          <div class="flex items-center gap-4 mb-10">
+            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            <span class="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 ml-4">mh-status-log</span>
+          </div>
+          <div class="space-y-6 font-mono text-xs">
+            <div class="flex gap-4">
+              <span class="text-green-400">[READY]</span>
+              <span class="text-white/60">Core Engine V2.1.0 Online</span>
+            </div>
+            <div class="flex gap-4">
+              <span class="text-brand-accent">[SYSTEM]</span>
+              <span class="text-white/60">Ajax Security Nonce: VERIFIED</span>
+            </div>
+            <div class="flex gap-4">
+              <span class="text-yellow-400">[LOADER]</span>
+              <span class="text-white/60">Dependency Map Generated: 46 Assets</span>
+            </div>
+            <div class="flex gap-4">
+              <span class="text-green-400">[SUCCESS]</span>
+              <span class="text-white/60">Deployment Complete. No Bloat Detected.</span>
+            </div>
+          </div>
+          <div class="mt-10 pt-10 border-t border-white/5 text-center">
+            <div class="inline-block px-6 py-2 rounded-full border border-brand-accent/20 text-brand-accent text-[10px] font-black uppercase tracking-[0.3em]">98% Optimization Score</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SUCCESS METRICS ═══ -->
+  <section class="py-20 border-y border-white/5 bg-white/[0.01] z-10 relative">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-10">
+      <div class="stat-card rv-up">
+        <div class="stat-value">10K+</div>
+        <div class="stat-label">Active Installs</div>
+      </div>
+      <div class="stat-card rv-up" style="transition-delay: 0.1s;">
+        <div class="stat-value">46</div>
+        <div class="stat-label">Elite Widgets</div>
+      </div>
+      <div class="stat-card rv-up" style="transition-delay: 0.2s;">
+        <div class="stat-value">0.0</div>
+        <div class="stat-label">Global Bloat</div>
+      </div>
+      <div class="stat-card rv-up" style="transition-delay: 0.3s;">
+        <div class="stat-value">24/7</div>
+        <div class="stat-label">Expert Support</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PERFORMANCE BENCHMARKS ═══ -->
+  <section id="performance" class="py-32 px-6 z-10 relative overflow-hidden">
+    <div class="max-w-4xl mx-auto text-center mb-20 rv-up">
+      <span class="text-brand-accent text-xs font-black uppercase tracking-[0.5em] mb-4 block">Benchmark Analysis</span>
+      <h2 class="font-display font-black text-5xl text-white mb-6">Built for the <span class="text-gradient">Fast Lane.</span></h2>
+      <p class="text-white/40 text-lg">We benchmarked MH Plug against standard Elementor addons. The results are undeniable.</p>
+    </div>
+
+    <div class="max-w-3xl mx-auto space-y-12 rv-scale">
+      <!-- Metric 1 -->
+      <div class="space-y-4">
+        <div class="flex justify-between items-end">
+          <span class="text-sm font-bold text-white/80">Page Load Time (DOM Ready)</span>
+          <span class="text-[10px] font-black text-brand-accent uppercase tracking-widest">35% Faster</span>
+        </div>
+        <div class="space-y-2">
+          <div class="flex items-center gap-4">
+            <span class="text-[9px] font-black text-white/30 w-24">MH PLUG</span>
+            <div class="perf-bar-bg flex-1">
+              <div class="perf-bar-fill bg-brand-accent" style="width: 30%"></div>
+            </div>
+            <span class="text-[10px] font-bold text-white/60">0.8s</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="text-[9px] font-black text-white/30 w-24">COMPETITORS</span>
+            <div class="perf-bar-bg flex-1">
+              <div class="perf-bar-fill bg-white/10" style="width: 85%"></div>
+            </div>
+            <span class="text-[10px] font-bold text-white/40">2.4s</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metric 2 -->
+      <div class="space-y-4">
+        <div class="flex justify-between items-end">
+          <span class="text-sm font-bold text-white/80">Global Request Count</span>
+          <span class="text-[10px] font-black text-brand-accent uppercase tracking-widest">Zero Unused Scripts</span>
+        </div>
+        <div class="space-y-2">
+          <div class="flex items-center gap-4">
+            <span class="text-[9px] font-black text-white/30 w-24">MH PLUG</span>
+            <div class="perf-bar-bg flex-1">
+              <div class="perf-bar-fill bg-brand-accent" style="width: 15%"></div>
+            </div>
+            <span class="text-[10px] font-bold text-white/60">2 Req</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="text-[9px] font-black text-white/30 w-24">COMPETITORS</span>
+            <div class="perf-bar-bg flex-1">
+              <div class="perf-bar-fill bg-white/10" style="width: 90%"></div>
+            </div>
+            <span class="text-[10px] font-bold text-white/40">24+ Req</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ KNOWLEDGE HUB (FAQ) ═══ -->
+  <section id="faq" class="py-32 px-6 z-10 relative bg-black/20">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-20 rv-up">
+        <h2 class="font-display font-black text-5xl text-white mb-6">Common <span class="text-brand-accent">Inquiries.</span></h2>
+        <p class="text-white/40">Everything you need to know about the MH System.</p>
+      </div>
+
+      <div class="space-y-4 rv-up">
+        <!-- FAQ 1 -->
+        <div class="faq-item">
+          <div class="faq-trigger">
+            <span class="text-white font-bold">Does it require Elementor Pro?</span>
+            <svg class="faq-icon w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+          <div class="faq-content">
+            No. MH Plug is designed to unlock Pro-level features—including Theme Building and Advanced WooCommerce—on the Free version of Elementor. You can save hundreds of dollars in annual subscriptions.
+          </div>
+        </div>
+        <!-- FAQ 2 -->
+        <div class="faq-item">
+          <div class="faq-trigger">
+            <span class="text-white font-bold">Will it slow down my website?</span>
+            <svg class="faq-icon w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+          <div class="faq-content">
+            Absolutely not. Our core philosophy is "Zero Bloat." We use conditional asset enqueuing, meaning scripts and styles are only loaded when the specific widget is present on a page.
+          </div>
+        </div>
+        <!-- FAQ 3 -->
+        <div class="faq-item">
+          <div class="faq-trigger">
+            <span class="text-white font-bold">Is it compatible with my theme?</span>
+            <svg class="faq-icon w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+          <div class="faq-content">
+            Yes. MH Plug is built following strict WordPress coding standards and Elementor's native API. It works seamlessly with Hello Elementor, Astra, GeneratePress, and any other standards-compliant theme.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ═══ FOOTER ═══ -->
-  <footer class="py-20 px-6 border-t border-white/5 bg-[#000205] relative z-10 text-center">
+  <footer id="download" class="py-20 px-6 border-t border-white/5 bg-[#000205] relative z-10 text-center">
     <div class="max-w-4xl mx-auto">
       <h2 class="font-display font-black text-4xl text-white mb-8">Ready to upgrade your workflow?</h2>
       <a href="#download" class="btn-premium inline-block px-12 py-5 rounded-[20px] text-sm font-black tracking-widest uppercase mb-16">Download MH Plug Now</a>
       
-      <div class="flex flex-col md:flex-row justify-center items-center gap-8 text-[11px] font-black uppercase tracking-[0.2em] text-white/30 border-t border-white/5 pt-10">
-        <a href="https://mhutin.com" class="hover:text-brand-accent transition-colors">© 2026 MHutin Labs</a>
-        <a href="#" class="hover:text-brand-accent transition-colors">Documentation</a>
-        <a href="#" class="hover:text-brand-accent transition-colors">Terms of Service</a>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-12 text-left mb-20">
+        <div class="space-y-4">
+          <h5 class="text-[10px] font-black uppercase tracking-[0.3em] text-brand-accent">Ecosystem</h5>
+          <ul class="space-y-2 text-[13px] text-white/40">
+            <li><a href="#" class="footer-link block">Theme Builder</a></li>
+            <li><a href="#" class="footer-link block">Widget Arsenal</a></li>
+            <li><a href="#" class="footer-link block">WooCommerce Core</a></li>
+            <li><a href="#" class="footer-link block">Performance Stats</a></li>
+          </ul>
+        </div>
+        <div class="space-y-4">
+          <h5 class="text-[10px] font-black uppercase tracking-[0.3em] text-brand-accent">Support</h5>
+          <ul class="space-y-2 text-[13px] text-white/40">
+            <li><a href="#" class="footer-link block">Documentation</a></li>
+            <li><a href="#" class="footer-link block">Video Tutorials</a></li>
+            <li><a href="#" class="footer-link block">Developer API</a></li>
+            <li><a href="#" class="footer-link block">Ticketing System</a></li>
+          </ul>
+        </div>
+        <div class="space-y-4">
+          <h5 class="text-[10px] font-black uppercase tracking-[0.3em] text-brand-accent">Labs</h5>
+          <ul class="space-y-2 text-[13px] text-white/40">
+            <li><a href="#" class="footer-link block">Beta Program</a></li>
+            <li><a href="#" class="footer-link block">Changelog</a></li>
+            <li><a href="#" class="footer-link block">Roadmap</a></li>
+            <li><a href="#" class="footer-link block">Security Reports</a></li>
+          </ul>
+        </div>
+        <div class="space-y-4 text-center sm:text-right">
+          <img src="MH-icon.png" alt="MH" class="w-12 h-12 object-contain mx-auto sm:ml-auto mb-4" />
+          <p class="text-[10px] text-white/20 leading-loose">Built with passion by<br/>MHutin Labs © 2026</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 border-t border-white/5 pt-10">
+        <div class="flex gap-10">
+          <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-white transition-colors">Refund Policy</a>
+        </div>
+        <div class="flex gap-6">
+          <span class="text-brand-accent">PRO VERSION</span>
+          <span>EST. 2024</span>
+        </div>
       </div>
     </div>
   </footer>
