@@ -550,9 +550,9 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
             }
             ";
         }
-        wp_register_style( 'mh-stacked-carousel-style', false );
-        wp_enqueue_style( 'mh-stacked-carousel-style' );
-        wp_add_inline_style( 'mh-stacked-carousel-style', $css );
+        echo "<style>
+" . $css . "
+</style>";
         ?>
 
         <div class="mh-stacked-wrap mh-sc-mode-<?php echo esc_attr( $mode ); ?><?php echo esc_attr( $zoom_class ); ?>">
@@ -635,8 +635,6 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
             }
         });
         ";
-        wp_add_inline_script( 'jquery-core', $js );
-        ?>
-        <?php
-    }
+        echo "<script type='text/javascript'>\n" . $js . "\n</script>";
+            }
 }

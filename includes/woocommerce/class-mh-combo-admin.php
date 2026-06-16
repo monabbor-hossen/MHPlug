@@ -251,12 +251,12 @@ class MH_Combo_Admin {
         }
         $js  = 'jQuery(document).ready(function($){';
         $js .= 'function mhTogglePricingFields(){';
-        $js .= "var type=$('#product-type').val();";
-        $js .= "if('combo'===type){$('.options_group.pricing').hide();}";
-        $js .= "else{$('.options_group.pricing').show();}";
+        $js .= 'var type=$("#product-type").val();';
+        $js .= 'if("combo"===type){$(".options_group.pricing").hide();}';
+        $js .= 'else{$(".options_group.pricing").show();}';
         $js .= '}';
         $js .= 'mhTogglePricingFields();';
-        $js .= "$('#product-type').on('change',mhTogglePricingFields);";
+        $js .= '$("#product-type").on("change",mhTogglePricingFields);';
         $js .= '});';
         wp_add_inline_script( 'jquery', $js );
     }

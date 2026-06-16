@@ -286,8 +286,6 @@ class MH_Synced_Slider_Widget extends \Elementor\Widget_Base {
         });
         <?php
         $js = ob_get_clean();
-        wp_add_inline_script( 'jquery-core', $js );
-        ?>
-        <?php
-    }
+        echo "<script type='text/javascript'>\n" . $js . "\n</script>";
+            }
 }

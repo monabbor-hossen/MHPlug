@@ -443,7 +443,6 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
         $layout_mobile  = !empty($settings['search_layout_mobile']) ? $settings['search_layout_mobile'] : $layout_tablet;
         
         $wrapper_classes = "mh-desk-{$layout_desktop} mh-tab-{$layout_tablet} mh-mob-{$layout_mobile} mh-design-{$design}";
-        ?>
 
         $css = "
             .mh-live-search-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
@@ -639,7 +638,5 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
             });
         ";
         wp_add_inline_script( 'jquery-core', $js );
-        ?>
-        <?php
     }
 }

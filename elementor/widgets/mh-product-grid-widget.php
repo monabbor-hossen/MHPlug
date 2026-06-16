@@ -760,7 +760,7 @@ class MH_Product_Grid_Widget extends \Elementor\Widget_Base {
         }
 
         $grid_id = 'mh-grid-' . $this->get_id();
-        <?php
+
         $css = "";
         ob_start();
         ?>

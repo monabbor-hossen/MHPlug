@@ -193,7 +193,7 @@ class MH_Heading_Widget extends \Elementor\Widget_Base {
         echo '</' . $tag . '>';
         echo '</div>'; // End Alignment Shrink-Wrapper
 
-        <?php
+    
         ob_start();
         ?>
             /* Alignment Wrapper handles the positioning inside the column */

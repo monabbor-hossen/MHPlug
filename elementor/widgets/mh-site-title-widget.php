@@ -253,57 +253,47 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
 
         // Get the actual site title from WordPress
         $site_title = get_bloginfo('name');
-        if (empty($site_title)) {
-             if (\Elementor\Plugin::$instance->editor->is_edit_mode()) {
-                 echo '<div style="text-align:center; padding: 20px; border: 1px dashed #ccc;">' . esc_html__('Site Title is Empty. Set one in Settings > General.', 'mh-plug') . '</div>';
-             }
-             return;
+        if ( empty( $site_title ) ) {
+            if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+                echo '<div style="text-align:center; padding: 20px; border: 1px dashed #ccc;">' . esc_html__( 'Site Title is Empty. Set one in Settings > General.', 'mh-plug' ) . '</div>';
+            }
+            return;
         }
 
         // Determine the link URL
-        $link_url = '';
         $link_attributes_string = '';
         $has_link = false;
 
-        if ($settings['link_to'] === 'home') {
-            $link_url = home_url('/');
+        if ( $settings['link_to'] === 'home' ) {
             $has_link = true;
-            $this->add_render_attribute('link', 'href', esc_url($link_url));
-            $link_attributes_string = $this->get_render_attribute_string('link');
+            $this->add_render_attribute( 'link', 'href', esc_url( home_url( '/' ) ) );
+            $link_attributes_string = $this->get_render_attribute_string( 'link' );
 
-        } elseif ($settings['link_to'] === 'custom' && !empty($settings['custom_link']['url'])) {
-            $link_url = $settings['custom_link']['url'];
+        } elseif ( $settings['link_to'] === 'custom' && ! empty( $settings['custom_link']['url'] ) ) {
             $has_link = true;
-            $this->add_link_attributes('link', $settings['custom_link']); // Adds href, target, rel
-            $link_attributes_string = $this->get_render_attribute_string('link');
+            $this->add_link_attributes( 'link', $settings['custom_link'] );
+            $link_attributes_string = $this->get_render_attribute_string( 'link' );
         }
 
         // Get the chosen HTML tag
-        $title_tag = tag_escape($settings['title_html_tag']); // Sanitize the tag
+        $title_tag = tag_escape( $settings['title_html_tag'] );
 
-        ?>
-        <div class="mh-site-title-container">
-            <<?php echo $title_tag; ?> class="mh-site-title-content">
-                <?php if ($has_link) : ?>
-                    <a <?php echo $link_attributes_string; ?>>
-                        <?php echo esc_html($site_title); ?>
-                    </a>
-                <?php else : ?>
-                    <?php echo esc_html($site_title); ?>
-                <?php endif; ?>
-            </<?php echo $title_tag; ?>>
-        </div>
+        // Build inner content
+        if ( $has_link ) {
+            $inner = '<a ' . $link_attributes_string . '>' . esc_html( $site_title ) . '</a>';
+        } else {
+            $inner = esc_html( $site_title );
+        }
 
-        <?php // --- ADD CSS TO REMOVE UNDERLINE ---
-        $css = "
-            .elementor-element-" . $this->get_id() . " .mh-site-title-content a {
-                text-decoration: none; /* Remove default underline */
-            }
-        ";
+        echo '<div class="mh-site-title-container">';
+        echo '<' . $title_tag . ' class="mh-site-title-content">' . $inner . '</' . $title_tag . '>';
+        echo '</div>';
+
+        // Inline CSS to remove link underline
+        $css = '.elementor-element-' . esc_attr( $this->get_id() ) . ' .mh-site-title-content a { text-decoration: none; }';
         wp_register_style( 'mh-site-title-style', false );
         wp_enqueue_style( 'mh-site-title-style' );
         wp_add_inline_style( 'mh-site-title-style', $css );
-        ?>
     }
 
 }

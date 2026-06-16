@@ -513,6 +513,5 @@ class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base {
             });
         ";
         wp_add_inline_script( 'jquery-core', $js );
-        <?php
     }
 }

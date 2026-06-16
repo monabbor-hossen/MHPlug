@@ -406,7 +406,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
                 </div>
                 <?php
                 $js = "jQuery(document).ready(function($){var s=$('.elementor-element-" . esc_attr($widget_id) . " .mh-post-carousel');if(s.length&&$.fn.slick){s.slick(s.data('slick'));}});";
-                wp_add_inline_script( 'jquery-core', $js );
+                echo "<script type='text/javascript'>\n" . $js . "\n</script>";
                 ?>
             </div>
             <?php

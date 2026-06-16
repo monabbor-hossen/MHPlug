@@ -817,7 +817,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 
         // Generate Inline CSS for structural layout
         $widget_id = $this->get_id();
-        ?>
+
         $css = "
             /* Equal Height Flex Grid/Slider */
             .mh-testimonial-wrapper-{$widget_id} .mh-testimonial-slider .slick-track {
@@ -1012,9 +1012,9 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
                 background-color: #333333;
             }
         ";
-        wp_register_style( 'mh-testimonial-style', false );
-        wp_enqueue_style( 'mh-testimonial-style' );
-        wp_add_inline_style( 'mh-testimonial-style', $css );
+        echo "<style>
+" . $css . "
+</style>";
         ?>
 
         <div class="mh-testimonial-wrapper mh-testimonial-wrapper-<?php echo $widget_id; ?> <?php echo esc_attr($dots_style_class); ?> <?php echo esc_attr($arrows_pos_class); ?> <?php echo esc_attr($dots_pos_class); ?>">
@@ -1088,10 +1088,9 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
                 });
             });
         ";
-        wp_add_inline_script( 'jquery-core', $js );
-        endif; ?>
+        echo "<script type='text/javascript'>\n" . $js . "\n</script>";
+        endif;
 
-		<?php
 	}
     
     private function render_testimonial_card($item, $lift_up_class) {

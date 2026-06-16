@@ -204,6 +204,5 @@ class MH_Compare_Table_Widget extends \Elementor\Widget_Base {
         wp_register_style( 'mh-compare-table-style', false );
         wp_enqueue_style( 'mh-compare-table-style' );
         wp_add_inline_style( 'mh-compare-table-style', $css );
-        ?>
     }
 }

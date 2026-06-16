@@ -554,9 +554,9 @@ class MH_Plug_Taxonomy_Slider_Widget extends \Elementor\Widget_Base {
             $css .= "{$p}-right .mh-tax-card-content > * { text-align: right !important; }\n";
             if ( $bp['media'] ) $css .= "}\n";
         }
-        wp_register_style( 'mh-taxonomy-slider-style', false );
-        wp_enqueue_style( 'mh-taxonomy-slider-style' );
-        wp_add_inline_style( 'mh-taxonomy-slider-style', $css );
+        echo "<style>
+" . $css . "
+</style>";
         ?>
 
         <div class="mh-tax-slider-wrapper">
@@ -656,8 +656,6 @@ class MH_Plug_Taxonomy_Slider_Widget extends \Elementor\Widget_Base {
             }
         });
         ";
-        wp_add_inline_script( 'jquery-core', $js );
-        ?>
-        <?php
-    }
+        echo "<script type='text/javascript'>\n" . $js . "\n</script>";
+            }
 }

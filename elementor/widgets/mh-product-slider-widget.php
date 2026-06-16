@@ -362,7 +362,6 @@ class MH_Product_Slider_Widget extends \Elementor\Widget_Base {
                 [ 'breakpoint' => 768,  'settings' => [ 'slidesToShow' => $settings['slides_to_show_mobile']['size'] ?? 1, 'slidesToScroll' => 1 ] ]
             ]
         ];
-        <?php
         ob_start();
         ?>
             .mh-product-slider-wrapper.mh-product-grid { display: block !important; width: 100%; position: relative; grid-template-columns: none !important; gap: 0 !important; }
@@ -391,9 +390,9 @@ class MH_Product_Slider_Widget extends \Elementor\Widget_Base {
             .mh-product-slider-wrapper .mh-quick-view-trigger svg { fill: currentColor !important; color: inherit !important; }
         <?php
         $css = ob_get_clean();
-        wp_register_style( 'mh-product-slider-style', false );
-        wp_enqueue_style( 'mh-product-slider-style' );
-        wp_add_inline_style( 'mh-product-slider-style', $css );
+        echo "<style>
+" . $css . "
+</style>";
         ?>
 
         <div class="mh-product-slider-wrapper mh-product-grid">
@@ -500,8 +499,6 @@ class MH_Product_Slider_Widget extends \Elementor\Widget_Base {
         });
         <?php
         $js = ob_get_clean();
-        wp_add_inline_script( 'jquery-core', $js );
-        ?>
-        <?php
+        echo "<script type='text/javascript'>\n" . $js . "\n</script>";
     }
 }
