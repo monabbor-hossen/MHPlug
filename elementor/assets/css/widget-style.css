@@ -1,0 +1,1049 @@
+/* =======================================
+ * MH Brush Text Widget (Base Styles)
+ * ======================================= */
+.mh-brush-text-wrapper {
+    position: relative; 
+    display: inline-flex; 
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: inherit; 
+    width: 100%; 
+    height: 180px; 
+    transition: transform 0.3s ease;
+}
+.mh-brush-text-wrapper:hover {
+    text-decoration: none;
+    color: inherit;
+    transform: scale(1.09);
+}
+.mh-brush-text-wrapper .mh-brush-text-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.mh-brush-text-wrapper .mh-brush-text-svg svg {
+    width: 100%;
+    height: 100%;
+    perspective-origin: none;
+}
+.mh-brush-text-wrapper .mh-brush-text-content {
+    position: relative;
+    z-index: 2; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.mh-brush-text-wrapper .mh-brush-primary-text {
+    line-height: 1.1;
+    color: #000000;
+    transition: color 0.3s ease;
+}
+.mh-brush-text-wrapper .mh-brush-secondary-text {
+    line-height: 1.2;
+    color: #000000;
+    transition: color 0.3s ease;
+}
+/* This path rule is now used by BOTH widgets */
+.mh-brush-text-wrapper .mh-brush-text-svg path {
+    fill: #ecd3cb; /* Default color */
+    transition: fill 0.3s ease;
+}
+
+
+/* =======================================
+ * MH Brush SLIDER Widget (New Styles)
+ * ======================================= */
+
+.mh-brush-slider-wrapper {
+    position: relative;
+    padding: 0 40px; /* Space for arrows */
+}
+
+/* Individual slide item */
+.mh-brush-slide-item {
+    padding: 10px; /* Spacing between slides */
+    box-sizing: border-box;
+    /* CSS Variables for this slide will be injected here */
+}
+
+/* Make slide fill the container */
+.mh-brush-slide-item .mh-brush-text-wrapper {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* --- NEW: Use CSS Variables for per-slide colors --- */
+.mh-brush-slide-item .mh-brush-text-svg path {
+    fill: var(--slide-brush-color, #ecd3cb); /* Use var, fallback to default */
+}
+
+.mh-brush-slide-item:hover .mh-brush-text-svg path {
+    fill: var(--slide-brush-color-hover, #004265); /* Use hover var */
+}
+/* --- END NEW --- */
+
+
+/* Editor-only: Make slides stack */
+.elementor-editor-active .mh-brush-slider-preview-editor .mh-brush-slide-item {
+    margin-bottom: 20px;
+}
+
+/* --- Arrows --- */
+.mh-brush-slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 24px;
+    color: #000;
+    transition: color 0.3s ease;
+}
+.mh-brush-slider-arrow.slick-disabled {
+    opacity: 0.2;
+    cursor: default;
+}
+.mh-brush-slider-arrow:not(.slick-disabled):hover {
+    color: #004265; /* Brand color */
+}
+[class*="mh-brush-slider-prev-"] { left: 0; }
+[class*="mh-brush-slider-next-"] { right: 0; }
+/* --- Dots --- */
+.mh-brush-slider-wrapper .slick-dots {
+    position: absolute;
+    bottom: -15px; /* Moved down slightly */
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+}
+
+.mh-brush-slider-wrapper .slick-dots li {
+    position: relative;
+    display: inline-block;
+    width: auto;
+    height: auto;
+    margin: 0 6px; /* Default spacing */
+    padding: 0;
+    cursor: pointer;
+}
+
+.slick-dots li button::before {
+    content: " " !important;
+}
+.mh-brush-slider-wrapper .slick-dots li button {
+    font-size: 0;
+    line-height: 0;
+    display: block;
+    width: 12px; /* Default size */
+    height: 12px; /* Default size */
+    padding: 0;
+    cursor: pointer;
+    color: transparent;
+    border: 0;
+    outline: none;
+    
+    /* --- NEW STYLES FOR HOLLOW DOTS --- */
+    background: transparent;       /* Transparent by default */
+    border: 2px solid #cccccc;     /* 2px Border */
+    border-radius: 50%;            /* Make it round */
+    box-sizing: border-box;        /* Ensure border is included in size */
+    transition: all 0.3s linear;
+}
+
+.mh-brush-slider-wrapper .slick-dots li button:hover {
+     border-color: #a8a8a8; /* Darker border on hover */
+}
+
+.mh-brush-slider-wrapper .slick-dots li.slick-active button {
+    background: #004265;
+    border-color: #004265;
+    transform: scale(1.1);
+    width: 30px !important;
+    border-radius: 10px;
+}
+/* =======================================
+ * MH Image Circle Widget
+ * ======================================= */
+
+.mh-image-circle-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.mh-image-circle-wrapper > a,
+.mh-image-circle-wrapper > div {
+    display: flex;
+    flex-direction: column;
+    align-items: inherit;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+}
+
+/* Wrapper for Image + Border */
+.mh-image-circle-image-wrapper {
+    display: block;
+    position: relative;
+    box-sizing: border-box;
+    width: 180px; /* Default — overridden by Elementor control */
+    height: 180px;
+    max-width: 100%; /* 🚀 Never overflow container */
+    padding: 10px;
+    margin: 0 auto; /* Center in slide */
+}
+
+/* Responsive: keep square aspect when % or vw units used */
+.mh-image-circle-image-wrapper[style*="%"],
+.mh-image-circle-image-wrapper[style*="vw"] {
+    height: auto !important;
+    aspect-ratio: 1 / 1;
+}
+
+/* The Border Element (Rotates) */
+.mh-image-circle-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    /* No border-radius here — controlled by .mh-shape-* classes */
+    border: 2px dotted #DDDDDD; 
+    transition: border-color 0.3s ease;
+    pointer-events: none;
+}
+
+/* The Image Element */
+.mh-image-circle-inner {
+    width: 100%;
+    height: 100%;
+    /* No border-radius here — controlled by .mh-shape-* classes */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #f0f0f0;
+    transition: transform 0.4s ease, filter 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Image overlay pseudo-element */
+.mh-image-circle-inner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: transparent;
+    transition: background 0.3s ease;
+    pointer-events: none;
+}
+
+.mh-image-circle-text {
+    color: #333333;
+    font-size: 1.2em;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    margin-top: 12px;
+    width: 100%;
+}
+
+/* ─── SHAPE VARIANTS ─── */
+
+/* Square — sharp corners */
+.mh-shape-square .mh-image-circle-border,
+.mh-shape-square .mh-image-circle-inner,
+.mh-shape-square .mh-image-circle-inner::after {
+    border-radius: 0 !important;
+}
+
+/* Rounded Square — custom radius via Elementor control, 16px fallback */
+.mh-shape-rounded .mh-image-circle-border,
+.mh-shape-rounded .mh-image-circle-inner,
+.mh-shape-rounded .mh-image-circle-inner::after {
+    border-radius: 16px;
+}
+
+/* Circle (default) — 50% */
+.mh-shape-circle .mh-image-circle-border,
+.mh-shape-circle .mh-image-circle-inner,
+.mh-shape-circle .mh-image-circle-inner::after {
+    border-radius: 50%;
+}
+
+/* ─── HOVER EFFECTS ─── */
+
+/* Zoom In */
+.mh-hover-zoom .mh-image-circle-slide-item:hover .mh-image-circle-inner,
+.mh-hover-zoom .mh-image-circle-wrapper:hover .mh-image-circle-inner {
+    transform: scale(1.08);
+}
+
+/* Brighten */
+.mh-hover-bright .mh-image-circle-slide-item:hover .mh-image-circle-inner,
+.mh-hover-bright .mh-image-circle-wrapper:hover .mh-image-circle-inner {
+    filter: brightness(1.15);
+}
+
+/* Grayscale to Color */
+.mh-hover-gray .mh-image-circle-inner {
+    filter: grayscale(100%);
+}
+.mh-hover-gray .mh-image-circle-slide-item:hover .mh-image-circle-inner,
+.mh-hover-gray .mh-image-circle-wrapper:hover .mh-image-circle-inner {
+    filter: grayscale(0%);
+}
+
+/* Blur to Clear */
+.mh-hover-blur .mh-image-circle-inner {
+    filter: blur(2px);
+}
+.mh-hover-blur .mh-image-circle-slide-item:hover .mh-image-circle-inner,
+.mh-hover-blur .mh-image-circle-wrapper:hover .mh-image-circle-inner {
+    filter: blur(0);
+}
+
+/* ─── Spin Animation ─── */
+@keyframes mh-spin-border {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.mh-image-circle-wrapper:hover .mh-spin-on-hover {
+    animation-name: mh-spin-border;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+/* ─── Alignment ─── */
+.mh-align-left .mh-image-circle-wrapper,
+.mh-align-tablet-left .mh-image-circle-wrapper,
+.mh-align-mobile-left .mh-image-circle-wrapper {
+    align-items: flex-start;
+    text-align: left;
+}
+.mh-align-center .mh-image-circle-wrapper,
+.mh-align-tablet-center .mh-image-circle-wrapper,
+.mh-align-mobile-center .mh-image-circle-wrapper {
+    align-items: center;
+    text-align: center;
+}
+.mh-align-right .mh-image-circle-wrapper,
+.mh-align-tablet-right .mh-image-circle-wrapper,
+.mh-align-mobile-right .mh-image-circle-wrapper {
+    align-items: flex-end;
+    text-align: right;
+}
+
+
+/* =======================================
+ * MH Image Circle Slider Widget
+ * ======================================= */
+
+.mh-brush-slider-wrapper .mh-image-circle-wrapper {
+    margin: 0 auto;
+}
+
+.mh-image-circle-slide-item {
+    display: flex; 
+    justify-content: center;
+}
+
+/* 🚀 Responsive: scale images inside slides */
+@media (max-width: 1024px) {
+    .mh-image-circle-image-wrapper {
+        max-width: 100%;
+        height: auto !important;
+        aspect-ratio: 1 / 1;
+    }
+}
+@media (max-width: 767px) {
+    .mh-image-circle-image-wrapper {
+        max-width: 70vw;
+        height: auto !important;
+        aspect-ratio: 1 / 1;
+    }
+    .mh-brush-slider-wrapper {
+        padding: 0 28px;
+    }
+}
+
+/* =======================================
+ * MH Stacked Carousel Widget
+ * ======================================= */
+
+.mh-stacked-wrap {
+    position: relative;
+    overflow: hidden;
+    padding: 30px 0;
+}
+
+.mh-stacked-slider {
+    display: flex;
+}
+
+/* 🚀 Force Slick's internal wrappers to pass height through */
+.mh-stacked-slider .slick-slide,
+.mh-stacked-slider .slick-slide > div {
+    height: auto;
+}
+.mh-stacked-slider .slick-slide > div {
+    display: flex;
+}
+
+.mh-stacked-item {
+    position: relative;
+    width: 360px;
+    min-height: 420px; /* min-height so Elementor control can override */
+    height: 420px;
+    margin: 0 12px;
+    border-radius: 16px;
+    overflow: hidden;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-color: #e0e0e0;
+    transition: transform 0.6s cubic-bezier(0.25,1,0.5,1),
+                opacity 0.6s ease,
+                box-shadow 0.6s ease;
+    will-change: transform, opacity;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    cursor: grab;
+    flex-shrink: 0;
+}
+
+/* Hide raw img tags — we use background-image */
+.mh-stacked-item > img {
+    display: none;
+}
+
+/* Dark overlay */
+.mh-stacked-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.35);
+    border-radius: inherit;
+    transition: background 0.3s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Content layer */
+.mh-stacked-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    text-align: left;
+    padding: 24px;
+    z-index: 2;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+/* ─── Text elements ─── */
+.mh-stacked-subtitle {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 6px;
+}
+
+.mh-stacked-title {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #ffffff;
+    margin: 0 0 8px;
+}
+
+.mh-stacked-desc {
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.8);
+    margin: 0 0 14px;
+}
+
+.mh-stacked-btn {
+    display: inline-block;
+    padding: 10px 24px;
+    background: #fff;
+    color: #111;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+.mh-stacked-btn:hover {
+    background: #d63638;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(214,54,56,0.3);
+}
+
+/* ─── 3D Depth: non-active slides ─── */
+.mh-stacked-slider .slick-slide {
+    opacity: 0.5;
+    transform: scale(0.85) perspective(800px) rotateY(0deg);
+    transition: transform 0.6s cubic-bezier(0.25,1,0.5,1),
+                opacity 0.6s ease;
+    z-index: 1;
+}
+
+/* Center (active) slide */
+.mh-stacked-slider .slick-slide.slick-center {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 3;
+}
+
+/* Adjacent slides — subtle 3D tilt */
+.mh-stacked-slider .slick-slide.prev {
+    transform: scale(0.88) translateX(30px);
+    z-index: 2;
+}
+.mh-stacked-slider .slick-slide.next {
+    transform: scale(0.88) translateX(-30px);
+    z-index: 2;
+}
+
+/* Content hidden on non-center slides */
+.mh-stacked-slider .slick-slide:not(.slick-center) .mh-stacked-content {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.mh-stacked-slider .slick-slide.slick-center .mh-stacked-content {
+    opacity: 1;
+    transition: opacity 0.4s ease 0.2s;
+}
+
+/* ─── Regular mode: cards fill slide width ─── */
+.mh-sc-mode-regular .mh-stacked-item,
+.mh-sc-mode-fade .mh-stacked-item,
+.mh-sc-mode-vertical .mh-stacked-item {
+    width: 100% !important;
+}
+.mh-sc-mode-regular .slick-slide,
+.mh-sc-mode-fade .slick-slide,
+.mh-sc-mode-vertical .slick-slide {
+    opacity: 1;
+    transform: none;
+}
+
+/* ─── Vertical mode ─── */
+.mh-sc-mode-vertical .mh-stacked-slider .slick-list {
+    overflow: hidden;
+}
+.mh-sc-mode-vertical .mh-stacked-item {
+    margin: 6px 0 !important;
+}
+
+/* ─── Image hover zoom transition ─── */
+.mh-sc-hover-zoom .mh-stacked-item {
+    transition: transform 0.6s cubic-bezier(0.25,1,0.5,1),
+                opacity 0.6s ease,
+                box-shadow 0.6s ease,
+                background-size 0.4s ease;
+}
+
+/* ─── Stacked center padding fix ─── */
+.mh-sc-mode-stacked .mh-stacked-slider .slick-list {
+    overflow: visible;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 767px) {
+    .mh-stacked-item {
+        height: 360px;
+    }
+    .mh-sc-mode-stacked .mh-stacked-item {
+        width: 100% !important;
+    }
+    .mh-stacked-title {
+        font-size: 20px;
+    }
+    .mh-stacked-wrap {
+        padding: 20px 0;
+    }
+}
+
+/* =======================================
+ * MH Feature Card Widget
+ * ======================================= */
+
+.mh-feature-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertical Center */
+    transition: all 0.3s ease;
+    
+    /* Default Background Props */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #000;
+    
+    position: relative; /* Establish stacking context */
+    overflow: hidden; 
+    z-index: 0; /* Ensure ::before sits behind content */
+}
+
+/* Overlay Pseudo-element */
+.mh-feature-card-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: 0; /* Top/Right/Bottom/Left = 0 */
+    z-index: -1; /* Behind content */
+    transition: background 0.3s ease;
+    /* Background color set by Elementor Control */
+}
+
+/* Content Layers */
+.mh-feature-card-title,
+.mh-feature-card-description,
+.mh-feature-card-button-wrapper {
+    position: relative;
+    z-index: 1; /* On top of overlay */
+}
+
+.mh-feature-card-title {
+    margin: 0 0 15px 0;
+    font-weight: 600;
+}
+
+.mh-feature-card-description {
+    margin: 0 0 25px 0;
+    line-height: 1.6;
+}
+
+.mh-feature-card-button-wrapper {
+    display: flex;
+}
+
+.mh-feature-card-button {
+    display: inline-block;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+}
+
+.mh-feature-card-button:hover {
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   MH Button Widget Styles
+   ========================================= */
+
+/* Core Button Base */
+.mh-button {
+    display: inline-block;
+    line-height: 1;
+    background-color: #0073e6; /* Fallback */
+    color: white; /* Fallback */
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+/* Flexbox Layout for Icon Alignment */
+.mh-button-content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Icon Styles */
+.mh-button-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Smooth Transition for Slide Effect */
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.mh-button-icon svg {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+}
+
+.mh-button-icon i {
+    font-size: 1em;
+    color: currentColor;
+}
+
+/* Default Icon Spacing */
+.mh-button-icon-right {
+    margin-left: 8px;
+}
+
+.mh-button-icon-left {
+    margin-right: 8px;
+}
+
+/* Size Presets */
+.mh-button-size-xs { font-size: 12px; padding: 8px 16px; }
+.mh-button-size-sm { font-size: 14px; padding: 10px 20px; }
+.mh-button-size-md { font-size: 16px; padding: 12px 24px; }
+.mh-button-size-lg { font-size: 18px; padding: 16px 32px; }
+.mh-button-size-xl { font-size: 22px; padding: 20px 40px; }
+
+/* Responsive Alignment Support */
+.elementor-align-left .mh-button-wrapper { text-align: left; }
+.elementor-align-center .mh-button-wrapper { text-align: center; }
+.elementor-align-right .mh-button-wrapper { text-align: right; }
+.elementor-align-justify .mh-button-wrapper { text-align: justify; }
+.elementor-align-justify .mh-button { width: 100%; }
+
+/* =========================================
+   Icon Slide Animation
+   ========================================= */
+
+/* Only animate if the 'mh-icon-slide' class is present */
+.mh-icon-slide:hover .mh-button-icon-right {
+    transform: translateX(6px);
+}
+
+.mh-icon-slide:hover .mh-button-icon-left {
+    transform: translateX(-6px);
+}
+
+/* =======================================================
+ * MH Woo Add to Cart Widget
+ * ======================================================= */
+
+/* Outer widget shell */
+.mh-atc-widget {
+    width: 100%;
+}
+
+.mh-atc-form {
+    margin: 0;
+    padding: 0;
+}
+
+/* ── Flex row: qty + button side by side ── */
+.mh-atc-wrap {
+    display:      flex;
+    align-items:  center;
+    flex-wrap:    wrap;    /* Stacks gracefully on very small screens */
+    gap:          12px;    /* Overridden by Elementor control */
+}
+
+/* ── Quantity wrapper: acts as a single grouped control ── */
+.mh-qty-wrapper {
+    display:         inline-flex;
+    align-items:     stretch;
+    border:          1px solid #ddd;
+    border-radius:   6px;         /* Overridden by Elementor control */
+    overflow:        hidden;       /* Clips ± buttons to the same radius */
+    background:      #f5f5f5;     /* Overridden by Elementor control */
+    height:          46px;         /* Overridden by Elementor control */
+    box-sizing:      border-box;
+}
+
+/* Minus and Plus buttons */
+.mh-qty-btn {
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    width:           40px;         /* Overridden by Elementor control */
+    height:          100%;         /* Fills the wrapper height */
+    border:          none;
+    background:      #e8e8e8;     /* Overridden by Elementor control */
+    color:           #1d2327;
+    font-size:       1.1rem;
+    font-weight:     600;
+    cursor:          pointer;
+    line-height:     1;
+    padding:         0;
+    transition:      background 0.2s ease, color 0.2s ease;
+    user-select:     none;
+    flex-shrink:     0;
+}
+
+.mh-qty-btn:hover {
+    background: #d63638;          /* Overridden by Elementor control */
+    color:       #fff;
+}
+
+.mh-qty-btn:focus-visible {
+    outline:        2px solid #0073e6;
+    outline-offset: -2px;
+    z-index:        1;
+}
+
+/* Number input — sits between the two buttons */
+.mh-qty-input {
+    width:        56px;           /* Overridden by Elementor control */
+    height:       100%;
+    border:       none;
+    border-left:  1px solid #ddd;
+    border-right: 1px solid #ddd;
+    background:   transparent;
+    text-align:   center;
+    font-size:    1rem;
+    color:        #1d2327;
+    -moz-appearance:    textfield; /* Firefox: hide spinner */
+    appearance:         textfield;
+    padding:      0;
+    box-sizing:   border-box;
+    outline:      none;
+}
+
+/* Chrome / Safari / Edge: hide number spinner arrows */
+.mh-qty-input::-webkit-outer-spin-button,
+.mh-qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* ── Add to Cart button ── */
+.mh-atc-btn {
+    display:          inline-flex;
+    align-items:      center;
+    justify-content:  center;
+    gap:              6px;
+    padding:          12px 24px;   /* Overridden by Elementor control */
+    background-color: #1d2327;    /* Overridden by Elementor control */
+    color:            #fff;
+    font-weight:      600;
+    font-size:        0.9375rem;
+    border:           none;
+    border-radius:    6px;        /* Overridden by Elementor control */
+    cursor:           pointer;
+    text-decoration:  none;
+    white-space:      nowrap;
+    transition:       background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    line-height:      1;
+}
+
+.mh-atc-btn:hover {
+    background-color: #d63638;   /* Overridden by Elementor control */
+    transform:        translateY(-1px);
+    box-shadow:       0 4px 12px rgba(214, 54, 56, 0.3);
+}
+
+.mh-atc-btn:active {
+    transform:  translateY(0);
+    box-shadow: none;
+}
+
+/* Loading state added by WooCommerce JS */
+.mh-atc-btn.loading {
+    opacity:        0.7;
+    pointer-events: none;
+}
+
+/* ── Editor-only placeholder notice ── */
+.mh-atc-editor-notice {
+    padding:       12px 16px;
+    background:    #fff8e1;
+    border:        1px solid #ffe082;
+    border-radius: 6px;
+    color:         #795548;
+    font-size:     13px;
+}
+
+/* ── Unavailable message ── */
+.mh-atc-unavailable {
+    color:       #d63638;
+    font-weight: 500;
+    margin:      0;
+}
+
+/* ── Responsive: stack on mobile ── */
+@media (max-width: 480px) {
+    .mh-atc-wrap {
+        flex-direction: column;
+        align-items:    flex-start;
+    }
+
+    .mh-atc-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* =======================================
+ * MH Snack Alert / Toast Notification
+ * ======================================= */
+.mh-toast-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.mh-toast {
+    pointer-events: auto;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mh-toast.mh-toast-show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.mh-toast-success { border-left: 4px solid #4caf50; }
+.mh-toast-error { border-left: 4px solid #f44336; }
+.mh-toast-info { border-left: 4px solid #2196f3; }
+
+.mh-toast-icon {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+/* =======================================
+ * Extracted from: mh-faq-widget.php
+ * ======================================= */
+.mh-faq-container { display: flex; flex-direction: column; }
+.mh-faq-item { width: 100%; transition: all 0.3s ease; }
+.mh-faq-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; transition: all 0.3s ease; }
+.mh-faq-title { margin: 0; font-weight: 600; flex: 1; transition: color 0.3s ease; }
+.mh-faq-icon { display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease; flex-shrink: 0; }
+
+/* The CSS Grid Magic for Smooth Height Animation */
+.mh-faq-content-wrapper { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+.mh-faq-item.active .mh-faq-content-wrapper { grid-template-rows: 1fr; }
+.mh-faq-content-inner { overflow: hidden; }
+.mh-faq-body { opacity: 0; transition: opacity 0.3s ease; transition-delay: 0s; }
+.mh-faq-item.active .mh-faq-body { opacity: 1; transition-delay: 0.15s; }
+
+/* Icon toggling logic */
+.mh-faq-icon .mh-icon-closed { display: block; }
+.mh-faq-icon .mh-icon-opened { display: none; }
+.mh-faq-item.active .mh-faq-icon .mh-icon-closed { display: none; }
+.mh-faq-item.active .mh-faq-icon .mh-icon-opened { display: block; }
+
+/* =======================================
+ * Extracted from: mh-synced-slider-widget.php
+ * ======================================= */
+/* The Unbreakable Foundation CSS */
+.mh-synced-container {
+    display: flex; width: 100%; max-width: 1200px; margin: 0 auto;
+    padding: 20px; align-items: center; gap: 60px; background-color: #1a202c; overflow: hidden;
+}
+.mh-left-col { width: 35%; padding: 20px; cursor: grab; }
+.mh-left-col:active { cursor: grabbing; }
+.mh-right-col { width: 65%; position: relative; overflow: hidden; }
+.mh-image-slider { overflow: hidden; }
+
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.mh-text-slider .slick-slide { display: block; min-height: 200px; outline: none; padding: 10px; }
+.mh-text-content {
+    background-color: transparent; color: white; padding: 20px 0; border-radius: 0; box-shadow: none;
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start; min-height: 350px;
+}
+
+.mh-text-content h2, .mh-text-content p, .mh-text-content .mh-meta, .mh-text-content .mh-price, .mh-text-content .mh-shop-btn { opacity: 0; }
+.slick-active .mh-text-content .mh-meta { animation: slideUpFade 0.5s ease forwards 0.1s; }
+.slick-active .mh-text-content h2 { animation: slideUpFade 0.5s ease forwards 0.2s; }
+.slick-active .mh-text-content .mh-price { animation: slideUpFade 0.5s ease forwards 0.3s; }
+.slick-active .mh-text-content .mh-shop-btn { animation: slideUpFade 0.5s ease forwards 0.4s; }
+
+.mh-text-content .mh-meta { display: block; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; color: #94a3b8; font-weight: 600; }
+.mh-text-content h2 { font-size: 3.5rem; font-weight: 800; margin: 0 0 1rem 0; line-height: 1.1; color: #ffffff; }
+.mh-text-content .mh-price { font-size: 1.25rem; color: #e2e8f0; margin-bottom: 30px; font-weight: 500; }
+.mh-shop-btn {
+    background-color: #ff8787; color: white; border: none; padding: 14px 35px; border-radius: 50px; font-size: 1rem;
+    font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: inline-block; box-shadow: 0 4px 15px rgba(255, 135, 135, 0.4); text-decoration: none;
+}
+.mh-shop-btn:hover { background-color: #ff6b6b; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255, 135, 135, 0.6); color: white; }
+
+.mh-image-slider .slick-slide { z-index: 0; position: relative; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.mh-image-slider .slick-center { z-index: 20 !important; }
+
+.mh-image-card {
+    border-radius: 15px; width: 150%; margin-left: -25%; height: 400px; overflow: hidden; display: flex !important;
+    justify-content: center; align-items: center; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0; pointer-events: none; transform: scale(0.7) translateX(-50px);
+}
+
+.mh-image-slider .slick-slide.slide-prev .mh-image-card { opacity: 0.6; pointer-events: auto; transform: translateX(40%) scale(0.85); z-index: 10; }
+.mh-image-slider .slick-slide.slide-next .mh-image-card { opacity: 0.6; pointer-events: auto; transform: translateX(-40%) scale(0.85); z-index: 10; }
+.mh-image-slider .slick-center .mh-image-card { opacity: 1; transform: scale(1.1); z-index: 20; }
+.mh-image-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+@media (max-width: 900px) {
+    .mh-synced-container { flex-direction: column-reverse; padding: 10px; gap: 20px; }
+    .mh-left-col, .mh-right-col { width: 100%; }
+    .mh-text-slider { text-align: center; }
+    .mh-text-content { align-items: center; text-align: center; }
+    .mh-text-content h2 { font-size: 2.5rem; }
+    .mh-image-card { height: 250px; width: 120%; margin-left: -10%;}
+    .mh-image-slider .slick-center .mh-image-card { transform: scale(1.05); }
+    .mh-image-slider .slick-slide.slide-prev .mh-image-card { transform: translateX(10%) scale(0.9); }
+    .mh-image-slider .slick-slide.slide-next .mh-image-card { transform: translateX(-10%) scale(0.9); }
+}
+
+/* =======================================
+ * Extracted from: mh-product-filter-widget.php
+ * ======================================= */
+.mh-filter-wrap { display: flex; flex-wrap: wrap; width: 100%; position: relative; }
+.mh-filter-btn, .mh-filter-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-weight: 600; text-align: center; cursor: pointer; border: none; outline: none; }
+
+/* Dropdown Specific Styles */
+.mh-dropdown-container { position: relative; display: inline-block; }
+.mh-filter-toggle i { transition: transform 0.3s ease; }
+.mh-dropdown-open .mh-filter-toggle i { transform: rotate(180deg); }
+
+.mh-filter-dropdown-menu { position: absolute; top: calc(100% + 10px); left: 0; z-index: 99; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; overflow: hidden; }
+.mh-dropdown-open .mh-filter-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+.mh-filter-dropdown-item { padding: 10px 20px; text-decoration: none; display: block; transition: all 0.2s ease; }

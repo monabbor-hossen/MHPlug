@@ -1,0 +1,93 @@
+#mh-age-gate-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--mh-ag-overlay-bg, rgba(0,0,0,0.8));
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.mh-age-gate-content {
+    max-width: 600px;
+    padding: 50px 40px;
+    background: var(--mh-ag-modal-bg, #ffffff);
+    border-radius: 12px;
+    box-shadow: var(--mh-ag-shadow, 0 15px 50px rgba(0,0,0,0.3));
+    width: 90%;
+}
+
+.mh-age-gate-logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.mh-age-gate-logo img {
+    max-height: 80px;
+    width: auto;
+    margin: 0 auto;
+}
+
+.mh-age-gate-fallback-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--mh-ag-title-color, #333333);
+}
+
+.mh-age-gate-content h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--mh-ag-title-color, #333333);
+    font-size: 2rem; /* Dynamically scales with theme root */
+    font-weight: 700;
+}
+
+.mh-age-gate-desc p {
+    color: var(--mh-ag-text-color, #666666);
+    font-size: 1rem; /* Dynamically scales with theme root */
+    line-height: 1.6;
+    margin-bottom: 35px;
+}
+
+.mh-age-gate-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.mh-age-gate-btn {
+    padding: 15px 30px;
+    font-size: 1.125rem; /* Dynamically scales with theme root */
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.mh-btn-yes {
+    background: var(--mh-ag-btn-yes-bg, #007cba);
+    color: var(--mh-ag-btn-yes-color, #ffffff);
+}
+
+.mh-btn-yes:hover {
+    background: var(--mh-ag-btn-yes-hover, #005a87);
+    transform: translateY(-2px);
+}
+
+.mh-btn-no {
+    background: var(--mh-ag-btn-no-bg, #f0f0f1);
+    color: var(--mh-ag-btn-no-color, #3c434a);
+}
+
+.mh-btn-no:hover {
+    background: var(--mh-ag-btn-no-hover, #dcdcdc);
+    transform: translateY(-2px);
+}

@@ -1,0 +1,292 @@
+/*
+ * MH Plug - Menu Icon Picker Styles
+ * This file is loaded only on nav-menus.php
+ */
+
+/* =======================================
+ * Modal & Icon Grid Styles
+ * ======================================= */
+.mh-menu-icon-modal {
+    display: none;
+    position: fixed;
+    z-index: 100001; /* High z-index for nav menu page */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.mh-menu-icon-modal.mh-modal-show {
+    display: block;
+    opacity: 1;
+}
+
+.mh-menu-icon-modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+.mh-modal-show .mh-menu-icon-modal-content {
+    transform: scale(1);
+}
+
+.mh-menu-icon-modal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #f9f9f9;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.mh-menu-icon-modal-header h2 {
+    margin: 0;
+    font-size: 1.3em;
+}
+.mh-menu-icon-modal-close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+}
+.mh-menu-icon-modal-close:hover,
+.mh-menu-icon-modal-close:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* --- Tabs for Icon Sets --- */
+.mh-menu-icon-modal-tabs {
+    display: flex;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+}
+.mh-menu-icon-modal-tabs button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: background-color 0.3s;
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+}
+.mh-menu-icon-modal-tabs button:hover {
+    background-color: #ddd;
+}
+.mh-menu-icon-modal-tabs button.active {
+    background-color: #fff;
+    color: #004265;
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+}
+.mh-menu-icon-modal-tabs button:first-child.active {
+    border-left: none;
+}
+
+.mh-menu-icon-modal-body {
+    padding: 20px;
+    height: 400px;
+    overflow-y: auto;
+    background: #fff;
+}
+.mh-menu-icon-tab-content {
+    display: none;
+}
+.mh-menu-icon-tab-content.active {
+    display: block;
+}
+.mh-menu-icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 10px;
+}
+.mh-menu-icon-grid .mh-icon-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.mh-menu-icon-grid .mh-icon-item i {
+    font-size: 24px;
+    color: #333;
+}
+.mh-menu-icon-grid .mh-icon-item:hover {
+    background-color: #004265;
+    border-color: #004265;
+}
+.mh-menu-icon-grid .mh-icon-item:hover i {
+    color: #fff;
+}
+
+.mh-menu-icon-modal-footer {
+    padding: 15px 20px;
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+    background-color: #f9f9f9;
+    border-radius: 0 0 8px 8px;
+}
+
+
+/* =======================================
+ * NEW Field Styles
+ * ======================================= */
+
+/* --- Container --- */
+.field-mh-menu-icon-container {
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.mh-menu-icon-label {
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 600;
+}
+
+/* --- Button + Remove Link Container --- */
+.mh-menu-icon-button-row {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+/* --- Styled Remove Link --- */
+.mh-menu-icon-remove {
+    margin-left: 15px;
+    color: #a00;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 13px;
+    font-weight: 600;
+}
+.mh-menu-icon-remove:hover {
+    color: #d00;
+}
+
+/* --- Neumorphic Button Style --- */
+.mh-plug-neumorphic-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    background-color: #e0e5ec;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-shadow: 1px 1px 1px #fff;
+    box-shadow: -4px -4px 10px #ffffff, 
+                4px 4px 10px #BABECC;
+    transition: all 0.2s ease-in-out;
+}
+.mh-plug-neumorphic-button:hover {
+    color: #004265;
+    box-shadow: -2px -2px 5px #ffffff, 
+                2px 2px 5px #BABECC;
+}
+.mh-plug-neumorphic-button:active,
+.mh-plug-neumorphic-button:focus {
+    color: #004265;
+    outline: none;
+    box-shadow: inset 1px 1px 2px #BABECC, 
+                inset -1px -1px 2px #ffffff;
+}
+.mh-menu-icon-picker-button .mh-plug-button-icon {
+    font-size: 16px;
+    margin-right: 8px;
+    transition: transform 0.2s ease-in-out;
+}
+.mh-menu-icon-picker-button:hover .mh-plug-button-icon {
+    transform: scale(1.1);
+}
+
+
+/* --- 3D Toggle Switch Style --- */
+.field-mh-menu-icon-hide-label {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+.mh-plug-toggle-switch-container {
+    display: flex;
+    align-items: center;
+}
+.mh-plug-toggle-label {
+    margin-left: 10px;
+    font-weight: 600;
+    color: #444;
+    cursor: pointer;
+    user-select: none;
+}
+.mh-plug-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    flex-shrink: 0;
+}
+.mh-plug-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.mh-plug-toggle-switch label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: background-color 0.4s;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.mh-plug-toggle-switch label:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transform-origin: center center;
+}
+.mh-plug-toggle-switch input:checked + label {
+    background-color: #004265; /* Our brand color */
+}
+.mh-plug-toggle-switch input:checked + label:before {
+    transform: translateX(26px) rotateY(360deg);
+}
+.mh-plug-toggle-switch input:focus + label {
+    box-shadow: 0 0 1px 3px #004265;
+}

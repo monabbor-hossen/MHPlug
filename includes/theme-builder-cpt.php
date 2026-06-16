@@ -1,0 +1,197 @@
+<?php
+/**
+ * MH Plug - Theme Builder CPT Registration & AJAX Handlers
+ */
+
+if ( ! defined( 'ABSPATH' ) ) { exit; }
+
+function mh_plug_allowed_template_types() {
+    return [ 'header', 'footer', 'single_post', 'single_product', 'archive_post', 'archive_product', 'quick_view', 'product_category', 'product_tag', 'product_brand', 'post_category', 'custom' ];
+}
+
+function mh_plug_register_template_cpt() {
+    $labels = [
+        'name'          => _x( 'MH Templates', 'Post Type General Name', 'mh-plug' ),
+        'singular_name' => _x( 'MH Template',  'Post Type Singular Name', 'mh-plug' ),
+        'menu_name'     => __( 'MH Templates', 'mh-plug' ),
+        'add_new_item'  => __( 'Add New Template', 'mh-plug' ),
+        'edit_item'     => __( 'Edit Template', 'mh-plug' ),
+        'view_item'     => __( 'View Template', 'mh-plug' ),
+    ];
+
+    register_post_type( 'mh_templates', [
+        'label'               => __( 'MH Template', 'mh-plug' ),
+        'labels'              => $labels,
+        'supports'            => [ 'title', 'editor', 'elementor' ],
+        'hierarchical'        => false,
+        'public'              => true,
+        'show_ui'             => true, 
+        'show_in_menu'        => false,
+        'show_in_rest'        => true, // 🚀 FIX: This permanently stops the Gutenberg JSON error!
+        'show_in_admin_bar'   => false,
+        'show_in_nav_menus'   => false,
+        'can_export'          => true,
+        'has_archive'         => false,
+        'exclude_from_search' => true,
+        'publicly_queryable'  => true, 
+        'rewrite'             => [ 'slug' => 'mh-template' ], 
+        'capability_type'     => 'post',
+    ] );
+}
+add_action( 'init', 'mh_plug_register_template_cpt', 0 );
+
+function mh_plug_add_cpt_elementor_support() {
+    $cpt_support = get_option( 'mh_plug_elementor_cpt_support', [ 'page', 'post' ] );
+    if ( ! in_array( 'mh_templates', $cpt_support, true ) ) {
+        $cpt_support[] = 'mh_templates';
+        update_option( 'mh_plug_elementor_cpt_support', $cpt_support );
+    }
+    add_post_type_support( 'mh_templates', 'elementor' );
+}
+add_action( 'init', 'mh_plug_add_cpt_elementor_support' );
+
+function mh_plug_ajax_create_template() {
+    check_ajax_referer( 'mh_tb_create_template', '_ajax_nonce' );
+
+    if ( ! current_user_can( 'edit_posts' ) ) {
+        wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'mh-plug' ) ] );
+    }
+
+    $template_name = isset( $_POST['template_name'] ) ? sanitize_text_field( $_POST['template_name'] ) : '';
+    $template_type = isset( $_POST['template_type'] ) ? sanitize_key( $_POST['template_type'] )        : '';
+
+    if ( empty( $template_name ) ) {
+        wp_send_json_error( [ 'message' => __( 'Template name is required.', 'mh-plug' ) ] );
+    }
+
+    if ( ! in_array( $template_type, mh_plug_allowed_template_types(), true ) ) {
+        wp_send_json_error( [ 'message' => __( 'Invalid template type.', 'mh-plug' ) ] );
+    }
+
+    $post_id = wp_insert_post( [
+        'post_title'  => $template_name,
+        'post_status' => 'publish',
+        'post_type'   => 'mh_templates',
+    ] );
+
+    if ( is_wp_error( $post_id ) ) {
+        wp_send_json_error( [ 'message' => $post_id->get_error_message() ] );
+    }
+
+    // Save our plugin's internal template type
+    update_post_meta( $post_id, '_mh_template_type',   $template_type );
+    update_post_meta( $post_id, '_mh_template_active', 'yes' );
+
+    // 🚀 FIX: Force Elementor Free to see this as a standard page!
+    // This stops Elementor from blocking the editor and kicking you back to Gutenberg.
+    update_post_meta( $post_id, '_elementor_template_type', 'wp-page' ); 
+    update_post_meta( $post_id, '_wp_page_template', 'elementor_canvas' );
+    update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
+
+    wp_send_json_success( [
+        'message'  => __( 'Template created successfully.', 'mh-plug' ),
+        'edit_url' => admin_url( 'post.php?post=' . $post_id . '&action=elementor' ),
+    ] );
+}
+add_action( 'wp_ajax_mh_tb_create_template', 'mh_plug_ajax_create_template' );
+
+function mh_plug_ajax_toggle_status() {
+    check_ajax_referer( 'mh_tb_toggle_status', '_ajax_nonce' );
+
+    if ( ! current_user_can( 'edit_posts' ) ) {
+        wp_send_json_error( [ 'message' => __( 'No permission.', 'mh-plug' ) ] );
+    }
+    $template_id   = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
+    $is_active_raw = isset( $_POST['is_active'] )   ? $_POST['is_active']              : false;
+    $is_active     = ( filter_var( $is_active_raw, FILTER_VALIDATE_BOOLEAN ) ) ? 'yes' : 'no';
+    if ( ! $template_id ) {
+        wp_send_json_error( [ 'message' => __( 'Invalid ID.', 'mh-plug' ) ] );
+    }
+    update_post_meta( $template_id, '_mh_template_active', $is_active );
+    wp_send_json_success( [ 'message' => __( 'Status updated.', 'mh-plug' ) ] );
+}
+add_action( 'wp_ajax_mh_tb_toggle_status', 'mh_plug_ajax_toggle_status' );
+
+function mh_plug_ajax_delete_template() {
+    check_ajax_referer( 'mh_tb_delete_template', '_ajax_nonce' );
+    if ( ! current_user_can( 'delete_posts' ) ) {
+        wp_send_json_error( [ 'message' => __( 'No permission.', 'mh-plug' ) ] );
+    }
+    $template_id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
+    if ( ! $template_id || get_post_type( $template_id ) !== 'mh_templates' ) {
+        wp_send_json_error( [ 'message' => __( 'Invalid template.', 'mh-plug' ) ] );
+    }
+    $result = wp_trash_post( $template_id );
+    if ( ! $result ) {
+        wp_send_json_error( [ 'message' => __( 'Could not delete template.', 'mh-plug' ) ] );
+    }
+    wp_send_json_success( [ 'message' => __( 'Template deleted.', 'mh-plug' ) ] );
+}
+add_action( 'wp_ajax_mh_tb_delete_template', 'mh_plug_ajax_delete_template' );
+
+function mh_plug_category_template_add_field() {
+    $templates = get_posts([ 'post_type' => 'mh_templates', 'posts_per_page' => -1, 'post_status' => 'publish' ]);
+    ?>
+    <div class="form-field">
+        <label for="mh_category_template"><?php esc_html_e( 'MH Custom Template (Optional)', 'mh-plug' ); ?></label>
+        <select name="mh_category_template" id="mh_category_template">
+            <option value=""><?php esc_html_e( '— Use Default Archive Template —', 'mh-plug' ); ?></option>
+            <?php foreach ( $templates as $tpl ) : ?>
+                <option value="<?php echo esc_attr( $tpl->ID ); ?>"><?php echo esc_html( $tpl->post_title ); ?></option>
+            <?php endforeach; ?>
+        </select>
+        <p><?php esc_html_e( 'Select a specific Elementor template for this category.', 'mh-plug' ); ?></p>
+    </div>
+    <?php
+}
+
+function mh_plug_category_template_edit_field( $term ) {
+    $templates = get_posts([ 'post_type' => 'mh_templates', 'posts_per_page' => -1, 'post_status' => 'publish' ]);
+    $current   = get_term_meta( $term->term_id, '_mh_category_template', true );
+    ?>
+    <tr class="form-field">
+        <th scope="row"><label for="mh_category_template"><?php esc_html_e( 'MH Custom Template', 'mh-plug' ); ?></label></th>
+        <td>
+            <select name="mh_category_template" id="mh_category_template">
+                <option value=""><?php esc_html_e( '— Use Default Archive Template —', 'mh-plug' ); ?></option>
+                <?php foreach ( $templates as $tpl ) : ?>
+                    <option value="<?php echo esc_attr( $tpl->ID ); ?>" <?php selected( $current, $tpl->ID ); ?>>
+                        <?php echo esc_html( $tpl->post_title ); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </td>
+    </tr>
+    <?php
+}
+
+function mh_plug_save_category_template( $term_id ) {
+    if ( isset( $_POST['mh_category_template'] ) ) {
+        update_term_meta( $term_id, '_mh_category_template', sanitize_text_field( $_POST['mh_category_template'] ) );
+    }
+}
+
+add_action( 'product_cat_add_form_fields', 'mh_plug_category_template_add_field' );
+add_action( 'product_cat_edit_form_fields', 'mh_plug_category_template_edit_field' );
+add_action( 'created_product_cat', 'mh_plug_save_category_template' );
+add_action( 'edited_product_cat', 'mh_plug_save_category_template' );
+add_action( 'category_add_form_fields', 'mh_plug_category_template_add_field' );
+add_action( 'category_edit_form_fields', 'mh_plug_category_template_edit_field' );
+add_action( 'created_category', 'mh_plug_save_category_template' );
+add_action( 'edited_category', 'mh_plug_save_category_template' );
+
+function mh_plug_get_template_type_meta( $post_id ) {
+    $type = get_post_meta( $post_id, '_mh_template_type', true );
+    if ( empty( $type ) ) {
+        $type = get_post_meta( $post_id, 'mh_template_type', true );
+    }
+    return (string) $type;
+}
+
+function mh_plug_get_template_active_meta( $post_id ) {
+    $active = get_post_meta( $post_id, '_mh_template_active', true );
+    if ( empty( $active ) ) {
+        $active = get_post_meta( $post_id, 'mh_template_active', true );
+    }
+    return ( $active === 'yes' ) ? 'yes' : 'no';
+}

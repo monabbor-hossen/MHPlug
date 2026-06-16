@@ -1,0 +1,64 @@
+@font-face {
+  font-family: 'MH-devstudio';
+  src:
+    url('../fonts/MH-devstudio.ttf?ognq53') format('truetype'),
+    url('../fonts/MH-devstudio.woff?ognq53') format('woff'),
+    url('../fonts/MH-devstudio.svg?ognq53#MH-devstudio') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="mhi-"], [class*=" mhi-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'MH-devstudio' !important;
+  speak-as: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mhi-card:before {
+  content: "\e906";
+}
+.mhi-border-image-slider:before {
+  content: "\e904";
+}
+.mhi-border-image:before {
+  content: "\e905";
+}
+.mhi-brush-slider:before {
+  content: "\e902";
+}
+.mhi-brush:before {
+  content: "\e903";
+}
+.mhi-menu:before {
+  content: "\e900";
+}
+.mhi-post:before {
+  content: "\e901";
+}
+.mhi-post-slider:before {
+  content: "\e921";
+}
+.mhi-image-carousel:before {
+  content: "\e922";
+}
+.mhi-text:before {
+  content: "\e923";
+}
+.mhi-site-title:before {
+  content: "\e924";
+}
+.mhi-site-logo:before {
+  content: "\e925";
+}
+
+
