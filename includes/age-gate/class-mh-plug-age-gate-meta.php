@@ -19,7 +19,7 @@ class MH_Plug_Age_Gate_Meta {
         foreach ( $screens as $screen ) {
             add_meta_box(
                 'mh_age_gate_meta_box',
-                __( 'Age Gate Settings', 'mh-plug' ),
+                __( 'Age Gate Settings', 'mh-plug-ecommerce-builder-widgets' ),
                 array( $this, 'meta_box_html' ),
                 $screen,
                 'side',
@@ -37,13 +37,13 @@ class MH_Plug_Age_Gate_Meta {
         }
 
         echo '<p><label for="mh_age_gate_override">';
-        esc_html_e( 'Select age gate behavior for this post:', 'mh-plug' );
+        esc_html_e( 'Select age gate behavior for this post:', 'mh-plug-ecommerce-builder-widgets' );
         echo '</label></p>';
         
         echo '<select id="mh_age_gate_override" name="mh_age_gate_override" style="width: 100%;">';
-        echo '<option value="global" ' . selected( $value, 'global', false ) . '>' . esc_html__( 'Use Global Setting', 'mh-plug' ) . '</option>';
-        echo '<option value="force_enable" ' . selected( $value, 'force_enable', false ) . '>' . esc_html__( 'Force Enable (Override Global)', 'mh-plug' ) . '</option>';
-        echo '<option value="force_disable" ' . selected( $value, 'force_disable', false ) . '>' . esc_html__( 'Force Disable (Override Global)', 'mh-plug' ) . '</option>';
+        echo '<option value="global" ' . selected( $value, 'global', false ) . '>' . esc_html__( 'Use Global Setting', 'mh-plug-ecommerce-builder-widgets' ) . '</option>';
+        echo '<option value="force_enable" ' . selected( $value, 'force_enable', false ) . '>' . esc_html__( 'Force Enable (Override Global)', 'mh-plug-ecommerce-builder-widgets' ) . '</option>';
+        echo '<option value="force_disable" ' . selected( $value, 'force_disable', false ) . '>' . esc_html__( 'Force Disable (Override Global)', 'mh-plug-ecommerce-builder-widgets' ) . '</option>';
         echo '</select>';
     }
 

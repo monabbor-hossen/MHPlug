@@ -17,7 +17,7 @@ use Elementor\Group_Control_Typography;
 class MH_Product_Brands_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_brands'; }
-    public function get_title() { return __( 'MH Product Brands', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Product Brands', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-price-list'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'product', 'brand', 'brands', 'woocommerce', 'mh', 'taxonomy' ]; }
@@ -26,47 +26,47 @@ class MH_Product_Brands_Widget extends \Elementor\Widget_Base {
 
         /* ── CONTENT ── */
         $this->start_controls_section( 'content_section', [
-            'label' => __( 'Brands Settings', 'mh-plug' ),
+            'label' => __( 'Brands Settings', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_control( 'taxonomy_slug', [
-            'label'       => __( 'Taxonomy Slug', 'mh-plug' ),
+            'label'       => __( 'Taxonomy Slug', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::TEXT,
             'default'     => 'product_brand', // Default for official Woo Brands
-            'description' => __( 'Change this if your brands plugin uses a different slug (e.g. yith_product_brand, pwb-brand)', 'mh-plug' ),
+            'description' => __( 'Change this if your brands plugin uses a different slug (e.g. yith_product_brand, pwb-brand)', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_control( 'show_prefix', [
-            'label'        => __( 'Show Prefix', 'mh-plug' ),
+            'label'        => __( 'Show Prefix', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
-            'label_on'     => __( 'Show', 'mh-plug' ),
-            'label_off'    => __( 'Hide', 'mh-plug' ),
+            'label_on'     => __( 'Show', 'mh-plug-ecommerce-builder-widgets' ),
+            'label_off'    => __( 'Hide', 'mh-plug-ecommerce-builder-widgets' ),
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'prefix_text', [
-            'label'       => __( 'Prefix Text', 'mh-plug' ),
+            'label'       => __( 'Prefix Text', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::TEXT,
-            'default'     => __( 'Brand: ', 'mh-plug' ),
-            'placeholder' => __( 'e.g. Brand:', 'mh-plug' ),
+            'default'     => __( 'Brand: ', 'mh-plug-ecommerce-builder-widgets' ),
+            'placeholder' => __( 'e.g. Brand:', 'mh-plug-ecommerce-builder-widgets' ),
             'condition'   => [ 'show_prefix' => 'yes' ],
         ] );
 
         $this->add_control( 'separator', [
-            'label'   => __( 'Separator', 'mh-plug' ),
+            'label'   => __( 'Separator', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::TEXT,
             'default' => ', ',
         ] );
 
         $this->add_responsive_control( 'align', [
-            'label'        => __( 'Alignment', 'mh-plug' ),
+            'label'        => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::CHOOSE,
             'options'      => [
-                'left'    => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center'  => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'right'   => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+                'left'    => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center'  => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'right'   => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
             ],
             'default'      => 'left',
             'selectors'    => [
@@ -78,13 +78,13 @@ class MH_Product_Brands_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: PREFIX TEXT ── */
         $this->start_controls_section( 'style_prefix_section', [
-            'label'     => __( 'Prefix Style', 'mh-plug' ),
+            'label'     => __( 'Prefix Style', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_prefix' => 'yes' ],
         ] );
 
         $this->add_control( 'prefix_color', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [
@@ -98,7 +98,7 @@ class MH_Product_Brands_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'prefix_spacing', [
-            'label'      => __( 'Spacing (Distance to brands)', 'mh-plug' ),
+            'label'      => __( 'Spacing (Distance to brands)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em' ],
             'range'      => [ 'px' => [ 'min' => 0, 'max' => 20 ] ],
@@ -112,7 +112,7 @@ class MH_Product_Brands_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: BRAND LINKS ── */
         $this->start_controls_section( 'style_links_section', [
-            'label' => __( 'Brand Links Style', 'mh-plug' ),
+            'label' => __( 'Brand Links Style', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
@@ -124,9 +124,9 @@ class MH_Product_Brands_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tabs( 'links_color_tabs' );
 
         /* Normal */
-        $this->start_controls_tab( 'links_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'links_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'links_color', [
-            'label'     => __( 'Link Color', 'mh-plug' ),
+            'label'     => __( 'Link Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#d63638',
             'selectors' => [
@@ -134,7 +134,7 @@ class MH_Product_Brands_Widget extends \Elementor\Widget_Base {
             ],
         ] );
         $this->add_control( 'separator_color', [
-            'label'     => __( 'Separator Color', 'mh-plug' ),
+            'label'     => __( 'Separator Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#888888',
             'selectors' => [
@@ -144,9 +144,9 @@ class MH_Product_Brands_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tab();
 
         /* Hover */
-        $this->start_controls_tab( 'links_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'links_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'links_hover_color', [
-            'label'     => __( 'Link Hover Color', 'mh-plug' ),
+            'label'     => __( 'Link Hover Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [
@@ -158,7 +158,7 @@ class MH_Product_Brands_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tabs();
 
         $this->add_responsive_control( 'wrap_margin', [
-            'label'      => __( 'Widget Margin', 'mh-plug' ),
+            'label'      => __( 'Widget Margin', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [

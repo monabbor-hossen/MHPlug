@@ -152,8 +152,8 @@ $weights = [
 <div class="wrap mh-plug-admin-wrap">
     <div class="mh-tb-header">
         <div class="mh-tb-header-text">
-            <h1 class="mh-plug-title"><?php esc_html_e( 'WooCommerce Customizer', 'mh-plug' ); ?></h1>
-            <p class="mh-tb-description"><?php esc_html_e( 'Style your Cart and Checkout pages', 'mh-plug' ); ?></p>
+            <h1 class="mh-plug-title"><?php esc_html_e( 'WooCommerce Customizer', 'mh-plug-ecommerce-builder-widgets' ); ?></h1>
+            <p class="mh-tb-description"><?php esc_html_e( 'Style your Cart and Checkout pages', 'mh-plug-ecommerce-builder-widgets' ); ?></p>
         </div>
     </div>
 
@@ -165,7 +165,7 @@ $weights = [
             <!-- TYPOGRAPHY -->
             <div class="mh-accordion-item mh-active">
                 <div class="mh-accordion-header">
-                    <span class="mh-accordion-title"><?php esc_html_e( 'Global Typography', 'mh-plug' ); ?></span>
+                    <span class="mh-accordion-title"><?php esc_html_e( 'Global Typography', 'mh-plug-ecommerce-builder-widgets' ); ?></span>
                     <span class="mh-header-controls">
                         <span class="mh-accordion-icon">+</span>
                     </span>
@@ -180,7 +180,7 @@ $weights = [
             <!-- CART PAGE - LAYOUT -->
             <div class="mh-accordion-item">
                 <div class="mh-accordion-header">
-                    <span class="mh-accordion-title"><?php esc_html_e( 'Cart Page — Headings & Table', 'mh-plug' ); ?></span>
+                    <span class="mh-accordion-title"><?php esc_html_e( 'Cart Page — Headings & Table', 'mh-plug-ecommerce-builder-widgets' ); ?></span>
                     <span class="mh-header-controls">
                         <span class="mh-accordion-icon">+</span>
                     </span>
@@ -213,7 +213,7 @@ $weights = [
             <!-- CART PAGE - BUTTONS -->
             <div class="mh-accordion-item">
                 <div class="mh-accordion-header">
-                    <span class="mh-accordion-title"><?php esc_html_e( 'Cart Page — Buttons', 'mh-plug' ); ?></span>
+                    <span class="mh-accordion-title"><?php esc_html_e( 'Cart Page — Buttons', 'mh-plug-ecommerce-builder-widgets' ); ?></span>
                     <span class="mh-header-controls">
                         <span class="mh-accordion-icon">+</span>
                     </span>
@@ -254,7 +254,7 @@ $weights = [
             <!-- CHECKOUT - FORM -->
             <div class="mh-accordion-item">
                 <div class="mh-accordion-header">
-                    <span class="mh-accordion-title"><?php esc_html_e( 'Checkout Page — Headings & Form', 'mh-plug' ); ?></span>
+                    <span class="mh-accordion-title"><?php esc_html_e( 'Checkout Page — Headings & Form', 'mh-plug-ecommerce-builder-widgets' ); ?></span>
                     <span class="mh-header-controls">
                         <span class="mh-accordion-icon">+</span>
                     </span>
@@ -291,7 +291,7 @@ $weights = [
             <!-- CHECKOUT - BUTTON -->
             <div class="mh-accordion-item">
                 <div class="mh-accordion-header">
-                    <span class="mh-accordion-title"><?php esc_html_e( 'Checkout Page — Place Order Button', 'mh-plug' ); ?></span>
+                    <span class="mh-accordion-title"><?php esc_html_e( 'Checkout Page — Place Order Button', 'mh-plug-ecommerce-builder-widgets' ); ?></span>
                     <span class="mh-header-controls">
                         <span class="mh-accordion-icon">+</span>
                     </span>
@@ -314,7 +314,7 @@ $weights = [
             <!-- NOTICES -->
             <div class="mh-accordion-item">
                 <div class="mh-accordion-header">
-                    <span class="mh-accordion-title"><?php esc_html_e( 'WooCommerce Notices', 'mh-plug' ); ?></span>
+                    <span class="mh-accordion-title"><?php esc_html_e( 'WooCommerce Notices', 'mh-plug-ecommerce-builder-widgets' ); ?></span>
                     <span class="mh-header-controls">
                         <span class="mh-accordion-icon">+</span>
                     </span>
@@ -345,7 +345,7 @@ $weights = [
         <button type="submit" class="mh-button">
             <span class="mh-button-content-wrapper">
                 <i class="dashicons dashicons-saved"></i>
-                <span class="mh-button-text"><?php esc_html_e( 'Save Changes', 'mh-plug' ); ?></span>
+                <span class="mh-button-text"><?php esc_html_e( 'Save Changes', 'mh-plug-ecommerce-builder-widgets' ); ?></span>
             </span>
         </button>
     </form>

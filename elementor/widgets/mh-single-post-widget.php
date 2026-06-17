@@ -15,61 +15,61 @@ use Elementor\Group_Control_Border;
 class MH_Single_Post_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_single_post'; }
-    public function get_title() { return __( 'MH Single Post', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Single Post', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-single-post'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
     protected function register_controls() {
         
         $this->start_controls_section( 'section_layout', [
-            'label' => __( 'Layout & Elements', 'mh-plug' ),
+            'label' => __( 'Layout & Elements', 'mh-plug-ecommerce-builder-widgets' ),
             'tab' => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_control( 'layout', [
-            'label' => __( 'Select Layout', 'mh-plug' ),
+            'label' => __( 'Select Layout', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SELECT,
             'default' => 'layout-1',
             'options' => [
-                'layout-1' => __( 'Layout 1 (Classic)', 'mh-plug' ),
-                'layout-2' => __( 'Layout 2 (Hero Cover)', 'mh-plug' ),
-                'layout-3' => __( 'Layout 3 (Split View)', 'mh-plug' ),
+                'layout-1' => __( 'Layout 1 (Classic)', 'mh-plug-ecommerce-builder-widgets' ),
+                'layout-2' => __( 'Layout 2 (Hero Cover)', 'mh-plug-ecommerce-builder-widgets' ),
+                'layout-3' => __( 'Layout 3 (Split View)', 'mh-plug-ecommerce-builder-widgets' ),
             ],
         ] );
 
-        $this->add_control( 'show_title', [ 'label' => __( 'Show Title', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
-        $this->add_control( 'show_meta', [ 'label' => __( 'Show Meta Info', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
-        $this->add_control( 'show_image', [ 'label' => __( 'Show Featured Image', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
-        $this->add_control( 'show_content', [ 'label' => __( 'Show Post Content', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
-        $this->add_control( 'show_author_box', [ 'label' => __( 'Show Author Box', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
+        $this->add_control( 'show_title', [ 'label' => __( 'Show Title', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
+        $this->add_control( 'show_meta', [ 'label' => __( 'Show Meta Info', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
+        $this->add_control( 'show_image', [ 'label' => __( 'Show Featured Image', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
+        $this->add_control( 'show_content', [ 'label' => __( 'Show Post Content', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
+        $this->add_control( 'show_author_box', [ 'label' => __( 'Show Author Box', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes' ] );
 
         $this->end_controls_section();
 
         // Style Sections
         $this->start_controls_section( 'section_style_general', [
-            'label' => __( 'General Wrapper', 'mh-plug' ),
+            'label' => __( 'General Wrapper', 'mh-plug-ecommerce-builder-widgets' ),
             'tab' => Controls_Manager::TAB_STYLE,
         ] );
         $this->add_responsive_control( 'wrapper_padding', [
-            'label' => __( 'Padding', 'mh-plug' ),
+            'label' => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%', 'em' ],
             'selectors' => [ '{{WRAPPER}} .mh-single-post-wrapper' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
         $this->add_control( 'wrapper_bg', [
-            'label' => __( 'Background Color', 'mh-plug' ),
+            'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-single-post-wrapper' => 'background-color: {{VALUE}};' ],
         ] );
         $this->end_controls_section();
 
         $this->start_controls_section( 'section_style_title', [
-            'label' => __( 'Title', 'mh-plug' ),
+            'label' => __( 'Title', 'mh-plug-ecommerce-builder-widgets' ),
             'tab' => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_title' => 'yes' ],
         ] );
         $this->add_control( 'title_color', [
-            'label' => __( 'Color', 'mh-plug' ),
+            'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-sp-title' => 'color: {{VALUE}};' ],
         ] );
@@ -78,24 +78,24 @@ class MH_Single_Post_Widget extends \Elementor\Widget_Base {
             'selector' => '{{WRAPPER}} .mh-sp-title',
         ] );
         $this->add_responsive_control( 'title_spacing', [
-            'label' => __( 'Spacing Bottom', 'mh-plug' ),
+            'label' => __( 'Spacing Bottom', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'selectors' => [ '{{WRAPPER}} .mh-sp-title' => 'margin-bottom: {{SIZE}}{{UNIT}};' ],
         ] );
         $this->end_controls_section();
 
         $this->start_controls_section( 'section_style_meta', [
-            'label' => __( 'Meta Info', 'mh-plug' ),
+            'label' => __( 'Meta Info', 'mh-plug-ecommerce-builder-widgets' ),
             'tab' => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_meta' => 'yes' ],
         ] );
         $this->add_control( 'meta_color', [
-            'label' => __( 'Color', 'mh-plug' ),
+            'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-sp-meta, {{WRAPPER}} .mh-sp-meta a' => 'color: {{VALUE}};' ],
         ] );
         $this->add_control( 'meta_icon_color', [
-            'label' => __( 'Icon Color', 'mh-plug' ),
+            'label' => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-sp-meta i' => 'color: {{VALUE}};' ],
         ] );
@@ -104,36 +104,36 @@ class MH_Single_Post_Widget extends \Elementor\Widget_Base {
             'selector' => '{{WRAPPER}} .mh-sp-meta',
         ] );
         $this->add_responsive_control( 'meta_spacing', [
-            'label' => __( 'Spacing Bottom', 'mh-plug' ),
+            'label' => __( 'Spacing Bottom', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'selectors' => [ '{{WRAPPER}} .mh-sp-meta' => 'margin-bottom: {{SIZE}}{{UNIT}};' ],
         ] );
         $this->end_controls_section();
 
         $this->start_controls_section( 'section_style_image', [
-            'label' => __( 'Image', 'mh-plug' ),
+            'label' => __( 'Image', 'mh-plug-ecommerce-builder-widgets' ),
             'tab' => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_image' => 'yes' ],
         ] );
         $this->add_responsive_control( 'image_radius', [
-            'label' => __( 'Border Radius', 'mh-plug' ),
+            'label' => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::DIMENSIONS,
             'selectors' => [ '{{WRAPPER}} .mh-sp-image img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
         $this->add_responsive_control( 'image_spacing', [
-            'label' => __( 'Spacing Bottom', 'mh-plug' ),
+            'label' => __( 'Spacing Bottom', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'selectors' => [ '{{WRAPPER}} .mh-sp-image' => 'margin-bottom: {{SIZE}}{{UNIT}};' ],
         ] );
         // specific for layout 2
         $this->add_control( 'layout2_overlay', [
-            'label' => __( 'Overlay Color (Layout 2)', 'mh-plug' ),
+            'label' => __( 'Overlay Color (Layout 2)', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-sp-hero-overlay' => 'background-color: {{VALUE}};' ],
             'condition' => [ 'layout' => 'layout-2' ],
         ] );
         $this->add_responsive_control( 'layout2_height', [
-            'label' => __( 'Hero Height (Layout 2)', 'mh-plug' ),
+            'label' => __( 'Hero Height (Layout 2)', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'size_units' => ['px', 'vh'],
             'range' => [ 'px' => ['min' => 200, 'max' => 1000] ],
@@ -143,12 +143,12 @@ class MH_Single_Post_Widget extends \Elementor\Widget_Base {
         $this->end_controls_section();
 
         $this->start_controls_section( 'section_style_content', [
-            'label' => __( 'Post Content', 'mh-plug' ),
+            'label' => __( 'Post Content', 'mh-plug-ecommerce-builder-widgets' ),
             'tab' => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_content' => 'yes' ],
         ] );
         $this->add_control( 'content_color', [
-            'label' => __( 'Text Color', 'mh-plug' ),
+            'label' => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-sp-content' => 'color: {{VALUE}};' ],
         ] );
@@ -159,32 +159,32 @@ class MH_Single_Post_Widget extends \Elementor\Widget_Base {
         $this->end_controls_section();
 
         $this->start_controls_section( 'section_style_author', [
-            'label' => __( 'Author Box', 'mh-plug' ),
+            'label' => __( 'Author Box', 'mh-plug-ecommerce-builder-widgets' ),
             'tab' => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_author_box' => 'yes' ],
         ] );
         $this->add_control( 'author_bg', [
-            'label' => __( 'Background Color', 'mh-plug' ),
+            'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-sp-author-box' => 'background-color: {{VALUE}};' ],
         ] );
         $this->add_control( 'author_name_color', [
-            'label' => __( 'Name Color', 'mh-plug' ),
+            'label' => __( 'Name Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-sp-author-name' => 'color: {{VALUE}};' ],
         ] );
         $this->add_control( 'author_bio_color', [
-            'label' => __( 'Bio Color', 'mh-plug' ),
+            'label' => __( 'Bio Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-sp-author-bio' => 'color: {{VALUE}};' ],
         ] );
         $this->add_responsive_control( 'author_padding', [
-            'label' => __( 'Padding', 'mh-plug' ),
+            'label' => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::DIMENSIONS,
             'selectors' => [ '{{WRAPPER}} .mh-sp-author-box' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
         $this->add_responsive_control( 'author_radius', [
-            'label' => __( 'Border Radius', 'mh-plug' ),
+            'label' => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::DIMENSIONS,
             'selectors' => [ '{{WRAPPER}} .mh-sp-author-box' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
@@ -363,7 +363,7 @@ class MH_Single_Post_Widget extends \Elementor\Widget_Base {
                         <?php echo get_avatar( get_the_author_meta( 'ID' ), 80 ); ?>
                     </div>
                     <div class="mh-sp-author-info">
-                        <h4 class="mh-sp-author-name"><?php echo esc_html__( 'Written by', 'mh-plug' ); ?> <?php the_author(); ?></h4>
+                        <h4 class="mh-sp-author-name"><?php echo esc_html__( 'Written by', 'mh-plug-ecommerce-builder-widgets' ); ?> <?php the_author(); ?></h4>
                         <p class="mh-sp-author-bio"><?php echo get_the_author_meta( 'description' ); ?></p>
                     </div>
                 </div>

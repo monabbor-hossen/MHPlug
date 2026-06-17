@@ -38,8 +38,8 @@ class MH_Plug_Age_Gate_Admin {
     public function add_plugin_page() {
         add_submenu_page(
             'mh-plug-settings',
-            __( 'MH Age Gate', 'mh-plug' ),
-            __( 'Age Gate', 'mh-plug' ),
+            __( 'MH Age Gate', 'mh-plug-ecommerce-builder-widgets' ),
+            __( 'Age Gate', 'mh-plug-ecommerce-builder-widgets' ),
             'manage_options',
             'mh-age-gate',
             array( $this, 'create_admin_page' )
@@ -50,7 +50,7 @@ class MH_Plug_Age_Gate_Admin {
         global $wp_settings_fields;
         ?>
         <div class="wrap mh-plug-admin-wrap mh-age-gate-admin-wrap">
-            <h1><?php esc_html_e( 'MH Age Gate Settings', 'mh-plug' ); ?></h1>
+            <h1><?php esc_html_e( 'MH Age Gate Settings', 'mh-plug-ecommerce-builder-widgets' ); ?></h1>
             <form method="post" action="options.php">
                 <?php settings_fields( 'mh_age_gate_option_group' ); ?>
                 <div class="mh-accordion">
@@ -58,7 +58,7 @@ class MH_Plug_Age_Gate_Admin {
                     <!-- General Settings -->
                     <div class="mh-accordion-item mh-active">
                         <div class="mh-accordion-header">
-                            <span class="mh-accordion-title"><?php esc_html_e( 'General Settings', 'mh-plug' ); ?></span>
+                            <span class="mh-accordion-title"><?php esc_html_e( 'General Settings', 'mh-plug-ecommerce-builder-widgets' ); ?></span>
                             <span class="mh-header-controls">
                                 <span class="mh-accordion-icon">-</span>
                             </span>
@@ -79,7 +79,7 @@ class MH_Plug_Age_Gate_Admin {
                     <!-- Content Settings -->
                     <div class="mh-accordion-item">
                         <div class="mh-accordion-header">
-                            <span class="mh-accordion-title"><?php esc_html_e( 'Content Settings', 'mh-plug' ); ?></span>
+                            <span class="mh-accordion-title"><?php esc_html_e( 'Content Settings', 'mh-plug-ecommerce-builder-widgets' ); ?></span>
                             <span class="mh-header-controls">
                                 <span class="mh-accordion-icon">+</span>
                             </span>
@@ -100,7 +100,7 @@ class MH_Plug_Age_Gate_Admin {
                     <!-- Appearance Settings -->
                     <div class="mh-accordion-item">
                         <div class="mh-accordion-header">
-                            <span class="mh-accordion-title"><?php esc_html_e( 'Appearance Settings', 'mh-plug' ); ?></span>
+                            <span class="mh-accordion-title"><?php esc_html_e( 'Appearance Settings', 'mh-plug-ecommerce-builder-widgets' ); ?></span>
                             <span class="mh-header-controls">
                                 <span class="mh-accordion-icon">+</span>
                             </span>
@@ -132,41 +132,41 @@ class MH_Plug_Age_Gate_Admin {
         // 1. General Section
         add_settings_section( 'mh_age_gate_general_section', '', null, 'mh-age-gate-admin' );
         
-        add_settings_field( 'enable_global', __( 'Enable Global Age Gate', 'mh-plug' ), array( $this, 'enable_global_cb' ), 'mh-age-gate-admin', 'mh_age_gate_general_section' );
-        add_settings_field( 'minimum_age', __( 'Minimum Age Required', 'mh-plug' ), array( $this, 'minimum_age_cb' ), 'mh-age-gate-admin', 'mh_age_gate_general_section' );
-        add_settings_field( 'cookie_duration', __( 'Cookie Duration (Days)', 'mh-plug' ), array( $this, 'cookie_duration_cb' ), 'mh-age-gate-admin', 'mh_age_gate_general_section' );
+        add_settings_field( 'enable_global', __( 'Enable Global Age Gate', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'enable_global_cb' ), 'mh-age-gate-admin', 'mh_age_gate_general_section' );
+        add_settings_field( 'minimum_age', __( 'Minimum Age Required', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'minimum_age_cb' ), 'mh-age-gate-admin', 'mh_age_gate_general_section' );
+        add_settings_field( 'cookie_duration', __( 'Cookie Duration (Days)', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'cookie_duration_cb' ), 'mh-age-gate-admin', 'mh_age_gate_general_section' );
 
         // 2. Content Section
         add_settings_section( 'mh_age_gate_content_section', '', null, 'mh-age-gate-admin' );
 
-        add_settings_field( 'show_logo', __( 'Show Site Logo', 'mh-plug' ), array( $this, 'show_logo_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
-        add_settings_field( 'modal_heading', __( 'Modal Heading', 'mh-plug' ), array( $this, 'modal_heading_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
-        add_settings_field( 'modal_subheading', __( 'Disclaimer / Subheading', 'mh-plug' ), array( $this, 'modal_subheading_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
-        add_settings_field( 'btn_yes_text', __( '"Yes" Button Text', 'mh-plug' ), array( $this, 'btn_yes_text_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
-        add_settings_field( 'btn_no_text', __( '"No" Button Text', 'mh-plug' ), array( $this, 'btn_no_text_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
-        add_settings_field( 'redirect_url', __( 'Redirect URL (On "No")', 'mh-plug' ), array( $this, 'redirect_url_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
+        add_settings_field( 'show_logo', __( 'Show Site Logo', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'show_logo_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
+        add_settings_field( 'modal_heading', __( 'Modal Heading', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'modal_heading_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
+        add_settings_field( 'modal_subheading', __( 'Disclaimer / Subheading', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'modal_subheading_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
+        add_settings_field( 'btn_yes_text', __( '"Yes" Button Text', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'btn_yes_text_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
+        add_settings_field( 'btn_no_text', __( '"No" Button Text', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'btn_no_text_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
+        add_settings_field( 'redirect_url', __( 'Redirect URL (On "No")', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'redirect_url_cb' ), 'mh-age-gate-admin', 'mh_age_gate_content_section' );
 
         // 3. Appearance Section
         add_settings_section( 'mh_age_gate_appearance_section', '', null, 'mh-age-gate-admin' );
 
         add_settings_field( 'hdr_bg', '', array( $this, 'header_background_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
-        add_settings_field( 'overlay_bg_color', __( 'Overlay Background Color', 'mh-plug' ), array( $this, 'overlay_bg_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
-        add_settings_field( 'modal_shadow', __( 'Enable Modal Shadow', 'mh-plug' ), array( $this, 'modal_shadow_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
-        add_settings_field( 'bg_color', __( 'Modal Background Color', 'mh-plug' ), array( $this, 'bg_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
+        add_settings_field( 'overlay_bg_color', __( 'Overlay Background Color', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'overlay_bg_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
+        add_settings_field( 'modal_shadow', __( 'Enable Modal Shadow', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'modal_shadow_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
+        add_settings_field( 'bg_color', __( 'Modal Background Color', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'bg_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
         
         add_settings_field( 'hdr_txt', '', array( $this, 'header_text_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
-        add_settings_field( 'title_color', __( 'Title Color', 'mh-plug' ), array( $this, 'title_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
-        add_settings_field( 'text_color', __( 'Text Color', 'mh-plug' ), array( $this, 'text_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
+        add_settings_field( 'title_color', __( 'Title Color', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'title_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
+        add_settings_field( 'text_color', __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'text_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
 
         add_settings_field( 'hdr_btn_yes', '', array( $this, 'header_button_yes_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
-        add_settings_field( 'btn_yes_bg_color', __( '"Yes" Background Color', 'mh-plug' ), array( $this, 'btn_yes_bg_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
-        add_settings_field( 'btn_yes_hover_color', __( '"Yes" Hover Color', 'mh-plug' ), array( $this, 'btn_yes_hover_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
-        add_settings_field( 'btn_yes_text_color', __( '"Yes" Text Color', 'mh-plug' ), array( $this, 'btn_yes_text_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
+        add_settings_field( 'btn_yes_bg_color', __( '"Yes" Background Color', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'btn_yes_bg_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
+        add_settings_field( 'btn_yes_hover_color', __( '"Yes" Hover Color', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'btn_yes_hover_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
+        add_settings_field( 'btn_yes_text_color', __( '"Yes" Text Color', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'btn_yes_text_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
 
         add_settings_field( 'hdr_btn_no', '', array( $this, 'header_button_no_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
-        add_settings_field( 'btn_no_bg_color', __( '"No" Background Color', 'mh-plug' ), array( $this, 'btn_no_bg_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
-        add_settings_field( 'btn_no_hover_color', __( '"No" Hover Color', 'mh-plug' ), array( $this, 'btn_no_hover_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
-        add_settings_field( 'btn_no_text_color', __( '"No" Text Color', 'mh-plug' ), array( $this, 'btn_no_text_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
+        add_settings_field( 'btn_no_bg_color', __( '"No" Background Color', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'btn_no_bg_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
+        add_settings_field( 'btn_no_hover_color', __( '"No" Hover Color', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'btn_no_hover_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
+        add_settings_field( 'btn_no_text_color', __( '"No" Text Color', 'mh-plug-ecommerce-builder-widgets' ), array( $this, 'btn_no_text_color_cb' ), 'mh-age-gate-admin', 'mh_age_gate_appearance_section' );
     }
 
     public function sanitize( $input ) {
@@ -227,135 +227,135 @@ class MH_Plug_Age_Gate_Admin {
     // GENERAL
     public function enable_global_cb() {
         $opt = get_option('mh_age_gate_options');
-        $this->render_switch('enable_global', __('Global Status', 'mh-plug'), !empty($opt['enable_global']));
+        $this->render_switch('enable_global', __('Global Status', 'mh-plug-ecommerce-builder-widgets'), !empty($opt['enable_global']));
     }
 
     public function minimum_age_cb() {
         $val = get_option('mh_age_gate_options')['minimum_age'] ?? 18;
         $html = sprintf( '<input type="number" name="mh_age_gate_options[minimum_age]" value="%s" style="width: 100%%;" />', esc_attr($val) );
-        $this->render_custom_field( __('Minimum Age', 'mh-plug'), $html );
+        $this->render_custom_field( __('Minimum Age', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function cookie_duration_cb() {
         $val = get_option('mh_age_gate_options')['cookie_duration'] ?? 30;
         $html = sprintf( '<input type="number" name="mh_age_gate_options[cookie_duration]" value="%s" style="width: 100%%;" />', esc_attr($val) );
-        $this->render_custom_field( __('Cookie Duration (Days)', 'mh-plug'), $html );
+        $this->render_custom_field( __('Cookie Duration (Days)', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     // CONTENT
     public function show_logo_cb() {
         $opt = get_option('mh_age_gate_options');
-        $this->render_switch('show_logo', __('Enable Site Logo', 'mh-plug'), isset($opt['show_logo']) ? !empty($opt['show_logo']) : true);
+        $this->render_switch('show_logo', __('Enable Site Logo', 'mh-plug-ecommerce-builder-widgets'), isset($opt['show_logo']) ? !empty($opt['show_logo']) : true);
     }
 
     public function modal_heading_cb() {
         $val = get_option('mh_age_gate_options')['modal_heading'] ?? '';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[modal_heading]" value="%s" style="width: 100%%;" />', esc_attr($val) );
-        $this->render_custom_field( __('Modal Heading', 'mh-plug'), $html );
+        $this->render_custom_field( __('Modal Heading', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function modal_subheading_cb() {
         $val = get_option('mh_age_gate_options')['modal_subheading'] ?? '';
         $html = sprintf( '<textarea name="mh_age_gate_options[modal_subheading]" rows="4" style="width: 100%%; resize: vertical;">%s</textarea>', esc_html($val) );
-        $this->render_custom_field( __('Disclaimer Text', 'mh-plug'), $html );
+        $this->render_custom_field( __('Disclaimer Text', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function btn_yes_text_cb() {
         $val = get_option('mh_age_gate_options')['btn_yes_text'] ?? '';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[btn_yes_text]" value="%s" style="width: 100%%;" placeholder="Yes, I am older" />', esc_attr($val) );
-        $this->render_custom_field( __('Yes Text', 'mh-plug'), $html );
+        $this->render_custom_field( __('Yes Text', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function btn_no_text_cb() {
         $val = get_option('mh_age_gate_options')['btn_no_text'] ?? '';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[btn_no_text]" value="%s" style="width: 100%%;" placeholder="No, I am not" />', esc_attr($val) );
-        $this->render_custom_field( __('No Text', 'mh-plug'), $html );
+        $this->render_custom_field( __('No Text', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function redirect_url_cb() {
         $val = get_option('mh_age_gate_options')['redirect_url'] ?? '';
         $html = sprintf( '<input type="url" name="mh_age_gate_options[redirect_url]" value="%s" style="width: 100%%;" />', esc_url($val) );
-        $this->render_custom_field( __('Redirect URL', 'mh-plug'), $html );
+        $this->render_custom_field( __('Redirect URL', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     // SECTION HEADERS
     public function header_background_cb() {
-        echo "<h3 style='margin-top: 10px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #e0e4e7; font-size: 16px; color: #1d2327;'>" . esc_html__('Background Styles', 'mh-plug') . "</h3>";
+        echo "<h3 style='margin-top: 10px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #e0e4e7; font-size: 16px; color: #1d2327;'>" . esc_html__('Background Styles', 'mh-plug-ecommerce-builder-widgets') . "</h3>";
     }
     public function header_text_cb() {
-        echo "<h3 style='margin-top: 20px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #e0e4e7; font-size: 16px; color: #1d2327;'>" . esc_html__('Text Styles', 'mh-plug') . "</h3>";
+        echo "<h3 style='margin-top: 20px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #e0e4e7; font-size: 16px; color: #1d2327;'>" . esc_html__('Text Styles', 'mh-plug-ecommerce-builder-widgets') . "</h3>";
     }
     public function header_button_yes_cb() {
-        echo "<h3 style='margin-top: 20px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #e0e4e7; font-size: 16px; color: #1d2327;'>" . esc_html__('"Yes" Button Styles', 'mh-plug') . "</h3>";
+        echo "<h3 style='margin-top: 20px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #e0e4e7; font-size: 16px; color: #1d2327;'>" . esc_html__('"Yes" Button Styles', 'mh-plug-ecommerce-builder-widgets') . "</h3>";
     }
     public function header_button_no_cb() {
-        echo "<h3 style='margin-top: 20px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #e0e4e7; font-size: 16px; color: #1d2327;'>" . esc_html__('"No" Button Styles', 'mh-plug') . "</h3>";
+        echo "<h3 style='margin-top: 20px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #e0e4e7; font-size: 16px; color: #1d2327;'>" . esc_html__('"No" Button Styles', 'mh-plug-ecommerce-builder-widgets') . "</h3>";
     }
 
     // APPEARANCE
     public function overlay_bg_color_cb() {
         $val = get_option('mh_age_gate_options')['overlay_bg_color'] ?? 'rgba(0,0,0,0.8)';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[overlay_bg_color]" value="%s" class="mh-color-picker" />', esc_attr($val) );
-        $this->render_custom_field( __('Overlay Color', 'mh-plug'), $html );
+        $this->render_custom_field( __('Overlay Color', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function bg_color_cb() {
         $val = get_option('mh_age_gate_options')['bg_color'] ?? '#ffffff';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[bg_color]" value="%s" class="mh-color-picker" />', esc_attr($val) );
-        $this->render_custom_field( __('Modal Background', 'mh-plug'), $html );
+        $this->render_custom_field( __('Modal Background', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function modal_shadow_cb() {
         $opt = get_option('mh_age_gate_options');
-        $this->render_switch('modal_shadow', __('Enable Modal Shadow', 'mh-plug'), isset($opt['modal_shadow']) ? !empty($opt['modal_shadow']) : true);
+        $this->render_switch('modal_shadow', __('Enable Modal Shadow', 'mh-plug-ecommerce-builder-widgets'), isset($opt['modal_shadow']) ? !empty($opt['modal_shadow']) : true);
     }
 
     public function title_color_cb() {
         $val = get_option('mh_age_gate_options')['title_color'] ?? '#333333';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[title_color]" value="%s" class="mh-color-picker" />', esc_attr($val) );
-        $this->render_custom_field( __('Title Color', 'mh-plug'), $html );
+        $this->render_custom_field( __('Title Color', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function text_color_cb() {
         $val = get_option('mh_age_gate_options')['text_color'] ?? '#666666';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[text_color]" value="%s" class="mh-color-picker" />', esc_attr($val) );
-        $this->render_custom_field( __('Text Color', 'mh-plug'), $html );
+        $this->render_custom_field( __('Text Color', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function btn_yes_bg_color_cb() {
         $val = get_option('mh_age_gate_options')['btn_yes_bg_color'] ?? '#007cba';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[btn_yes_bg_color]" value="%s" class="mh-color-picker" />', esc_attr($val) );
-        $this->render_custom_field( __('Background Color', 'mh-plug'), $html );
+        $this->render_custom_field( __('Background Color', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function btn_yes_hover_color_cb() {
         $val = get_option('mh_age_gate_options')['btn_yes_hover_color'] ?? '#005a87';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[btn_yes_hover_color]" value="%s" class="mh-color-picker" />', esc_attr($val) );
-        $this->render_custom_field( __('Hover Color', 'mh-plug'), $html );
+        $this->render_custom_field( __('Hover Color', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function btn_yes_text_color_cb() {
         $val = get_option('mh_age_gate_options')['btn_yes_text_color'] ?? '#ffffff';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[btn_yes_text_color]" value="%s" class="mh-color-picker" />', esc_attr($val) );
-        $this->render_custom_field( __('Text Color', 'mh-plug'), $html );
+        $this->render_custom_field( __('Text Color', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function btn_no_bg_color_cb() {
         $val = get_option('mh_age_gate_options')['btn_no_bg_color'] ?? '#f0f0f1';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[btn_no_bg_color]" value="%s" class="mh-color-picker" />', esc_attr($val) );
-        $this->render_custom_field( __('Background Color', 'mh-plug'), $html );
+        $this->render_custom_field( __('Background Color', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function btn_no_hover_color_cb() {
         $val = get_option('mh_age_gate_options')['btn_no_hover_color'] ?? '#dcdcdc';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[btn_no_hover_color]" value="%s" class="mh-color-picker" />', esc_attr($val) );
-        $this->render_custom_field( __('Hover Color', 'mh-plug'), $html );
+        $this->render_custom_field( __('Hover Color', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
     public function btn_no_text_color_cb() {
         $val = get_option('mh_age_gate_options')['btn_no_text_color'] ?? '#3c434a';
         $html = sprintf( '<input type="text" name="mh_age_gate_options[btn_no_text_color]" value="%s" class="mh-color-picker" />', esc_attr($val) );
-        $this->render_custom_field( __('Text Color', 'mh-plug'), $html );
+        $this->render_custom_field( __('Text Color', 'mh-plug-ecommerce-builder-widgets'), $html );
     }
 
 }

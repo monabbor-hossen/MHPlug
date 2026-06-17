@@ -19,7 +19,7 @@ use Elementor\Repeater;
 class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_filter'; }
-    public function get_title() { return __( 'MH Product Sorting Filter', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Product Sorting Filter', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-filter'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
@@ -29,42 +29,42 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         // CONTENT: FILTER OPTIONS (REPEATER)
         // ----------------------------------------------------
         $this->start_controls_section( 'section_filters', [
-            'label' => __( 'Sorting Options', 'mh-plug' ),
+            'label' => __( 'Sorting Options', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $repeater = new Repeater();
 
         $repeater->add_control( 'orderby_val', [
-            'label'   => __( 'Sort Type', 'mh-plug' ),
+            'label'   => __( 'Sort Type', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'date',
             'options' => [
-                'menu_order' => __( 'Default Sorting', 'mh-plug' ),
-                'popularity' => __( 'Popularity (Sales)', 'mh-plug' ),
-                'rating'     => __( 'Average Rating', 'mh-plug' ),
-                'date'       => __( 'Latest (Newest)', 'mh-plug' ),
-                'price'      => __( 'Price: Low to High', 'mh-plug' ),
-                'price-desc' => __( 'Price: High to Low', 'mh-plug' ),
+                'menu_order' => __( 'Default Sorting', 'mh-plug-ecommerce-builder-widgets' ),
+                'popularity' => __( 'Popularity (Sales)', 'mh-plug-ecommerce-builder-widgets' ),
+                'rating'     => __( 'Average Rating', 'mh-plug-ecommerce-builder-widgets' ),
+                'date'       => __( 'Latest (Newest)', 'mh-plug-ecommerce-builder-widgets' ),
+                'price'      => __( 'Price: Low to High', 'mh-plug-ecommerce-builder-widgets' ),
+                'price-desc' => __( 'Price: High to Low', 'mh-plug-ecommerce-builder-widgets' ),
             ],
         ] );
 
         $repeater->add_control( 'custom_label', [
-            'label'       => __( 'Button Label', 'mh-plug' ),
+            'label'       => __( 'Button Label', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::TEXT,
-            'default'     => __( 'Sort Option', 'mh-plug' ),
-            'description' => __( 'The text users will see on the button/dropdown.', 'mh-plug' ),
+            'default'     => __( 'Sort Option', 'mh-plug-ecommerce-builder-widgets' ),
+            'description' => __( 'The text users will see on the button/dropdown.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_control( 'filters', [
-            'label'       => __( 'Sorting Options', 'mh-plug' ),
+            'label'       => __( 'Sorting Options', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::REPEATER,
             'fields'      => $repeater->get_controls(),
             'default'     => [
-                [ 'orderby_val' => 'date', 'custom_label' => __( 'Latest', 'mh-plug' ) ],
-                [ 'orderby_val' => 'popularity', 'custom_label' => __( 'Best Sellers', 'mh-plug' ) ],
-                [ 'orderby_val' => 'rating', 'custom_label' => __( 'Top Rated', 'mh-plug' ) ],
-                [ 'orderby_val' => 'price', 'custom_label' => __( 'Price: Low to High', 'mh-plug' ) ],
-                [ 'orderby_val' => 'price-desc', 'custom_label' => __( 'Price: High to Low', 'mh-plug' ) ],
+                [ 'orderby_val' => 'date', 'custom_label' => __( 'Latest', 'mh-plug-ecommerce-builder-widgets' ) ],
+                [ 'orderby_val' => 'popularity', 'custom_label' => __( 'Best Sellers', 'mh-plug-ecommerce-builder-widgets' ) ],
+                [ 'orderby_val' => 'rating', 'custom_label' => __( 'Top Rated', 'mh-plug-ecommerce-builder-widgets' ) ],
+                [ 'orderby_val' => 'price', 'custom_label' => __( 'Price: Low to High', 'mh-plug-ecommerce-builder-widgets' ) ],
+                [ 'orderby_val' => 'price-desc', 'custom_label' => __( 'Price: High to Low', 'mh-plug-ecommerce-builder-widgets' ) ],
             ],
             'title_field' => '{{{ custom_label }}}',
         ] );
@@ -75,26 +75,26 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         // STYLE: LAYOUT & ALIGNMENT
         // ----------------------------------------------------
         $this->start_controls_section( 'section_style_layout', [
-            'label' => __( 'Layout Setting', 'mh-plug' ),
+            'label' => __( 'Layout Setting', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control( 'display_style', [
-            'label'   => __( 'Display Style', 'mh-plug' ),
+            'label'   => __( 'Display Style', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'buttons',
             'options' => [
-                'buttons'  => __( 'Inline Buttons', 'mh-plug' ),
-                'dropdown' => __( 'Dropdown Menu', 'mh-plug' ),
+                'buttons'  => __( 'Inline Buttons', 'mh-plug-ecommerce-builder-widgets' ),
+                'dropdown' => __( 'Dropdown Menu', 'mh-plug-ecommerce-builder-widgets' ),
             ],
         ] );
 
         $this->add_responsive_control( 'layout_direction', [
-            'label'     => __( 'Direction', 'mh-plug' ),
+            'label'     => __( 'Direction', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
-                'row'    => [ 'title' => __( 'Horizontal', 'mh-plug' ), 'icon' => 'eicon-ellipsis-h' ],
-                'column' => [ 'title' => __( 'Vertical', 'mh-plug' ), 'icon' => 'eicon-editor-list-ul' ],
+                'row'    => [ 'title' => __( 'Horizontal', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-ellipsis-h' ],
+                'column' => [ 'title' => __( 'Vertical', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-editor-list-ul' ],
             ],
             'default'   => 'row',
             'selectors' => [ '{{WRAPPER}} .mh-filter-wrap' => 'flex-direction: {{VALUE}};' ],
@@ -102,12 +102,12 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'alignment', [
-            'label'     => __( 'Alignment', 'mh-plug' ),
+            'label'     => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
-                'flex-start' => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center'     => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'flex-end'   => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+                'flex-start' => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center'     => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'flex-end'   => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
             ],
             'default'   => 'flex-start',
             'selectors' => [ 
@@ -116,7 +116,7 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'gap', [
-            'label'      => __( 'Gap Between Buttons', 'mh-plug' ),
+            'label'      => __( 'Gap Between Buttons', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'size' => 10, 'unit' => 'px' ],
@@ -130,7 +130,7 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         // STYLE: BUTTONS / TOGGLE
         // ----------------------------------------------------
         $this->start_controls_section( 'section_style_buttons', [
-            'label' => __( 'Filter Buttons / Toggle', 'mh-plug' ),
+            'label' => __( 'Filter Buttons / Toggle', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
@@ -142,7 +142,7 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'btn_padding', [
-            'label'      => __( 'Padding', 'mh-plug' ),
+            'label'      => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'default'    => [ 'top' => 10, 'right' => 20, 'bottom' => 10, 'left' => 20, 'isLinked' => true ],
@@ -150,7 +150,7 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'btn_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
             'default'    => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'isLinked' => true ],
@@ -159,20 +159,20 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
 
         $this->start_controls_tabs( 'tabs_btn_style' );
 
-        $this->start_controls_tab( 'tab_btn_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'btn_color', [ 'label' => __( 'Text/Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#555555', 'selectors' => [ $btn_target => 'color: {{VALUE}};' ] ] );
-        $this->add_control( 'btn_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#f5f5f5', 'selectors' => [ $btn_target => 'background-color: {{VALUE}};' ] ] );
+        $this->start_controls_tab( 'tab_btn_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
+        $this->add_control( 'btn_color', [ 'label' => __( 'Text/Icon Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'default' => '#555555', 'selectors' => [ $btn_target => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'btn_bg', [ 'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'default' => '#f5f5f5', 'selectors' => [ $btn_target => 'background-color: {{VALUE}};' ] ] );
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_border', 'selector' => $btn_target ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_shadow', 'selector' => $btn_target ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'tab_btn_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
-        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Text/Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-filter-btn:hover, {{WRAPPER}} .mh-filter-toggle:hover' => 'color: {{VALUE}};' ] ] );
-        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#2293e9', 'selectors' => [ '{{WRAPPER}} .mh-filter-btn:hover, {{WRAPPER}} .mh-filter-toggle:hover' => 'background-color: {{VALUE}};' ] ] );
+        $this->start_controls_tab( 'tab_btn_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
+        $this->add_control( 'btn_hover_color', [ 'label' => __( 'Text/Icon Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-filter-btn:hover, {{WRAPPER}} .mh-filter-toggle:hover' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'btn_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'default' => '#2293e9', 'selectors' => [ '{{WRAPPER}} .mh-filter-btn:hover, {{WRAPPER}} .mh-filter-toggle:hover' => 'background-color: {{VALUE}};' ] ] );
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_hover_border', 'selector' => '{{WRAPPER}} .mh-filter-btn:hover, {{WRAPPER}} .mh-filter-toggle:hover' ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_hover_shadow', 'selector' => '{{WRAPPER}} .mh-filter-btn:hover, {{WRAPPER}} .mh-filter-toggle:hover' ] );
         $this->add_control( 'hover_scale', [
-            'label' => __( 'Hover Scale (Animation)', 'mh-plug' ),
+            'label' => __( 'Hover Scale (Animation)', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'range' => [ 'px' => [ 'min' => 1, 'max' => 1.2, 'step' => 0.01 ] ],
             'default' => [ 'size' => 1.05 ],
@@ -180,9 +180,9 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'tab_btn_active', [ 'label' => __( 'Active', 'mh-plug' ) ] );
-        $this->add_control( 'btn_active_color', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-filter-btn.mh-active, {{WRAPPER}} .mh-dropdown-open .mh-filter-toggle' => 'color: {{VALUE}};' ] ] );
-        $this->add_control( 'btn_active_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#111111', 'selectors' => [ '{{WRAPPER}} .mh-filter-btn.mh-active, {{WRAPPER}} .mh-dropdown-open .mh-filter-toggle' => 'background-color: {{VALUE}};' ] ] );
+        $this->start_controls_tab( 'tab_btn_active', [ 'label' => __( 'Active', 'mh-plug-ecommerce-builder-widgets' ) ] );
+        $this->add_control( 'btn_active_color', [ 'label' => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-filter-btn.mh-active, {{WRAPPER}} .mh-dropdown-open .mh-filter-toggle' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'btn_active_bg', [ 'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'default' => '#111111', 'selectors' => [ '{{WRAPPER}} .mh-filter-btn.mh-active, {{WRAPPER}} .mh-dropdown-open .mh-filter-toggle' => 'background-color: {{VALUE}};' ] ] );
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'btn_active_border', 'selector' => '{{WRAPPER}} .mh-filter-btn.mh-active, {{WRAPPER}} .mh-dropdown-open .mh-filter-toggle' ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'btn_active_shadow', 'selector' => '{{WRAPPER}} .mh-filter-btn.mh-active, {{WRAPPER}} .mh-dropdown-open .mh-filter-toggle' ] );
         $this->end_controls_tab();
@@ -190,7 +190,7 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tabs();
 
         $this->add_control( 'transition_speed', [
-            'label'      => __( 'Animation Speed (s)', 'mh-plug' ),
+            'label'      => __( 'Animation Speed (s)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 's' ],
             'range'      => [ 's' => [ 'min' => 0.1, 'max' => 2, 'step' => 0.1 ] ],
@@ -205,20 +205,20 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         // STYLE: DROPDOWN MENU 
         // ----------------------------------------------------
         $this->start_controls_section( 'section_style_dropdown', [
-            'label'     => __( 'Dropdown Menu', 'mh-plug' ),
+            'label'     => __( 'Dropdown Menu', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'display_style' => 'dropdown' ],
         ] );
 
         $this->add_control( 'dropdown_bg', [
-            'label'     => __( 'Background Color', 'mh-plug' ),
+            'label'     => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'selectors' => [ '{{WRAPPER}} .mh-filter-dropdown-menu' => 'background-color: {{VALUE}};' ],
         ] );
 
         $this->add_responsive_control( 'dropdown_width', [
-            'label'      => __( 'Menu Width', 'mh-plug' ),
+            'label'      => __( 'Menu Width', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'range'      => [ 'px' => [ 'min' => 100, 'max' => 400 ] ],
@@ -227,14 +227,14 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'dropdown_padding', [
-            'label'      => __( 'Inner Padding', 'mh-plug' ),
+            'label'      => __( 'Inner Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em' ],
             'selectors'  => [ '{{WRAPPER}} .mh-filter-dropdown-menu' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
         $this->add_responsive_control( 'dropdown_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
             'default'    => [ 'top' => 8, 'right' => 8, 'bottom' => 8, 'left' => 8, 'isLinked' => true ],
@@ -254,7 +254,7 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
             ]
         ] );
 
-        $this->add_control( 'heading_dropdown_items', [ 'label' => __( 'Dropdown Items', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $this->add_control( 'heading_dropdown_items', [ 'label' => __( 'Dropdown Items', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
             'name'     => 'dropdown_item_typography',
@@ -262,14 +262,14 @@ class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->start_controls_tabs( 'tabs_dropdown_item_style' );
-        $this->start_controls_tab( 'tab_dropdown_item_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'item_color', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ '{{WRAPPER}} .mh-filter-dropdown-item' => 'color: {{VALUE}};' ] ] );
-        $this->add_control( 'item_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-filter-dropdown-item' => 'background-color: {{VALUE}};' ] ] );
+        $this->start_controls_tab( 'tab_dropdown_item_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
+        $this->add_control( 'item_color', [ 'label' => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ '{{WRAPPER}} .mh-filter-dropdown-item' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'item_bg', [ 'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-filter-dropdown-item' => 'background-color: {{VALUE}};' ] ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'tab_dropdown_item_hover', [ 'label' => __( 'Hover / Active', 'mh-plug' ) ] );
-        $this->add_control( 'item_hover_color', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#2293e9', 'selectors' => [ '{{WRAPPER}} .mh-filter-dropdown-item:hover, {{WRAPPER}} .mh-filter-dropdown-item.mh-active' => 'color: {{VALUE}};' ] ] );
-        $this->add_control( 'item_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#f9f9f9', 'selectors' => [ '{{WRAPPER}} .mh-filter-dropdown-item:hover, {{WRAPPER}} .mh-filter-dropdown-item.mh-active' => 'background-color: {{VALUE}};' ] ] );
+        $this->start_controls_tab( 'tab_dropdown_item_hover', [ 'label' => __( 'Hover / Active', 'mh-plug-ecommerce-builder-widgets' ) ] );
+        $this->add_control( 'item_hover_color', [ 'label' => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'default' => '#2293e9', 'selectors' => [ '{{WRAPPER}} .mh-filter-dropdown-item:hover, {{WRAPPER}} .mh-filter-dropdown-item.mh-active' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'item_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'default' => '#f9f9f9', 'selectors' => [ '{{WRAPPER}} .mh-filter-dropdown-item:hover, {{WRAPPER}} .mh-filter-dropdown-item.mh-active' => 'background-color: {{VALUE}};' ] ] );
         $this->end_controls_tab();
         $this->end_controls_tabs();
 

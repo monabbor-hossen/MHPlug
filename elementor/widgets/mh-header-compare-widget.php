@@ -10,46 +10,46 @@ use Elementor\Group_Control_Box_Shadow;
 class MH_Header_Compare_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_header_compare'; }
-    public function get_title() { return __( 'MH Header Compare', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Header Compare', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-exchange'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_script_depends() { return [ 'mh-widgets-js' ]; }
 
     protected function register_controls() {
         // CONTENT
-        $this->start_controls_section('section_content', ['label' => __('Compare Settings', 'mh-plug')]);
+        $this->start_controls_section('section_content', ['label' => __('Compare Settings', 'mh-plug-ecommerce-builder-widgets')]);
         
         $this->add_control('icon', [
-            'label' => __('Compare Icon', 'mh-plug'),
+            'label' => __('Compare Icon', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::ICONS,
             'default' => ['value' => 'fas fa-exchange-alt', 'library' => 'fa-solid'],
         ]);
 
         $this->add_control('compare_page_url', [
-            'label' => __('Compare Page URL', 'mh-plug'),
+            'label' => __('Compare Page URL', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::URL,
-            'placeholder' => __('https://your-site.com/compare', 'mh-plug'),
+            'placeholder' => __('https://your-site.com/compare', 'mh-plug-ecommerce-builder-widgets'),
         ]);
         
         $this->end_controls_section();
 
         // STYLE - ICON
-        $this->start_controls_section('section_style_icon', ['label' => __('Icon Style', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
+        $this->start_controls_section('section_style_icon', ['label' => __('Icon Style', 'mh-plug-ecommerce-builder-widgets'), 'tab' => Controls_Manager::TAB_STYLE]);
         
         $this->add_responsive_control('icon_size', [
-            'label' => __('Icon Size', 'mh-plug'),
+            'label' => __('Icon Size', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::SLIDER,
             'selectors' => ['{{WRAPPER}} .mh-header-compare-icon i, {{WRAPPER}} .mh-header-compare-icon svg' => 'font-size: {{SIZE}}{{UNIT}}; width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};'],
         ]);
 
         $this->add_responsive_control('box_size', [
-            'label' => __('Box Size', 'mh-plug'),
+            'label' => __('Box Size', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::SLIDER,
             'selectors' => ['{{WRAPPER}} .mh-header-compare-icon' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}; display: flex; align-items: center; justify-content: center;'],
         ]);
 
         $this->add_responsive_control('icon_radius', [
-            'label' => __('Border Radius', 'mh-plug'),
+            'label' => __('Border Radius', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::DIMENSIONS,
             'size_units' => ['px', '%'],
             'selectors' => ['{{WRAPPER}} .mh-header-compare-icon' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'],
@@ -58,14 +58,14 @@ class MH_Header_Compare_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tabs('tabs_icon_style');
 
         // Normal State
-        $this->start_controls_tab('tab_icon_normal', ['label' => __('Normal', 'mh-plug')]);
+        $this->start_controls_tab('tab_icon_normal', ['label' => __('Normal', 'mh-plug-ecommerce-builder-widgets')]);
         $this->add_control('icon_color', [
-            'label' => __('Icon Color', 'mh-plug'),
+            'label' => __('Icon Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-header-compare-icon' => 'color: {{VALUE}}; fill: {{VALUE}};'],
         ]);
         $this->add_control('icon_bg', [
-            'label' => __('Background', 'mh-plug'),
+            'label' => __('Background', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-header-compare-icon' => 'background-color: {{VALUE}};'],
         ]);
@@ -74,28 +74,28 @@ class MH_Header_Compare_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tab();
 
         // Hover State
-        $this->start_controls_tab('tab_icon_hover', ['label' => __('Hover', 'mh-plug')]);
+        $this->start_controls_tab('tab_icon_hover', ['label' => __('Hover', 'mh-plug-ecommerce-builder-widgets')]);
         $this->add_control('icon_hover_color', [
-            'label' => __('Icon Color', 'mh-plug'),
+            'label' => __('Icon Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-header-compare-icon:hover' => 'color: {{VALUE}}; fill: {{VALUE}};'],
         ]);
         $this->add_control('icon_hover_bg', [
-            'label' => __('Background', 'mh-plug'),
+            'label' => __('Background', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-header-compare-icon:hover' => 'background-color: {{VALUE}};'],
         ]);
         $this->add_group_control(Group_Control_Border::get_type(), ['name' => 'icon_hover_border', 'selector' => '{{WRAPPER}} .mh-header-compare-icon:hover']);
         $this->add_group_control(Group_Control_Box_Shadow::get_type(), ['name' => 'icon_hover_shadow', 'selector' => '{{WRAPPER}} .mh-header-compare-icon:hover']);
         $this->add_control('hover_animation', [
-            'label' => __('Hover Animation', 'mh-plug'),
+            'label' => __('Hover Animation', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::HOVER_ANIMATION,
         ]);
         $this->end_controls_tab();
         $this->end_controls_tabs();
 
         $this->add_control('transition_duration', [
-            'label' => __('Transition Duration (s)', 'mh-plug'),
+            'label' => __('Transition Duration (s)', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::SLIDER,
             'default' => ['size' => 0.3],
             'range' => ['px' => ['max' => 3, 'step' => 0.1]],
@@ -106,15 +106,15 @@ class MH_Header_Compare_Widget extends \Elementor\Widget_Base {
         $this->end_controls_section();
 
         // STYLE - BADGE
-        $this->start_controls_section('section_style_badge', ['label' => __('Badge Style', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
+        $this->start_controls_section('section_style_badge', ['label' => __('Badge Style', 'mh-plug-ecommerce-builder-widgets'), 'tab' => Controls_Manager::TAB_STYLE]);
         $this->add_control('badge_bg', [
-            'label' => __('Badge Background', 'mh-plug'),
+            'label' => __('Badge Background', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'default' => '#d63638',
             'selectors' => ['{{WRAPPER}} .mh-compare-count' => 'background-color: {{VALUE}};'],
         ]);
         $this->add_control('badge_color', [
-            'label' => __('Badge Text Color', 'mh-plug'),
+            'label' => __('Badge Text Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'default' => '#ffffff',
             'selectors' => ['{{WRAPPER}} .mh-compare-count' => 'color: {{VALUE}};'],
@@ -122,13 +122,13 @@ class MH_Header_Compare_Widget extends \Elementor\Widget_Base {
         $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'badge_typo', 'selector' => '{{WRAPPER}} .mh-compare-count']);
         
         $this->add_responsive_control('badge_offset_x', [
-            'label' => __('Horizontal Offset', 'mh-plug'),
+            'label' => __('Horizontal Offset', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::SLIDER,
             'range' => ['px' => ['min' => -50, 'max' => 50]],
             'selectors' => ['{{WRAPPER}} .mh-compare-count' => 'right: {{SIZE}}px;'],
         ]);
         $this->add_responsive_control('badge_offset_y', [
-            'label' => __('Vertical Offset', 'mh-plug'),
+            'label' => __('Vertical Offset', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::SLIDER,
             'range' => ['px' => ['min' => -50, 'max' => 50]],
             'selectors' => ['{{WRAPPER}} .mh-compare-count' => 'top: {{SIZE}}px;'],

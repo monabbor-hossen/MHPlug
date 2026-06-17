@@ -12,7 +12,7 @@ use Elementor\Repeater;
 class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
 
     public function get_name()       { return 'mh_stacked_carousel'; }
-    public function get_title()      { return __( 'MH Stacked Carousel', 'mh-plug' ); }
+    public function get_title()      { return __( 'MH Stacked Carousel', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon()       { return 'eicon-post-slider'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_script_depends() { return [ 'slick-js' ]; }
@@ -23,47 +23,47 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
          * CONTENT TAB — Slides
          * ============================================ */
         $this->start_controls_section( 'content_section', [
-            'label' => __( 'Slides', 'mh-plug' ),
+            'label' => __( 'Slides', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ]);
 
         $repeater = new Repeater();
 
         $repeater->add_control( 'image', [
-            'label'   => __( 'Background Image', 'mh-plug' ),
+            'label'   => __( 'Background Image', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::MEDIA,
             'default' => [ 'url' => Utils::get_placeholder_image_src() ],
         ]);
         $repeater->add_control( 'title', [
-            'label'       => __( 'Title', 'mh-plug' ),
+            'label'       => __( 'Title', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::TEXT,
-            'default'     => __( 'Slide Title', 'mh-plug' ),
+            'default'     => __( 'Slide Title', 'mh-plug-ecommerce-builder-widgets' ),
             'label_block' => true,
         ]);
         $repeater->add_control( 'subtitle', [
-            'label'       => __( 'Subtitle', 'mh-plug' ),
+            'label'       => __( 'Subtitle', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::TEXT,
-            'default'     => __( 'CATEGORY', 'mh-plug' ),
+            'default'     => __( 'CATEGORY', 'mh-plug-ecommerce-builder-widgets' ),
             'label_block' => true,
         ]);
         $repeater->add_control( 'description', [
-            'label'   => __( 'Description', 'mh-plug' ),
+            'label'   => __( 'Description', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::TEXTAREA,
-            'default' => __( 'A short description for this slide.', 'mh-plug' ),
+            'default' => __( 'A short description for this slide.', 'mh-plug-ecommerce-builder-widgets' ),
         ]);
         $repeater->add_control( 'button_text', [
-            'label'   => __( 'Button Text', 'mh-plug' ),
+            'label'   => __( 'Button Text', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::TEXT,
-            'default' => __( 'Learn More', 'mh-plug' ),
+            'default' => __( 'Learn More', 'mh-plug-ecommerce-builder-widgets' ),
         ]);
         $repeater->add_control( 'button_link', [
-            'label'       => __( 'Button Link', 'mh-plug' ),
+            'label'       => __( 'Button Link', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::URL,
             'placeholder' => 'https://your-link.com',
         ]);
 
         $this->add_control( 'slides', [
-            'label'       => __( 'Slides', 'mh-plug' ),
+            'label'       => __( 'Slides', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::REPEATER,
             'fields'      => $repeater->get_controls(),
             'default'     => [
@@ -81,27 +81,27 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
          * CONTENT TAB — Display Toggles
          * ============================================ */
         $this->start_controls_section( 'section_display', [
-            'label' => __( 'Display Options', 'mh-plug' ),
+            'label' => __( 'Display Options', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ]);
 
         $this->add_control( 'show_subtitle', [
-            'label'   => __( 'Show Subtitle', 'mh-plug' ),
+            'label'   => __( 'Show Subtitle', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SWITCHER,
             'default' => 'yes',
         ]);
         $this->add_control( 'show_title', [
-            'label'   => __( 'Show Title', 'mh-plug' ),
+            'label'   => __( 'Show Title', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SWITCHER,
             'default' => 'yes',
         ]);
         $this->add_control( 'show_description', [
-            'label'   => __( 'Show Description', 'mh-plug' ),
+            'label'   => __( 'Show Description', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SWITCHER,
             'default' => 'yes',
         ]);
         $this->add_control( 'show_button', [
-            'label'   => __( 'Show Button', 'mh-plug' ),
+            'label'   => __( 'Show Button', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SWITCHER,
             'default' => 'yes',
         ]);
@@ -112,24 +112,24 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
          * CONTENT TAB — Slider Settings
          * ============================================ */
         $this->start_controls_section( 'section_slider_settings', [
-            'label' => __( 'Slider Settings', 'mh-plug' ),
+            'label' => __( 'Slider Settings', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ]);
 
         $this->add_control( 'slide_mode', [
-            'label'   => __( 'Slide Mode', 'mh-plug' ),
+            'label'   => __( 'Slide Mode', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'stacked',
             'options' => [
-                'stacked'  => __( 'Stacked (Center Focus)', 'mh-plug' ),
-                'regular'  => __( 'Regular Slide', 'mh-plug' ),
-                'fade'     => __( 'Fade', 'mh-plug' ),
-                'vertical' => __( 'Vertical (Top to Bottom)', 'mh-plug' ),
+                'stacked'  => __( 'Stacked (Center Focus)', 'mh-plug-ecommerce-builder-widgets' ),
+                'regular'  => __( 'Regular Slide', 'mh-plug-ecommerce-builder-widgets' ),
+                'fade'     => __( 'Fade', 'mh-plug-ecommerce-builder-widgets' ),
+                'vertical' => __( 'Vertical (Top to Bottom)', 'mh-plug-ecommerce-builder-widgets' ),
             ],
         ]);
 
         $this->add_responsive_control( 'slides_to_show', [
-            'label'   => __( 'Slides to Show', 'mh-plug' ),
+            'label'   => __( 'Slides to Show', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::NUMBER,
             'min'     => 1,
             'max'     => 8,
@@ -142,7 +142,7 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
         ]);
 
         $this->add_control( 'slides_to_scroll', [
-            'label'   => __( 'Slides to Scroll', 'mh-plug' ),
+            'label'   => __( 'Slides to Scroll', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::NUMBER,
             'min'     => 1,
             'max'     => 8,
@@ -151,7 +151,7 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
         ]);
 
         $this->add_control( 'slide_gap', [
-            'label'   => __( 'Gap Between Slides (px)', 'mh-plug' ),
+            'label'   => __( 'Gap Between Slides (px)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::NUMBER,
             'min'     => 0,
             'max'     => 80,
@@ -160,36 +160,36 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
         ]);
 
         $this->add_control( 'infinite_loop', [
-            'label'   => __( 'Infinite Loop', 'mh-plug' ),
+            'label'   => __( 'Infinite Loop', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SWITCHER,
             'default' => 'yes',
         ]);
 
         $this->add_control( 'show_arrows', [
-            'label'   => __( 'Show Arrows', 'mh-plug' ),
+            'label'   => __( 'Show Arrows', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SWITCHER,
             'default' => '',
         ]);
 
         $this->add_control( 'show_dots', [
-            'label'   => __( 'Show Dots', 'mh-plug' ),
+            'label'   => __( 'Show Dots', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SWITCHER,
             'default' => '',
         ]);
 
         $this->add_control( 'autoplay', [
-            'label'   => __( 'Autoplay', 'mh-plug' ),
+            'label'   => __( 'Autoplay', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SWITCHER,
             'default' => '',
         ]);
         $this->add_control( 'autoplay_speed', [
-            'label'     => __( 'Autoplay Speed (ms)', 'mh-plug' ),
+            'label'     => __( 'Autoplay Speed (ms)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::NUMBER,
             'default'   => 3000,
             'condition' => [ 'autoplay' => 'yes' ],
         ]);
         $this->add_control( 'transition_speed', [
-            'label'   => __( 'Transition Speed (ms)', 'mh-plug' ),
+            'label'   => __( 'Transition Speed (ms)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::NUMBER,
             'default' => 800,
         ]);
@@ -200,33 +200,33 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
          * STYLE TAB — Card
          * ============================================ */
         $this->start_controls_section( 'section_style_card', [
-            'label' => __( 'Card', 'mh-plug' ),
+            'label' => __( 'Card', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ]);
 
         $this->add_responsive_control( 'card_height', [
-            'label'   => __( 'Height', 'mh-plug' ),
+            'label'   => __( 'Height', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SLIDER,
             'range'   => [ 'px' => [ 'min' => 200, 'max' => 700 ] ],
             'default' => [ 'unit' => 'px', 'size' => 420 ],
             'selectors' => [ '{{WRAPPER}} .mh-stacked-item' => 'height: {{SIZE}}{{UNIT}}; min-height: {{SIZE}}{{UNIT}};' ],
         ]);
         $this->add_responsive_control( 'card_width', [
-            'label'   => __( 'Width', 'mh-plug' ),
+            'label'   => __( 'Width', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SLIDER,
             'range'   => [ 'px' => [ 'min' => 200, 'max' => 700 ] ],
             'default' => [ 'unit' => 'px', 'size' => 360 ],
             'selectors' => [ '{{WRAPPER}} .mh-stacked-item' => 'width: {{SIZE}}{{UNIT}};' ],
         ]);
         $this->add_control( 'card_border_radius', [
-            'label'   => __( 'Border Radius', 'mh-plug' ),
+            'label'   => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SLIDER,
             'range'   => [ 'px' => [ 'min' => 0, 'max' => 50 ] ],
             'default' => [ 'unit' => 'px', 'size' => 16 ],
             'selectors' => [ '{{WRAPPER}} .mh-stacked-item' => 'border-radius: {{SIZE}}{{UNIT}};' ],
         ]);
         $this->add_control( 'overlay_color', [
-            'label'   => __( 'Overlay Color', 'mh-plug' ),
+            'label'   => __( 'Overlay Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::COLOR,
             'default' => 'rgba(0,0,0,0.35)',
             'selectors' => [ '{{WRAPPER}} .mh-stacked-wrap .mh-stacked-overlay' => 'background: {{VALUE}} !important;' ],
@@ -236,43 +236,43 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
             'selector' => '{{WRAPPER}} .mh-stacked-item',
         ]);
         $this->add_responsive_control( 'content_padding', [
-            'label'      => __( 'Content Padding', 'mh-plug' ),
+            'label'      => __( 'Content Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'top' => '24', 'right' => '24', 'bottom' => '24', 'left' => '24', 'unit' => 'px' ],
             'selectors'  => [ '{{WRAPPER}} .mh-stacked-wrap .mh-stacked-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;' ],
         ]);
         $this->add_control( 'content_valign', [
-            'label'   => __( 'Vertical Position', 'mh-plug' ),
+            'label'   => __( 'Vertical Position', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'flex-end',
             'options' => [
-                'flex-start' => __( 'Top', 'mh-plug' ),
-                'center'     => __( 'Center', 'mh-plug' ),
-                'flex-end'   => __( 'Bottom', 'mh-plug' ),
+                'flex-start' => __( 'Top', 'mh-plug-ecommerce-builder-widgets' ),
+                'center'     => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ),
+                'flex-end'   => __( 'Bottom', 'mh-plug-ecommerce-builder-widgets' ),
             ],
             'selectors' => [ '{{WRAPPER}} .mh-stacked-wrap .mh-stacked-content' => 'justify-content: {{VALUE}} !important;' ],
         ]);
 
         $this->add_control( 'content_halign', [
-            'label'   => __( 'Horizontal Alignment', 'mh-plug' ),
+            'label'   => __( 'Horizontal Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::CHOOSE,
             'options' => [
-                'flex-start' => [ 'title' => __( 'Left', 'mh-plug' ),   'icon' => 'eicon-text-align-left' ],
-                'center'     => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'flex-end'   => [ 'title' => __( 'Right', 'mh-plug' ),  'icon' => 'eicon-text-align-right' ],
+                'flex-start' => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ),   'icon' => 'eicon-text-align-left' ],
+                'center'     => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'flex-end'   => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ),  'icon' => 'eicon-text-align-right' ],
             ],
             'default'   => 'flex-start',
             'selectors' => [ '{{WRAPPER}} .mh-stacked-wrap .mh-stacked-content' => 'align-items: {{VALUE}} !important;' ],
         ]);
 
         $this->add_control( 'text_align', [
-            'label'   => __( 'Text Align', 'mh-plug' ),
+            'label'   => __( 'Text Align', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::CHOOSE,
             'options' => [
-                'left'   => [ 'title' => __( 'Left', 'mh-plug' ),   'icon' => 'eicon-text-align-left' ],
-                'center' => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'right'  => [ 'title' => __( 'Right', 'mh-plug' ),  'icon' => 'eicon-text-align-right' ],
+                'left'   => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ),   'icon' => 'eicon-text-align-left' ],
+                'center' => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'right'  => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ),  'icon' => 'eicon-text-align-right' ],
             ],
             'default'   => 'left',
             'selectors' => [ '{{WRAPPER}} .mh-stacked-wrap .mh-stacked-content' => 'text-align: {{VALUE}} !important;' ],
@@ -284,45 +284,45 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
          * STYLE TAB — Image
          * ============================================ */
         $this->start_controls_section( 'section_style_image', [
-            'label' => __( 'Image', 'mh-plug' ),
+            'label' => __( 'Image', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ]);
 
         $this->add_control( 'image_fit', [
-            'label'   => __( 'Object Fit', 'mh-plug' ),
+            'label'   => __( 'Object Fit', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'cover',
             'options' => [
-                'cover'   => __( 'Cover', 'mh-plug' ),
-                'contain' => __( 'Contain', 'mh-plug' ),
-                'fill'    => __( 'Fill (Stretch)', 'mh-plug' ),
+                'cover'   => __( 'Cover', 'mh-plug-ecommerce-builder-widgets' ),
+                'contain' => __( 'Contain', 'mh-plug-ecommerce-builder-widgets' ),
+                'fill'    => __( 'Fill (Stretch)', 'mh-plug-ecommerce-builder-widgets' ),
             ],
             'selectors' => [ '{{WRAPPER}} .mh-stacked-item' => 'background-size: {{VALUE}};' ],
         ]);
 
         $this->add_control( 'image_position', [
-            'label'   => __( 'Position', 'mh-plug' ),
+            'label'   => __( 'Position', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'center center',
             'options' => [
-                'center center' => __( 'Center', 'mh-plug' ),
-                'top center'    => __( 'Top', 'mh-plug' ),
-                'bottom center' => __( 'Bottom', 'mh-plug' ),
-                'center left'   => __( 'Left', 'mh-plug' ),
-                'center right'  => __( 'Right', 'mh-plug' ),
+                'center center' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ),
+                'top center'    => __( 'Top', 'mh-plug-ecommerce-builder-widgets' ),
+                'bottom center' => __( 'Bottom', 'mh-plug-ecommerce-builder-widgets' ),
+                'center left'   => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ),
+                'center right'  => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ),
             ],
             'selectors' => [ '{{WRAPPER}} .mh-stacked-item' => 'background-position: {{VALUE}};' ],
         ]);
 
         $this->add_control( 'image_hover_zoom', [
-            'label'   => __( 'Hover Zoom', 'mh-plug' ),
+            'label'   => __( 'Hover Zoom', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SWITCHER,
             'default' => '',
-            'description' => __( 'Subtle zoom effect on hover.', 'mh-plug' ),
+            'description' => __( 'Subtle zoom effect on hover.', 'mh-plug-ecommerce-builder-widgets' ),
         ]);
 
         $this->add_control( 'image_hover_zoom_scale', [
-            'label'   => __( 'Zoom Scale', 'mh-plug' ),
+            'label'   => __( 'Zoom Scale', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SLIDER,
             'range'   => [ 'px' => [ 'min' => 1, 'max' => 1.5, 'step' => 0.05 ] ],
             'default' => [ 'unit' => 'px', 'size' => 1.1 ],
@@ -335,12 +335,12 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
          * STYLE TAB — Subtitle
          * ============================================ */
         $this->start_controls_section( 'section_style_subtitle', [
-            'label'     => __( 'Subtitle', 'mh-plug' ),
+            'label'     => __( 'Subtitle', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_subtitle' => 'yes' ],
         ]);
         $this->add_control( 'subtitle_color', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => 'rgba(255,255,255,0.75)',
             'selectors' => [ '{{WRAPPER}} .mh-stacked-subtitle' => 'color: {{VALUE}};' ],
@@ -350,7 +350,7 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
             'selector' => '{{WRAPPER}} .mh-stacked-subtitle',
         ]);
         $this->add_responsive_control( 'subtitle_spacing', [
-            'label'     => __( 'Bottom Spacing', 'mh-plug' ),
+            'label'     => __( 'Bottom Spacing', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SLIDER,
             'range'     => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
             'default'   => [ 'unit' => 'px', 'size' => 6 ],
@@ -362,12 +362,12 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
          * STYLE TAB — Title
          * ============================================ */
         $this->start_controls_section( 'section_style_title', [
-            'label'     => __( 'Title', 'mh-plug' ),
+            'label'     => __( 'Title', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_title' => 'yes' ],
         ]);
         $this->add_control( 'title_color', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'selectors' => [ '{{WRAPPER}} .mh-stacked-title' => 'color: {{VALUE}};' ],
@@ -381,7 +381,7 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
             'selector' => '{{WRAPPER}} .mh-stacked-title',
         ]);
         $this->add_responsive_control( 'title_spacing', [
-            'label'     => __( 'Bottom Spacing', 'mh-plug' ),
+            'label'     => __( 'Bottom Spacing', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SLIDER,
             'range'     => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
             'default'   => [ 'unit' => 'px', 'size' => 8 ],
@@ -393,12 +393,12 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
          * STYLE TAB — Description
          * ============================================ */
         $this->start_controls_section( 'section_style_desc', [
-            'label'     => __( 'Description', 'mh-plug' ),
+            'label'     => __( 'Description', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_description' => 'yes' ],
         ]);
         $this->add_control( 'desc_color', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => 'rgba(255,255,255,0.8)',
             'selectors' => [ '{{WRAPPER}} .mh-stacked-desc' => 'color: {{VALUE}};' ],
@@ -408,7 +408,7 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
             'selector' => '{{WRAPPER}} .mh-stacked-desc',
         ]);
         $this->add_responsive_control( 'desc_spacing', [
-            'label'     => __( 'Bottom Spacing', 'mh-plug' ),
+            'label'     => __( 'Bottom Spacing', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SLIDER,
             'range'     => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
             'default'   => [ 'unit' => 'px', 'size' => 14 ],
@@ -420,37 +420,37 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
          * STYLE TAB — Button
          * ============================================ */
         $this->start_controls_section( 'section_style_button', [
-            'label'     => __( 'Button', 'mh-plug' ),
+            'label'     => __( 'Button', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_button' => 'yes' ],
         ]);
 
         $this->start_controls_tabs( 'btn_tabs' );
 
-        $this->start_controls_tab( 'btn_tab_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'btn_tab_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'btn_bg', [
-            'label'     => __( 'Background', 'mh-plug' ),
+            'label'     => __( 'Background', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'selectors' => [ '{{WRAPPER}} .mh-stacked-btn' => 'background: {{VALUE}};' ],
         ]);
         $this->add_control( 'btn_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#111111',
             'selectors' => [ '{{WRAPPER}} .mh-stacked-btn' => 'color: {{VALUE}};' ],
         ]);
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'btn_tab_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'btn_tab_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'btn_bg_hover', [
-            'label'     => __( 'Background', 'mh-plug' ),
+            'label'     => __( 'Background', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#d63638',
             'selectors' => [ '{{WRAPPER}} .mh-stacked-btn:hover' => 'background: {{VALUE}};' ],
         ]);
         $this->add_control( 'btn_color_hover', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'selectors' => [ '{{WRAPPER}} .mh-stacked-btn:hover' => 'color: {{VALUE}};' ],
@@ -465,14 +465,14 @@ class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
             'separator' => 'before',
         ]);
         $this->add_control( 'btn_border_radius', [
-            'label'   => __( 'Border Radius', 'mh-plug' ),
+            'label'   => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SLIDER,
             'range'   => [ 'px' => [ 'min' => 0, 'max' => 50 ] ],
             'default' => [ 'unit' => 'px', 'size' => 8 ],
             'selectors' => [ '{{WRAPPER}} .mh-stacked-btn' => 'border-radius: {{SIZE}}{{UNIT}};' ],
         ]);
         $this->add_responsive_control( 'btn_padding', [
-            'label'      => __( 'Padding', 'mh-plug' ),
+            'label'      => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'top' => '10', 'right' => '24', 'bottom' => '10', 'left' => '24', 'unit' => 'px' ],

@@ -23,7 +23,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 	}
 
 	public function get_title() {
-		return esc_html__( 'MH Feature Card', 'mh-plug' );
+		return esc_html__( 'MH Feature Card', 'mh-plug-ecommerce-builder-widgets' );
 	}
 
 	public function get_icon() {
@@ -40,16 +40,16 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_content',
 			[
-				'label' => esc_html__( 'Card Content', 'mh-plug' ),
+				'label' => esc_html__( 'Card Content', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
 		$this->add_control(
 			'card_title',
 			[
-				'label' => esc_html__( 'Title', 'mh-plug' ),
+				'label' => esc_html__( 'Title', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::TEXT,
-				'default' => esc_html__( 'Feature Title', 'mh-plug' ),
+				'default' => esc_html__( 'Feature Title', 'mh-plug-ecommerce-builder-widgets' ),
 				'label_block' => true,
 			]
 		);
@@ -57,27 +57,27 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'card_description',
 			[
-				'label' => esc_html__( 'Description', 'mh-plug' ),
+				'label' => esc_html__( 'Description', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::TEXTAREA,
-				'default' => esc_html__( 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'mh-plug' ),
+				'default' => esc_html__( 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
         $this->add_control(
 			'button_text',
 			[
-				'label' => esc_html__( 'Button Text', 'mh-plug' ),
+				'label' => esc_html__( 'Button Text', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::TEXT,
-				'default' => esc_html__( 'Read More', 'mh-plug' ),
+				'default' => esc_html__( 'Read More', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
 		$this->add_control(
 			'button_link',
 			[
-				'label' => esc_html__( 'Button Link', 'mh-plug' ),
+				'label' => esc_html__( 'Button Link', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::URL,
-				'placeholder' => esc_html__( 'https://your-link.com', 'mh-plug' ),
+				'placeholder' => esc_html__( 'https://your-link.com', 'mh-plug-ecommerce-builder-widgets' ),
 				'default' => [
 					'url' => '#',
 				],
@@ -87,19 +87,19 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
 			'text_align',
 			[
-				'label' => esc_html__( 'Alignment', 'mh-plug' ),
+				'label' => esc_html__( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left' => [
-						'title' => esc_html__( 'Left', 'mh-plug' ),
+						'title' => esc_html__( 'Left', 'mh-plug-ecommerce-builder-widgets' ),
 						'icon' => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => esc_html__( 'Center', 'mh-plug' ),
+						'title' => esc_html__( 'Center', 'mh-plug-ecommerce-builder-widgets' ),
 						'icon' => 'eicon-text-align-center',
 					],
 					'right' => [
-						'title' => esc_html__( 'Right', 'mh-plug' ),
+						'title' => esc_html__( 'Right', 'mh-plug-ecommerce-builder-widgets' ),
 						'icon' => 'eicon-text-align-right',
 					],
 				],
@@ -123,19 +123,19 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->add_control(
 			'background_type',
 			[
-				'label' => esc_html__( 'Background Type', 'mh-plug' ),
+				'label' => esc_html__( 'Background Type', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'image' => [
-						'title' => esc_html__( 'Image', 'mh-plug' ),
+						'title' => esc_html__( 'Image', 'mh-plug-ecommerce-builder-widgets' ),
 						'icon' => 'eicon-image',
 					],
 					'color' => [
-						'title' => esc_html__( 'Color', 'mh-plug' ),
+						'title' => esc_html__( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
 						'icon' => 'eicon-paint-brush',
 					],
                     'none' => [
-						'title' => esc_html__( 'None', 'mh-plug' ),
+						'title' => esc_html__( 'None', 'mh-plug-ecommerce-builder-widgets' ),
 						'icon' => 'eicon-ban',
 					],
 				],
@@ -148,7 +148,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->add_control(
 			'card_image',
 			[
-				'label' => esc_html__( 'Background Image', 'mh-plug' ),
+				'label' => esc_html__( 'Background Image', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::MEDIA,
                 'default' => [
 					'url' => Utils::get_placeholder_image_src(),
@@ -163,7 +163,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->add_control(
 			'card_bg_color',
 			[
-				'label' => esc_html__( 'Background Color', 'mh-plug' ),
+				'label' => esc_html__( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#333333',
                 'condition' => [
@@ -178,7 +178,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_style_box',
 			[
-				'label' => esc_html__( 'Card Box', 'mh-plug' ),
+				'label' => esc_html__( 'Card Box', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -186,7 +186,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
 			'box_height',
 			[
-				'label' => esc_html__( 'Min Height', 'mh-plug' ),
+				'label' => esc_html__( 'Min Height', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
@@ -207,7 +207,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
 			'box_padding',
 			[
-				'label' => esc_html__( 'Padding', 'mh-plug' ),
+				'label' => esc_html__( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
                 'default' => [
@@ -230,7 +230,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 			Group_Control_Background::get_type(),
 			[
 				'name' => 'box_background_settings',
-				'label' => esc_html__( 'Background Settings', 'mh-plug' ),
+				'label' => esc_html__( 'Background Settings', 'mh-plug-ecommerce-builder-widgets' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .mh-feature-card-wrapper',
                 'exclude' => ['image'], 
@@ -251,7 +251,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->add_responsive_control(
 			'box_border_radius',
 			[
-				'label' => esc_html__( 'Border Radius', 'mh-plug' ),
+				'label' => esc_html__( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
@@ -265,7 +265,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name' => 'box_shadow',
-				'label' => esc_html__( 'Box Shadow', 'mh-plug' ),
+				'label' => esc_html__( 'Box Shadow', 'mh-plug-ecommerce-builder-widgets' ),
 				'selector' => '{{WRAPPER}} .mh-feature-card-wrapper',
 			]
 		);
@@ -276,7 +276,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
 			'section_style_overlay',
 			[
-				'label' => esc_html__( 'Background Overlay', 'mh-plug' ),
+				'label' => esc_html__( 'Background Overlay', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
                 // Only show overlay options if Image is selected
                 'condition' => [
@@ -290,7 +290,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
 			'tab_overlay_normal',
 			[
-				'label' => esc_html__( 'Normal', 'mh-plug' ),
+				'label' => esc_html__( 'Normal', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
@@ -298,7 +298,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 			Group_Control_Background::get_type(),
 			[
 				'name' => 'background_overlay',
-				'label' => esc_html__( 'Overlay', 'mh-plug' ),
+				'label' => esc_html__( 'Overlay', 'mh-plug-ecommerce-builder-widgets' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .mh-feature-card-wrapper::before',
 			]
@@ -309,7 +309,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
 			'tab_overlay_hover',
 			[
-				'label' => esc_html__( 'Hover', 'mh-plug' ),
+				'label' => esc_html__( 'Hover', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
@@ -317,7 +317,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 			Group_Control_Background::get_type(),
 			[
 				'name' => 'background_overlay_hover',
-				'label' => esc_html__( 'Overlay', 'mh-plug' ),
+				'label' => esc_html__( 'Overlay', 'mh-plug-ecommerce-builder-widgets' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .mh-feature-card-wrapper:hover::before',
 			]
@@ -332,7 +332,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_style_title',
 			[
-				'label' => esc_html__( 'Title', 'mh-plug' ),
+				'label' => esc_html__( 'Title', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -340,7 +340,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'title_color',
 			[
-				'label' => esc_html__( 'Color', 'mh-plug' ),
+				'label' => esc_html__( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#FFFFFF', // Default to white
 				'selectors' => [
@@ -360,7 +360,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->add_responsive_control(
 			'title_margin',
 			[
-				'label' => esc_html__( 'Margin', 'mh-plug' ),
+				'label' => esc_html__( 'Margin', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
 				'selectors' => [
@@ -375,7 +375,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_style_desc',
 			[
-				'label' => esc_html__( 'Description', 'mh-plug' ),
+				'label' => esc_html__( 'Description', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -383,7 +383,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'desc_color',
 			[
-				'label' => esc_html__( 'Color', 'mh-plug' ),
+				'label' => esc_html__( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#EEEEEE', 
 				'selectors' => [
@@ -403,7 +403,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
 			'desc_margin',
 			[
-				'label' => esc_html__( 'Margin', 'mh-plug' ),
+				'label' => esc_html__( 'Margin', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
 				'selectors' => [
@@ -418,7 +418,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
 			'section_style_button',
 			[
-				'label' => esc_html__( 'Button', 'mh-plug' ),
+				'label' => esc_html__( 'Button', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -428,14 +428,14 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_normal',
 			[
-				'label' => esc_html__( 'Normal', 'mh-plug' ),
+				'label' => esc_html__( 'Normal', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
 		$this->add_control(
 			'button_text_color',
 			[
-				'label' => esc_html__( 'Text Color', 'mh-plug' ),
+				'label' => esc_html__( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
@@ -447,7 +447,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'button_bg_color',
 			[
-				'label' => esc_html__( 'Background Color', 'mh-plug' ),
+				'label' => esc_html__( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#004265',
 				'selectors' => [
@@ -461,14 +461,14 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_hover',
 			[
-				'label' => esc_html__( 'Hover', 'mh-plug' ),
+				'label' => esc_html__( 'Hover', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
 		$this->add_control(
 			'button_text_color_hover',
 			[
-				'label' => esc_html__( 'Text Color', 'mh-plug' ),
+				'label' => esc_html__( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .mh-feature-card-button:hover' => 'color: {{VALUE}};',
@@ -479,7 +479,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'button_bg_color_hover',
 			[
-				'label' => esc_html__( 'Background Color', 'mh-plug' ),
+				'label' => esc_html__( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .mh-feature-card-button:hover' => 'background-color: {{VALUE}};',
@@ -502,7 +502,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
 			'button_padding',
 			[
-				'label' => esc_html__( 'Padding', 'mh-plug' ),
+				'label' => esc_html__( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
                 'default' => [
@@ -522,7 +522,7 @@ class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
 			'button_radius',
 			[
-				'label' => esc_html__( 'Border Radius', 'mh-plug' ),
+				'label' => esc_html__( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
                 'default' => [

@@ -43,7 +43,7 @@ class MH_Custom_Variations_Admin {
 
     public static function add_product_data_tab( $tabs ) {
         $tabs['mh_custom_variations'] = [
-            'label'    => __( 'Custom Variations', 'mh-plug' ),
+            'label'    => __( 'Custom Variations', 'mh-plug-ecommerce-builder-widgets' ),
             'target'   => 'mh_custom_variations_panel',
             'class'    => [ 'show_if_simple', 'show_if_combo' ],
             'priority' => 70,
@@ -78,7 +78,7 @@ class MH_Custom_Variations_Admin {
         }
 
         if ( empty( $attributes ) ) {
-            echo '<p style="padding:15px;">' . __( 'Please add attributes and check "Used for variations" in the "Attributes" tab first.', 'mh-plug' ) . '</p>';
+            echo '<p style="padding:15px;">' . __( 'Please add attributes and check "Used for variations" in the "Attributes" tab first.', 'mh-plug-ecommerce-builder-widgets' ) . '</p>';
             echo '</div>';
             return;
         }
@@ -94,9 +94,9 @@ class MH_Custom_Variations_Admin {
             <table class="widefat" style="margin-bottom: 15px;">
                 <thead>
                     <tr>
-                        <th><?php esc_html_e( 'Attributes', 'mh-plug' ); ?></th>
-                        <th><?php esc_html_e( 'Regular Price', 'mh-plug' ); ?></th>
-                        <th><?php esc_html_e( 'Sale Price', 'mh-plug' ); ?></th>
+                        <th><?php esc_html_e( 'Attributes', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
+                        <th><?php esc_html_e( 'Regular Price', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
+                        <th><?php esc_html_e( 'Sale Price', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -110,8 +110,8 @@ class MH_Custom_Variations_Admin {
                     ?>
                 </tbody>
             </table>
-            <button type="button" class="button button-primary" id="mh-add-custom-var-rule"><?php esc_html_e( 'Add New Rule', 'mh-plug' ); ?></button>
-            <button type="button" class="button button-primary mh-save-variations-btn" style="margin-left: 10px;"><?php esc_html_e( 'Save Variations', 'mh-plug' ); ?></button>
+            <button type="button" class="button button-primary" id="mh-add-custom-var-rule"><?php esc_html_e( 'Add New Rule', 'mh-plug-ecommerce-builder-widgets' ); ?></button>
+            <button type="button" class="button button-primary mh-save-variations-btn" style="margin-left: 10px;"><?php esc_html_e( 'Save Variations', 'mh-plug-ecommerce-builder-widgets' ); ?></button>
             <span class="mh-save-spinner spinner" style="float: none; margin-top: 4px;"></span>
         </div>
 

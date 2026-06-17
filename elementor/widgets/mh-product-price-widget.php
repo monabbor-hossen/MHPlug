@@ -15,7 +15,7 @@ use Elementor\Group_Control_Text_Shadow;
 class MH_Product_Price_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_price'; }
-    public function get_title() { return __( 'MH Product Price', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Product Price', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-product-price'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
@@ -30,28 +30,28 @@ class MH_Product_Price_Widget extends \Elementor\Widget_Base {
 
     protected function register_controls() {
         $this->start_controls_section( 'content_section', [
-            'label' => __( 'Price Settings', 'mh-plug' ),
+            'label' => __( 'Price Settings', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_responsive_control( 'align', [
-            'label'   => __( 'Alignment', 'mh-plug' ),
+            'label'   => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::CHOOSE,
             'options' => [
-                'left'   => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center' => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'right'  => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+                'left'   => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center' => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'right'  => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
             ],
             'selectors' => [ '{{WRAPPER}} .mh-price-inner' => 'text-align: {{VALUE}};', ],
         ] );
         $this->end_controls_section();
 
         $this->start_controls_section( 'style_main_price', [
-            'label' => __( 'Main Price', 'mh-plug' ),
+            'label' => __( 'Main Price', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
         $this->add_control( 'main_price_color', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [
                 '{{WRAPPER}} .mh-price-inner > .amount'     => 'color: {{VALUE}};',
@@ -65,11 +65,11 @@ class MH_Product_Price_Widget extends \Elementor\Widget_Base {
         $this->end_controls_section();
 
         $this->start_controls_section( 'style_old_price', [
-            'label' => __( 'Old Price (Strikethrough)', 'mh-plug' ),
+            'label' => __( 'Old Price (Strikethrough)', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
         $this->add_control( 'old_price_color', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#a8a8a8',
             'selectors' => [
@@ -82,7 +82,7 @@ class MH_Product_Price_Widget extends \Elementor\Widget_Base {
             'selector' => '{{WRAPPER}} .mh-price-inner del',
         ] );
         $this->add_responsive_control( 'old_price_gap', [
-            'label'      => __( 'Gap', 'mh-plug' ),
+            'label'      => __( 'Gap', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'selectors'  => [ '{{WRAPPER}} .mh-price-inner del' => 'margin-right: {{SIZE}}{{UNIT}};', ],
         ] );

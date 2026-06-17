@@ -20,7 +20,7 @@ class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_title() {
-        return esc_html__('MH Site Logo', 'mh-plug');
+        return esc_html__('MH Site Logo', 'mh-plug-ecommerce-builder-widgets');
     }
 
     public function get_icon() {
@@ -37,7 +37,7 @@ class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_content',
             [
-                'label' => esc_html__('Logo Settings', 'mh-plug'),
+                'label' => esc_html__('Logo Settings', 'mh-plug-ecommerce-builder-widgets'),
                 'tab'   => Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -45,19 +45,19 @@ class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'alignment',
             [
-                'label' => esc_html__( 'Alignment', 'mh-plug' ),
+                'label' => esc_html__( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
                     'left' => [
-                        'title' => esc_html__( 'Left', 'mh-plug' ),
+                        'title' => esc_html__( 'Left', 'mh-plug-ecommerce-builder-widgets' ),
                         'icon' => 'eicon-text-align-left',
                     ],
                     'center' => [
-                        'title' => esc_html__( 'Center', 'mh-plug' ),
+                        'title' => esc_html__( 'Center', 'mh-plug-ecommerce-builder-widgets' ),
                         'icon' => 'eicon-text-align-center',
                     ],
                     'right' => [
-                        'title' => esc_html__( 'Right', 'mh-plug' ),
+                        'title' => esc_html__( 'Right', 'mh-plug-ecommerce-builder-widgets' ),
                         'icon' => 'eicon-text-align-right',
                     ],
                 ],
@@ -71,13 +71,13 @@ class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'link_to',
             [
-                'label' => esc_html__( 'Link', 'mh-plug' ),
+                'label' => esc_html__( 'Link', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'home',
                 'options' => [
-                    'none' => esc_html__( 'None', 'mh-plug' ),
-                    'home' => esc_html__( 'Home URL', 'mh-plug' ),
-                    'custom' => esc_html__( 'Custom URL', 'mh-plug' ),
+                    'none' => esc_html__( 'None', 'mh-plug-ecommerce-builder-widgets' ),
+                    'home' => esc_html__( 'Home URL', 'mh-plug-ecommerce-builder-widgets' ),
+                    'custom' => esc_html__( 'Custom URL', 'mh-plug-ecommerce-builder-widgets' ),
                 ],
             ]
         );
@@ -85,9 +85,9 @@ class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'custom_link',
             [
-                'label' => esc_html__( 'Custom URL', 'mh-plug' ),
+                'label' => esc_html__( 'Custom URL', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::URL,
-                'placeholder' => esc_html__( 'https://your-link.com', 'mh-plug' ),
+                'placeholder' => esc_html__( 'https://your-link.com', 'mh-plug-ecommerce-builder-widgets' ),
                 'condition' => [
                     'link_to' => 'custom',
                 ],
@@ -104,7 +104,7 @@ class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_style',
             [
-                'label' => esc_html__('Logo Style', 'mh-plug'),
+                'label' => esc_html__('Logo Style', 'mh-plug-ecommerce-builder-widgets'),
                 'tab' => Controls_Manager::TAB_STYLE,
             ]
         );
@@ -112,7 +112,7 @@ class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'width',
             [
-                'label' => esc_html__( 'Width', 'mh-plug' ),
+                'label' => esc_html__( 'Width', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SLIDER,
                 'size_units' => [ 'px', '%', 'vw' ],
                 'range' => [
@@ -137,7 +137,7 @@ class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
         $this->add_control(
 			'border_radius',
 			[
-				'label' => esc_html__( 'Border Radius', 'mh-plug' ),
+				'label' => esc_html__( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
@@ -157,7 +157,7 @@ class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'padding',
             [
-                'label'      => esc_html__('Padding', 'mh-plug'),
+                'label'      => esc_html__('Padding', 'mh-plug-ecommerce-builder-widgets'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%', 'em'],
                 'selectors'  => [
@@ -170,7 +170,7 @@ class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'margin',
             [
-                'label'      => esc_html__('Margin', 'mh-plug'),
+                'label'      => esc_html__('Margin', 'mh-plug-ecommerce-builder-widgets'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%', 'em'],
                 'selectors'  => [
@@ -190,7 +190,7 @@ class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
 
     if (!$logo_id) {
         if (\Elementor\Plugin::$instance->editor->is_edit_mode()) {
-             echo '<div style="text-align:center; padding: 20px; border: 1px dashed #ccc;">' . esc_html__('No Site Logo Set. Set one in Appearance > Customize > Site Identity.', 'mh-plug') . '</div>';
+             echo '<div style="text-align:center; padding: 20px; border: 1px dashed #ccc;">' . esc_html__('No Site Logo Set. Set one in Appearance > Customize > Site Identity.', 'mh-plug-ecommerce-builder-widgets') . '</div>';
         }
         return;
     }

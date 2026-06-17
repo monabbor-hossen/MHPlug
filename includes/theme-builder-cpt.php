@@ -11,16 +11,16 @@ function mh_plug_allowed_template_types() {
 
 function mh_plug_register_template_cpt() {
     $labels = [
-        'name'          => _x( 'MH Templates', 'Post Type General Name', 'mh-plug' ),
-        'singular_name' => _x( 'MH Template',  'Post Type Singular Name', 'mh-plug' ),
-        'menu_name'     => __( 'MH Templates', 'mh-plug' ),
-        'add_new_item'  => __( 'Add New Template', 'mh-plug' ),
-        'edit_item'     => __( 'Edit Template', 'mh-plug' ),
-        'view_item'     => __( 'View Template', 'mh-plug' ),
+        'name'          => _x( 'MH Templates', 'Post Type General Name', 'mh-plug-ecommerce-builder-widgets' ),
+        'singular_name' => _x( 'MH Template',  'Post Type Singular Name', 'mh-plug-ecommerce-builder-widgets' ),
+        'menu_name'     => __( 'MH Templates', 'mh-plug-ecommerce-builder-widgets' ),
+        'add_new_item'  => __( 'Add New Template', 'mh-plug-ecommerce-builder-widgets' ),
+        'edit_item'     => __( 'Edit Template', 'mh-plug-ecommerce-builder-widgets' ),
+        'view_item'     => __( 'View Template', 'mh-plug-ecommerce-builder-widgets' ),
     ];
 
     register_post_type( 'mh_templates', [
-        'label'               => __( 'MH Template', 'mh-plug' ),
+        'label'               => __( 'MH Template', 'mh-plug-ecommerce-builder-widgets' ),
         'labels'              => $labels,
         'supports'            => [ 'title', 'editor', 'elementor' ],
         'hierarchical'        => false,
@@ -54,18 +54,18 @@ function mh_plug_ajax_create_template() {
     check_ajax_referer( 'mh_tb_create_template', '_ajax_nonce' );
 
     if ( ! current_user_can( 'edit_posts' ) ) {
-        wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'mh-plug' ) ] );
+        wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'mh-plug-ecommerce-builder-widgets' ) ] );
     }
 
     $template_name = isset( $_POST['template_name'] ) ? sanitize_text_field( $_POST['template_name'] ) : '';
     $template_type = isset( $_POST['template_type'] ) ? sanitize_key( $_POST['template_type'] )        : '';
 
     if ( empty( $template_name ) ) {
-        wp_send_json_error( [ 'message' => __( 'Template name is required.', 'mh-plug' ) ] );
+        wp_send_json_error( [ 'message' => __( 'Template name is required.', 'mh-plug-ecommerce-builder-widgets' ) ] );
     }
 
     if ( ! in_array( $template_type, mh_plug_allowed_template_types(), true ) ) {
-        wp_send_json_error( [ 'message' => __( 'Invalid template type.', 'mh-plug' ) ] );
+        wp_send_json_error( [ 'message' => __( 'Invalid template type.', 'mh-plug-ecommerce-builder-widgets' ) ] );
     }
 
     $post_id = wp_insert_post( [
@@ -89,7 +89,7 @@ function mh_plug_ajax_create_template() {
     update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
 
     wp_send_json_success( [
-        'message'  => __( 'Template created successfully.', 'mh-plug' ),
+        'message'  => __( 'Template created successfully.', 'mh-plug-ecommerce-builder-widgets' ),
         'edit_url' => admin_url( 'post.php?post=' . $post_id . '&action=elementor' ),
     ] );
 }
@@ -99,33 +99,33 @@ function mh_plug_ajax_toggle_status() {
     check_ajax_referer( 'mh_tb_toggle_status', '_ajax_nonce' );
 
     if ( ! current_user_can( 'edit_posts' ) ) {
-        wp_send_json_error( [ 'message' => __( 'No permission.', 'mh-plug' ) ] );
+        wp_send_json_error( [ 'message' => __( 'No permission.', 'mh-plug-ecommerce-builder-widgets' ) ] );
     }
     $template_id   = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
     $is_active_raw = isset( $_POST['is_active'] )   ? $_POST['is_active']              : false;
     $is_active     = ( filter_var( $is_active_raw, FILTER_VALIDATE_BOOLEAN ) ) ? 'yes' : 'no';
     if ( ! $template_id ) {
-        wp_send_json_error( [ 'message' => __( 'Invalid ID.', 'mh-plug' ) ] );
+        wp_send_json_error( [ 'message' => __( 'Invalid ID.', 'mh-plug-ecommerce-builder-widgets' ) ] );
     }
     update_post_meta( $template_id, '_mh_template_active', $is_active );
-    wp_send_json_success( [ 'message' => __( 'Status updated.', 'mh-plug' ) ] );
+    wp_send_json_success( [ 'message' => __( 'Status updated.', 'mh-plug-ecommerce-builder-widgets' ) ] );
 }
 add_action( 'wp_ajax_mh_tb_toggle_status', 'mh_plug_ajax_toggle_status' );
 
 function mh_plug_ajax_delete_template() {
     check_ajax_referer( 'mh_tb_delete_template', '_ajax_nonce' );
     if ( ! current_user_can( 'delete_posts' ) ) {
-        wp_send_json_error( [ 'message' => __( 'No permission.', 'mh-plug' ) ] );
+        wp_send_json_error( [ 'message' => __( 'No permission.', 'mh-plug-ecommerce-builder-widgets' ) ] );
     }
     $template_id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
     if ( ! $template_id || get_post_type( $template_id ) !== 'mh_templates' ) {
-        wp_send_json_error( [ 'message' => __( 'Invalid template.', 'mh-plug' ) ] );
+        wp_send_json_error( [ 'message' => __( 'Invalid template.', 'mh-plug-ecommerce-builder-widgets' ) ] );
     }
     $result = wp_trash_post( $template_id );
     if ( ! $result ) {
-        wp_send_json_error( [ 'message' => __( 'Could not delete template.', 'mh-plug' ) ] );
+        wp_send_json_error( [ 'message' => __( 'Could not delete template.', 'mh-plug-ecommerce-builder-widgets' ) ] );
     }
-    wp_send_json_success( [ 'message' => __( 'Template deleted.', 'mh-plug' ) ] );
+    wp_send_json_success( [ 'message' => __( 'Template deleted.', 'mh-plug-ecommerce-builder-widgets' ) ] );
 }
 add_action( 'wp_ajax_mh_tb_delete_template', 'mh_plug_ajax_delete_template' );
 
@@ -133,14 +133,14 @@ function mh_plug_category_template_add_field() {
     $templates = get_posts([ 'post_type' => 'mh_templates', 'posts_per_page' => -1, 'post_status' => 'publish' ]);
     ?>
     <div class="form-field">
-        <label for="mh_category_template"><?php esc_html_e( 'MH Custom Template (Optional)', 'mh-plug' ); ?></label>
+        <label for="mh_category_template"><?php esc_html_e( 'MH Custom Template (Optional)', 'mh-plug-ecommerce-builder-widgets' ); ?></label>
         <select name="mh_category_template" id="mh_category_template">
-            <option value=""><?php esc_html_e( '— Use Default Archive Template —', 'mh-plug' ); ?></option>
+            <option value=""><?php esc_html_e( '— Use Default Archive Template —', 'mh-plug-ecommerce-builder-widgets' ); ?></option>
             <?php foreach ( $templates as $tpl ) : ?>
                 <option value="<?php echo esc_attr( $tpl->ID ); ?>"><?php echo esc_html( $tpl->post_title ); ?></option>
             <?php endforeach; ?>
         </select>
-        <p><?php esc_html_e( 'Select a specific Elementor template for this category.', 'mh-plug' ); ?></p>
+        <p><?php esc_html_e( 'Select a specific Elementor template for this category.', 'mh-plug-ecommerce-builder-widgets' ); ?></p>
     </div>
     <?php
 }
@@ -150,10 +150,10 @@ function mh_plug_category_template_edit_field( $term ) {
     $current   = get_term_meta( $term->term_id, '_mh_category_template', true );
     ?>
     <tr class="form-field">
-        <th scope="row"><label for="mh_category_template"><?php esc_html_e( 'MH Custom Template', 'mh-plug' ); ?></label></th>
+        <th scope="row"><label for="mh_category_template"><?php esc_html_e( 'MH Custom Template', 'mh-plug-ecommerce-builder-widgets' ); ?></label></th>
         <td>
             <select name="mh_category_template" id="mh_category_template">
-                <option value=""><?php esc_html_e( '— Use Default Archive Template —', 'mh-plug' ); ?></option>
+                <option value=""><?php esc_html_e( '— Use Default Archive Template —', 'mh-plug-ecommerce-builder-widgets' ); ?></option>
                 <?php foreach ( $templates as $tpl ) : ?>
                     <option value="<?php echo esc_attr( $tpl->ID ); ?>" <?php selected( $current, $tpl->ID ); ?>>
                         <?php echo esc_html( $tpl->post_title ); ?>

@@ -30,7 +30,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_title() {
-        return esc_html__('MH Post Carousel', 'mh-plug');
+        return esc_html__('MH Post Carousel', 'mh-plug-ecommerce-builder-widgets');
     }
 
     public function get_icon() {
@@ -68,7 +68,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_query',
             [
-                'label' => esc_html__('Query', 'mh-plug'),
+                'label' => esc_html__('Query', 'mh-plug-ecommerce-builder-widgets'),
                 'tab' => Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -77,7 +77,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'selected_post_type',
             [
-                'label' => esc_html__('Post Type', 'mh-plug'),
+                'label' => esc_html__('Post Type', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'post',
                 'options' => $this->get_supported_post_types(), // Uses the helper method
@@ -87,7 +87,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'posts_per_page',
             [
-                'label' => esc_html__('Posts Per Page', 'mh-plug'),
+                'label' => esc_html__('Posts Per Page', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::NUMBER,
                 'default' => 6,
             ]
@@ -99,7 +99,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_layout_builder',
             [
-                'label' => esc_html__('Card Layout Builder', 'mh-plug'),
+                'label' => esc_html__('Card Layout Builder', 'mh-plug-ecommerce-builder-widgets'),
                 'tab' => Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -108,7 +108,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
             'layout_note',
             [
                 'type' => Controls_Manager::RAW_HTML,
-                'raw' => '<small>' . __('Drag & Drop to reorder. Use "Inline" width for side-by-side items. Open an item to style it.', 'mh-plug') . '</small>',
+                'raw' => '<small>' . __('Drag & Drop to reorder. Use "Inline" width for side-by-side items. Open an item to style it.', 'mh-plug-ecommerce-builder-widgets') . '</small>',
                 'content_classes' => 'elementor-descriptor',
             ]
         );
@@ -119,7 +119,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
         $repeater->add_control(
             'element_type',
             [
-                'label' => esc_html__('Element Type', 'mh-plug'),
+                'label' => esc_html__('Element Type', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'title',
                 'options' => [
@@ -138,7 +138,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
         $repeater->add_control(
             'element_width',
             [
-                'label' => esc_html__( 'Width', 'mh-plug' ),
+                'label' => esc_html__( 'Width', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'full',
                 'options' => [
@@ -151,7 +151,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
         $repeater->add_responsive_control(
             'element_align',
             [
-                'label' => esc_html__( 'Alignment', 'mh-plug' ),
+                'label' => esc_html__( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
                     'left' => [ 'title' => 'Left', 'icon' => 'eicon-text-align-left' ],
@@ -189,7 +189,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
         $repeater->add_control(
             'item_text_color',
             [
-                'label' => esc_html__('Text Color', 'mh-plug'),
+                'label' => esc_html__('Text Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} {{CURRENT_ITEM}}' => 'color: {{VALUE}};',
@@ -268,7 +268,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'card_elements',
             [
-                'label' => esc_html__('Elements', 'mh-plug'),
+                'label' => esc_html__('Elements', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::REPEATER,
                 'fields' => $repeater->get_controls(),
                 'default' => [
@@ -286,7 +286,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'content_align',
             [
-                'label' => esc_html__('Global Alignment', 'mh-plug'),
+                'label' => esc_html__('Global Alignment', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
                     'left' => [ 'title' => 'Left', 'icon' => 'eicon-text-align-left' ],

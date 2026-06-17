@@ -18,7 +18,7 @@ use Elementor\Utils;
 class MH_Product_Title_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_title'; }
-    public function get_title() { return __( 'MH Product Title', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Product Title', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-product-title'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'product', 'title', 'heading', 'woocommerce', 'mh' ]; }
@@ -27,12 +27,12 @@ class MH_Product_Title_Widget extends \Elementor\Widget_Base {
 
         /* ── CONTENT ── */
         $this->start_controls_section( 'content_section', [
-            'label' => __( 'Title Settings', 'mh-plug' ),
+            'label' => __( 'Title Settings', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_control( 'title_html_tag', [
-            'label'   => __( 'HTML Tag', 'mh-plug' ),
+            'label'   => __( 'HTML Tag', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'options' => [
                 'h1'   => 'H1',
@@ -49,13 +49,13 @@ class MH_Product_Title_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'align', [
-            'label'        => __( 'Alignment', 'mh-plug' ),
+            'label'        => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::CHOOSE,
             'options'      => [
-                'left'    => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center'  => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'right'   => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
-                'justify' => [ 'title' => __( 'Justified', 'mh-plug' ), 'icon' => 'eicon-text-align-justify' ],
+                'left'    => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center'  => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'right'   => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
+                'justify' => [ 'title' => __( 'Justified', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-justify' ],
             ],
             'default'      => 'left',
             'selectors'    => [
@@ -67,12 +67,12 @@ class MH_Product_Title_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE ── */
         $this->start_controls_section( 'style_section', [
-            'label' => __( 'Title Style', 'mh-plug' ),
+            'label' => __( 'Title Style', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control( 'title_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [
                 '{{WRAPPER}} .mh-product-title' => 'color: {{VALUE}};',
@@ -90,7 +90,7 @@ class MH_Product_Title_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'title_margin', [
-            'label'      => __( 'Margin', 'mh-plug' ),
+            'label'      => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [

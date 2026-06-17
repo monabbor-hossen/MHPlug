@@ -169,14 +169,14 @@ function mh_wishlist_has_product( $product_id ) {
 function mh_wishlist_ajax_add() {
     // 🚀 FIX: Look for 'security' instead of 'nonce' to match JavaScript
     if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'security', false ) ) {
-        wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug' ) ], 403 );
+        wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug-ecommerce-builder-widgets' ) ], 403 );
     }
 
     $product_id   = isset( $_POST['product_id'] )   ? absint( $_POST['product_id'] )   : 0;
     $variation_id = isset( $_POST['variation_id'] ) ? absint( $_POST['variation_id'] ) : 0;
 
     if ( ! $product_id ) {
-        wp_send_json_error( [ 'message' => __( 'Invalid product.', 'mh-plug' ) ], 400 );
+        wp_send_json_error( [ 'message' => __( 'Invalid product.', 'mh-plug-ecommerce-builder-widgets' ) ], 400 );
     }
 
     global $wpdb;
@@ -206,7 +206,7 @@ function mh_wishlist_ajax_add() {
         wp_send_json_success( [
             'status'  => 'already_added',
             'count'   => mh_wishlist_count(),
-            'message' => __( 'Already in wishlist.', 'mh-plug' ),
+            'message' => __( 'Already in wishlist.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
     }
 
@@ -223,7 +223,7 @@ function mh_wishlist_ajax_add() {
     );
 
     if ( false === $inserted ) {
-        wp_send_json_error( [ 'message' => __( 'Could not add to wishlist.', 'mh-plug' ) ], 500 );
+        wp_send_json_error( [ 'message' => __( 'Could not add to wishlist.', 'mh-plug-ecommerce-builder-widgets' ) ], 500 );
     }
 
     mh_wishlist_clear_cache();
@@ -231,7 +231,7 @@ function mh_wishlist_ajax_add() {
     wp_send_json_success( [
         'status'  => 'added',
         'count'   => mh_wishlist_count(),
-        'message' => __( 'Added to wishlist!', 'mh-plug' ),
+        'message' => __( 'Added to wishlist!', 'mh-plug-ecommerce-builder-widgets' ),
     ] );
 }
 add_action( 'wp_ajax_mh_wishlist_add',        'mh_wishlist_ajax_add' );
@@ -243,12 +243,12 @@ add_action( 'wp_ajax_nopriv_mh_wishlist_add', 'mh_wishlist_ajax_add' );
 function mh_wishlist_ajax_remove() {
     // 🚀 FIX: Look for 'security'
     if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'security', false ) ) {
-        wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug' ) ], 403 );
+        wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug-ecommerce-builder-widgets' ) ], 403 );
     }
 
     $product_id = isset( $_POST['product_id'] ) ? absint( $_POST['product_id'] ) : 0;
     if ( ! $product_id ) {
-        wp_send_json_error( [ 'message' => __( 'Invalid product.', 'mh-plug' ) ], 400 );
+        wp_send_json_error( [ 'message' => __( 'Invalid product.', 'mh-plug-ecommerce-builder-widgets' ) ], 400 );
     }
 
     global $wpdb;
@@ -274,7 +274,7 @@ function mh_wishlist_ajax_remove() {
     wp_send_json_success( [
         'status'  => 'removed',
         'count'   => mh_wishlist_count(),
-        'message' => __( 'Removed from wishlist.', 'mh-plug' ),
+        'message' => __( 'Removed from wishlist.', 'mh-plug-ecommerce-builder-widgets' ),
     ] );
 }
 add_action( 'wp_ajax_mh_wishlist_remove',        'mh_wishlist_ajax_remove' );
@@ -286,12 +286,12 @@ add_action( 'wp_ajax_nopriv_mh_wishlist_remove', 'mh_wishlist_ajax_remove' );
 function mh_wishlist_ajax_toggle() {
     // 🚀 FIX: Look for 'security'
     if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'security', false ) ) {
-        wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug' ) ], 403 );
+        wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug-ecommerce-builder-widgets' ) ], 403 );
     }
 
     $product_id = isset( $_POST['product_id'] ) ? absint( $_POST['product_id'] ) : 0;
     if ( ! $product_id ) {
-        wp_send_json_error( [ 'message' => __( 'Invalid product.', 'mh-plug' ) ], 400 );
+        wp_send_json_error( [ 'message' => __( 'Invalid product.', 'mh-plug-ecommerce-builder-widgets' ) ], 400 );
     }
 
     global $wpdb;
@@ -339,7 +339,7 @@ function mh_wishlist_ajax_toggle() {
             'status'  => 'removed',
             'added'   => false,
             'count'   => mh_wishlist_count(),
-            'message' => __( 'Removed from wishlist.', 'mh-plug' ),
+            'message' => __( 'Removed from wishlist.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
     }
 
@@ -359,7 +359,7 @@ function mh_wishlist_ajax_toggle() {
     );
 
     if ( false === $inserted ) {
-        wp_send_json_error( [ 'message' => __( 'Could not add to wishlist.', 'mh-plug' ) ], 500 );
+        wp_send_json_error( [ 'message' => __( 'Could not add to wishlist.', 'mh-plug-ecommerce-builder-widgets' ) ], 500 );
     }
 
     mh_wishlist_clear_cache();
@@ -368,7 +368,7 @@ function mh_wishlist_ajax_toggle() {
         'status'  => 'added',
         'added'   => true,
         'count'   => mh_wishlist_count(),
-        'message' => __( 'Added to wishlist!', 'mh-plug' ),
+        'message' => __( 'Added to wishlist!', 'mh-plug-ecommerce-builder-widgets' ),
     ] );
 }
 // 🚀 FIX: Sync Action names with the JS file (mh_wishlist_toggle)
@@ -381,7 +381,7 @@ add_action( 'wp_ajax_nopriv_mh_wishlist_toggle', 'mh_wishlist_ajax_toggle' );
 function mh_wishlist_ajax_load() {
     // 🚀 FIX: Look for 'security'
     if ( ! check_ajax_referer( 'mh_wishlist_nonce', 'security', false ) ) {
-        wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug' ) ], 403 );
+        wp_send_json_error( [ 'message' => __( 'Security check failed.', 'mh-plug-ecommerce-builder-widgets' ) ], 403 );
     }
 
     $items    = mh_wishlist_get_items();
@@ -426,8 +426,8 @@ function mh_wishlist_render_button( $product_id, $context = 'single' ) {
     }
     $icon_class = $in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
     $label      = $in_wishlist
-        ? __( 'Remove from Wishlist', 'mh-plug' )
-        : __( 'Add to Wishlist', 'mh-plug' );
+        ? __( 'Remove from Wishlist', 'mh-plug-ecommerce-builder-widgets' )
+        : __( 'Add to Wishlist', 'mh-plug-ecommerce-builder-widgets' );
     $nonce      = wp_create_nonce( 'mh_wishlist_nonce' );
     ?>
     <button

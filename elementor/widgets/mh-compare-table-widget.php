@@ -10,7 +10,7 @@ use Elementor\Group_Control_Box_Shadow;
 class MH_Compare_Table_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_compare_table'; }
-    public function get_title() { return __( 'MH Compare Table', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Compare Table', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-table'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_script_depends() { return [ 'mh-widgets-js' ]; }
@@ -18,56 +18,56 @@ class MH_Compare_Table_Widget extends \Elementor\Widget_Base {
     protected function register_controls() {
         
         // TABLE STRUCTURE
-        $this->start_controls_section('section_style', ['label' => __('Table Structure', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
+        $this->start_controls_section('section_style', ['label' => __('Table Structure', 'mh-plug-ecommerce-builder-widgets'), 'tab' => Controls_Manager::TAB_STYLE]);
         $this->add_control('header_bg', [
-            'label' => __('Left Heading Background', 'mh-plug'),
+            'label' => __('Left Heading Background', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-compare-table th' => 'background-color: {{VALUE}};']
         ]);
         $this->add_control('content_bg', [
-            'label' => __('Content Background', 'mh-plug'),
+            'label' => __('Content Background', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-compare-table td' => 'background-color: {{VALUE}};']
         ]);
         $this->add_control('border_color', [
-            'label' => __('Border Color', 'mh-plug'),
+            'label' => __('Border Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-compare-table th, {{WRAPPER}} .mh-compare-table td' => 'border-color: {{VALUE}};']
         ]);
         $this->add_responsive_control('cell_padding', [
-            'label' => __('Cell Padding', 'mh-plug'),
+            'label' => __('Cell Padding', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::DIMENSIONS,
             'selectors' => ['{{WRAPPER}} .mh-compare-table th, {{WRAPPER}} .mh-compare-table td' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'],
         ]);
         $this->end_controls_section();
 
         // TYPOGRAPHY
-        $this->start_controls_section('section_typo', ['label' => __('Typography & Colors', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
+        $this->start_controls_section('section_typo', ['label' => __('Typography & Colors', 'mh-plug-ecommerce-builder-widgets'), 'tab' => Controls_Manager::TAB_STYLE]);
         
-        $this->add_control('heading_th', ['label' => __('Headings (Left Column)', 'mh-plug'), 'type' => Controls_Manager::HEADING]);
+        $this->add_control('heading_th', ['label' => __('Headings (Left Column)', 'mh-plug-ecommerce-builder-widgets'), 'type' => Controls_Manager::HEADING]);
         $this->add_control('th_color', [
-            'label' => __('Color', 'mh-plug'),
+            'label' => __('Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-compare-table th' => 'color: {{VALUE}};']
         ]);
         $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'th_typo', 'selector' => '{{WRAPPER}} .mh-compare-table th']);
 
-        $this->add_control('heading_title', ['label' => __('Product Title', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before']);
+        $this->add_control('heading_title', ['label' => __('Product Title', 'mh-plug-ecommerce-builder-widgets'), 'type' => Controls_Manager::HEADING, 'separator' => 'before']);
         $this->add_control('title_color', [
-            'label' => __('Color', 'mh-plug'),
+            'label' => __('Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-compare-title a' => 'color: {{VALUE}};']
         ]);
         $this->add_control('title_hover_color', [
-            'label' => __('Hover Color', 'mh-plug'),
+            'label' => __('Hover Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-compare-title a:hover' => 'color: {{VALUE}};']
         ]);
         $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'title_typo', 'selector' => '{{WRAPPER}} .mh-compare-title']);
 
-        $this->add_control('heading_price', ['label' => __('Price', 'mh-plug'), 'type' => Controls_Manager::HEADING, 'separator' => 'before']);
+        $this->add_control('heading_price', ['label' => __('Price', 'mh-plug-ecommerce-builder-widgets'), 'type' => Controls_Manager::HEADING, 'separator' => 'before']);
         $this->add_control('price_color', [
-            'label' => __('Color', 'mh-plug'),
+            'label' => __('Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-compare-price' => 'color: {{VALUE}};']
         ]);
@@ -76,10 +76,10 @@ class MH_Compare_Table_Widget extends \Elementor\Widget_Base {
         $this->end_controls_section();
 
         // ADD TO CART BUTTON
-        $this->start_controls_section('section_cart_btn', ['label' => __('Add to Cart Button', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
+        $this->start_controls_section('section_cart_btn', ['label' => __('Add to Cart Button', 'mh-plug-ecommerce-builder-widgets'), 'tab' => Controls_Manager::TAB_STYLE]);
         
         $this->add_control('show_cart_btn', [
-            'label' => __('Show Button', 'mh-plug'),
+            'label' => __('Show Button', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::SWITCHER,
             'default' => 'yes',
         ]);
@@ -91,7 +91,7 @@ class MH_Compare_Table_Widget extends \Elementor\Widget_Base {
         ]);
 
         $this->add_responsive_control('btn_padding', [
-            'label' => __('Padding', 'mh-plug'),
+            'label' => __('Padding', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::DIMENSIONS,
             'size_units' => ['px', 'em', '%'],
             'selectors' => ['{{WRAPPER}} .mh-compare-add-to-cart .button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'],
@@ -99,7 +99,7 @@ class MH_Compare_Table_Widget extends \Elementor\Widget_Base {
         ]);
 
         $this->add_responsive_control('btn_radius', [
-            'label' => __('Border Radius', 'mh-plug'),
+            'label' => __('Border Radius', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::DIMENSIONS,
             'size_units' => ['px', '%'],
             'selectors' => ['{{WRAPPER}} .mh-compare-add-to-cart .button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'],
@@ -109,14 +109,14 @@ class MH_Compare_Table_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tabs('tabs_cart_btn', ['condition' => ['show_cart_btn' => 'yes']]);
         
         // Button Normal
-        $this->start_controls_tab('tab_cart_normal', ['label' => __('Normal', 'mh-plug')]);
+        $this->start_controls_tab('tab_cart_normal', ['label' => __('Normal', 'mh-plug-ecommerce-builder-widgets')]);
         $this->add_control('btn_color', [
-            'label' => __('Text Color', 'mh-plug'),
+            'label' => __('Text Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-compare-add-to-cart .button' => 'color: {{VALUE}};']
         ]);
         $this->add_control('btn_bg', [
-            'label' => __('Background', 'mh-plug'),
+            'label' => __('Background', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-compare-add-to-cart .button' => 'background-color: {{VALUE}};']
         ]);
@@ -124,14 +124,14 @@ class MH_Compare_Table_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tab();
 
         // Button Hover
-        $this->start_controls_tab('tab_cart_hover', ['label' => __('Hover', 'mh-plug')]);
+        $this->start_controls_tab('tab_cart_hover', ['label' => __('Hover', 'mh-plug-ecommerce-builder-widgets')]);
         $this->add_control('btn_hover_color', [
-            'label' => __('Text Color', 'mh-plug'),
+            'label' => __('Text Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-compare-add-to-cart .button:hover' => 'color: {{VALUE}};']
         ]);
         $this->add_control('btn_hover_bg', [
-            'label' => __('Background', 'mh-plug'),
+            'label' => __('Background', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-compare-add-to-cart .button:hover' => 'background-color: {{VALUE}};']
         ]);
@@ -142,24 +142,24 @@ class MH_Compare_Table_Widget extends \Elementor\Widget_Base {
         $this->end_controls_section();
 
         // REMOVE ICON
-        $this->start_controls_section('section_remove_icon', ['label' => __('Remove Icon (X)', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
+        $this->start_controls_section('section_remove_icon', ['label' => __('Remove Icon (X)', 'mh-plug-ecommerce-builder-widgets'), 'tab' => Controls_Manager::TAB_STYLE]);
         $this->add_control('remove_color', [
-            'label' => __('Icon Color', 'mh-plug'),
+            'label' => __('Icon Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-remove-compare' => 'color: {{VALUE}};']
         ]);
         $this->add_control('remove_bg', [
-            'label' => __('Background', 'mh-plug'),
+            'label' => __('Background', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-remove-compare' => 'background-color: {{VALUE}};']
         ]);
         $this->add_control('remove_hover_color', [
-            'label' => __('Hover Icon Color', 'mh-plug'),
+            'label' => __('Hover Icon Color', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-remove-compare:hover' => 'color: {{VALUE}};']
         ]);
         $this->add_control('remove_hover_bg', [
-            'label' => __('Hover Background', 'mh-plug'),
+            'label' => __('Hover Background', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::COLOR,
             'selectors' => ['{{WRAPPER}} .mh-remove-compare:hover' => 'background-color: {{VALUE}};']
         ]);
@@ -173,7 +173,7 @@ class MH_Compare_Table_Widget extends \Elementor\Widget_Base {
         <div class="mh-compare-table-wrapper<?php echo esc_attr($hide_cart_class); ?>">
             <div class="mh-compare-loading" style="text-align:center; padding:50px;">
                 <i class="fas fa-spinner fa-spin fa-2x" style="color:#004265;"></i>
-                <p style="margin-top:15px; font-weight:600;"><?php esc_html_e('Loading Compare Data...', 'mh-plug'); ?></p>
+                <p style="margin-top:15px; font-weight:600;"><?php esc_html_e('Loading Compare Data...', 'mh-plug-ecommerce-builder-widgets'); ?></p>
             </div>
         </div>
         <?php

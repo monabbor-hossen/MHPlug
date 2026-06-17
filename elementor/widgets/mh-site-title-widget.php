@@ -20,7 +20,7 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_title() {
-        return esc_html__('MH Site Title', 'mh-plug');
+        return esc_html__('MH Site Title', 'mh-plug-ecommerce-builder-widgets');
     }
 
     public function get_icon() {
@@ -39,7 +39,7 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_content',
             [
-                'label' => esc_html__('Content', 'mh-plug'),
+                'label' => esc_html__('Content', 'mh-plug-ecommerce-builder-widgets'),
                 'tab'   => Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -47,13 +47,13 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'link_to',
             [
-                'label' => esc_html__( 'Link', 'mh-plug' ),
+                'label' => esc_html__( 'Link', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'home',
                 'options' => [
-                    'none' => esc_html__( 'None', 'mh-plug' ),
-                    'home' => esc_html__( 'Home URL', 'mh-plug' ),
-                    'custom' => esc_html__( 'Custom URL', 'mh-plug' ),
+                    'none' => esc_html__( 'None', 'mh-plug-ecommerce-builder-widgets' ),
+                    'home' => esc_html__( 'Home URL', 'mh-plug-ecommerce-builder-widgets' ),
+                    'custom' => esc_html__( 'Custom URL', 'mh-plug-ecommerce-builder-widgets' ),
                 ],
             ]
         );
@@ -61,9 +61,9 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'custom_link',
             [
-                'label' => esc_html__( 'Custom URL', 'mh-plug' ),
+                'label' => esc_html__( 'Custom URL', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::URL,
-                'placeholder' => esc_html__( 'https://your-link.com', 'mh-plug' ),
+                'placeholder' => esc_html__( 'https://your-link.com', 'mh-plug-ecommerce-builder-widgets' ),
                 'condition' => [
                     'link_to' => 'custom',
                 ],
@@ -77,7 +77,7 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'title_html_tag',
             [
-                'label'   => esc_html__('HTML Tag', 'mh-plug'),
+                'label'   => esc_html__('HTML Tag', 'mh-plug-ecommerce-builder-widgets'),
                 'type'    => Controls_Manager::SELECT,
                 'options' => [ 'h1'=>'H1', 'h2'=>'H2', 'h3'=>'H3', 'h4'=>'H4', 'h5'=>'H5', 'h6'=>'H6', 'p'=>'P', 'div'=>'DIV', 'span'=>'Span' ],
                 'default' => 'h1',
@@ -91,7 +91,7 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_style',
             [
-                'label' => esc_html__('Style', 'mh-plug'),
+                'label' => esc_html__('Style', 'mh-plug-ecommerce-builder-widgets'),
                 'tab' => Controls_Manager::TAB_STYLE,
             ]
         );
@@ -99,12 +99,12 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
          $this->add_responsive_control(
             'alignment',
             [
-                'label' => esc_html__( 'Alignment', 'mh-plug' ),
+                'label' => esc_html__( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
-                    'left' => [ 'title' => esc_html__( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left', ],
-                    'center' => [ 'title' => esc_html__( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center', ],
-                    'right' => [ 'title' => esc_html__( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right', ],
+                    'left' => [ 'title' => esc_html__( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left', ],
+                    'center' => [ 'title' => esc_html__( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center', ],
+                    'right' => [ 'title' => esc_html__( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right', ],
                 ],
                 'default' => 'left',
                 'selectors' => [
@@ -119,13 +119,13 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         // --- Normal Tab ---
         $this->start_controls_tab(
             'title_color_normal',
-            [ 'label' => esc_html__( 'Normal', 'mh-plug' ) ]
+            [ 'label' => esc_html__( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ]
         );
 
         $this->add_control(
             'text_color',
             [
-                'label'     => esc_html__('Text Color', 'mh-plug'),
+                'label'     => esc_html__('Text Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-site-title-content' => 'color: {{VALUE}};',
@@ -137,7 +137,7 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'background_color',
             [
-                'label'     => esc_html__('Background Color', 'mh-plug'),
+                'label'     => esc_html__('Background Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-site-title-content' => 'background-color: {{VALUE}}; display: inline-block;', // Apply to inner element
@@ -150,13 +150,13 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         // --- Hover Tab ---
         $this->start_controls_tab(
             'title_color_hover',
-            [ 'label' => esc_html__( 'Hover', 'mh-plug' ) ]
+            [ 'label' => esc_html__( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ]
         );
 
         $this->add_control(
             'text_hover_color',
             [
-                'label'     => esc_html__('Text Color', 'mh-plug'),
+                'label'     => esc_html__('Text Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     // Apply hover color only when hovering the container if linked, or the content itself if not linked
@@ -170,7 +170,7 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'background_hover_color',
             [
-                'label'     => esc_html__('Background Color', 'mh-plug'),
+                'label'     => esc_html__('Background Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                      // Apply hover bg color similarly
@@ -224,7 +224,7 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'padding',
             [
-                'label'      => esc_html__('Padding', 'mh-plug'),
+                'label'      => esc_html__('Padding', 'mh-plug-ecommerce-builder-widgets'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%', 'em'],
                 'selectors'  => [
@@ -236,7 +236,7 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'margin',
             [
-                'label'      => esc_html__('Margin', 'mh-plug'),
+                'label'      => esc_html__('Margin', 'mh-plug-ecommerce-builder-widgets'),
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%', 'em'],
                 'selectors'  => [
@@ -255,7 +255,7 @@ class MH_Site_Title_Widget extends \Elementor\Widget_Base {
         $site_title = get_bloginfo('name');
         if ( empty( $site_title ) ) {
             if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-                echo '<div style="text-align:center; padding: 20px; border: 1px dashed #ccc;">' . esc_html__( 'Site Title is Empty. Set one in Settings > General.', 'mh-plug' ) . '</div>';
+                echo '<div style="text-align:center; padding: 20px; border: 1px dashed #ccc;">' . esc_html__( 'Site Title is Empty. Set one in Settings > General.', 'mh-plug-ecommerce-builder-widgets' ) . '</div>';
             }
             return;
         }

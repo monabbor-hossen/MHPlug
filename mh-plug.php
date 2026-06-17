@@ -8,7 +8,7 @@
  * Author URI:        https://mhutin.com/
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       mh-plug
+ * Text Domain:       mh-plug-ecommerce-builder-widgets
  */
 
 if (!defined('ABSPATH')) {
@@ -24,7 +24,7 @@ define('MH_PLUG_URL', plugin_dir_url(__FILE__));
  */
 function mh_plug_load_textdomain() {
     load_plugin_textdomain(
-        'mh-plug',
+        'mh-plug-ecommerce-builder-widgets',
         false,
         dirname( plugin_basename( __FILE__ ) ) . '/languages/'
     );
@@ -187,9 +187,9 @@ function mh_plug_enqueue_frontend_scripts() {
                 'liveSearchNonce' => wp_create_nonce('mh_live_search_nonce'),
                 'quickViewNonce'  => wp_create_nonce('mh_quick_view_nonce'),
                 'i18n'    => [
-                    'addLabel'     => __('Add to Wishlist', 'mh-plug'),
-                    'removeLabel'  => __('Remove from Wishlist', 'mh-plug'),
-                    'emptyMessage' => __('Your wishlist is empty.', 'mh-plug'),
+                    'addLabel'     => __('Add to Wishlist', 'mh-plug-ecommerce-builder-widgets'),
+                    'removeLabel'  => __('Remove from Wishlist', 'mh-plug-ecommerce-builder-widgets'),
+                    'emptyMessage' => __('Your wishlist is empty.', 'mh-plug-ecommerce-builder-widgets'),
                 ],
             ];
             wp_add_inline_script('mh-wishlist-js', 'var mhWishlist = ' . wp_json_encode($wishlist_data) . ';', 'before');
@@ -318,7 +318,7 @@ if ( ! function_exists( 'mh_qv_output_simple_attributes' ) ) {
             echo '<div style="margin-bottom: 10px;">';
             echo '<label style="display:block; font-weight:600; margin-bottom: 5px; color:#333;">' . esc_html( $label ) . '</label>';
             echo '<select name="' . esc_attr( $select_name ) . '" class="mh-qv-attr-select" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9; color:#333; outline:none;">';
-            echo '<option value="">' . esc_html( sprintf( __( 'Choose %s', 'mh-plug' ), $label ) ) . '</option>';
+            echo '<option value="">' . esc_html( sprintf( __( 'Choose %s', 'mh-plug-ecommerce-builder-widgets' ), $label ) ) . '</option>';
 
             if ( $attribute->is_taxonomy() ) {
                 $terms = wc_get_product_terms( $product->get_id(), $attribute_name, ['fields' => 'all'] );
@@ -418,7 +418,7 @@ if ( ! function_exists( 'mh_qv_ajax_add_to_cart' ) ) {
         check_ajax_referer( 'mh_quick_view_nonce', 'nonce' );
 
         if ( ! isset($_POST['product_id']) || empty($_POST['product_id']) ) {
-            wp_send_json_error(['message' => __( 'Missing Product ID', 'mh-plug' )]);
+            wp_send_json_error(['message' => __( 'Missing Product ID', 'mh-plug-ecommerce-builder-widgets' )]);
         }
 
         $product_id   = absint($_POST['product_id']);

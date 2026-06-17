@@ -16,7 +16,7 @@ use Elementor\Group_Control_Typography;
 class MH_Breadcrumb_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_breadcrumb'; }
-    public function get_title() { return __( 'MH Breadcrumb', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Breadcrumb', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-breadcrumbs'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'product', 'breadcrumb', 'breadcrumbs', 'woocommerce', 'mh', 'navigation' ]; }
@@ -25,30 +25,30 @@ class MH_Breadcrumb_Widget extends \Elementor\Widget_Base {
 
         /* ── CONTENT ── */
         $this->start_controls_section( 'content_section', [
-            'label' => __( 'Breadcrumb Settings', 'mh-plug' ),
+            'label' => __( 'Breadcrumb Settings', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_control( 'home_text', [
-            'label'   => __( 'Home Text', 'mh-plug' ),
+            'label'   => __( 'Home Text', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::TEXT,
-            'default' => __( 'Home', 'mh-plug' ),
+            'default' => __( 'Home', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_control( 'delimiter', [
-            'label'   => __( 'Separator', 'mh-plug' ),
+            'label'   => __( 'Separator', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::TEXT,
             'default' => ' / ',
-            'description' => __( 'The character(s) between breadcrumb links.', 'mh-plug' ),
+            'description' => __( 'The character(s) between breadcrumb links.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_responsive_control( 'align', [
-            'label'        => __( 'Alignment', 'mh-plug' ),
+            'label'        => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::CHOOSE,
             'options'      => [
-                'left'    => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center'  => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'right'   => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+                'left'    => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center'  => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'right'   => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
             ],
             'default'      => 'left',
             'selectors'    => [
@@ -60,7 +60,7 @@ class MH_Breadcrumb_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE ── */
         $this->start_controls_section( 'style_section', [
-            'label' => __( 'Text & Links Style', 'mh-plug' ),
+            'label' => __( 'Text & Links Style', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
@@ -72,9 +72,9 @@ class MH_Breadcrumb_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tabs( 'breadcrumb_color_tabs' );
 
         /* Normal Links */
-        $this->start_controls_tab( 'tab_links', [ 'label' => __( 'Links', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_links', [ 'label' => __( 'Links', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'link_color', [
-            'label'     => __( 'Link Color', 'mh-plug' ),
+            'label'     => __( 'Link Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#555555',
             'selectors' => [
@@ -82,7 +82,7 @@ class MH_Breadcrumb_Widget extends \Elementor\Widget_Base {
             ],
         ] );
         $this->add_control( 'link_hover_color', [
-            'label'     => __( 'Hover Color', 'mh-plug' ),
+            'label'     => __( 'Hover Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#d63638',
             'selectors' => [
@@ -92,9 +92,9 @@ class MH_Breadcrumb_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tab();
 
         /* Current Page Text */
-        $this->start_controls_tab( 'tab_current', [ 'label' => __( 'Current Page', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_current', [ 'label' => __( 'Current Page', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'current_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [
@@ -104,9 +104,9 @@ class MH_Breadcrumb_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tab();
 
         /* Separator */
-        $this->start_controls_tab( 'tab_separator', [ 'label' => __( 'Separator', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_separator', [ 'label' => __( 'Separator', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'separator_color', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#cccccc',
             'selectors' => [
@@ -118,7 +118,7 @@ class MH_Breadcrumb_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tabs();
 
         $this->add_responsive_control( 'margin', [
-            'label'      => __( 'Margin', 'mh-plug' ),
+            'label'      => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [

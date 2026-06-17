@@ -69,8 +69,8 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 <div class="wrap mh-plug-admin-wrap mh-futuristic-dashboard">
     <div class="mh-dashboard-header">
         <div class="mh-header-glow"></div>
-        <h1><i class="fas fa-space-shuttle"></i> <?php esc_html_e('Preloader Engine', 'mh-plug'); ?></h1>
-        <p><?php esc_html_e('Advanced holographic gradient engine deployed.', 'mh-plug'); ?></p>
+        <h1><i class="fas fa-space-shuttle"></i> <?php esc_html_e('Preloader Engine', 'mh-plug-ecommerce-builder-widgets'); ?></h1>
+        <p><?php esc_html_e('Advanced holographic gradient engine deployed.', 'mh-plug-ecommerce-builder-widgets'); ?></p>
     </div>
 
     <form method="post" action="options.php">
@@ -80,8 +80,8 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                 <div class="mh-card-inner">
                     <div class="mh-setting-row">
                         <div class="mh-setting-info">
-                            <h3><?php esc_html_e('System Power', 'mh-plug'); ?></h3>
-                            <p><?php esc_html_e('Activate the global preloader on your website.', 'mh-plug'); ?></p>
+                            <h3><?php esc_html_e('System Power', 'mh-plug-ecommerce-builder-widgets'); ?></h3>
+                            <p><?php esc_html_e('Activate the global preloader on your website.', 'mh-plug-ecommerce-builder-widgets'); ?></p>
                         </div>
                         <label class="switch">
                             <input class="cb mh-live-trigger" type="checkbox" name="mh_plug_preloader_settings[enable]" value="yes" <?php checked($enable, 'yes'); ?> />
@@ -91,8 +91,8 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                     <div class="mh-divider"></div>
                     <div class="mh-setting-row">
                         <div class="mh-setting-info">
-                            <h3><?php esc_html_e('Render Engine Type', 'mh-plug'); ?></h3>
-                            <p><?php esc_html_e('Choose between CSS animations or custom media.', 'mh-plug'); ?></p>
+                            <h3><?php esc_html_e('Render Engine Type', 'mh-plug-ecommerce-builder-widgets'); ?></h3>
+                            <p><?php esc_html_e('Choose between CSS animations or custom media.', 'mh-plug-ecommerce-builder-widgets'); ?></p>
                         </div>
                         <div class="mh-cyber-radio-group">
                             <label class="mh-cyber-radio">
@@ -110,7 +110,7 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 
             <div class="mh-futuristic-card mh-preview-card">
                 <div class="mh-card-inner">
-                    <h3><i class="fas fa-eye"></i> <?php esc_html_e('Live Hologram Preview', 'mh-plug'); ?></h3>
+                    <h3><i class="fas fa-eye"></i> <?php esc_html_e('Live Hologram Preview', 'mh-plug-ecommerce-builder-widgets'); ?></h3>
                     <div class="mh-hud-container">
                         <div class="mh-hud-overlay"></div>
                         <div id="mh-live-preview-box" class="mh-preview-box">
@@ -131,9 +131,9 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 
             <div class="mh-futuristic-card mh-css-settings" style="display: <?php echo ($type === 'css') ? 'block' : 'none'; ?>;">
                 <div class="mh-card-inner">
-                    <h3><i class="fas fa-magic"></i> <?php esc_html_e('Animation Protocol', 'mh-plug'); ?></h3>
+                    <h3><i class="fas fa-magic"></i> <?php esc_html_e('Animation Protocol', 'mh-plug-ecommerce-builder-widgets'); ?></h3>
                     <div class="mh-field-group">
-                        <label><?php esc_html_e('Select Sequence (30 Total)', 'mh-plug'); ?></label>
+                        <label><?php esc_html_e('Select Sequence (30 Total)', 'mh-plug-ecommerce-builder-widgets'); ?></label>
                         <select name="mh_plug_preloader_settings[css_effect]" id="mh_css_effect_select" class="mh-cyber-select mh-live-trigger">
                             <optgroup label="Basic Shapes">
                                 <option value="1" <?php selected($css_effect, '1'); ?>>1. Classic Spinner</option>
@@ -175,7 +175,7 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                     </div>
 
                     <div class="mh-field-group">
-                        <label><?php esc_html_e('Animation Scale (Size)', 'mh-plug'); ?></label>
+                        <label><?php esc_html_e('Animation Scale (Size)', 'mh-plug-ecommerce-builder-widgets'); ?></label>
                         <div class="mh-range-slider">
                             <input type="range" id="mh_effect_size_range" name="mh_plug_preloader_settings[effect_size]" min="0.5" max="3.0" step="0.1" value="<?php echo esc_attr($effect_size); ?>" class="mh-live-trigger" />
                             <span class="mh-range-badge"><span class="mh-scale-val"><?php echo esc_attr($effect_size); ?></span>x</span>
@@ -187,17 +187,17 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 
             <div class="mh-futuristic-card mh-image-settings" style="display: <?php echo ($type === 'image') ? 'block' : 'none'; ?>;">
                 <div class="mh-card-inner">
-                    <h3><i class="fas fa-file-upload"></i> <?php esc_html_e('Media Protocol', 'mh-plug'); ?></h3>
+                    <h3><i class="fas fa-file-upload"></i> <?php esc_html_e('Media Protocol', 'mh-plug-ecommerce-builder-widgets'); ?></h3>
                     <div class="mh-field-group">
-                        <label><?php esc_html_e('Upload Asset (GIF/PNG)', 'mh-plug'); ?></label>
+                        <label><?php esc_html_e('Upload Asset (GIF/PNG)', 'mh-plug-ecommerce-builder-widgets'); ?></label>
                         <input type="hidden" id="mh-preloader-image-url" name="mh_plug_preloader_settings[image]" value="<?php echo esc_attr($image); ?>" class="mh-live-trigger" />
                         <div class="mh-action-buttons">
-                            <button type="button" class="mh-cyber-btn mh-btn-blue" id="mh-upload-preloader-btn"><i class="fas fa-cloud-upload-alt"></i> <?php esc_html_e('Inject Media', 'mh-plug'); ?></button>
-                            <button type="button" class="mh-cyber-btn mh-btn-red" id="mh-remove-preloader-btn" style="display: <?php echo empty($image) ? 'none' : 'inline-flex'; ?>;"><i class="fas fa-trash"></i> <?php esc_html_e('Purge', 'mh-plug'); ?></button>
+                            <button type="button" class="mh-cyber-btn mh-btn-blue" id="mh-upload-preloader-btn"><i class="fas fa-cloud-upload-alt"></i> <?php esc_html_e('Inject Media', 'mh-plug-ecommerce-builder-widgets'); ?></button>
+                            <button type="button" class="mh-cyber-btn mh-btn-red" id="mh-remove-preloader-btn" style="display: <?php echo empty($image) ? 'none' : 'inline-flex'; ?>;"><i class="fas fa-trash"></i> <?php esc_html_e('Purge', 'mh-plug-ecommerce-builder-widgets'); ?></button>
                         </div>
                     </div>
                     <div class="mh-field-group">
-                        <label><?php esc_html_e('Asset Scale (Width px)', 'mh-plug'); ?></label>
+                        <label><?php esc_html_e('Asset Scale (Width px)', 'mh-plug-ecommerce-builder-widgets'); ?></label>
                         <div class="mh-range-slider">
                             <input type="range" id="mh_img_width_range" name="mh_plug_preloader_settings[img_width]" min="20" max="300" value="<?php echo esc_attr($img_width); ?>" class="mh-live-trigger" />
                             <span class="mh-range-badge"><span class="mh-width-val"><?php echo esc_attr($img_width); ?></span>px</span>
@@ -208,15 +208,15 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 
             <div class="mh-futuristic-card">
                 <div class="mh-card-inner">
-                    <h3><i class="fas fa-font"></i> <?php esc_html_e('Holographic Text Protocol', 'mh-plug'); ?></h3>
+                    <h3><i class="fas fa-font"></i> <?php esc_html_e('Holographic Text Protocol', 'mh-plug-ecommerce-builder-widgets'); ?></h3>
                     
                     <div class="mh-field-group">
-                        <label><?php esc_html_e('Custom Loading Text', 'mh-plug'); ?></label>
+                        <label><?php esc_html_e('Custom Loading Text', 'mh-plug-ecommerce-builder-widgets'); ?></label>
                         <input type="text" id="mh_custom_text_input" name="mh_plug_preloader_settings[custom_text]" value="<?php echo esc_attr($custom_text); ?>" class="mh-cyber-input mh-live-trigger" placeholder="e.g. SYSTEM LOADING..." />
                     </div>
 
                     <div class="mh-field-group">
-                        <label><?php esc_html_e('Text Animation Effect', 'mh-plug'); ?></label>
+                        <label><?php esc_html_e('Text Animation Effect', 'mh-plug-ecommerce-builder-widgets'); ?></label>
                         <select name="mh_plug_preloader_settings[text_anim]" id="mh_text_anim_select" class="mh-cyber-select mh-live-trigger">
                             <option value="none" <?php selected($text_anim, 'none'); ?>>None</option>
                             <option value="blink" <?php selected($text_anim, 'blink'); ?>>Blink</option>
@@ -238,7 +238,7 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                     </div>
 
                     <div class="mh-field-group">
-                        <label><?php esc_html_e('Text Size (px)', 'mh-plug'); ?></label>
+                        <label><?php esc_html_e('Text Size (px)', 'mh-plug-ecommerce-builder-widgets'); ?></label>
                         <div class="mh-range-slider">
                             <input type="range" id="mh_text_size_range" name="mh_plug_preloader_settings[text_size]" min="10" max="60" value="<?php echo esc_attr($text_size); ?>" class="mh-live-trigger" />
                             <span class="mh-range-badge"><span class="mh-text-size-val"><?php echo esc_attr($text_size); ?></span>px</span>
@@ -251,12 +251,12 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 
             <div class="mh-futuristic-card">
                 <div class="mh-card-inner">
-                    <h3><i class="fas fa-globe"></i> <?php esc_html_e('Environment Variables', 'mh-plug'); ?></h3>
+                    <h3><i class="fas fa-globe"></i> <?php esc_html_e('Environment Variables', 'mh-plug-ecommerce-builder-widgets'); ?></h3>
                     
                     <?php mh_render_color_group('bg', 'Backdrop Color / Gradient', $bg_color_type, $bg_c1, $bg_c2, $bg_angle); ?>
 
                     <div class="mh-field-group" style="margin-top:20px;">
-                        <label><?php esc_html_e('Retention Time (Delay ms)', 'mh-plug'); ?></label>
+                        <label><?php esc_html_e('Retention Time (Delay ms)', 'mh-plug-ecommerce-builder-widgets'); ?></label>
                         <div class="mh-range-slider">
                             <input type="range" name="mh_plug_preloader_settings[delay]" min="0" max="3000" step="100" value="<?php echo esc_attr($delay); ?>" oninput="this.nextElementSibling.querySelector('span').innerText = this.value" />
                             <span class="mh-range-badge"><span><?php echo esc_attr($delay); ?></span>ms</span>
@@ -264,7 +264,7 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
                     </div>
 
                     <div class="mh-field-group">
-                        <label><?php esc_html_e('Dissolve Speed (Fade ms)', 'mh-plug'); ?></label>
+                        <label><?php esc_html_e('Dissolve Speed (Fade ms)', 'mh-plug-ecommerce-builder-widgets'); ?></label>
                         <div class="mh-range-slider">
                             <input type="range" name="mh_plug_preloader_settings[transition]" min="100" max="2000" step="100" value="<?php echo esc_attr($transition); ?>" oninput="this.nextElementSibling.querySelector('span').innerText = this.value" />
                             <span class="mh-range-badge"><span><?php echo esc_attr($transition); ?></span>ms</span>
@@ -276,7 +276,7 @@ function mh_render_color_group($name_prefix, $label, $type_val, $c1_val, $c2_val
 
         <div class="mh-save-dock">
             <button type="submit" class="mh-cyber-btn mh-btn-save">
-                <i class="fas fa-save"></i> <?php esc_html_e('Initialize Settings', 'mh-plug'); ?>
+                <i class="fas fa-save"></i> <?php esc_html_e('Initialize Settings', 'mh-plug-ecommerce-builder-widgets'); ?>
             </button>
         </div>
     </form>

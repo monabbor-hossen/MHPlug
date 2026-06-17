@@ -31,12 +31,12 @@ $disabled_attr = $is_elementor_active ? '' : 'disabled';
  
             <div class="mh-accordion-item">
                 <div class="mh-accordion-header">
-                    <span class="mh-accordion-title"><?php esc_html_e('Global Settings (Future)', 'mh-plug'); ?></span>
+                    <span class="mh-accordion-title"><?php esc_html_e('Global Settings (Future)', 'mh-plug-ecommerce-builder-widgets'); ?></span>
                    <?php // Add an inner wrapper for the right-side elements ?>
                     <span class="mh-header-controls">
                         <span class="mh-widget-controls">
-                            <button type="button" class="button button-small mh-toggle-all" data-action="enable"><?php esc_html_e('Enable All', 'mh-plug'); ?></button>
-                            <button type="button" class="button button-small mh-toggle-all" data-action="disable"><?php esc_html_e('Disable All', 'mh-plug'); ?></button>
+                            <button type="button" class="button button-small mh-toggle-all" data-action="enable"><?php esc_html_e('Enable All', 'mh-plug-ecommerce-builder-widgets'); ?></button>
+                            <button type="button" class="button button-small mh-toggle-all" data-action="disable"><?php esc_html_e('Disable All', 'mh-plug-ecommerce-builder-widgets'); ?></button>
                         </span>
                         <span class="mh-accordion-icon">+</span>
                     </span>
@@ -64,18 +64,18 @@ $disabled_attr = $is_elementor_active ? '' : 'disabled';
             <div class="mh-accordion-item <?php echo esc_attr( $wc_section_class ); ?>">
                 <div class="mh-accordion-header">
                     <span class="mh-accordion-title">
-                        <?php esc_html_e( 'WooCommerce Features', 'mh-plug' ); ?>
+                        <?php esc_html_e( 'WooCommerce Features', 'mh-plug-ecommerce-builder-widgets' ); ?>
                         <?php if ( ! $is_wc_active ) : ?>
-                            <span class="mh-dependency-notice"><?php esc_html_e( '(Requires WooCommerce plugin)', 'mh-plug' ); ?></span>
+                            <span class="mh-dependency-notice"><?php esc_html_e( '(Requires WooCommerce plugin)', 'mh-plug-ecommerce-builder-widgets' ); ?></span>
                         <?php endif; ?>
                     </span>
                     <span class="mh-header-controls">
                         <span class="mh-widget-controls">
                             <button type="button" class="button button-small mh-toggle-all" data-action="enable" data-section="woocommerce" <?php echo $wc_disabled_attr; ?>>
-                                <?php esc_html_e( 'Enable All', 'mh-plug' ); ?>
+                                <?php esc_html_e( 'Enable All', 'mh-plug-ecommerce-builder-widgets' ); ?>
                             </button>
                             <button type="button" class="button button-small mh-toggle-all" data-action="disable" data-section="woocommerce" <?php echo $wc_disabled_attr; ?>>
-                                <?php esc_html_e( 'Disable All', 'mh-plug' ); ?>
+                                <?php esc_html_e( 'Disable All', 'mh-plug-ecommerce-builder-widgets' ); ?>
                             </button>
                         </span>
                         <span class="mh-accordion-icon">+</span>
@@ -85,8 +85,8 @@ $disabled_attr = $is_elementor_active ? '' : 'disabled';
                     <?php if ( ! $is_wc_active ) : ?>
                         <div class="mh-plug-admin-notice notice-error">
                             <p>
-                                <strong><?php esc_html_e( 'WooCommerce is not active.', 'mh-plug' ); ?></strong>
-                                <?php esc_html_e( 'Please install and activate WooCommerce to use these features.', 'mh-plug' ); ?>
+                                <strong><?php esc_html_e( 'WooCommerce is not active.', 'mh-plug-ecommerce-builder-widgets' ); ?></strong>
+                                <?php esc_html_e( 'Please install and activate WooCommerce to use these features.', 'mh-plug-ecommerce-builder-widgets' ); ?>
                             </p>
                         </div>
                     <?php endif; ?>
@@ -106,16 +106,16 @@ $disabled_attr = $is_elementor_active ? '' : 'disabled';
             <div class="mh-accordion-item <?php echo esc_attr($widget_section_class); ?>">
                 <?php // Change header from button to div ?>
                 <div class="mh-accordion-header">
-                    <span class="mh-accordion-title"><?php esc_html_e('Elementor Widgets', 'mh-plug'); ?></span>
+                    <span class="mh-accordion-title"><?php esc_html_e('Elementor Widgets', 'mh-plug-ecommerce-builder-widgets'); ?></span>
                     <?php // Add an inner wrapper for the right-side elements ?>
                     <span class="mh-header-controls">
                         
                         <span class="mh-widget-controls">
                             <button type="button" class="button button-small mh-toggle-all" data-action="enable" <?php echo $disabled_attr; ?>>
-                                <?php esc_html_e('Enable All', 'mh-plug'); ?>
+                                <?php esc_html_e('Enable All', 'mh-plug-ecommerce-builder-widgets'); ?>
                             </button>
                             <button type="button" class="button button-small mh-toggle-all" data-action="disable" <?php echo $disabled_attr; ?>>
-                                <?php esc_html_e('Disable All', 'mh-plug'); ?>
+                                <?php esc_html_e('Disable All', 'mh-plug-ecommerce-builder-widgets'); ?>
                             </button>
                         </span>
                         <span class="mh-accordion-icon">+</span>
@@ -125,8 +125,8 @@ $disabled_attr = $is_elementor_active ? '' : 'disabled';
                      <?php if (!$is_elementor_active) : ?>
                         <div class="mh-plug-admin-notice notice-error">
                             <p>
-                                <strong><?php esc_html_e('Elementor is not active.', 'mh-plug'); ?></strong>
-                                <?php esc_html_e('Please install and activate Elementor to use these widgets.', 'mh-plug'); ?>
+                                <strong><?php esc_html_e('Elementor is not active.', 'mh-plug-ecommerce-builder-widgets'); ?></strong>
+                                <?php esc_html_e('Please install and activate Elementor to use these widgets.', 'mh-plug-ecommerce-builder-widgets'); ?>
                             </p>
                         </div>
                     <?php endif; ?>

@@ -125,7 +125,7 @@ function mh_plug_render_floating_mini_cart() {
         <!-- Header -->
         <div style="display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid rgba(0,0,0,0.08);">
             <h3 style="margin:0; font-size:18px; font-weight:700; color:<?php echo esc_attr( $opts['panel_text_color'] ); ?>;">
-                <?php esc_html_e( 'Shopping Cart', 'mh-plug' ); ?>
+                <?php esc_html_e( 'Shopping Cart', 'mh-plug-ecommerce-builder-widgets' ); ?>
             </h3>
             <span id="mh-mini-cart-close" style="cursor:pointer; font-size:24px; line-height:1; color:#999; transition:color 0.2s;" onmouseover="this.style.color='#d63638'" onmouseout="this.style.color='#999'">&times;</span>
         </div>
@@ -144,14 +144,14 @@ function mh_plug_render_floating_mini_cart() {
                 color:<?php echo esc_attr( $opts['btn_view_cart_text'] ); ?>;
                 border:1px solid rgba(0,0,0,0.08);
                 transition: opacity 0.2s;
-            "><?php esc_html_e( 'View Cart', 'mh-plug' ); ?></a>
+            "><?php esc_html_e( 'View Cart', 'mh-plug-ecommerce-builder-widgets' ); ?></a>
             <a href="<?php echo esc_url( $opts['checkout_url'] ); ?>" style="
                 flex:1; text-align:center; padding:12px 16px; text-decoration:none; font-weight:600; font-size:14px;
                 border-radius:<?php echo $br; ?>px;
                 background:<?php echo esc_attr( $opts['btn_checkout_bg'] ); ?>;
                 color:<?php echo esc_attr( $opts['btn_checkout_text'] ); ?>;
                 transition: opacity 0.2s;
-            "><?php esc_html_e( 'Checkout', 'mh-plug' ); ?></a>
+            "><?php esc_html_e( 'Checkout', 'mh-plug-ecommerce-builder-widgets' ); ?></a>
         </div>
     </div>
 

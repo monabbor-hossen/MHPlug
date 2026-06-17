@@ -16,7 +16,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 	}
 
 	public function get_title() {
-		return __( 'MH Testimonial', 'mh-plug' );
+		return __( 'MH Testimonial', 'mh-plug-ecommerce-builder-widgets' );
 	}
 
 	public function get_icon() {
@@ -40,7 +40,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_content',
 			[
-				'label' => __( 'Testimonials', 'mh-plug' ),
+				'label' => __( 'Testimonials', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
@@ -49,9 +49,9 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$repeater->add_control(
 			'author_name',
 			[
-				'label' => __( 'Author Name', 'mh-plug' ),
+				'label' => __( 'Author Name', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::TEXT,
-				'default' => __( 'John Doe', 'mh-plug' ),
+				'default' => __( 'John Doe', 'mh-plug-ecommerce-builder-widgets' ),
 				'label_block' => true,
 			]
 		);
@@ -59,9 +59,9 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$repeater->add_control(
 			'author_designation',
 			[
-				'label' => __( 'Designation / Location', 'mh-plug' ),
+				'label' => __( 'Designation / Location', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::TEXT,
-				'default' => __( 'CEO, Company', 'mh-plug' ),
+				'default' => __( 'CEO, Company', 'mh-plug-ecommerce-builder-widgets' ),
 				'label_block' => true,
 			]
 		);
@@ -69,7 +69,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$repeater->add_control(
 			'author_image',
 			[
-				'label' => __( 'Author Image', 'mh-plug' ),
+				'label' => __( 'Author Image', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::MEDIA,
 				'default' => [
 					'url' => \Elementor\Utils::get_placeholder_image_src(),
@@ -80,16 +80,16 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$repeater->add_control(
 			'review_text',
 			[
-				'label' => __( 'Review Text', 'mh-plug' ),
+				'label' => __( 'Review Text', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::TEXTAREA,
-				'default' => __( 'This is a great product! I highly recommend it to everyone.', 'mh-plug' ),
+				'default' => __( 'This is a great product! I highly recommend it to everyone.', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
 		$repeater->add_control(
 			'star_rating',
 			[
-				'label' => __( 'Star Rating', 'mh-plug' ),
+				'label' => __( 'Star Rating', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::NUMBER,
 				'min' => 1,
 				'max' => 5,
@@ -101,26 +101,26 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'testimonials',
 			[
-				'label' => __( 'Testimonial List', 'mh-plug' ),
+				'label' => __( 'Testimonial List', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::REPEATER,
 				'fields' => $repeater->get_controls(),
 				'default' => [
 					[
-						'author_name' => __( 'John Doe', 'mh-plug' ),
-						'author_designation' => __( 'CEO, Company', 'mh-plug' ),
-						'review_text' => __( 'This is an amazing product. It changed my life completely!', 'mh-plug' ),
+						'author_name' => __( 'John Doe', 'mh-plug-ecommerce-builder-widgets' ),
+						'author_designation' => __( 'CEO, Company', 'mh-plug-ecommerce-builder-widgets' ),
+						'review_text' => __( 'This is an amazing product. It changed my life completely!', 'mh-plug-ecommerce-builder-widgets' ),
 						'star_rating' => 5,
 					],
 					[
-						'author_name' => __( 'Jane Smith', 'mh-plug' ),
-						'author_designation' => __( 'Designer', 'mh-plug' ),
-						'review_text' => __( 'Excellent design and great support. Highly recommended.', 'mh-plug' ),
+						'author_name' => __( 'Jane Smith', 'mh-plug-ecommerce-builder-widgets' ),
+						'author_designation' => __( 'Designer', 'mh-plug-ecommerce-builder-widgets' ),
+						'review_text' => __( 'Excellent design and great support. Highly recommended.', 'mh-plug-ecommerce-builder-widgets' ),
 						'star_rating' => 4,
 					],
                     [
-						'author_name' => __( 'Mike Johnson', 'mh-plug' ),
-						'author_designation' => __( 'Developer', 'mh-plug' ),
-						'review_text' => __( 'Very clean code and easy to use. Great job!', 'mh-plug' ),
+						'author_name' => __( 'Mike Johnson', 'mh-plug-ecommerce-builder-widgets' ),
+						'author_designation' => __( 'Developer', 'mh-plug-ecommerce-builder-widgets' ),
+						'review_text' => __( 'Very clean code and easy to use. Great job!', 'mh-plug-ecommerce-builder-widgets' ),
 						'star_rating' => 5,
 					],
 				],
@@ -133,17 +133,17 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_layout',
 			[
-				'label' => __( 'Layout Settings', 'mh-plug' ),
+				'label' => __( 'Layout Settings', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
 		$this->add_control(
 			'enable_slider',
 			[
-				'label' => __( 'Enable Slider', 'mh-plug' ),
+				'label' => __( 'Enable Slider', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => __( 'Yes', 'mh-plug' ),
-				'label_off' => __( 'No', 'mh-plug' ),
+				'label_on' => __( 'Yes', 'mh-plug-ecommerce-builder-widgets' ),
+				'label_off' => __( 'No', 'mh-plug-ecommerce-builder-widgets' ),
 				'return_value' => 'yes',
 				'default' => 'yes',
 			]
@@ -152,7 +152,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_responsive_control(
 			'grid_columns',
 			[
-				'label' => __( 'Columns', 'mh-plug' ),
+				'label' => __( 'Columns', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::NUMBER,
 				'min' => 1,
 				'max' => 6,
@@ -169,7 +169,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_responsive_control(
 			'grid_gap',
 			[
-				'label' => __( 'Gap', 'mh-plug' ),
+				'label' => __( 'Gap', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%', 'em', 'rem' ],
 				'range' => [
@@ -194,7 +194,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'slides_to_show',
 			[
-				'label' => __( 'Slides to Show', 'mh-plug' ),
+				'label' => __( 'Slides to Show', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::NUMBER,
 				'min' => 1,
 				'max' => 6,
@@ -208,7 +208,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'autoplay',
 			[
-				'label' => __( 'Autoplay', 'mh-plug' ),
+				'label' => __( 'Autoplay', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'yes',
 				'condition' => [
@@ -220,7 +220,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'autoplay_speed',
 			[
-				'label' => __( 'Autoplay Speed (ms)', 'mh-plug' ),
+				'label' => __( 'Autoplay Speed (ms)', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::NUMBER,
 				'default' => 3000,
 				'condition' => [
@@ -233,7 +233,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'show_arrows',
 			[
-				'label' => __( 'Show Arrows', 'mh-plug' ),
+				'label' => __( 'Show Arrows', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'yes',
 				'condition' => [
@@ -245,7 +245,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'show_dots',
 			[
-				'label' => __( 'Show Dots', 'mh-plug' ),
+				'label' => __( 'Show Dots', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'yes',
 				'condition' => [
@@ -257,13 +257,13 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'dots_style',
             [
-                'label' => __( 'Dots Style', 'mh-plug' ),
+                'label' => __( 'Dots Style', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'circles',
                 'options' => [
-                    'circles'  => __( 'Circles', 'mh-plug' ),
-                    'lines'    => __( 'Lines', 'mh-plug' ),
-                    'squares'  => __( 'Squares', 'mh-plug' ),
+                    'circles'  => __( 'Circles', 'mh-plug-ecommerce-builder-widgets' ),
+                    'lines'    => __( 'Lines', 'mh-plug-ecommerce-builder-widgets' ),
+                    'squares'  => __( 'Squares', 'mh-plug-ecommerce-builder-widgets' ),
                 ],
                 'condition' => [
                     'enable_slider' => 'yes',
@@ -279,7 +279,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
 			'section_slider_style',
 			[
-				'label' => __( 'Slider Navigation', 'mh-plug' ),
+				'label' => __( 'Slider Navigation', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'enable_slider' => 'yes',
@@ -287,24 +287,24 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 			]
 		);
 
-        $this->add_control( 'heading_arrows', [ 'label' => __( 'Arrows', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'condition' => [ 'show_arrows' => 'yes' ] ] );
+        $this->add_control( 'heading_arrows', [ 'label' => __( 'Arrows', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::HEADING, 'condition' => [ 'show_arrows' => 'yes' ] ] );
 
         $this->add_control(
             'arrows_position',
             [
-                'label' => __( 'Arrows Position', 'mh-plug' ),
+                'label' => __( 'Arrows Position', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'inside',
                 'options' => [
-                    'inside'  => __( 'Inside Slider', 'mh-plug' ),
-                    'outside' => __( 'Outside Slider', 'mh-plug' ),
+                    'inside'  => __( 'Inside Slider', 'mh-plug-ecommerce-builder-widgets' ),
+                    'outside' => __( 'Outside Slider', 'mh-plug-ecommerce-builder-widgets' ),
                 ],
                 'condition' => [ 'show_arrows' => 'yes' ],
             ]
         );
 
         $this->add_responsive_control( 'arrows_outside_spacing', [
-            'label' => __( 'Slider Padding (For Arrows)', 'mh-plug' ),
+            'label' => __( 'Slider Padding (For Arrows)', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'default' => [ 'size' => 50, 'unit' => 'px' ],
             'selectors' => [ '{{WRAPPER}} .mh-arrows-pos-outside .mh-testimonial-slider' => 'padding-left: {{SIZE}}{{UNIT}}; padding-right: {{SIZE}}{{UNIT}};' ],
@@ -312,7 +312,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         ]);
 
         $this->add_responsive_control( 'arrows_horizontal_offset', [
-            'label' => __( 'Horizontal Offset', 'mh-plug' ),
+            'label' => __( 'Horizontal Offset', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'range' => [ 'px' => [ 'min' => -100, 'max' => 100 ] ],
             'selectors' => [
@@ -325,7 +325,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         ]);
         
         $this->add_responsive_control( 'arrows_vertical_offset', [
-            'label' => __( 'Vertical Offset', 'mh-plug' ),
+            'label' => __( 'Vertical Offset', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'range' => [ 'px' => [ 'min' => -200, 'max' => 200 ] ],
             'selectors' => [
@@ -335,44 +335,44 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         ]);
 
         $this->start_controls_tabs( 'arrows_tabs', [ 'condition' => [ 'show_arrows' => 'yes' ] ] );
-        $this->start_controls_tab( 'arrows_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'arrows_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         
-        $this->add_control( 'arrow_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow i' => 'color: {{VALUE}};' ] ] );
-        $this->add_control( 'arrow_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow' => 'background-color: {{VALUE}};' ] ] );
-        $this->add_responsive_control( 'arrow_size', [ 'label' => __( 'Box Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}; line-height: {{SIZE}}{{UNIT}};' ] ] );
-        $this->add_responsive_control( 'arrow_icon_size', [ 'label' => __( 'Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow i' => 'font-size: {{SIZE}}{{UNIT}};' ] ] );
-        $this->add_control( 'arrow_border_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_control( 'arrow_color', [ 'label' => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow i' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'arrow_bg', [ 'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow' => 'background-color: {{VALUE}};' ] ] );
+        $this->add_responsive_control( 'arrow_size', [ 'label' => __( 'Box Size', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}; line-height: {{SIZE}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'arrow_icon_size', [ 'label' => __( 'Icon Size', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow i' => 'font-size: {{SIZE}}{{UNIT}};' ] ] );
+        $this->add_control( 'arrow_border_radius', [ 'label' => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'arrow_border', 'selector' => '{{WRAPPER}} .mh-testimonial-slider .slick-arrow' ] );
         
         $this->end_controls_tab();
         
-        $this->start_controls_tab( 'arrows_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'arrows_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
         
-        $this->add_control( 'arrow_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow:hover i' => 'color: {{VALUE}};' ] ] );
-        $this->add_control( 'arrow_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow:hover' => 'background-color: {{VALUE}};' ] ] );
-        $this->add_control( 'arrow_hover_border_color', [ 'label' => __( 'Border Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow:hover' => 'border-color: {{VALUE}};' ] ] );
+        $this->add_control( 'arrow_hover_color', [ 'label' => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow:hover i' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'arrow_hover_bg', [ 'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow:hover' => 'background-color: {{VALUE}};' ] ] );
+        $this->add_control( 'arrow_hover_border_color', [ 'label' => __( 'Border Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-arrow:hover' => 'border-color: {{VALUE}};' ] ] );
         
         $this->end_controls_tab();
         $this->end_controls_tabs();
 
-        $this->add_control( 'heading_dots', [ 'label' => __( 'Dots', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before', 'condition' => [ 'show_dots' => 'yes' ] ] );
+        $this->add_control( 'heading_dots', [ 'label' => __( 'Dots', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before', 'condition' => [ 'show_dots' => 'yes' ] ] );
         
         $this->add_control(
             'dots_position',
             [
-                'label' => __( 'Dots Position', 'mh-plug' ),
+                'label' => __( 'Dots Position', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'outside',
                 'options' => [
-                    'inside'  => __( 'Inside Slider', 'mh-plug' ),
-                    'outside' => __( 'Outside Slider', 'mh-plug' ),
+                    'inside'  => __( 'Inside Slider', 'mh-plug-ecommerce-builder-widgets' ),
+                    'outside' => __( 'Outside Slider', 'mh-plug-ecommerce-builder-widgets' ),
                 ],
                 'condition' => [ 'show_dots' => 'yes' ],
             ]
         );
 
         $this->add_responsive_control( 'dots_outside_spacing', [
-            'label' => __( 'Slider Padding (For Dots)', 'mh-plug' ),
+            'label' => __( 'Slider Padding (For Dots)', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'default' => [ 'size' => 40, 'unit' => 'px' ],
             'selectors' => [ '{{WRAPPER}} .mh-dots-pos-outside .mh-testimonial-slider' => 'padding-bottom: {{SIZE}}{{UNIT}};' ],
@@ -380,7 +380,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         ]);
 
         $this->add_responsive_control( 'dots_vertical_offset', [
-            'label' => __( 'Vertical Offset', 'mh-plug' ),
+            'label' => __( 'Vertical Offset', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'range' => [ 'px' => [ 'min' => -100, 'max' => 100 ] ],
             'selectors' => [
@@ -390,21 +390,21 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         ]);
 
         $this->start_controls_tabs( 'dots_tabs', [ 'condition' => [ 'show_dots' => 'yes' ] ] );
-        $this->start_controls_tab( 'dots_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'dots_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         
-        $this->add_control( 'dot_color', [ 'label' => __( 'Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li button' => 'background-color: {{VALUE}};' ] ] );
+        $this->add_control( 'dot_color', [ 'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li button' => 'background-color: {{VALUE}};' ] ] );
         
-        $this->add_responsive_control( 'dot_width', [ 'label' => __( 'Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li button' => 'width: {{SIZE}}{{UNIT}};' ] ] );
-        $this->add_responsive_control( 'dot_height', [ 'label' => __( 'Height', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li button' => 'height: {{SIZE}}{{UNIT}};' ] ] );
-        $this->add_responsive_control( 'dot_gap', [ 'label' => __( 'Gap', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li' => 'margin: 0 {{SIZE}}{{UNIT}};' ] ] );
-        $this->add_responsive_control( 'dot_border_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'dot_width', [ 'label' => __( 'Width', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li button' => 'width: {{SIZE}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'dot_height', [ 'label' => __( 'Height', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li button' => 'height: {{SIZE}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'dot_gap', [ 'label' => __( 'Gap', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li' => 'margin: 0 {{SIZE}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'dot_border_radius', [ 'label' => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
 
         $this->end_controls_tab();
         
-        $this->start_controls_tab( 'dots_active', [ 'label' => __( 'Active / Hover', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'dots_active', [ 'label' => __( 'Active / Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
         
-        $this->add_control( 'dot_active_color', [ 'label' => __( 'Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li.slick-active button' => 'background-color: {{VALUE}};', '{{WRAPPER}} .mh-testimonial-slider .slick-dots li button:hover' => 'background-color: {{VALUE}};' ] ] );
-        $this->add_responsive_control( 'dot_active_width', [ 'label' => __( 'Active Width', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li.slick-active button' => 'width: {{SIZE}}{{UNIT}};' ] ] );
+        $this->add_control( 'dot_active_color', [ 'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li.slick-active button' => 'background-color: {{VALUE}};', '{{WRAPPER}} .mh-testimonial-slider .slick-dots li button:hover' => 'background-color: {{VALUE}};' ] ] );
+        $this->add_responsive_control( 'dot_active_width', [ 'label' => __( 'Active Width', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SLIDER, 'selectors' => [ '{{WRAPPER}} .mh-testimonial-slider .slick-dots li.slick-active button' => 'width: {{SIZE}}{{UNIT}};' ] ] );
         
         $this->end_controls_tab();
         $this->end_controls_tabs();
@@ -414,18 +414,18 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_card_style',
 			[
-				'label' => __( 'Card', 'mh-plug' ),
+				'label' => __( 'Card', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
         
         $this->add_control( 'card_alignment', [
-            'label' => __( 'Text Alignment', 'mh-plug' ),
+            'label' => __( 'Text Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::CHOOSE,
             'options' => [
-                'left' => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center' => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'right' => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+                'left' => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center' => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'right' => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
             ],
             'default' => 'center',
             'selectors' => [
@@ -437,7 +437,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_responsive_control(
 			'card_padding',
 			[
-				'label' => __( 'Padding', 'mh-plug' ),
+				'label' => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
 				'default' => [
@@ -457,7 +457,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_responsive_control(
 			'card_border_radius',
 			[
-				'label' => __( 'Border Radius', 'mh-plug' ),
+				'label' => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
 				'default' => [
@@ -479,14 +479,14 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'card_normal_tab',
             [
-                'label' => __( 'Normal', 'mh-plug' ),
+                'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
         
         $this->add_control(
 			'card_bg_color',
 			[
-				'label' => __( 'Background Color', 'mh-plug' ),
+				'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
@@ -499,7 +499,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name' => 'card_border',
-				'label' => __( 'Border', 'mh-plug' ),
+				'label' => __( 'Border', 'mh-plug-ecommerce-builder-widgets' ),
 				'selector' => '{{WRAPPER}} .mh-testimonial-card',
 			]
 		);
@@ -508,7 +508,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name' => 'card_box_shadow',
-				'label' => __( 'Box Shadow', 'mh-plug' ),
+				'label' => __( 'Box Shadow', 'mh-plug-ecommerce-builder-widgets' ),
 				'selector' => '{{WRAPPER}} .mh-testimonial-card',
 			]
 		);
@@ -518,14 +518,14 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'card_hover_tab',
             [
-                'label' => __( 'Hover', 'mh-plug' ),
+                'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
         
         $this->add_control(
 			'card_hover_bg_color',
 			[
-				'label' => __( 'Background Color', 'mh-plug' ),
+				'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .mh-testimonial-card:hover' => 'background-color: {{VALUE}};',
@@ -536,7 +536,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->add_control(
 			'card_hover_border_color',
 			[
-				'label' => __( 'Border Color', 'mh-plug' ),
+				'label' => __( 'Border Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .mh-testimonial-card:hover' => 'border-color: {{VALUE}};',
@@ -547,7 +547,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->add_control(
 			'hover_animation',
 			[
-				'label' => __( 'Lift Up on Hover', 'mh-plug' ),
+				'label' => __( 'Lift Up on Hover', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'yes',
 			]
@@ -557,7 +557,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name' => 'card_hover_box_shadow',
-				'label' => __( 'Hover Box Shadow', 'mh-plug' ),
+				'label' => __( 'Hover Box Shadow', 'mh-plug-ecommerce-builder-widgets' ),
 				'selector' => '{{WRAPPER}} .mh-testimonial-card:hover',
 			]
 		);
@@ -570,23 +570,23 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
 			'section_image_style',
 			[
-				'label' => __( 'Author Image', 'mh-plug' ),
+				'label' => __( 'Author Image', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
         
-        $this->add_responsive_control( 'image_size', [ 'label' => __( 'Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'size_units' => [ 'px', '%' ], 'default' => [ 'size' => 50, 'unit' => 'px' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-avatar' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};' ] ] );
-        $this->add_responsive_control( 'image_border_radius', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-avatar' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'image_size', [ 'label' => __( 'Size', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SLIDER, 'size_units' => [ 'px', '%' ], 'default' => [ 'size' => 50, 'unit' => 'px' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-avatar' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'image_border_radius', [ 'label' => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-avatar' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'image_border', 'selector' => '{{WRAPPER}} .mh-testimonial-avatar' ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'image_box_shadow', 'selector' => '{{WRAPPER}} .mh-testimonial-avatar' ] );
-        $this->add_responsive_control( 'image_margin', [ 'label' => __( 'Margin', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-avatar' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'image_margin', [ 'label' => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-avatar' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
         
         $this->end_controls_section();
         
         $this->start_controls_section(
 			'section_typography_style',
 			[
-				'label' => __( 'Content Elements', 'mh-plug' ),
+				'label' => __( 'Content Elements', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -594,7 +594,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->add_control(
 			'heading_stars_style',
 			[
-				'label' => __( 'Stars', 'mh-plug' ),
+				'label' => __( 'Stars', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::HEADING,
 			]
 		);
@@ -602,7 +602,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'star_color',
 			[
-				'label' => __( 'Star Color', 'mh-plug' ),
+				'label' => __( 'Star Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#FFD700',
 				'selectors' => [
@@ -614,7 +614,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
 			'star_size',
 			[
-				'label' => __( 'Star Size', 'mh-plug' ),
+				'label' => __( 'Star Size', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em' ],
 				'default' => [
@@ -627,12 +627,12 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 			]
 		);
         
-        $this->add_responsive_control( 'stars_margin', [ 'label' => __( 'Margin', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-stars' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'stars_margin', [ 'label' => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-stars' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
 
         $this->add_control(
 			'heading_review_style',
 			[
-				'label' => __( 'Review Text', 'mh-plug' ),
+				'label' => __( 'Review Text', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
 			]
@@ -641,7 +641,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'review_color',
 			[
-				'label' => __( 'Color', 'mh-plug' ),
+				'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#666666',
 				'selectors' => [
@@ -658,14 +658,14 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 			]
 		);
         
-        $this->add_responsive_control( 'review_margin', [ 'label' => __( 'Margin', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-review' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'review_margin', [ 'label' => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-review' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
 
-        $this->add_control( 'author_block_margin', [ 'label' => __( 'Author Area Margin', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-author-block' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], 'separator' => 'before' ] );
+        $this->add_control( 'author_block_margin', [ 'label' => __( 'Author Area Margin', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-author-block' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ], 'separator' => 'before' ] );
 
         $this->add_control(
 			'heading_name_style',
 			[
-				'label' => __( 'Author Name', 'mh-plug' ),
+				'label' => __( 'Author Name', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
 			]
@@ -674,7 +674,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'name_color',
 			[
-				'label' => __( 'Color', 'mh-plug' ),
+				'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#333333',
 				'selectors' => [
@@ -691,12 +691,12 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 			]
 		);
         
-        $this->add_responsive_control( 'name_margin', [ 'label' => __( 'Margin', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-name' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'name_margin', [ 'label' => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-name' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
 
         $this->add_control(
 			'heading_designation_style',
 			[
-				'label' => __( 'Designation', 'mh-plug' ),
+				'label' => __( 'Designation', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
 			]
@@ -705,7 +705,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'designation_color',
 			[
-				'label' => __( 'Color', 'mh-plug' ),
+				'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#999999',
 				'selectors' => [
@@ -722,14 +722,14 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
 			]
 		);
         
-        $this->add_responsive_control( 'designation_margin', [ 'label' => __( 'Margin', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-designation' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'designation_margin', [ 'label' => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => [ 'px', '%', 'em' ], 'selectors' => [ '{{WRAPPER}} .mh-testimonial-designation' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
 
 		$this->end_controls_section();
 
         $this->start_controls_section(
 			'section_separator_style',
 			[
-				'label' => __( 'Separator', 'mh-plug' ),
+				'label' => __( 'Separator', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -737,7 +737,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->add_control(
 			'separator_color',
 			[
-				'label' => __( 'Color', 'mh-plug' ),
+				'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#eeeeee',
 				'selectors' => [
@@ -749,7 +749,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
 			'separator_thickness',
 			[
-				'label' => __( 'Thickness', 'mh-plug' ),
+				'label' => __( 'Thickness', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default' => [
@@ -765,7 +765,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
 			'separator_width',
 			[
-				'label' => __( 'Width', 'mh-plug' ),
+				'label' => __( 'Width', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
 				'default' => [
@@ -781,7 +781,7 @@ class MH_Testimonial_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
 			'separator_margin',
 			[
-				'label' => __( 'Margin', 'mh-plug' ),
+				'label' => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
 				'default' => [

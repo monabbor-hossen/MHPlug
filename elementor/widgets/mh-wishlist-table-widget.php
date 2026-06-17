@@ -21,7 +21,7 @@ use Elementor\Group_Control_Border;
 class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
 
     public function get_name()        { return 'mh_wishlist_table'; }
-    public function get_title()       { return __( 'MH Wishlist Table', 'mh-plug' ); }
+    public function get_title()       { return __( 'MH Wishlist Table', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon()        { return 'eicon-table'; }
     public function get_categories()  { return [ 'mh-plug-widgets' ]; }
     public function get_keywords()    { return [ 'wishlist', 'table', 'woocommerce', 'mh' ]; }
@@ -32,69 +32,69 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
 
         /* ── CONTENT: Column Visibility ── */
         $this->start_controls_section( 'columns_section', [
-            'label' => __( 'Columns', 'mh-plug' ),
+            'label' => __( 'Columns', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_control( 'show_image', [
-            'label'        => __( 'Show Product Image', 'mh-plug' ),
+            'label'        => __( 'Show Product Image', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
-            'label_on'     => __( 'Yes', 'mh-plug' ),
-            'label_off'    => __( 'No', 'mh-plug' ),
+            'label_on'     => __( 'Yes', 'mh-plug-ecommerce-builder-widgets' ),
+            'label_off'    => __( 'No', 'mh-plug-ecommerce-builder-widgets' ),
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'show_price', [
-            'label'        => __( 'Show Price', 'mh-plug' ),
+            'label'        => __( 'Show Price', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
-            'label_on'     => __( 'Yes', 'mh-plug' ),
-            'label_off'    => __( 'No', 'mh-plug' ),
+            'label_on'     => __( 'Yes', 'mh-plug-ecommerce-builder-widgets' ),
+            'label_off'    => __( 'No', 'mh-plug-ecommerce-builder-widgets' ),
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'show_stock', [
-            'label'        => __( 'Show Stock Status', 'mh-plug' ),
+            'label'        => __( 'Show Stock Status', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
-            'label_on'     => __( 'Yes', 'mh-plug' ),
-            'label_off'    => __( 'No', 'mh-plug' ),
+            'label_on'     => __( 'Yes', 'mh-plug-ecommerce-builder-widgets' ),
+            'label_off'    => __( 'No', 'mh-plug-ecommerce-builder-widgets' ),
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'show_add_to_cart', [
-            'label'        => __( 'Show Add to Cart', 'mh-plug' ),
+            'label'        => __( 'Show Add to Cart', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
-            'label_on'     => __( 'Yes', 'mh-plug' ),
-            'label_off'    => __( 'No', 'mh-plug' ),
+            'label_on'     => __( 'Yes', 'mh-plug-ecommerce-builder-widgets' ),
+            'label_off'    => __( 'No', 'mh-plug-ecommerce-builder-widgets' ),
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'empty_message', [
-            'label'   => __( 'Empty Wishlist Message', 'mh-plug' ),
+            'label'   => __( 'Empty Wishlist Message', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::TEXT,
-            'default' => __( 'Your wishlist is empty.', 'mh-plug' ),
+            'default' => __( 'Your wishlist is empty.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->end_controls_section();
 
         /* ── STYLE: Table Header ── */
         $this->start_controls_section( 'style_header', [
-            'label' => __( 'Table Header', 'mh-plug' ),
+            'label' => __( 'Table Header', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control( 'header_bg', [
-            'label'     => __( 'Background Color', 'mh-plug' ),
+            'label'     => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [ '{{WRAPPER}} table.mh-wishlist-table thead' => 'background: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'header_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'selectors' => [ '{{WRAPPER}} table.mh-wishlist-table thead th' => 'color: {{VALUE}};' ],
@@ -109,32 +109,32 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: Table Rows ── */
         $this->start_controls_section( 'style_rows', [
-            'label' => __( 'Table Rows', 'mh-plug' ),
+            'label' => __( 'Table Rows', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control( 'row_bg', [
-            'label'     => __( 'Row Background', 'mh-plug' ),
+            'label'     => __( 'Row Background', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'selectors' => [ '{{WRAPPER}} table.mh-wishlist-table tbody tr' => 'background: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'row_hover_bg', [
-            'label'     => __( 'Row Hover Background', 'mh-plug' ),
+            'label'     => __( 'Row Hover Background', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#f9f9f9',
             'selectors' => [ '{{WRAPPER}} table.mh-wishlist-table tbody tr:hover' => 'background: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'row_text_color', [
-            'label'     => __( 'Row Text Color', 'mh-plug' ),
+            'label'     => __( 'Row Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} table.mh-wishlist-table tbody td' => 'color: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'row_border_color', [
-            'label'     => __( 'Row Divider Color', 'mh-plug' ),
+            'label'     => __( 'Row Divider Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#f0f0f1',
             'selectors' => [ '{{WRAPPER}} table.mh-wishlist-table tbody tr' => 'border-bottom-color: {{VALUE}};' ],
@@ -144,7 +144,7 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: Add to Cart Button ── */
         $this->start_controls_section( 'style_cart_btn', [
-            'label'     => __( 'Add to Cart Button', 'mh-plug' ),
+            'label'     => __( 'Add to Cart Button', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_add_to_cart' => 'yes' ],
         ] );
@@ -155,28 +155,28 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'cart_btn_bg', [
-            'label'     => __( 'Background Color', 'mh-plug' ),
+            'label'     => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [ '{{WRAPPER}} .mh-wl-col-cart .button' => 'background: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'cart_btn_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'selectors' => [ '{{WRAPPER}} .mh-wl-col-cart .button' => 'color: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'cart_btn_bg_hover', [
-            'label'     => __( 'Hover Background', 'mh-plug' ),
+            'label'     => __( 'Hover Background', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#d63638',
             'selectors' => [ '{{WRAPPER}} .mh-wl-col-cart .button:hover' => 'background: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'cart_btn_border_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'range'      => [ 'px' => [ 'min' => 0, 'max' => 50 ] ],
@@ -185,7 +185,7 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'cart_btn_padding', [
-            'label'      => __( 'Padding', 'mh-plug' ),
+            'label'      => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'top' => 8, 'right' => 16, 'bottom' => 8, 'left' => 16, 'unit' => 'px' ],
@@ -198,7 +198,7 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: Table Container ── */
         $this->start_controls_section( 'style_table', [
-            'label' => __( 'Table Container', 'mh-plug' ),
+            'label' => __( 'Table Container', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
@@ -208,7 +208,7 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'table_border_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'range'      => [ 'px' => [ 'min' => 0, 'max' => 30 ] ],
@@ -223,7 +223,7 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
         $settings = $this->get_settings_for_display();
 
         if ( ! function_exists( 'mh_wishlist_get_items' ) ) {
-            echo '<p>' . esc_html__( 'Wishlist feature is not enabled.', 'mh-plug' ) . '</p>';
+            echo '<p>' . esc_html__( 'Wishlist feature is not enabled.', 'mh-plug-ecommerce-builder-widgets' ) . '</p>';
             return;
         }
 
@@ -233,7 +233,7 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
         $show_price   = 'yes' === $settings['show_price'];
         $show_stock   = 'yes' === $settings['show_stock'];
         $show_cart    = 'yes' === $settings['show_add_to_cart'];
-        $empty_msg    = ! empty($settings['empty_message']) ? $settings['empty_message'] : __( 'Your wishlist is empty.', 'mh-plug' );
+        $empty_msg    = ! empty($settings['empty_message']) ? $settings['empty_message'] : __( 'Your wishlist is empty.', 'mh-plug-ecommerce-builder-widgets' );
 
         ?>
         <div class="mh-wishlist-table-wrapper">
@@ -249,17 +249,17 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
                         <tr>
                             <th class="mh-wl-col-remove" style="padding: 15px;"></th>
                             <?php if ( $show_image ) : ?>
-                                <th class="mh-wl-col-image" style="padding: 15px;"><?php esc_html_e( 'Product', 'mh-plug' ); ?></th>
+                                <th class="mh-wl-col-image" style="padding: 15px;"><?php esc_html_e( 'Product', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
                             <?php endif; ?>
-                            <th class="mh-wl-col-name" style="padding: 15px;"><?php esc_html_e( 'Name', 'mh-plug' ); ?></th>
+                            <th class="mh-wl-col-name" style="padding: 15px;"><?php esc_html_e( 'Name', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
                             <?php if ( $show_price ) : ?>
-                                <th class="mh-wl-col-price" style="padding: 15px;"><?php esc_html_e( 'Price', 'mh-plug' ); ?></th>
+                                <th class="mh-wl-col-price" style="padding: 15px;"><?php esc_html_e( 'Price', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
                             <?php endif; ?>
                             <?php if ( $show_stock ) : ?>
-                                <th class="mh-wl-col-stock" style="padding: 15px;"><?php esc_html_e( 'Stock', 'mh-plug' ); ?></th>
+                                <th class="mh-wl-col-stock" style="padding: 15px;"><?php esc_html_e( 'Stock', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
                             <?php endif; ?>
                             <?php if ( $show_cart ) : ?>
-                                <th class="mh-wl-col-cart" style="padding: 15px;"><?php esc_html_e( 'Action', 'mh-plug' ); ?></th>
+                                <th class="mh-wl-col-cart" style="padding: 15px;"><?php esc_html_e( 'Action', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
                             <?php endif; ?>
                         </tr>
                     </thead>
@@ -270,9 +270,9 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
 
                             $stock      = $product->get_stock_status();
                             $badge_map  = [
-                                'instock'    => [ 'class' => 'mh-wl-stock-instock',    'label' => __( 'In Stock', 'mh-plug' ), 'color' => '#0f834d' ],
-                                'outofstock' => [ 'class' => 'mh-wl-stock-outofstock', 'label' => __( 'Out of Stock', 'mh-plug' ), 'color' => '#d63638' ],
-                                'onbackorder'=> [ 'class' => 'mh-wl-stock-onbackorder','label' => __( 'On Backorder', 'mh-plug' ), 'color' => '#e27730' ],
+                                'instock'    => [ 'class' => 'mh-wl-stock-instock',    'label' => __( 'In Stock', 'mh-plug-ecommerce-builder-widgets' ), 'color' => '#0f834d' ],
+                                'outofstock' => [ 'class' => 'mh-wl-stock-outofstock', 'label' => __( 'Out of Stock', 'mh-plug-ecommerce-builder-widgets' ), 'color' => '#d63638' ],
+                                'onbackorder'=> [ 'class' => 'mh-wl-stock-onbackorder','label' => __( 'On Backorder', 'mh-plug-ecommerce-builder-widgets' ), 'color' => '#e27730' ],
                             ];
                             $badge = $badge_map[ $stock ] ?? $badge_map['instock'];
                         ?>
@@ -321,7 +321,7 @@ class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
                                         $product
                                     );
                                 } else {
-                                    echo '<span style="color: #d63638;">' . esc_html__( 'Out of Stock', 'mh-plug' ) . '</span>';
+                                    echo '<span style="color: #d63638;">' . esc_html__( 'Out of Stock', 'mh-plug-ecommerce-builder-widgets' ) . '</span>';
                                 }
                                 ?>
                             </td>

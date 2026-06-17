@@ -15,7 +15,7 @@ use Elementor\Group_Control_Box_Shadow;
 trait MH_Quick_View_Trait {
 
     protected function get_qv_templates() {
-        $templates = [ '' => __( 'Default (Built-in Layout)', 'mh-plug' ) ];
+        $templates = [ '' => __( 'Default (Built-in Layout)', 'mh-plug-ecommerce-builder-widgets' ) ];
         $query = new \WP_Query( [ 
             'post_type'      => 'mh_templates', 
             'posts_per_page' => -1, 
@@ -32,27 +32,27 @@ trait MH_Quick_View_Trait {
     protected function register_quick_view_controls() {
         // --- CONTENT ---
         $this->start_controls_section( 'section_quick_view_config', [
-            'label' => __( 'Quick View Button', 'mh-plug' ),
+            'label' => __( 'Quick View Button', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT
         ]);
 
         $this->add_control( 'show_quick_view', [
-            'label'   => __( 'Show Quick View Button', 'mh-plug' ),
+            'label'   => __( 'Show Quick View Button', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SWITCHER,
             'default' => 'yes'
         ]);
 
         $this->add_control( 'quick_view_template', [
-            'label'       => __( 'Select Popup Template', 'mh-plug' ),
+            'label'       => __( 'Select Popup Template', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::SELECT,
             'options'     => $this->get_qv_templates(),
             'default'     => '',
-            'description' => __( 'Select a Theme Builder template to override the default Quick View design.', 'mh-plug' ),
+            'description' => __( 'Select a Theme Builder template to override the default Quick View design.', 'mh-plug-ecommerce-builder-widgets' ),
             'condition'   => [ 'show_quick_view' => 'yes' ]
         ]);
 
         $this->add_control( 'quick_view_icon', [
-            'label'     => __( 'Button Icon', 'mh-plug' ),
+            'label'     => __( 'Button Icon', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::ICONS,
             'default'   => [ 'value' => 'fas fa-shopping-bag', 'library' => 'fa-solid' ],
             'condition' => [ 'show_quick_view' => 'yes' ]
@@ -62,14 +62,14 @@ trait MH_Quick_View_Trait {
 
         // --- STYLE ---
         $this->start_controls_section( 'section_quick_view_style', [
-            'label'     => __( 'Quick View Style', 'mh-plug' ),
+            'label'     => __( 'Quick View Style', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_quick_view' => 'yes' ]
         ]);
 
         // 🚀 FIX: Added Default 16px size to prevent vanishing icon
         $this->add_responsive_control( 'qv_icon_size', [
-            'label'     => __( 'Icon Size', 'mh-plug' ),
+            'label'     => __( 'Icon Size', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SLIDER,
             'default'   => [ 'size' => 16 ],
             'range'     => [ 'px' => [ 'min' => 10, 'max' => 100 ] ],
@@ -81,7 +81,7 @@ trait MH_Quick_View_Trait {
 
         // 🚀 FIX: Added Default 40px width/height to prevent 0x0 collapse
         $this->add_responsive_control( 'qv_box_size', [
-            'label'     => __( 'Button Size', 'mh-plug' ),
+            'label'     => __( 'Button Size', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SLIDER,
             'default'   => [ 'size' => 40 ],
             'range'     => [ 'px' => [ 'min' => 20, 'max' => 150 ] ],
@@ -92,7 +92,7 @@ trait MH_Quick_View_Trait {
 
         // 🚀 FIX: Added Default 50% border radius to make it a perfect circle immediately
         $this->add_responsive_control( 'qv_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
             'default'    => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => '%' ],
@@ -102,9 +102,9 @@ trait MH_Quick_View_Trait {
         $this->start_controls_tabs( 'tabs_qv_style' );
 
         // Normal
-        $this->start_controls_tab( 'tab_qv_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_qv_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'qv_color', [
-            'label'     => __( 'Icon Color', 'mh-plug' ),
+            'label'     => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#333333',
             'selectors' => [ 
@@ -115,7 +115,7 @@ trait MH_Quick_View_Trait {
         ]);
         $this->add_group_control( Group_Control_Background::get_type(), [
             'name'     => 'qv_bg',
-            'label'    => __( 'Background (Supports Gradient)', 'mh-plug' ),
+            'label'    => __( 'Background (Supports Gradient)', 'mh-plug-ecommerce-builder-widgets' ),
             'types'    => [ 'classic', 'gradient' ],
             'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger'
         ]);
@@ -124,9 +124,9 @@ trait MH_Quick_View_Trait {
         $this->end_controls_tab();
 
         // Hover
-        $this->start_controls_tab( 'tab_qv_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_qv_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'qv_hover_color', [
-            'label'     => __( 'Icon Hover Color', 'mh-plug' ),
+            'label'     => __( 'Icon Hover Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'selectors' => [ 
@@ -137,18 +137,18 @@ trait MH_Quick_View_Trait {
         ]);
         $this->add_group_control( Group_Control_Background::get_type(), [
             'name'     => 'qv_hover_bg',
-            'label'    => __( 'Hover Background', 'mh-plug' ),
+            'label'    => __( 'Hover Background', 'mh-plug-ecommerce-builder-widgets' ),
             'types'    => [ 'classic', 'gradient' ],
             'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger:hover'
         ]);
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'qv_hover_border', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger:hover' ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'qv_hover_shadow', 'selector' => '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger:hover' ] );
-        $this->add_control( 'qv_hover_anim', [ 'label' => __( 'Hover Animation', 'mh-plug' ), 'type'  => Controls_Manager::HOVER_ANIMATION ] );
+        $this->add_control( 'qv_hover_anim', [ 'label' => __( 'Hover Animation', 'mh-plug-ecommerce-builder-widgets' ), 'type'  => Controls_Manager::HOVER_ANIMATION ] );
         $this->end_controls_tab();
         $this->end_controls_tabs();
 
         $this->add_control( 'qv_transition', [
-            'label'     => __( 'Transition Speed (s)', 'mh-plug' ),
+            'label'     => __( 'Transition Speed (s)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SLIDER,
             'default'   => [ 'size' => 0.3 ],
             'selectors' => [ '{{WRAPPER}} .mh-product-grid .mh-action-btn.mh-quick-view-trigger' => 'transition: all {{SIZE}}s ease !important;' ],
@@ -168,7 +168,7 @@ trait MH_Quick_View_Trait {
         <a href="#" class="mh-action-btn mh-quick-view-trigger<?php echo esc_attr( $animation ); ?>" 
            data-product-id="<?php echo esc_attr( $product_id ); ?>" 
            data-template-id="<?php echo esc_attr( $template_id ); ?>"
-           title="<?php esc_html_e( 'Quick View', 'mh-plug' ); ?>"
+           title="<?php esc_html_e( 'Quick View', 'mh-plug-ecommerce-builder-widgets' ); ?>"
            style="display:flex; align-items:center; justify-content:center;">
             <?php 
             // 🚀 FIX: Bulletproof Icon injection. Avoids Elementor render_icon glitches entirely.

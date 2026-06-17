@@ -177,7 +177,7 @@ final class MH_Elementor_Loader {
     public function quick_view_ajax() {
         check_ajax_referer( 'mh_quick_view_nonce', 'nonce' );
 
-        if (!isset($_POST['product_id'])) { wp_send_json_error(['message' => __( 'No product ID provided.', 'mh-plug' )]); }
+        if (!isset($_POST['product_id'])) { wp_send_json_error(['message' => __( 'No product ID provided.', 'mh-plug-ecommerce-builder-widgets' )]); }
         $product_id = intval($_POST['product_id']);
         $template_id = !empty($_POST['template_id']) ? intval($_POST['template_id']) : 0;
         global $post, $product;
@@ -207,7 +207,7 @@ final class MH_Elementor_Loader {
     public function get_compare_table_ajax() {
         check_ajax_referer( 'mh_compare_nonce', 'nonce' );
 
-        if (!isset($_POST['product_ids']) || !is_array($_POST['product_ids'])) { wp_send_json_error(['html' => '<div class="mh-compare-empty"><h3>' . esc_html__('No products to compare', 'mh-plug') . '</h3><p>' . esc_html__('Return to the shop to add products.', 'mh-plug') . '</p></div>']); }
+        if (!isset($_POST['product_ids']) || !is_array($_POST['product_ids'])) { wp_send_json_error(['html' => '<div class="mh-compare-empty"><h3>' . esc_html__('No products to compare', 'mh-plug-ecommerce-builder-widgets') . '</h3><p>' . esc_html__('Return to the shop to add products.', 'mh-plug-ecommerce-builder-widgets') . '</p></div>']); }
         $product_ids = array_map('intval', $_POST['product_ids']);
         $products = [];
         $all_attributes = [];
@@ -221,13 +221,13 @@ final class MH_Elementor_Loader {
                 }
             }
         }
-        if (empty($products)) wp_send_json_error(['html' => '<p>' . esc_html__( 'Products not found.', 'mh-plug' ) . '</p>']);
+        if (empty($products)) wp_send_json_error(['html' => '<p>' . esc_html__( 'Products not found.', 'mh-plug-ecommerce-builder-widgets' ) . '</p>']);
         ob_start();
         ?>
         <table class="mh-compare-table">
             <tbody>
                 <tr>
-                    <th><?php esc_html_e( 'Product Details', 'mh-plug' ); ?></th>
+                    <th><?php esc_html_e( 'Product Details', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
                     <?php foreach($products as $prod_obj):
                         global $product, $post;
                         $product = $prod_obj;
@@ -236,7 +236,7 @@ final class MH_Elementor_Loader {
                     ?>
                         <td class="mh-compare-item">
                             <div class="mh-compare-image">
-                                <a href="#" class="mh-remove-compare" data-product-id="<?php echo esc_attr($product->get_id()); ?>" title="<?php esc_attr_e( 'Remove', 'mh-plug' ); ?>"><i class="fas fa-times"></i></a>
+                                <a href="#" class="mh-remove-compare" data-product-id="<?php echo esc_attr($product->get_id()); ?>" title="<?php esc_attr_e( 'Remove', 'mh-plug-ecommerce-builder-widgets' ); ?>"><i class="fas fa-times"></i></a>
                                 <?php echo $product->get_image('woocommerce_thumbnail'); ?>
                             </div>
                             <h3 class="mh-compare-title"><a href="<?php echo esc_url( $product->get_permalink() ); ?>"><?php echo esc_html( $product->get_title() ); ?></a></h3>
@@ -246,15 +246,15 @@ final class MH_Elementor_Loader {
                     <?php endforeach; wp_reset_postdata(); ?>
                 </tr>
                 <tr>
-                    <th><?php esc_html_e( 'Description', 'mh-plug' ); ?></th>
+                    <th><?php esc_html_e( 'Description', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
                     <?php foreach($products as $product): ?><td><?php echo wp_kses_post( wp_trim_words($product->get_short_description(), 15, '...') ); ?></td><?php endforeach; ?>
                 </tr>
                 <tr>
-                    <th><?php esc_html_e( 'Rating', 'mh-plug' ); ?></th>
+                    <th><?php esc_html_e( 'Rating', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
                     <?php foreach($products as $product): ?><td><?php echo wp_kses_post( wc_get_rating_html($product->get_average_rating()) ); ?></td><?php endforeach; ?>
                 </tr>
                 <tr>
-                    <th><?php esc_html_e( 'Availability', 'mh-plug' ); ?></th>
+                    <th><?php esc_html_e( 'Availability', 'mh-plug-ecommerce-builder-widgets' ); ?></th>
                     <?php foreach($products as $product): ?><td><?php echo wp_kses_post( wc_get_stock_html($product) ); ?></td><?php endforeach; ?>
                 </tr>
                 <?php foreach($all_attributes as $attr_key => $attr_label): ?>
@@ -271,7 +271,7 @@ final class MH_Elementor_Loader {
         wp_send_json_success(['html' => ob_get_clean()]);
     }
 
-    public function register_widget_category($elements_manager) { $elements_manager->add_category('mh-plug-widgets', ['title' => esc_html__('MH Plug', 'mh-plug'), 'icon' => 'eicon-plug']); }
+    public function register_widget_category($elements_manager) { $elements_manager->add_category('mh-plug-widgets', ['title' => esc_html__('MH Plug', 'mh-plug-ecommerce-builder-widgets'), 'icon' => 'eicon-plug']); }
     public function print_inline_editor_styles() { echo '<style id="mh-plug-editor-badge-styles"> .elementor-element-wrapper [class^="mhi-"] { position: relative !important; } .elementor-element-wrapper [class^="mhi-"]::after { content: "MH"; position: absolute; top: -10px; right: -45px; z-index: 10; background-color: #2293e9ff; color: #ffffff; padding: 2px 6px; font-size: 10px; line-height: 1; font-weight: 600; border-radius: 4px; text-transform: uppercase; box-shadow: 0 1px 2px rgba(0,0,0,0.2); } </style>'; }
     
     // Continue below...

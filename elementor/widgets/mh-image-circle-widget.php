@@ -23,7 +23,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_title() {
-        return esc_html__('MH Image Circle', 'mh-plug');
+        return esc_html__('MH Image Circle', 'mh-plug-ecommerce-builder-widgets');
     }
 
     public function get_icon() {
@@ -40,7 +40,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_content_image_text',
             [
-                'label' => esc_html__('Image & Text', 'mh-plug'),
+                'label' => esc_html__('Image & Text', 'mh-plug-ecommerce-builder-widgets'),
                 'tab' => Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -48,7 +48,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'image',
             [
-                'label' => esc_html__('Choose Image', 'mh-plug'),
+                'label' => esc_html__('Choose Image', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::MEDIA,
                 'default' => [
                     'url' => \Elementor\Utils::get_placeholder_image_src(),
@@ -68,9 +68,9 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'text',
             [
-                'label' => esc_html__('Text', 'mh-plug'),
+                'label' => esc_html__('Text', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::TEXT,
-                'default' => esc_html__('Melody Mates', 'mh-plug'),
+                'default' => esc_html__('Melody Mates', 'mh-plug-ecommerce-builder-widgets'),
                 'dynamic' => ['active' => true],
             ]
         );
@@ -78,9 +78,9 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'link',
             [
-                'label' => esc_html__('Link', 'mh-plug'),
+                'label' => esc_html__('Link', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::URL,
-                'placeholder' => esc_html__('https://your-link.com', 'mh-plug'),
+                'placeholder' => esc_html__('https://your-link.com', 'mh-plug-ecommerce-builder-widgets'),
                 'dynamic' => ['active' => true],
             ]
         );
@@ -88,19 +88,19 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'alignment',
             [
-                'label' => esc_html__( 'Alignment', 'mh-plug' ),
+                'label' => esc_html__( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
                     'left' => [
-                        'title' => esc_html__( 'Left', 'mh-plug' ),
+                        'title' => esc_html__( 'Left', 'mh-plug-ecommerce-builder-widgets' ),
                         'icon' => 'eicon-text-align-left',
                     ],
                     'center' => [
-                        'title' => esc_html__( 'Center', 'mh-plug' ),
+                        'title' => esc_html__( 'Center', 'mh-plug-ecommerce-builder-widgets' ),
                         'icon' => 'eicon-text-align-center',
                     ],
                     'right' => [
-                        'title' => esc_html__( 'Right', 'mh-plug' ),
+                        'title' => esc_html__( 'Right', 'mh-plug-ecommerce-builder-widgets' ),
                         'icon' => 'eicon-text-align-right',
                     ],
                 ],
@@ -117,7 +117,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_style_image',
             [
-                'label' => esc_html__('Image', 'mh-plug'),
+                'label' => esc_html__('Image', 'mh-plug-ecommerce-builder-widgets'),
                 'tab' => Controls_Manager::TAB_STYLE,
             ]
         );
@@ -125,7 +125,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'image_size_control',
             [
-                'label' => esc_html__( 'Image Size (Diameter)', 'mh-plug' ),
+                'label' => esc_html__( 'Image Size (Diameter)', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'px' => ['min' => 50, 'max' => 500],
@@ -140,7 +140,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'image_border_gap',
             [
-                'label' => esc_html__('Border Gap', 'mh-plug'),
+                'label' => esc_html__('Border Gap', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'px' => ['min' => 0, 'max' => 50],
@@ -155,7 +155,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'image_spacing',
             [
-                'label' => esc_html__('Spacing Below Image', 'mh-plug'),
+                'label' => esc_html__('Spacing Below Image', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [ 'unit' => 'px', 'size' => 20 ],
                 'selectors' => [
@@ -169,7 +169,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         // Normal Tab
         $this->start_controls_tab(
             'tab_image_normal',
-            [ 'label' => esc_html__( 'Normal', 'mh-plug' ) ]
+            [ 'label' => esc_html__( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ]
         );
 
         $this->add_group_control(
@@ -188,7 +188,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'image_border_radius',
             [
-                'label' => esc_html__('Border Radius', 'mh-plug'),
+                'label' => esc_html__('Border Radius', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'default' => [ 'unit' => '%', 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'isLinked' => true ],
@@ -204,13 +204,13 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         // Hover Tab
         $this->start_controls_tab(
             'tab_image_hover',
-            [ 'label' => esc_html__( 'Hover', 'mh-plug' ) ]
+            [ 'label' => esc_html__( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ]
         );
 
         $this->add_control(
             'image_border_color_hover',
             [
-                'label' => esc_html__('Border Color', 'mh-plug'),
+                'label' => esc_html__('Border Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-image-circle-wrapper:hover .mh-image-circle-border' => 'border-color: {{VALUE}};',
@@ -221,10 +221,10 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'hover_animation_spin',
             [
-                'label' => esc_html__('Spin Border on Hover', 'mh-plug'),
+                'label' => esc_html__('Spin Border on Hover', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::SWITCHER,
-                'label_on' => esc_html__('Yes', 'mh-plug'),
-                'label_off' => esc_html__('No', 'mh-plug'),
+                'label_on' => esc_html__('Yes', 'mh-plug-ecommerce-builder-widgets'),
+                'label_off' => esc_html__('No', 'mh-plug-ecommerce-builder-widgets'),
                 'return_value' => 'yes',
                 'default' => 'yes',
             ]
@@ -233,7 +233,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'hover_transition',
             [
-                'label' => esc_html__( 'Transition Duration (s)', 'mh-plug' ),
+                'label' => esc_html__( 'Transition Duration (s)', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [ 'px' => [ 'min' => 0.1, 'max' => 10, 'step' => 0.1 ] ],
                 'default' => [ 'unit' => 'px', 'size' => 10 ], // Actually seconds, but using slider
@@ -252,7 +252,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_style_text',
             [
-                'label' => esc_html__('Text', 'mh-plug'),
+                'label' => esc_html__('Text', 'mh-plug-ecommerce-builder-widgets'),
                 'tab' => Controls_Manager::TAB_STYLE,
             ]
         );
@@ -262,13 +262,13 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         // --- Normal Tab ---
         $this->start_controls_tab(
             'tab_text_normal',
-            [ 'label' => esc_html__( 'Normal', 'mh-plug' ) ]
+            [ 'label' => esc_html__( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ]
         );
 
         $this->add_control(
             'text_color',
             [
-                'label' => esc_html__('Color', 'mh-plug'),
+                'label' => esc_html__('Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::COLOR,
                 'default' => '#333333',
                 'selectors' => [
@@ -282,13 +282,13 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         // --- Hover Tab ---
         $this->start_controls_tab(
             'tab_text_hover',
-            [ 'label' => esc_html__( 'Hover', 'mh-plug' ) ]
+            [ 'label' => esc_html__( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ]
         );
 
         $this->add_control(
             'text_color_hover',
             [
-                'label' => esc_html__('Color', 'mh-plug'),
+                'label' => esc_html__('Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-image-circle-wrapper:hover .mh-image-circle-text' => 'color: {{VALUE}};',
@@ -320,7 +320,7 @@ class MH_Image_Circle_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'text_margin',
             [
-                'label' => esc_html__( 'Margin', 'mh-plug' ),
+                'label' => esc_html__( 'Margin', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => [ 'px', '%', 'em' ],
                 'selectors' => [

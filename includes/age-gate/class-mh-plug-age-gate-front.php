@@ -124,10 +124,10 @@ class MH_Plug_Age_Gate_Front {
             return;
         }
 
-        $modal_heading    = $this->options['modal_heading'] ?? __( 'Age Verification', 'mh-plug' );
-        $modal_subheading = $this->options['modal_subheading'] ?? __( 'Please confirm your age to continue.', 'mh-plug' );
-        $btn_yes          = $this->options['btn_yes_text'] ?? __( 'Yes, I am older', 'mh-plug' );
-        $btn_no           = $this->options['btn_no_text'] ?? __( 'No, I am not', 'mh-plug' );
+        $modal_heading    = $this->options['modal_heading'] ?? __( 'Age Verification', 'mh-plug-ecommerce-builder-widgets' );
+        $modal_subheading = $this->options['modal_subheading'] ?? __( 'Please confirm your age to continue.', 'mh-plug-ecommerce-builder-widgets' );
+        $btn_yes          = $this->options['btn_yes_text'] ?? __( 'Yes, I am older', 'mh-plug-ecommerce-builder-widgets' );
+        $btn_no           = $this->options['btn_no_text'] ?? __( 'No, I am not', 'mh-plug-ecommerce-builder-widgets' );
         $min_age          = $this->options['minimum_age'] ?? 18;
         $show_logo        = !empty( $this->options['show_logo'] );
 

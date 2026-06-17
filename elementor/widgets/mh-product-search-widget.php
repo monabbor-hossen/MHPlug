@@ -18,7 +18,7 @@ use Elementor\Icons_Manager;
 class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_search'; }
-    public function get_title() { return __( 'MH Product Search', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Product Search', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-search'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
@@ -26,48 +26,48 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
         
         /* ── CONTENT ── */
         $this->start_controls_section( 'content_section', [
-            'label' => __( 'Search Settings', 'mh-plug' ),
+            'label' => __( 'Search Settings', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_responsive_control( 'search_layout', [
-            'label'        => __( 'Layout', 'mh-plug' ),
+            'label'        => __( 'Layout', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SELECT,
             'default'      => 'standard',
             'options'      => [
-                'standard'   => __( 'Standard (Always Open)', 'mh-plug' ),
-                'expandable' => __( 'Dropdown Box (Icon Click)', 'mh-plug' ),
-                'slide_out'  => __( 'Morphing (Sliding Animation)', 'mh-plug' ),
+                'standard'   => __( 'Standard (Always Open)', 'mh-plug-ecommerce-builder-widgets' ),
+                'expandable' => __( 'Dropdown Box (Icon Click)', 'mh-plug-ecommerce-builder-widgets' ),
+                'slide_out'  => __( 'Morphing (Sliding Animation)', 'mh-plug-ecommerce-builder-widgets' ),
             ],
         ] );
 
         $this->add_control( 'design_style', [
-            'label'   => __( 'Input Design Style', 'mh-plug' ),
+            'label'   => __( 'Input Design Style', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'modern',
             'options' => [
-                'classic' => __( 'Classic (Standard Box)', 'mh-plug' ),
-                'modern'  => __( 'Modern (Icon Inside Input)', 'mh-plug' ),
+                'classic' => __( 'Classic (Standard Box)', 'mh-plug-ecommerce-builder-widgets' ),
+                'modern'  => __( 'Modern (Icon Inside Input)', 'mh-plug-ecommerce-builder-widgets' ),
             ],
-            'description' => __( 'Choose "Modern" to display the icon inside the search bar.', 'mh-plug' ),
+            'description' => __( 'Choose "Modern" to display the icon inside the search bar.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_control( 'search_icon', [
-            'label'     => __( 'Search Icon', 'mh-plug' ),
+            'label'     => __( 'Search Icon', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::ICONS,
             'default'   => [ 'value' => 'fas fa-search', 'library' => 'fa-solid' ],
         ] );
 
         $this->add_control( 'placeholder', [
-            'label'   => __( 'Placeholder Text', 'mh-plug' ),
+            'label'   => __( 'Placeholder Text', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::TEXT,
-            'default' => __( 'Search for products...', 'mh-plug' ),
+            'default' => __( 'Search for products...', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_control( 'not_found_text', [
-            'label'   => __( 'Not Found Message', 'mh-plug' ),
+            'label'   => __( 'Not Found Message', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::TEXT,
-            'default' => __( 'No products found.', 'mh-plug' ),
+            'default' => __( 'No products found.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->end_controls_section();
@@ -77,43 +77,43 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
            ========================================== */
         // 🚀 FIX: Removed the condition so this panel is always available for responsive styling
         $this->start_controls_section( 'style_standard_section', [
-            'label' => __( '🎨 Standard Layout Styles', 'mh-plug' ),
+            'label' => __( '🎨 Standard Layout Styles', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control( 'std_input_bg', [
-            'label'     => __( 'Input Background', 'mh-plug' ),
+            'label'     => __( 'Input Background', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}}' => '--std-in-bg: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'std_input_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}}' => '--std-in-c: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'std_ph_color', [
-            'label'     => __( 'Placeholder Color', 'mh-plug' ),
+            'label'     => __( 'Placeholder Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}}' => '--std-ph-c: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'std_icon_color', [
-            'label'     => __( 'Icon Color', 'mh-plug' ),
+            'label'     => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}}' => '--std-ic-c: {{VALUE}};' ],
         ] );
 
         $this->add_responsive_control( 'std_icon_size', [
-            'label'      => __( 'Icon Size', 'mh-plug' ),
+            'label'      => __( 'Icon Size', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em', 'rem' ],
             'selectors'  => [ '{{WRAPPER}}' => '--std-ic-s: {{SIZE}}{{UNIT}};' ],
         ] );
 
         $this->add_responsive_control( 'std_padding', [
-            'label'      => __( 'Input Padding', 'mh-plug' ),
+            'label'      => __( 'Input Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [ '{{WRAPPER}}' => '--std-in-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
@@ -126,7 +126,7 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'std_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
             'selectors'  => [ '{{WRAPPER}}' => '--std-in-r: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
@@ -139,38 +139,38 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
            ========================================== */
         // 🚀 FIX: Removed the condition so this panel is always available for responsive styling
         $this->start_controls_section( 'style_expandable_section', [
-            'label' => __( '🎨 Expandable Layout Styles', 'mh-plug' ),
+            'label' => __( '🎨 Expandable Layout Styles', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         // --- TRIGGER BUTTON STYLES ---
-        $this->add_control( 'heading_exp_trigger', [ 'label' => __( 'Trigger Button', 'mh-plug' ), 'type' => Controls_Manager::HEADING ] );
+        $this->add_control( 'heading_exp_trigger', [ 'label' => __( 'Trigger Button', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::HEADING ] );
 
         $this->start_controls_tabs( 'tabs_exp_trigger' );
 
         // Normal State
-        $this->start_controls_tab( 'tab_exp_trig_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_exp_trig_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'exp_trig_color', [
-            'label'     => __( 'Icon Color', 'mh-plug' ),
+            'label'     => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}}' => '--exp-tr-c: {{VALUE}};' ],
         ] );
         $this->add_control( 'exp_trig_bg', [
-            'label'     => __( 'Background', 'mh-plug' ),
+            'label'     => __( 'Background', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}}' => '--exp-tr-bg: {{VALUE}};' ],
         ] );
         $this->end_controls_tab();
 
         // Hover State
-        $this->start_controls_tab( 'tab_exp_trig_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_exp_trig_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'exp_trig_color_h', [
-            'label'     => __( 'Icon Color', 'mh-plug' ),
+            'label'     => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}}' => '--exp-tr-hc: {{VALUE}};' ],
         ] );
         $this->add_control( 'exp_trig_bg_h', [
-            'label'     => __( 'Background', 'mh-plug' ),
+            'label'     => __( 'Background', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}}' => '--exp-tr-hbg: {{VALUE}};' ],
         ] );
@@ -179,7 +179,7 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tabs();
 
         $this->add_responsive_control( 'exp_trig_size', [
-            'label'      => __( 'Icon Size', 'mh-plug' ),
+            'label'      => __( 'Icon Size', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em', 'rem' ],
             'selectors'  => [ '{{WRAPPER}}' => '--exp-tr-s: {{SIZE}}{{UNIT}};' ],
@@ -187,24 +187,24 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
         ] );
         
         $this->add_responsive_control( 'exp_trig_pad', [
-            'label'      => __( 'Padding', 'mh-plug' ),
+            'label'      => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [ '{{WRAPPER}}' => '--exp-tr-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
         $this->add_responsive_control( 'exp_trig_rad', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
             'selectors'  => [ '{{WRAPPER}}' => '--exp-tr-r: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
         // --- DROPDOWN BOX POSITIONING ---
-        $this->add_control( 'heading_exp_box_pos', [ 'label' => __( 'Dropdown Box Positioning', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $this->add_control( 'heading_exp_box_pos', [ 'label' => __( 'Dropdown Box Positioning', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
 
         $this->add_responsive_control( 'exp_box_pos_x', [
-            'label'      => __( 'Horizontal Position (X)', 'mh-plug' ),
+            'label'      => __( 'Horizontal Position (X)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', '%' ],
             'range'      => [ 'px' => [ 'min' => -500, 'max' => 500 ], '%' => [ 'min' => -100, 'max' => 100 ] ],
@@ -213,27 +213,27 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'exp_box_pos_y', [
-            'label'      => __( 'Vertical Position (Y)', 'mh-plug' ),
+            'label'      => __( 'Vertical Position (Y)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', '%' ],
             'range'      => [ 'px' => [ 'min' => -100, 'max' => 200 ], '%' => [ 'min' => -50, 'max' => 100 ] ],
             'default'    => [ 'size' => 15, 'unit' => 'px' ],
             'selectors'  => [ '{{WRAPPER}}' => '--exp-pos-y: {{SIZE}}{{UNIT}};' ],
-            'description'=> __( 'Use this to adjust how far down the dropdown opens below the icon.', 'mh-plug' ),
+            'description'=> __( 'Use this to adjust how far down the dropdown opens below the icon.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
 
         // --- DROPDOWN BOX STYLES ---
-        $this->add_control( 'heading_exp_box', [ 'label' => __( 'Dropdown Box Design', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $this->add_control( 'heading_exp_box', [ 'label' => __( 'Dropdown Box Design', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
 
         $this->add_control( 'exp_box_bg_color', [
-            'label'     => __( 'Box Background', 'mh-plug' ),
+            'label'     => __( 'Box Background', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}}' => '--exp-box-bg: {{VALUE}};' ],
         ] );
 
         $this->add_responsive_control( 'exp_box_width', [
-            'label'      => __( 'Max Width', 'mh-plug' ),
+            'label'      => __( 'Max Width', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', '%', 'vw' ],
             'range'      => [ 'px' => [ 'min' => 200, 'max' => 800 ] ],
@@ -241,7 +241,7 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'exp_box_pad', [
-            'label'      => __( 'Padding', 'mh-plug' ),
+            'label'      => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [ '{{WRAPPER}}' => '--exp-box-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
@@ -253,7 +253,7 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'exp_box_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
             'selectors'  => [ '{{WRAPPER}} .mh-desk-expandable .mh-search-expandable-container, {{WRAPPER}} .mh-tab-expandable .mh-search-expandable-container, {{WRAPPER}} .mh-mob-expandable .mh-search-expandable-container' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
@@ -266,22 +266,22 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
 
 
         // --- INSIDE INPUT STYLES ---
-        $this->add_control( 'heading_exp_input', [ 'label' => __( 'Inside Search Input', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $this->add_control( 'heading_exp_input', [ 'label' => __( 'Inside Search Input', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
         
-        $this->add_control( 'exp_in_bg', [ 'label' => __( 'Input Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-in-bg: {{VALUE}};' ] ] );
-        $this->add_control( 'exp_in_c', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-in-c: {{VALUE}};' ] ] );
-        $this->add_control( 'exp_ph_color', [ 'label' => __( 'Placeholder Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-ph-c: {{VALUE}};' ] ] );
-        $this->add_control( 'exp_ic_c', [ 'label' => __( 'Inside Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-ic-c: {{VALUE}};' ] ] );
+        $this->add_control( 'exp_in_bg', [ 'label' => __( 'Input Background', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-in-bg: {{VALUE}};' ] ] );
+        $this->add_control( 'exp_in_c', [ 'label' => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-in-c: {{VALUE}};' ] ] );
+        $this->add_control( 'exp_ph_color', [ 'label' => __( 'Placeholder Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-ph-c: {{VALUE}};' ] ] );
+        $this->add_control( 'exp_ic_c', [ 'label' => __( 'Inside Icon Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--exp-ic-c: {{VALUE}};' ] ] );
         
         $this->add_responsive_control( 'exp_ic_s', [
-            'label'      => __( 'Inside Icon Size', 'mh-plug' ),
+            'label'      => __( 'Inside Icon Size', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em', 'rem' ],
             'selectors'  => [ '{{WRAPPER}}' => '--exp-ic-s: {{SIZE}}{{UNIT}};' ],
         ] );
 
         $this->add_responsive_control( 'exp_in_pad', [
-            'label'      => __( 'Input Padding', 'mh-plug' ),
+            'label'      => __( 'Input Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [ '{{WRAPPER}}' => '--exp-in-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
@@ -293,7 +293,7 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'exp_in_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
             'selectors'  => [ '{{WRAPPER}} .mh-desk-expandable .mh-search-input, {{WRAPPER}} .mh-tab-expandable .mh-search-input, {{WRAPPER}} .mh-mob-expandable .mh-search-input' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
@@ -306,36 +306,36 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
            ========================================== */
         // 🚀 FIX: Removed the condition so this panel is always available for responsive styling
         $this->start_controls_section( 'style_morphing_section', [
-            'label' => __( '🎨 Morphing Layout Styles', 'mh-plug' ),
+            'label' => __( '🎨 Morphing Layout Styles', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_responsive_control( 'mor_expanded_width', [
-            'label'      => __( 'Expanded Search Max Width', 'mh-plug' ),
+            'label'      => __( 'Expanded Search Max Width', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', '%' ],
             'range'      => [ 'px' => [ 'min' => 150, 'max' => 600 ] ],
             'selectors'  => [ '{{WRAPPER}}' => '--mor-box-w: {{SIZE}}{{UNIT}};' ],
         ] );
 
-        $this->add_control( 'heading_mor_closed', [ 'label' => __( 'Closed State (Button)', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $this->add_control( 'heading_mor_closed', [ 'label' => __( 'Closed State (Button)', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
 
         $this->start_controls_tabs( 'tabs_mor_closed' );
-        $this->start_controls_tab( 'tab_mor_closed_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
-        $this->add_control( 'mor_trig_color', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-c: {{VALUE}};' ] ] );
-        $this->add_control( 'mor_trig_bg', [ 'label' => __( 'Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-bg: {{VALUE}};' ] ] );
+        $this->start_controls_tab( 'tab_mor_closed_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
+        $this->add_control( 'mor_trig_color', [ 'label' => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-c: {{VALUE}};' ] ] );
+        $this->add_control( 'mor_trig_bg', [ 'label' => __( 'Background', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-bg: {{VALUE}};' ] ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'tab_mor_closed_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
-        $this->add_control( 'mor_trig_color_h', [ 'label' => __( 'Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-hc: {{VALUE}};' ] ] );
-        $this->add_control( 'mor_trig_bg_h', [ 'label' => __( 'Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-hbg: {{VALUE}};' ] ] );
+        $this->start_controls_tab( 'tab_mor_closed_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
+        $this->add_control( 'mor_trig_color_h', [ 'label' => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-hc: {{VALUE}};' ] ] );
+        $this->add_control( 'mor_trig_bg_h', [ 'label' => __( 'Background', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-hbg: {{VALUE}};' ] ] );
         $this->end_controls_tab();
         $this->end_controls_tabs();
 
-        $this->add_responsive_control( 'mor_trig_s', [ 'label' => __( 'Icon Size', 'mh-plug' ), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px', 'em', 'rem'], 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-s: {{SIZE}}{{UNIT}};' ], 'separator' => 'before' ] );
+        $this->add_responsive_control( 'mor_trig_s', [ 'label' => __( 'Icon Size', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SLIDER, 'size_units' => ['px', 'em', 'rem'], 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-s: {{SIZE}}{{UNIT}};' ], 'separator' => 'before' ] );
         
         $this->add_responsive_control( 'mor_trig_pad', [ 
-            'label'      => __( 'Closed Button Padding', 'mh-plug' ), 
+            'label'      => __( 'Closed Button Padding', 'mh-plug-ecommerce-builder-widgets' ), 
             'type'       => Controls_Manager::DIMENSIONS, 
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [ 
@@ -343,31 +343,31 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
             ] 
         ] );
 
-        $this->add_responsive_control( 'mor_trig_r', [ 'label' => __( 'Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%'], 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-r: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'mor_trig_r', [ 'label' => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%'], 'selectors' => [ '{{WRAPPER}}' => '--mor-tr-r: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
 
-        $this->add_control( 'heading_mor_open', [ 'label' => __( 'Open State (Expanded)', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $this->add_control( 'heading_mor_open', [ 'label' => __( 'Open State (Expanded)', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
 
-        $this->add_control( 'mor_in_bg', [ 'label' => __( 'Input Background', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-in-bg: {{VALUE}};' ] ] );
-        $this->add_control( 'mor_in_c', [ 'label' => __( 'Text Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-in-c: {{VALUE}};' ] ] );
-        $this->add_control( 'mor_ph_color', [ 'label' => __( 'Placeholder Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-ph-c: {{VALUE}};' ] ] );
-        $this->add_control( 'mor_ic_c', [ 'label' => __( 'Inside Icon Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-ic-c: {{VALUE}};' ] ] );
+        $this->add_control( 'mor_in_bg', [ 'label' => __( 'Input Background', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-in-bg: {{VALUE}};' ] ] );
+        $this->add_control( 'mor_in_c', [ 'label' => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-in-c: {{VALUE}};' ] ] );
+        $this->add_control( 'mor_ph_color', [ 'label' => __( 'Placeholder Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-ph-c: {{VALUE}};' ] ] );
+        $this->add_control( 'mor_ic_c', [ 'label' => __( 'Inside Icon Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}}' => '--mor-ic-c: {{VALUE}};' ] ] );
         
         $this->add_responsive_control( 'mor_ic_s', [
-            'label'      => __( 'Inside Icon Size', 'mh-plug' ),
+            'label'      => __( 'Inside Icon Size', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'selectors'  => [ '{{WRAPPER}}' => '--mor-ic-s: {{SIZE}}{{UNIT}};' ],
         ] );
 
         $this->add_responsive_control( 'mor_in_pad', [
-            'label'      => __( 'Expanded Input Padding', 'mh-plug' ),
+            'label'      => __( 'Expanded Input Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [ '{{WRAPPER}}' => '--mor-in-p: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
         $this->add_group_control( Group_Control_Border::get_type(), [ 'name' => 'mor_expanded_border', 'selector' => '{{WRAPPER}} .mh-desk-slide_out.mh-search-is-open .mh-search-form, {{WRAPPER}} .mh-tab-slide_out.mh-search-is-open .mh-search-form, {{WRAPPER}} .mh-mob-slide_out.mh-search-is-open .mh-search-form' ] );
-        $this->add_responsive_control( 'mor_in_r', [ 'label' => __( 'Expanded Border Radius', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%'], 'selectors' => [ '{{WRAPPER}}' => '--mor-in-r: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'mor_in_r', [ 'label' => __( 'Expanded Border Radius', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%'], 'selectors' => [ '{{WRAPPER}}' => '--mor-in-r: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
         $this->add_group_control( Group_Control_Box_Shadow::get_type(), [ 'name' => 'mor_expanded_shadow', 'selector' => '{{WRAPPER}} .mh-desk-slide_out.mh-search-is-open .mh-search-form, {{WRAPPER}} .mh-tab-slide_out.mh-search-is-open .mh-search-form, {{WRAPPER}} .mh-mob-slide_out.mh-search-is-open .mh-search-form' ] );
 
         $this->end_controls_section();
@@ -376,13 +376,13 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
            📐 STYLE: INSIDE ICON ALIGNMENT
            ========================================== */
         $this->start_controls_section( 'style_icon_section', [
-            'label'     => __( '📐 Inside Icon Alignment', 'mh-plug' ),
+            'label'     => __( '📐 Inside Icon Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'design_style' => 'modern' ],
         ] );
 
         $this->add_responsive_control( 'icon_left_pos', [
-            'label'      => __( 'Icon Left Position', 'mh-plug' ),
+            'label'      => __( 'Icon Left Position', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', '%' ],
             'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ], '%' => [ 'min' => 0, 'max' => 50 ] ],
@@ -391,13 +391,13 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'icon_nudge_y', [
-            'label'      => __( 'Vertical Nudge (Y-Axis)', 'mh-plug' ),
+            'label'      => __( 'Vertical Nudge (Y-Axis)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'range'      => [ 'px' => [ 'min' => -20, 'max' => 20 ] ],
             'default'    => [ 'size' => 0, 'unit' => 'px' ],
             'selectors'  => [ '{{WRAPPER}}' => '--ic-nudge-y: {{SIZE}}{{UNIT}};' ],
-            'description'=> __( 'Use this to manually nudge the icon up or down pixel-by-pixel until it perfectly matches your text.', 'mh-plug' ),
+            'description'=> __( 'Use this to manually nudge the icon up or down pixel-by-pixel until it perfectly matches your text.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->end_controls_section();
@@ -406,18 +406,18 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
            🌍 STYLE: GLOBAL (Applies to all)
            ========================================== */
         $this->start_controls_section( 'style_global_section', [
-            'label' => __( '🌍 Global Styles (All Layouts)', 'mh-plug' ),
+            'label' => __( '🌍 Global Styles (All Layouts)', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
             'name'     => 'input_typography',
-            'label'    => __( 'Search Text Typography', 'mh-plug' ),
+            'label'    => __( 'Search Text Typography', 'mh-plug-ecommerce-builder-widgets' ),
             'selector' => '{{WRAPPER}} .mh-search-input',
         ] );
 
         $this->add_control( 'results_bg', [
-            'label'     => __( 'Results Box Background', 'mh-plug' ),
+            'label'     => __( 'Results Box Background', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'separator' => 'before',
@@ -550,7 +550,7 @@ class MH_Plug_Product_Search_Widget extends \Elementor\Widget_Base {
 
         <div class="mh-live-search-wrapper <?php echo esc_attr($wrapper_classes); ?>">
             
-            <button class="mh-search-trigger" aria-label="<?php esc_attr_e('Open Search', 'mh-plug'); ?>">
+            <button class="mh-search-trigger" aria-label="<?php esc_attr_e('Open Search', 'mh-plug-ecommerce-builder-widgets'); ?>">
                 <?php Icons_Manager::render_icon( $icon, [ 'aria-hidden' => 'true' ] ); ?>
             </button>
             

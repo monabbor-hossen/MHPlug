@@ -92,7 +92,7 @@ function mh_plug_add_menu_item_icon_field( $item_id, $item, $depth, $args, $id =
                name="<?php echo $icon_input_name; ?>"
                value="<?php echo esc_attr( $icon_class ); ?>" />
 
-        <strong class="mh-menu-icon-label"><?php esc_html_e('Icon', 'mh-plug'); ?></strong>
+        <strong class="mh-menu-icon-label"><?php esc_html_e('Icon', 'mh-plug-ecommerce-builder-widgets'); ?></strong>
 
         <div class="mh-menu-icon-button-row">
             <button type="button"
@@ -102,17 +102,17 @@ function mh_plug_add_menu_item_icon_field( $item_id, $item, $depth, $args, $id =
                     data-target-input="#<?php echo $icon_input_id; ?>">
 
                 <span class="mh-plug-button-icon <?php echo esc_attr($icon_class ? $icon_class : 'mhi-add-plus'); ?>"></span>
-                <span class="mh-plug-button-text"><?php esc_html_e('Select Icon', 'mh-plug'); ?></span>
+                <span class="mh-plug-button-text"><?php esc_html_e('Select Icon', 'mh-plug-ecommerce-builder-widgets'); ?></span>
             </button>
 
             <span class="mh-menu-icon-remove"
                   data-itemid="<?php echo $menu_item_db_id; ?>"
                   <?php echo empty($icon_class) ? 'style="display: none;"' : ''; ?>>
-                <?php esc_html_e('Remove', 'mh-plug'); ?>
+                <?php esc_html_e('Remove', 'mh-plug-ecommerce-builder-widgets'); ?>
             </span>
         </div>
 
-        <p class="description"><?php esc_html_e('Click the button to select an icon.', 'mh-plug'); ?></p>
+        <p class="description"><?php esc_html_e('Click the button to select an icon.', 'mh-plug-ecommerce-builder-widgets'); ?></p>
 
         <?php // This entire 3D toggle switch section will ONLY appear if its global setting is ON ?>
         <?php if (!empty($icon_class)) : ?>
@@ -127,7 +127,7 @@ function mh_plug_add_menu_item_icon_field( $item_id, $item, $depth, $args, $id =
                         <label for="<?php echo $hide_label_input_id; ?>"></label>
                     </div>
                     <label for="<?php echo $hide_label_input_id; ?>" class="mh-plug-toggle-label">
-                        <?php esc_html_e('Hide Navigation Label (Only show icon)', 'mh-plug'); ?>
+                        <?php esc_html_e('Hide Navigation Label (Only show icon)', 'mh-plug-ecommerce-builder-widgets'); ?>
                     </label>
                 </div>
             </div>
@@ -218,13 +218,13 @@ function mh_plug_add_icon_picker_modal_html() {
         <div class="mh-menu-icon-modal-content">
 
             <div class="mh-menu-icon-modal-header">
-                <h2><?php esc_html_e('Select an Icon', 'mh-plug'); ?></h2>
+                <h2><?php esc_html_e('Select an Icon', 'mh-plug-ecommerce-builder-widgets'); ?></h2>
                 <span class="mh-menu-icon-modal-close">&times;</span>
             </div>
 
             <div class="mh-menu-icon-modal-tabs">
-                <button class="active" data-tab="mh-tab-mh-icons"><?php esc_html_e('MH Icons', 'mh-plug'); ?></button>
-                <button data-tab="mh-tab-fa-icons"><?php esc_html_e('Font Awesome 6', 'mh-plug'); ?></button>
+                <button class="active" data-tab="mh-tab-mh-icons"><?php esc_html_e('MH Icons', 'mh-plug-ecommerce-builder-widgets'); ?></button>
+                <button data-tab="mh-tab-fa-icons"><?php esc_html_e('Font Awesome 6', 'mh-plug-ecommerce-builder-widgets'); ?></button>
             </div>
 
             <div class="mh-menu-icon-modal-body">
@@ -238,14 +238,14 @@ function mh_plug_add_icon_picker_modal_html() {
                                 </span>
                             <?php endforeach; ?>
                         <?php else : ?>
-                            <p><?php esc_html_e('No custom MH icons found in includes/mh-icon-list.php', 'mh-plug'); ?></p>
+                            <p><?php esc_html_e('No custom MH icons found in includes/mh-icon-list.php', 'mh-plug-ecommerce-builder-widgets'); ?></p>
                         <?php endif; ?>
                     </div>
                 </div>
 
                 <div id="mh-tab-fa-icons" class="mh-menu-icon-tab-content">
                     <?php // Basic Search Input for Font Awesome ?>
-                    <input type="text" id="mh-fa-icon-search" placeholder="<?php esc_attr_e('Search Font Awesome icons...', 'mh-plug'); ?>" style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+                    <input type="text" id="mh-fa-icon-search" placeholder="<?php esc_attr_e('Search Font Awesome icons...', 'mh-plug-ecommerce-builder-widgets'); ?>" style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
 
                     <div class="mh-menu-icon-grid" id="mh-fa-icon-grid">
                         <?php if ( ! empty( $fa_icons ) && is_array($fa_icons) ) : ?>
@@ -256,7 +256,7 @@ function mh_plug_add_icon_picker_modal_html() {
                                 </span>
                             <?php endforeach; ?>
                         <?php else : ?>
-                            <p><?php esc_html_e('No Font Awesome icons found. Please check includes/fa-6-icon-list.php', 'mh-plug'); ?></p>
+                            <p><?php esc_html_e('No Font Awesome icons found. Please check includes/fa-6-icon-list.php', 'mh-plug-ecommerce-builder-widgets'); ?></p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -264,7 +264,7 @@ function mh_plug_add_icon_picker_modal_html() {
             </div>
 
             <div class="mh-menu-icon-modal-footer">
-                <p><?php esc_html_e('Click an icon to select it.', 'mh-plug'); ?></p>
+                <p><?php esc_html_e('Click an icon to select it.', 'mh-plug-ecommerce-builder-widgets'); ?></p>
             </div>
 
         </div>

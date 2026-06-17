@@ -17,7 +17,7 @@ use Elementor\Group_Control_Text_Shadow;
 class MH_Product_Short_Description_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_short_description'; }
-    public function get_title() { return __( 'MH Short Description', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Short Description', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-text-area'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'product', 'short', 'description', 'woocommerce', 'mh', 'excerpt' ]; }
@@ -26,18 +26,18 @@ class MH_Product_Short_Description_Widget extends \Elementor\Widget_Base {
 
         /* ── CONTENT ── */
         $this->start_controls_section( 'content_section', [
-            'label' => __( 'Description Settings', 'mh-plug' ),
+            'label' => __( 'Description Settings', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_responsive_control( 'align', [
-            'label'        => __( 'Alignment', 'mh-plug' ),
+            'label'        => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::CHOOSE,
             'options'      => [
-                'left'    => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center'  => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'right'   => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
-                'justify' => [ 'title' => __( 'Justified', 'mh-plug' ), 'icon' => 'eicon-text-align-justify' ],
+                'left'    => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center'  => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'right'   => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
+                'justify' => [ 'title' => __( 'Justified', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-justify' ],
             ],
             'default'      => 'left',
             'selectors'    => [
@@ -49,12 +49,12 @@ class MH_Product_Short_Description_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE ── */
         $this->start_controls_section( 'style_section', [
-            'label' => __( 'Text Style', 'mh-plug' ),
+            'label' => __( 'Text Style', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control( 'text_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#555555',
             'selectors' => [
@@ -74,7 +74,7 @@ class MH_Product_Short_Description_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'text_margin', [
-            'label'      => __( 'Margin', 'mh-plug' ),
+            'label'      => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [
@@ -116,7 +116,7 @@ class MH_Product_Short_Description_Widget extends \Elementor\Widget_Base {
         // Provide a helpful placeholder in the editor if the product happens to be missing a description
         if ( empty( $short_description ) ) {
             if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-                $short_description = '<p style="color:#999; font-style:italic;">' . esc_html__( 'This product does not have a short description. Add one in the WooCommerce product data settings to see it here.', 'mh-plug' ) . '</p>';
+                $short_description = '<p style="color:#999; font-style:italic;">' . esc_html__( 'This product does not have a short description. Add one in the WooCommerce product data settings to see it here.', 'mh-plug-ecommerce-builder-widgets' ) . '</p>';
             } else {
                 return; // Hide completely on the frontend if empty
             }

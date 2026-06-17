@@ -86,8 +86,8 @@ class MH_Admin_Menu
     public function register_menu()
     {
         add_menu_page(
-            esc_html__('MH Plug Settings', 'mh-plug'),
-            esc_html__('MH Plug', 'mh-plug'),
+            esc_html__('MH Plug Settings', 'mh-plug-ecommerce-builder-widgets'),
+            esc_html__('MH Plug', 'mh-plug-ecommerce-builder-widgets'),
             'manage_options',
             'mh-plug-settings',
             [$this, 'render_settings_page'],
@@ -97,8 +97,8 @@ class MH_Admin_Menu
 
         add_submenu_page(
             'mh-plug-settings',
-            esc_html__('Theme Builder', 'mh-plug'),
-            esc_html__('Theme Builder', 'mh-plug'),
+            esc_html__('Theme Builder', 'mh-plug-ecommerce-builder-widgets'),
+            esc_html__('Theme Builder', 'mh-plug-ecommerce-builder-widgets'),
             'manage_options',
             'mh-plug-theme-builder',
             [$this, 'render_theme_builder_page']
@@ -107,8 +107,8 @@ class MH_Admin_Menu
         // 🚀 NEW: Preloader Submenu Page
         add_submenu_page(
             'mh-plug-settings',
-            esc_html__('Preloader', 'mh-plug'),
-            esc_html__('Preloader', 'mh-plug'),
+            esc_html__('Preloader', 'mh-plug-ecommerce-builder-widgets'),
+            esc_html__('Preloader', 'mh-plug-ecommerce-builder-widgets'),
             'manage_options',
             'mh-plug-preloader',
             [$this, 'render_preloader_page']
@@ -117,8 +117,8 @@ class MH_Admin_Menu
         // 🚀 Mini Cart Submenu Page
         add_submenu_page(
             'mh-plug-settings',
-            esc_html__('Mini Cart', 'mh-plug'),
-            esc_html__('Mini Cart', 'mh-plug'),
+            esc_html__('Mini Cart', 'mh-plug-ecommerce-builder-widgets'),
+            esc_html__('Mini Cart', 'mh-plug-ecommerce-builder-widgets'),
             'manage_options',
             'mh-plug-mini-cart',
             [$this, 'render_mini_cart_page']
@@ -127,8 +127,8 @@ class MH_Admin_Menu
         // 🚀 WooCommerce Pages Customizer
         add_submenu_page(
             'mh-plug-settings',
-            esc_html__('WooCommerce Pages', 'mh-plug'),
-            esc_html__('WooCommerce Pages', 'mh-plug'),
+            esc_html__('WooCommerce Pages', 'mh-plug-ecommerce-builder-widgets'),
+            esc_html__('WooCommerce Pages', 'mh-plug-ecommerce-builder-widgets'),
             'manage_options',
             'mh-plug-woo-pages',
             [$this, 'render_woo_pages_settings']

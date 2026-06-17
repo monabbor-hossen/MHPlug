@@ -16,7 +16,7 @@ use Elementor\Group_Control_Typography;
 class MH_Product_Share_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_share'; }
-    public function get_title() { return __( 'MH Product Share', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Product Share', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-share'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'product', 'share', 'social', 'facebook', 'twitter', 'whatsapp', 'mh' ]; }
@@ -27,45 +27,45 @@ class MH_Product_Share_Widget extends \Elementor\Widget_Base {
 
         /* ── CONTENT: PLATFORMS ── */
         $this->start_controls_section( 'section_platforms', [
-            'label' => __( 'Share Platforms', 'mh-plug' ),
+            'label' => __( 'Share Platforms', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_control( 'share_label', [
-            'label'   => __( 'Label Text', 'mh-plug' ),
+            'label'   => __( 'Label Text', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::TEXT,
-            'default' => __( 'Share:', 'mh-plug' ),
+            'default' => __( 'Share:', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_control( 'show_facebook', [
-            'label' => __( 'Facebook', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
+            'label' => __( 'Facebook', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
         ] );
         $this->add_control( 'show_twitter', [
-            'label' => __( 'Twitter / X', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
+            'label' => __( 'Twitter / X', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
         ] );
         $this->add_control( 'show_pinterest', [
-            'label' => __( 'Pinterest', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
+            'label' => __( 'Pinterest', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
         ] );
         $this->add_control( 'show_linkedin', [
-            'label' => __( 'LinkedIn', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
+            'label' => __( 'LinkedIn', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
         ] );
         $this->add_control( 'show_whatsapp', [
-            'label' => __( 'WhatsApp', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
+            'label' => __( 'WhatsApp', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
         ] );
         $this->add_control( 'show_telegram', [
-            'label' => __( 'Telegram', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
+            'label' => __( 'Telegram', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
         ] );
         $this->add_control( 'show_email', [
-            'label' => __( 'Email', 'mh-plug' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
+            'label' => __( 'Email', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::SWITCHER, 'default' => 'yes',
         ] );
 
         $this->add_responsive_control( 'align', [
-            'label'     => __( 'Alignment', 'mh-plug' ),
+            'label'     => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
-                'flex-start' => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center'     => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'flex-end'   => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+                'flex-start' => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center'     => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'flex-end'   => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
             ],
             'default'   => 'flex-start',
             'selectors' => [ '{{WRAPPER}} .mh-share-wrapper' => 'justify-content: {{VALUE}};', ],
@@ -76,12 +76,12 @@ class MH_Product_Share_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: LABEL ── */
         $this->start_controls_section( 'style_label', [
-            'label' => __( 'Label Style', 'mh-plug' ),
+            'label' => __( 'Label Style', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control( 'label_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#333333',
             'selectors' => [ '{{WRAPPER}} .mh-share-label' => 'color: {{VALUE}};' ],
@@ -93,7 +93,7 @@ class MH_Product_Share_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'label_spacing', [
-            'label'      => __( 'Spacing After Label', 'mh-plug' ),
+            'label'      => __( 'Spacing After Label', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'default'    => [ 'size' => 15 ],
@@ -104,17 +104,17 @@ class MH_Product_Share_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: ICONS ── */
         $this->start_controls_section( 'style_icons', [
-            'label' => __( 'Icon Style', 'mh-plug' ),
+            'label' => __( 'Icon Style', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control( 'icon_color_type', [
-            'label'   => __( 'Color Type', 'mh-plug' ),
+            'label'   => __( 'Color Type', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'custom',
             'options' => [
-                'custom'   => __( 'Custom Colors', 'mh-plug' ),
-                'official' => __( 'Official Brand Colors', 'mh-plug' ),
+                'custom'   => __( 'Custom Colors', 'mh-plug-ecommerce-builder-widgets' ),
+                'official' => __( 'Official Brand Colors', 'mh-plug-ecommerce-builder-widgets' ),
             ],
         ] );
 
@@ -122,18 +122,18 @@ class MH_Product_Share_Widget extends \Elementor\Widget_Base {
             'condition' => [ 'icon_color_type' => 'custom' ],
         ] );
 
-        $this->start_controls_tab( 'icon_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'icon_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'icon_color', [
-            'label'     => __( 'Icon Color', 'mh-plug' ),
+            'label'     => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#777777',
             'selectors' => [ '{{WRAPPER}} .mh-share-icon' => 'color: {{VALUE}};' ],
         ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'icon_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'icon_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'icon_hover_color', [
-            'label'     => __( 'Icon Hover Color', 'mh-plug' ),
+            'label'     => __( 'Icon Hover Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [ '{{WRAPPER}} .mh-share-icon:hover' => 'color: {{VALUE}};' ],
@@ -142,7 +142,7 @@ class MH_Product_Share_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tabs();
 
         $this->add_responsive_control( 'icon_size', [
-            'label'      => __( 'Icon Size', 'mh-plug' ),
+            'label'      => __( 'Icon Size', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'size' => 16, 'unit' => 'px' ],
@@ -151,7 +151,7 @@ class MH_Product_Share_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'icon_gap', [
-            'label'      => __( 'Spacing Between Icons', 'mh-plug' ),
+            'label'      => __( 'Spacing Between Icons', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'default'    => [ 'size' => 15, 'unit' => 'px' ],

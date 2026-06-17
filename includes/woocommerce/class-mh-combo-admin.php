@@ -61,7 +61,7 @@ class MH_Combo_Admin {
      * @return array
      */
     public function add_combo_product_type( array $types ) {
-        $types['combo'] = __( 'Combo Product', 'mh-plug' );
+        $types['combo'] = __( 'Combo Product', 'mh-plug-ecommerce-builder-widgets' );
         return $types;
     }
 
@@ -81,7 +81,7 @@ class MH_Combo_Admin {
      */
     public function add_combo_product_tab( array $tabs ) {
         $tabs['mh_combo'] = [
-            'label'    => __( 'Combo Items', 'mh-plug' ),
+            'label'    => __( 'Combo Items', 'mh-plug-ecommerce-builder-widgets' ),
             'target'   => 'combo_product_data',   // ID of the panel <div>.
             'class'    => [ 'show_if_combo' ],        // Show only for combo type.
             'priority' => 65,
@@ -115,8 +115,8 @@ class MH_Combo_Admin {
         <div id="combo_product_data" class="panel woocommerce_options_panel show_if_combo">
             <div class="options_group">
                 <p class="form-field">
-                    <label for="_mh_combo_products"><?php esc_html_e( 'Combo Products', 'mh-plug' ); ?></label>
-                    <select class="wc-product-search" multiple="multiple" style="width: 50%;" id="_mh_combo_products" name="_mh_combo_products[]" data-placeholder="<?php esc_attr_e( 'Search for products...', 'mh-plug' ); ?>" data-action="woocommerce_json_search_products_and_variations">
+                    <label for="_mh_combo_products"><?php esc_html_e( 'Combo Products', 'mh-plug-ecommerce-builder-widgets' ); ?></label>
+                    <select class="wc-product-search" multiple="multiple" style="width: 50%;" id="_mh_combo_products" name="_mh_combo_products[]" data-placeholder="<?php esc_attr_e( 'Search for products...', 'mh-plug-ecommerce-builder-widgets' ); ?>" data-action="woocommerce_json_search_products_and_variations">
                         <?php
                         foreach ( $combo_product_ids as $product_id ) {
                             $product = wc_get_product( $product_id );
@@ -133,9 +133,9 @@ class MH_Combo_Admin {
                 $current_regular_price = get_post_meta( $post->ID, '_regular_price', true );
                 woocommerce_wp_text_input( [
                     'id'                => '_mh_combo_regular_price_display',
-                    'label'             => __( 'Total Regular Price', 'mh-plug' ),
+                    'label'             => __( 'Total Regular Price', 'mh-plug-ecommerce-builder-widgets' ),
                     'value'             => $current_regular_price,
-                    'description'       => __( 'This is automatically calculated by summing the prices of the bundled products. Save the product to update this value.', 'mh-plug' ),
+                    'description'       => __( 'This is automatically calculated by summing the prices of the bundled products. Save the product to update this value.', 'mh-plug-ecommerce-builder-widgets' ),
                     'desc_tip'          => true,
                     'custom_attributes' => [
                         'readonly' => 'readonly',
@@ -147,8 +147,8 @@ class MH_Combo_Admin {
                 $saved_combo_sale_price = get_post_meta( $post->ID, '_mh_combo_sale_price', true );
                 woocommerce_wp_text_input( [
                     'id'          => '_mh_combo_sale_price',
-                    'label'       => __( 'Combo Sale Price ($)', 'mh-plug' ),
-                    'description' => __( 'Leave blank to charge the full combined price of all products. Enter a number to offer a discounted combo price.', 'mh-plug' ),
+                    'label'       => __( 'Combo Sale Price ($)', 'mh-plug-ecommerce-builder-widgets' ),
+                    'description' => __( 'Leave blank to charge the full combined price of all products. Enter a number to offer a discounted combo price.', 'mh-plug-ecommerce-builder-widgets' ),
                     'desc_tip'    => true,
                     'data_type'   => 'price',
                     'value'       => $saved_combo_sale_price,

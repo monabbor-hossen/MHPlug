@@ -18,7 +18,7 @@ use Elementor\Group_Control_Border;
 class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_taxonomy_card'; }
-    public function get_title() { return __( 'MH Taxonomy Card', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Taxonomy Card', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-image-box'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
@@ -39,34 +39,34 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
     protected function register_controls() {
 
         $source_options = [
-            'custom'   => __( 'Custom Content', 'mh-plug' ),
-            'category' => __( 'Post Category', 'mh-plug' ),
-            'post_tag' => __( 'Post Tag', 'mh-plug' ),
+            'custom'   => __( 'Custom Content', 'mh-plug-ecommerce-builder-widgets' ),
+            'category' => __( 'Post Category', 'mh-plug-ecommerce-builder-widgets' ),
+            'post_tag' => __( 'Post Tag', 'mh-plug-ecommerce-builder-widgets' ),
         ];
 
         $taxonomies = [
-            'category' => __( 'Select Post Category', 'mh-plug' ),
-            'post_tag' => __( 'Select Post Tag', 'mh-plug' ),
+            'category' => __( 'Select Post Category', 'mh-plug-ecommerce-builder-widgets' ),
+            'post_tag' => __( 'Select Post Tag', 'mh-plug-ecommerce-builder-widgets' ),
         ];
 
         // Only add WooCommerce options if WooCommerce is actually installed and active
         if ( class_exists( 'WooCommerce' ) ) {
-            $source_options['product_cat']   = __( 'Product Category', 'mh-plug' );
-            $source_options['product_brand'] = __( 'Product Brand', 'mh-plug' );
-            $source_options['product_tag']   = __( 'Product Tag', 'mh-plug' );
+            $source_options['product_cat']   = __( 'Product Category', 'mh-plug-ecommerce-builder-widgets' );
+            $source_options['product_brand'] = __( 'Product Brand', 'mh-plug-ecommerce-builder-widgets' );
+            $source_options['product_tag']   = __( 'Product Tag', 'mh-plug-ecommerce-builder-widgets' );
 
-            $taxonomies['product_cat']   = __( 'Select Product Category', 'mh-plug' );
-            $taxonomies['product_brand'] = __( 'Select Product Brand', 'mh-plug' );
-            $taxonomies['product_tag']   = __( 'Select Product Tag', 'mh-plug' );
+            $taxonomies['product_cat']   = __( 'Select Product Category', 'mh-plug-ecommerce-builder-widgets' );
+            $taxonomies['product_brand'] = __( 'Select Product Brand', 'mh-plug-ecommerce-builder-widgets' );
+            $taxonomies['product_tag']   = __( 'Select Product Tag', 'mh-plug-ecommerce-builder-widgets' );
         }
 
         /* ── CONTENT: SOURCE ── */
         $this->start_controls_section( 'section_content', [
-            'label' => __( 'Card Content', 'mh-plug' ),
+            'label' => __( 'Card Content', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_control( 'source_type', [
-            'label'   => __( 'Data Source', 'mh-plug' ),
+            'label'   => __( 'Data Source', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'custom',
             'options' => $source_options,
@@ -84,34 +84,34 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
 
         // Custom Inputs
         $this->add_control( 'custom_title', [
-            'label'     => __( 'Title', 'mh-plug' ),
+            'label'     => __( 'Title', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::TEXT,
-            'default'   => __( 'Card Title', 'mh-plug' ),
+            'default'   => __( 'Card Title', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'source_type' => 'custom' ],
         ] );
 
         $this->add_control( 'custom_desc', [
-            'label'     => __( 'Description', 'mh-plug' ),
+            'label'     => __( 'Description', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::TEXTAREA,
-            'default'   => __( 'Enter your description here...', 'mh-plug' ),
+            'default'   => __( 'Enter your description here...', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'source_type' => 'custom' ],
         ] );
 
         $this->add_control( 'custom_image', [
-            'label'     => __( 'Background Image', 'mh-plug' ),
+            'label'     => __( 'Background Image', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::MEDIA,
             'condition' => [ 'source_type' => 'custom' ],
         ] );
 
         $this->add_control( 'custom_link', [
-            'label'     => __( 'Custom Link', 'mh-plug' ),
+            'label'     => __( 'Custom Link', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::URL,
             'condition' => [ 'source_type' => 'custom' ],
-            'description' => __( 'If using a taxonomy, the link is generated automatically.', 'mh-plug' ),
+            'description' => __( 'If using a taxonomy, the link is generated automatically.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_control( 'show_description', [
-            'label'        => __( 'Show Description', 'mh-plug' ),
+            'label'        => __( 'Show Description', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
             'return_value' => 'yes',
             'default'      => 'yes',
@@ -119,7 +119,7 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'show_button', [
-            'label'        => __( 'Show Button', 'mh-plug' ),
+            'label'        => __( 'Show Button', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
             'return_value' => 'yes',
             'default'      => 'no',
@@ -127,9 +127,9 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'button_text', [
-            'label'     => __( 'Button Text', 'mh-plug' ),
+            'label'     => __( 'Button Text', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::TEXT,
-            'default'   => __( 'Shop Now', 'mh-plug' ),
+            'default'   => __( 'Shop Now', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'show_button' => 'yes' ],
         ] );
 
@@ -137,12 +137,12 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: BOX LAYOUT & POSITION ── */
         $this->start_controls_section( 'section_style_box', [
-            'label' => __( 'Box & Content Position', 'mh-plug' ),
+            'label' => __( 'Box & Content Position', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_responsive_control( 'min_height', [
-            'label'      => __( 'Card Minimum Height', 'mh-plug' ),
+            'label'      => __( 'Card Minimum Height', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'vh', 'em' ],
             'range'      => [ 'px' => [ 'min' => 100, 'max' => 800 ] ],
@@ -151,44 +151,44 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'content_padding', [
-            'label'      => __( 'Content Padding', 'mh-plug' ),
+            'label'      => __( 'Content Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [ '{{WRAPPER}} .mh-tax-card-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ],
         ] );
 
         $this->add_control( 'heading_alignment', [
-            'label'     => __( 'Content Position', 'mh-plug' ),
+            'label'     => __( 'Content Position', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::HEADING,
             'separator' => 'before',
         ] );
 
         $this->add_responsive_control( 'vertical_align', [
-            'label'     => __( 'Vertical Position', 'mh-plug' ),
+            'label'     => __( 'Vertical Position', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
-                'flex-start' => [ 'title' => __( 'Top', 'mh-plug' ), 'icon' => 'eicon-v-align-top' ],
-                'center'     => [ 'title' => __( 'Middle', 'mh-plug' ), 'icon' => 'eicon-v-align-middle' ],
-                'flex-end'   => [ 'title' => __( 'Bottom', 'mh-plug' ), 'icon' => 'eicon-v-align-bottom' ],
+                'flex-start' => [ 'title' => __( 'Top', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-v-align-top' ],
+                'center'     => [ 'title' => __( 'Middle', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-v-align-middle' ],
+                'flex-end'   => [ 'title' => __( 'Bottom', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-v-align-bottom' ],
             ],
             'default'   => 'center',
             'selectors' => [ '{{WRAPPER}} .mh-tax-card' => 'justify-content: {{VALUE}} !important;' ],
         ] );
 
         $this->add_responsive_control( 'horizontal_align', [
-            'label'        => __( 'Horizontal Position', 'mh-plug' ),
+            'label'        => __( 'Horizontal Position', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::CHOOSE,
             'options'      => [
-                'left'   => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center' => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'right'  => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+                'left'   => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center' => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'right'  => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
             ],
             'default'      => 'center',
             'prefix_class' => 'mh-card-align%s-', 
         ] );
 
         $this->add_responsive_control( 'border_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
             'separator'  => 'before',
@@ -201,14 +201,14 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'hover_animation', [
-            'label'        => __( 'Enable Image Zoom on Hover', 'mh-plug' ),
+            'label'        => __( 'Enable Image Zoom on Hover', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'transition_time', [
-            'label'      => __( 'Hover Transition Time (s)', 'mh-plug' ),
+            'label'      => __( 'Hover Transition Time (s)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 's' ],
             'range'      => [ 's' => [ 'min' => 0.1, 'max' => 2.0, 'step' => 0.1 ] ],
@@ -225,14 +225,14 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: BACKGROUND & OVERLAY ── */
         $this->start_controls_section( 'section_style_bg', [
-            'label' => __( 'Background & Overlay', 'mh-plug' ),
+            'label' => __( 'Background & Overlay', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control( 'heading_fallback_bg', [
-            'label' => __( 'Fallback Background', 'mh-plug' ),
+            'label' => __( 'Fallback Background', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::HEADING,
-            'description' => __( 'This background applies if the category has no image.', 'mh-plug' ),
+            'description' => __( 'This background applies if the category has no image.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_group_control( Group_Control_Background::get_type(), [
@@ -242,14 +242,14 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'heading_overlay', [
-            'label' => __( 'Color Overlay', 'mh-plug' ),
+            'label' => __( 'Color Overlay', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::HEADING,
             'separator' => 'before',
         ] );
 
         $this->start_controls_tabs( 'tabs_overlay' );
         
-        $this->start_controls_tab( 'tab_overlay_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_overlay_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_group_control( Group_Control_Background::get_type(), [
             'name'     => 'overlay_bg',
             'types'    => [ 'classic', 'gradient' ],
@@ -257,7 +257,7 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
         ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'tab_overlay_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_overlay_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_group_control( Group_Control_Background::get_type(), [
             'name'     => 'overlay_bg_hover',
             'types'    => [ 'classic', 'gradient' ],
@@ -271,27 +271,27 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: CONTENT TYPOGRAPHY ── */
         $this->start_controls_section( 'section_style_content', [
-            'label' => __( 'Typography & Colors', 'mh-plug' ),
+            'label' => __( 'Typography & Colors', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
-        $this->add_control( 'heading_title', [ 'label' => __( 'Title', 'mh-plug' ), 'type' => Controls_Manager::HEADING ] );
-        $this->add_control( 'title_color', [ 'label' => __( 'Title Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-tax-card-title' => 'color: {{VALUE}};' ] ] );
-        $this->add_control( 'title_color_hover', [ 'label' => __( 'Title Color (Hover)', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-tax-card:hover .mh-tax-card-title' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'heading_title', [ 'label' => __( 'Title', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::HEADING ] );
+        $this->add_control( 'title_color', [ 'label' => __( 'Title Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-tax-card-title' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'title_color_hover', [ 'label' => __( 'Title Color (Hover)', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-tax-card:hover .mh-tax-card-title' => 'color: {{VALUE}};' ] ] );
         $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'title_typography', 'selector' => '{{WRAPPER}} .mh-tax-card-title' ] );
-        $this->add_responsive_control( 'title_margin', [ 'label' => __( 'Margin', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}} .mh-tax-card-title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'title_margin', [ 'label' => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}} .mh-tax-card-title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
 
-        $this->add_control( 'heading_desc', [ 'label' => __( 'Description', 'mh-plug' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
-        $this->add_control( 'desc_color', [ 'label' => __( 'Description Color', 'mh-plug' ), 'type' => Controls_Manager::COLOR, 'default' => '#eeeeee', 'selectors' => [ '{{WRAPPER}} .mh-tax-card-desc' => 'color: {{VALUE}};' ] ] );
+        $this->add_control( 'heading_desc', [ 'label' => __( 'Description', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::HEADING, 'separator' => 'before' ] );
+        $this->add_control( 'desc_color', [ 'label' => __( 'Description Color', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::COLOR, 'default' => '#eeeeee', 'selectors' => [ '{{WRAPPER}} .mh-tax-card-desc' => 'color: {{VALUE}};' ] ] );
         $this->add_group_control( Group_Control_Typography::get_type(), [ 'name' => 'desc_typography', 'selector' => '{{WRAPPER}} .mh-tax-card-desc' ] );
-        $this->add_responsive_control( 'desc_margin', [ 'label' => __( 'Margin', 'mh-plug' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}} .mh-tax-card-desc' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
+        $this->add_responsive_control( 'desc_margin', [ 'label' => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => [ '{{WRAPPER}} .mh-tax-card-desc' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ] ] );
 
         $this->end_controls_section();
 
 
         /* ── STYLE: BUTTON ── */
         $this->start_controls_section( 'section_style_button', [
-            'label'     => __( 'Button Styles', 'mh-plug' ),
+            'label'     => __( 'Button Styles', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_button' => 'yes' ],
         ] );
@@ -303,15 +303,15 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
 
         $this->start_controls_tabs( 'tabs_button_style' );
 
-        $this->start_controls_tab( 'tab_button_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_button_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'button_text_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [ '{{WRAPPER}} .mh-tax-card-btn' => 'color: {{VALUE}};' ],
         ] );
         $this->add_control( 'button_bg_color', [
-            'label'     => __( 'Background Color', 'mh-plug' ),
+            'label'     => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'selectors' => [ '{{WRAPPER}} .mh-tax-card-btn' => 'background-color: {{VALUE}};' ],
@@ -326,15 +326,15 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
         ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'tab_button_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_button_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'button_text_color_hover', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'selectors' => [ '{{WRAPPER}} .mh-tax-card:hover .mh-tax-card-btn' => 'color: {{VALUE}};' ],
         ] );
         $this->add_control( 'button_bg_color_hover', [
-            'label'     => __( 'Background Color', 'mh-plug' ),
+            'label'     => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#2293e9',
             'selectors' => [ '{{WRAPPER}} .mh-tax-card:hover .mh-tax-card-btn' => 'background-color: {{VALUE}};' ],
@@ -352,7 +352,7 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tabs();
 
         $this->add_responsive_control( 'button_padding', [
-            'label'      => __( 'Padding', 'mh-plug' ),
+            'label'      => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'default'    => [ 'top' => 12, 'right' => 25, 'bottom' => 12, 'left' => 25, 'unit' => 'px' ],
@@ -361,7 +361,7 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'button_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
             'default'    => [ 'top' => 50, 'right' => 50, 'bottom' => 50, 'left' => 50, 'unit' => 'px' ],
@@ -369,7 +369,7 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
         ] );
         
         $this->add_responsive_control( 'button_margin', [
-            'label'      => __( 'Margin', 'mh-plug' ),
+            'label'      => __( 'Margin', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'default'    => [ 'top' => 15, 'right' => 0, 'bottom' => 0, 'left' => 0, 'unit' => 'px' ],

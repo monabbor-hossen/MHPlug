@@ -17,7 +17,7 @@ use Elementor\Group_Control_Border;
 class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_nav_menu'; }
-    public function get_title() { return __( 'MH Nav Menu', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Nav Menu', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-nav-menu'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'menu', 'nav', 'header', 'hamburger', 'dropdown', 'border', 'align' ]; }
@@ -27,7 +27,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
 
     private function get_available_menus() {
         $menus = wp_get_nav_menus();
-        $options = [ '' => __( '— Select a Menu —', 'mh-plug' ) ]; 
+        $options = [ '' => __( '— Select a Menu —', 'mh-plug-ecommerce-builder-widgets' ) ]; 
         
         if ( ! empty( $menus ) ) {
             foreach ( $menus as $menu ) { 
@@ -43,18 +43,18 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
          * CONTENT TAB
          * ========================================== */
 
-        $this->start_controls_section( 'section_layout', [ 'label' => __( 'Menu Settings', 'mh-plug' ) ] );
+        $this->start_controls_section( 'section_layout', [ 'label' => __( 'Menu Settings', 'mh-plug-ecommerce-builder-widgets' ) ] );
 
         $this->add_control( 'menu', [
-            'label'   => __( 'Select Menu', 'mh-plug' ),
+            'label'   => __( 'Select Menu', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'options' => $this->get_available_menus(),
             'default' => '',
-            'description' => __( 'Go to Appearance > Menus to create new menus.', 'mh-plug' ),
+            'description' => __( 'Go to Appearance > Menus to create new menus.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_control( 'menu_layout', [
-            'label'   => __( 'Menu Layout', 'mh-plug' ),
+            'label'   => __( 'Menu Layout', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'horizontal',
             'options' => [ 'horizontal' => 'Horizontal', 'vertical' => 'Vertical' ],
@@ -62,7 +62,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'align_items', [
-            'label'     => __( 'Menu Position Align', 'mh-plug' ),
+            'label'     => __( 'Menu Position Align', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
                 'flex-start' => [ 'title' => 'Left', 'icon' => 'eicon-h-align-left' ],
@@ -74,7 +74,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'item_text_align', [
-            'label'     => __( 'Item Text Align', 'mh-plug' ),
+            'label'     => __( 'Item Text Align', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
                 'flex-start' => [ 'title' => 'Left', 'icon' => 'eicon-text-align-left' ],
@@ -87,7 +87,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'enable_sticky', [
-            'label'        => __( 'Consider Sticky Header', 'mh-plug' ),
+            'label'        => __( 'Consider Sticky Header', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
             'return_value' => 'yes',
             'default'      => 'no',
@@ -95,7 +95,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'scroll_speed', [
-            'label'      => __( 'Scroll Speed (ms)', 'mh-plug' ),
+            'label'      => __( 'Scroll Speed (ms)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::NUMBER,
             'default'    => 500,
             'description'=> 'Duration for smooth scroll anchor links.',
@@ -103,24 +103,24 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
 
         $this->end_controls_section();
 
-        $this->start_controls_section( 'section_menu_items', [ 'label' => __( 'Item Options', 'mh-plug' ) ] );
+        $this->start_controls_section( 'section_menu_items', [ 'label' => __( 'Item Options', 'mh-plug-ecommerce-builder-widgets' ) ] );
 
         $this->add_control( 'hover_effect', [
-            'label'   => __( 'Hover Effect', 'mh-plug' ),
+            'label'   => __( 'Hover Effect', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'underline',
             'options' => [ 'none' => 'None', 'underline' => 'Underline Pointer', 'background' => 'Background Fade' ],
         ] );
 
         $this->add_control( 'submenu_icon', [
-            'label'   => __( 'Sub Menu Icon', 'mh-plug' ),
+            'label'   => __( 'Sub Menu Icon', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'fa-caret-down',
             'options' => [ 'none' => 'None', 'fa-caret-down' => 'Triangle', 'fa-angle-down' => 'Angle', 'fa-plus' => 'Plus' ],
         ] );
 
         $this->add_control( 'submenu_display', [
-            'label'   => __( 'Sub Menu Display', 'mh-plug' ),
+            'label'   => __( 'Sub Menu Display', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'hover',
             'options' => [ 'hover' => 'On Mouse Over', 'click' => 'On Click' ],
@@ -128,24 +128,24 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
 
         $this->end_controls_section();
 
-        $this->start_controls_section( 'section_mobile_menu', [ 'label' => __( 'Mobile Menu', 'mh-plug' ) ] );
+        $this->start_controls_section( 'section_mobile_menu', [ 'label' => __( 'Mobile Menu', 'mh-plug-ecommerce-builder-widgets' ) ] );
 
         $this->add_control( 'mobile_breakpoint', [
-            'label'   => __( 'Show On', 'mh-plug' ),
+            'label'   => __( 'Show On', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => '768',
             'options' => [ '1024' => 'Tablet (≤ 1024px)', '768' => 'Mobile (≤ 768px)', 'none' => 'None' ],
         ] );
 
         $this->add_control( 'mobile_stretch', [
-            'label'   => __( 'Stretch Dropdown', 'mh-plug' ),
+            'label'   => __( 'Stretch Dropdown', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'full',
             'options' => [ 'full' => 'Full Screen Width', 'custom' => 'Stay Inside Column' ],
         ] );
 
         $this->add_responsive_control( 'toggle_align', [
-            'label'     => __( 'Toggle Align', 'mh-plug' ),
+            'label'     => __( 'Toggle Align', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
                 'flex-start' => [ 'title' => 'Left', 'icon' => 'eicon-h-align-left' ],
@@ -156,12 +156,12 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'mobile_dropdown_distance', [
-            'label'      => __( 'Dropdown Distance (Fix Overlap)', 'mh-plug' ),
+            'label'      => __( 'Dropdown Distance (Fix Overlap)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'range'      => [ 'px' => [ 'min' => -50, 'max' => 200 ] ],
             'selectors'  => [ '{{WRAPPER}} .mh-nav-mobile-panel' => 'margin-top: {{SIZE}}{{UNIT}};' ],
-            'description'=> __( 'Push the menu down so it does not overlap your header items.', 'mh-plug' ),
+            'description'=> __( 'Push the menu down so it does not overlap your header items.', 'mh-plug-ecommerce-builder-widgets' ),
             'separator'  => 'before',
         ] );
 
@@ -171,7 +171,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
          * STYLE TAB
          * ========================================== */
 
-        $this->start_controls_section( 'style_main_menu', [ 'label' => __( 'Main Menu', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
+        $this->start_controls_section( 'style_main_menu', [ 'label' => __( 'Main Menu', 'mh-plug-ecommerce-builder-widgets' ), 'tab' => Controls_Manager::TAB_STYLE ] );
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
             'name'     => 'main_menu_typography',
@@ -254,10 +254,10 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
         /* ==========================================
          * SUB MENU STYLE
          * ========================================== */
-        $this->start_controls_section( 'style_sub_menu', [ 'label' => __( 'Sub Menu', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
+        $this->start_controls_section( 'style_sub_menu', [ 'label' => __( 'Sub Menu', 'mh-plug-ecommerce-builder-widgets' ), 'tab' => Controls_Manager::TAB_STYLE ] );
 
         $this->add_responsive_control( 'sub_text_align', [
-            'label'     => __( 'Submenu Alignment', 'mh-plug' ),
+            'label'     => __( 'Submenu Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
                 'flex-start' => [ 'title' => 'Left', 'icon' => 'eicon-h-align-left' ],
@@ -270,7 +270,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'sub_item_padding', [
-            'label'      => __( 'Item Padding', 'mh-plug' ),
+            'label'      => __( 'Item Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [ 
@@ -291,7 +291,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
 
         $this->start_controls_tabs( 'tabs_sub_menu_style' );
         
-        $this->start_controls_tab( 'tab_sub_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_sub_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
 
         $this->add_responsive_control( 'sub_text_color', [
             'label' => 'Text Color', 'type' => Controls_Manager::COLOR, 'default' => '#555555',
@@ -325,7 +325,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
 
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'tab_sub_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_sub_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
 
         $this->add_responsive_control( 'sub_text_color_hover', [
             'label' => 'Hover Text Color', 'type' => Controls_Manager::COLOR, 'default' => '#111111',
@@ -351,7 +351,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
         /* ==========================================
          * MOBILE DROPDOWN MENU STYLE
          * ========================================== */
-        $this->start_controls_section( 'style_mobile_menu', [ 'label' => __( 'Mobile Dropdown Menu', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
+        $this->start_controls_section( 'style_mobile_menu', [ 'label' => __( 'Mobile Dropdown Menu', 'mh-plug-ecommerce-builder-widgets' ), 'tab' => Controls_Manager::TAB_STYLE ] );
 
         $this->add_control( 'mobile_panel_bg', [
             'label' => 'Panel Background', 'type' => Controls_Manager::COLOR,
@@ -393,7 +393,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
         /* ==========================================
          * TOGGLE BUTTON STYLE
          * ========================================== */
-        $this->start_controls_section( 'style_toggle', [ 'label' => __( 'Toggle Button', 'mh-plug' ), 'tab' => Controls_Manager::TAB_STYLE ] );
+        $this->start_controls_section( 'style_toggle', [ 'label' => __( 'Toggle Button', 'mh-plug-ecommerce-builder-widgets' ), 'tab' => Controls_Manager::TAB_STYLE ] );
 
         $this->add_responsive_control( 'toggle_color', [
             'label' => 'Color', 'type' => Controls_Manager::COLOR, 'default' => '#333333',
@@ -434,7 +434,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
         $unique_id  = str_replace('-', '_', $widget_id);
 
         if ( ! $menu_slug || $menu_slug === '' ) {
-            echo '<div style="padding:15px; border:1px dashed #d63638; text-align:center; color: #d63638; background: #fff;"><strong>' . __( 'Please select a menu from the Elementor Panel.', 'mh-plug' ) . '</strong></div>';
+            echo '<div style="padding:15px; border:1px dashed #d63638; text-align:center; color: #d63638; background: #fff;"><strong>' . __( 'Please select a menu from the Elementor Panel.', 'mh-plug-ecommerce-builder-widgets' ) . '</strong></div>';
             return;
         }
 
@@ -600,7 +600,7 @@ class MH_Nav_Menu_Widget extends \Elementor\Widget_Base {
                 
                 // 🚀 THE FIX: Bulletproof Fallback. If a menu is completely empty, it will display a warning link instead of crashing Elementor with a grey box!
                 $fallback_menu = function() use ( $menu_classes ) {
-                    echo '<ul class="' . esc_attr( $menu_classes ) . '"><li class="menu-item"><a href="' . admin_url('nav-menus.php') . '" style="color:#d63638 !important;">' . __( 'Menu is empty. Click here to assign items.', 'mh-plug' ) . '</a></li></ul>';
+                    echo '<ul class="' . esc_attr( $menu_classes ) . '"><li class="menu-item"><a href="' . admin_url('nav-menus.php') . '" style="color:#d63638 !important;">' . __( 'Menu is empty. Click here to assign items.', 'mh-plug-ecommerce-builder-widgets' ) . '</a></li></ul>';
                 };
 
                 wp_nav_menu([ 

@@ -14,7 +14,7 @@ use Elementor\Controls_Manager;
 class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_gallery'; }
-    public function get_title() { return __( 'MH Product Gallery', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Product Gallery', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-product-gallery'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
@@ -25,12 +25,12 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
 
     protected function register_controls() {
         $this->start_controls_section( 'section_layout', [
-            'label' => __( 'Gallery Settings', 'mh-plug' ),
+            'label' => __( 'Gallery Settings', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_responsive_control( 'gallery_width', [
-            'label'      => __( 'Gallery Max Width', 'mh-plug' ),
+            'label'      => __( 'Gallery Max Width', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', '%' ],
             'selectors'  => [
@@ -39,26 +39,26 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'enable_lightbox', [
-            'label'        => __( 'Enable Image Lightbox', 'mh-plug' ),
+            'label'        => __( 'Enable Image Lightbox', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
-            'label_on'     => __( 'Yes', 'mh-plug' ),
-            'label_off'    => __( 'No', 'mh-plug' ),
+            'label_on'     => __( 'Yes', 'mh-plug-ecommerce-builder-widgets' ),
+            'label_off'    => __( 'No', 'mh-plug-ecommerce-builder-widgets' ),
             'return_value' => 'yes',
             'default'      => 'yes',
             'separator'    => 'before',
-            'description'  => __( 'Clicking the main image will open it in a fullscreen popup.', 'mh-plug' ),
+            'description'  => __( 'Clicking the main image will open it in a fullscreen popup.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->end_controls_section();
 
         // Style Tab -> Main Image
         $this->start_controls_section( 'section_style_main_image', [
-            'label' => __( 'Main Image', 'mh-plug' ),
+            'label' => __( 'Main Image', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_responsive_control( 'main_image_gap', [
-            'label' => __( 'Gap Below Image', 'mh-plug' ),
+            'label' => __( 'Gap Below Image', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em', 'rem' ],
             'range' => [
@@ -70,7 +70,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'main_image_border_radius', [
-            'label' => __( 'Border Radius', 'mh-plug' ),
+            'label' => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%', 'em' ],
             'selectors' => [
@@ -98,12 +98,12 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
 
         // Style Tab -> Thumbnails
         $this->start_controls_section( 'section_style_thumbnails', [
-            'label' => __( 'Thumbnails', 'mh-plug' ),
+            'label' => __( 'Thumbnails', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_responsive_control( 'thumbnail_spacing', [
-            'label' => __( 'Spacing', 'mh-plug' ),
+            'label' => __( 'Spacing', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'range' => [
@@ -116,7 +116,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'thumbnail_border_radius', [
-            'label' => __( 'Border Radius', 'mh-plug' ),
+            'label' => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%', 'em' ],
             'selectors' => [
@@ -130,12 +130,12 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_thumb_normal',
             [
-                'label' => __( 'Normal', 'mh-plug' ),
+                'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control( 'thumb_opacity', [
-            'label' => __( 'Opacity', 'mh-plug' ),
+            'label' => __( 'Opacity', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'range' => [
                 'px' => [ 'max' => 1, 'min' => 0.10, 'step' => 0.01 ],
@@ -159,12 +159,12 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_thumb_active',
             [
-                'label' => __( 'Active / Hover', 'mh-plug' ),
+                'label' => __( 'Active / Hover', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control( 'thumb_opacity_active', [
-            'label' => __( 'Opacity', 'mh-plug' ),
+            'label' => __( 'Opacity', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::SLIDER,
             'range' => [
                 'px' => [ 'max' => 1, 'min' => 0.10, 'step' => 0.01 ],
@@ -175,7 +175,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'thumb_border_color_active', [
-            'label' => __( 'Border Color', 'mh-plug' ),
+            'label' => __( 'Border Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => Controls_Manager::COLOR,
             'selectors' => [
                 '{{WRAPPER}} .mh-gallery-thumb-slider .slick-current img, {{WRAPPER}} .mh-gallery-thumb-slider .slick-slide:hover img' => 'border-color: {{VALUE}};',
@@ -189,14 +189,14 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
 
         // Style Tab -> Main Arrows
         $this->start_controls_section( 'section_style_main_arrows', [
-            'label' => __( 'Main Arrows', 'mh-plug' ),
+            'label' => __( 'Main Arrows', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control(
             'main_arrow_size',
             [
-                'label' => __( 'Icon Size', 'mh-plug' ),
+                'label' => __( 'Icon Size', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SLIDER,
                 'size_units' => [ 'px', 'em' ],
                 'selectors' => [
@@ -208,7 +208,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'main_arrow_box_size',
             [
-                'label' => __( 'Box Size', 'mh-plug' ),
+                'label' => __( 'Box Size', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SLIDER,
                 'size_units' => [ 'px', 'em' ],
                 'selectors' => [
@@ -220,7 +220,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'main_arrow_offset',
             [
-                'label' => __( 'Position Offset', 'mh-plug' ),
+                'label' => __( 'Position Offset', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SLIDER,
                 'size_units' => [ 'px', '%', 'em' ],
                 'range' => [
@@ -238,14 +238,14 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_main_arrow_normal',
             [
-                'label' => __( 'Normal', 'mh-plug' ),
+                'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control(
             'main_arrow_color',
             [
-                'label' => __( 'Color', 'mh-plug' ),
+                'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-gallery-arrow' => 'color: {{VALUE}};',
@@ -256,7 +256,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'main_arrow_bg_color',
             [
-                'label' => __( 'Background Color', 'mh-plug' ),
+                'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-gallery-arrow' => 'background-color: {{VALUE}};',
@@ -285,14 +285,14 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_main_arrow_hover',
             [
-                'label' => __( 'Hover', 'mh-plug' ),
+                'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control(
             'main_arrow_hover_color',
             [
-                'label' => __( 'Color', 'mh-plug' ),
+                'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-gallery-arrow:hover' => 'color: {{VALUE}};',
@@ -303,7 +303,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'main_arrow_hover_bg_color',
             [
-                'label' => __( 'Background Color', 'mh-plug' ),
+                'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-gallery-arrow:hover' => 'background-color: {{VALUE}};',
@@ -314,7 +314,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'main_arrow_hover_border_color',
             [
-                'label' => __( 'Border Color', 'mh-plug' ),
+                'label' => __( 'Border Color', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-gallery-arrow:hover' => 'border-color: {{VALUE}};',
@@ -328,7 +328,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'main_arrow_border_radius',
             [
-                'label' => __( 'Border Radius', 'mh-plug' ),
+                'label' => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => [ 'px', '%', 'em' ],
                 'selectors' => [
@@ -342,14 +342,14 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
 
         // Style Tab -> Thumbnail Arrows
         $this->start_controls_section( 'section_style_thumb_arrows', [
-            'label' => __( 'Thumbnail Arrows', 'mh-plug' ),
+            'label' => __( 'Thumbnail Arrows', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control(
             'thumb_arrow_size',
             [
-                'label' => __( 'Icon Size', 'mh-plug' ),
+                'label' => __( 'Icon Size', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SLIDER,
                 'size_units' => [ 'px', 'em' ],
                 'selectors' => [
@@ -361,7 +361,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'thumb_arrow_box_size',
             [
-                'label' => __( 'Box Size', 'mh-plug' ),
+                'label' => __( 'Box Size', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SLIDER,
                 'size_units' => [ 'px', 'em' ],
                 'selectors' => [
@@ -373,7 +373,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'thumb_arrow_offset',
             [
-                'label' => __( 'Position Offset', 'mh-plug' ),
+                'label' => __( 'Position Offset', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SLIDER,
                 'size_units' => [ 'px', '%', 'em' ],
                 'range' => [
@@ -391,14 +391,14 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_thumb_arrow_normal',
             [
-                'label' => __( 'Normal', 'mh-plug' ),
+                'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control(
             'thumb_arrow_color',
             [
-                'label' => __( 'Color', 'mh-plug' ),
+                'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-thumb-arrow' => 'color: {{VALUE}};',
@@ -409,7 +409,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'thumb_arrow_bg_color',
             [
-                'label' => __( 'Background Color', 'mh-plug' ),
+                'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-thumb-arrow' => 'background-color: {{VALUE}};',
@@ -438,14 +438,14 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_thumb_arrow_hover',
             [
-                'label' => __( 'Hover', 'mh-plug' ),
+                'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control(
             'thumb_arrow_hover_color',
             [
-                'label' => __( 'Color', 'mh-plug' ),
+                'label' => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-thumb-arrow:hover' => 'color: {{VALUE}};',
@@ -456,7 +456,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'thumb_arrow_hover_bg_color',
             [
-                'label' => __( 'Background Color', 'mh-plug' ),
+                'label' => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-thumb-arrow:hover' => 'background-color: {{VALUE}};',
@@ -467,7 +467,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'thumb_arrow_hover_border_color',
             [
-                'label' => __( 'Border Color', 'mh-plug' ),
+                'label' => __( 'Border Color', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-thumb-arrow:hover' => 'border-color: {{VALUE}};',
@@ -481,7 +481,7 @@ class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'thumb_arrow_border_radius',
             [
-                'label' => __( 'Border Radius', 'mh-plug' ),
+                'label' => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => [ 'px', '%', 'em' ],
                 'selectors' => [

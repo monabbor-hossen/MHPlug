@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_woo_attributes'; }
-    public function get_title() { return esc_html__('Product Attributes', 'mh-plug'); }
+    public function get_title() { return esc_html__('Product Attributes', 'mh-plug-ecommerce-builder-widgets'); }
     public function get_icon() { return 'eicon-product-meta'; }
     public function get_categories() { return ['mh-plug-widgets']; }
     public function get_keywords() { return ['woocommerce', 'product', 'attributes', 'dropdown', 'select', 'mh']; }
@@ -19,22 +19,22 @@ class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base {
         /**
          * Layout Options
          */
-        $this->start_controls_section( 'section_layout', [ 'label' => esc_html__('Layout', 'mh-plug'), 'tab' => \Elementor\Controls_Manager::TAB_CONTENT, ] );
+        $this->start_controls_section( 'section_layout', [ 'label' => esc_html__('Layout', 'mh-plug-ecommerce-builder-widgets'), 'tab' => \Elementor\Controls_Manager::TAB_CONTENT, ] );
         $this->add_control( 'attribute_layout', [
-            'label' => esc_html__('Default Layout Style', 'mh-plug'),
+            'label' => esc_html__('Default Layout Style', 'mh-plug-ecommerce-builder-widgets'),
             'type' => \Elementor\Controls_Manager::SELECT,
             'default' => 'dropdown',
             'options' => [
-                'dropdown' => esc_html__('Dropdown / Select', 'mh-plug'),
-                'dropdown_search' => esc_html__('Searchable Dropdown (Select2)', 'mh-plug'),
-                'pills'    => esc_html__('Tags / Pills', 'mh-plug'),
-                'radio'    => esc_html__('Radio Buttons (Vertical)', 'mh-plug'),
-                'grid2'    => esc_html__('Radio Buttons (Grid)', 'mh-plug'),
+                'dropdown' => esc_html__('Dropdown / Select', 'mh-plug-ecommerce-builder-widgets'),
+                'dropdown_search' => esc_html__('Searchable Dropdown (Select2)', 'mh-plug-ecommerce-builder-widgets'),
+                'pills'    => esc_html__('Tags / Pills', 'mh-plug-ecommerce-builder-widgets'),
+                'radio'    => esc_html__('Radio Buttons (Vertical)', 'mh-plug-ecommerce-builder-widgets'),
+                'grid2'    => esc_html__('Radio Buttons (Grid)', 'mh-plug-ecommerce-builder-widgets'),
             ],
         ] );
 
         $attribute_options = [];
-        $attribute_options[''] = esc_html__( 'Select an Attribute...', 'mh-plug' );
+        $attribute_options[''] = esc_html__( 'Select an Attribute...', 'mh-plug-ecommerce-builder-widgets' );
         if ( function_exists('wc_get_attribute_taxonomies') ) {
             $taxonomies = wc_get_attribute_taxonomies();
             if ( ! empty( $taxonomies ) ) {
@@ -47,7 +47,7 @@ class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base {
         $repeater = new \Elementor\Repeater();
         
         $repeater->add_control( 'attribute_type', [
-            'label' => esc_html__('Attribute Type', 'mh-plug'),
+            'label' => esc_html__('Attribute Type', 'mh-plug-ecommerce-builder-widgets'),
             'type' => \Elementor\Controls_Manager::CHOOSE,
             'options' => [
                 'global' => [ 'title' => 'Global', 'icon' => 'eicon-globe' ],
@@ -58,7 +58,7 @@ class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base {
         ]);
 
         $repeater->add_control( 'attribute_name', [
-            'label' => esc_html__( 'Select Global Attribute', 'mh-plug' ),
+            'label' => esc_html__( 'Select Global Attribute', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => \Elementor\Controls_Manager::SELECT2,
             'options' => $attribute_options,
             'label_block' => true,
@@ -66,25 +66,25 @@ class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base {
         ] );
 
         $repeater->add_control( 'custom_attribute_name', [
-            'label' => esc_html__( 'Custom Attribute Slug', 'mh-plug' ),
+            'label' => esc_html__( 'Custom Attribute Slug', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => \Elementor\Controls_Manager::TEXT,
-            'description' => esc_html__( 'For attributes created directly on the product (e.g. Size).', 'mh-plug' ),
+            'description' => esc_html__( 'For attributes created directly on the product (e.g. Size).', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'attribute_type' => 'custom' ],
         ] );
         $repeater->add_control( 'layout', [
-            'label' => esc_html__( 'Layout Style', 'mh-plug' ),
+            'label' => esc_html__( 'Layout Style', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => \Elementor\Controls_Manager::SELECT,
             'default' => 'pills',
             'options' => [
-                'dropdown' => esc_html__('Dropdown / Select', 'mh-plug'),
-                'dropdown_search' => esc_html__('Searchable Dropdown (Select2)', 'mh-plug'),
-                'pills'    => esc_html__('Tags / Pills', 'mh-plug'),
-                'radio'    => esc_html__('Radio Buttons (Vertical)', 'mh-plug'),
-                'grid2'    => esc_html__('Radio Buttons (Grid)', 'mh-plug'),
+                'dropdown' => esc_html__('Dropdown / Select', 'mh-plug-ecommerce-builder-widgets'),
+                'dropdown_search' => esc_html__('Searchable Dropdown (Select2)', 'mh-plug-ecommerce-builder-widgets'),
+                'pills'    => esc_html__('Tags / Pills', 'mh-plug-ecommerce-builder-widgets'),
+                'radio'    => esc_html__('Radio Buttons (Vertical)', 'mh-plug-ecommerce-builder-widgets'),
+                'grid2'    => esc_html__('Radio Buttons (Grid)', 'mh-plug-ecommerce-builder-widgets'),
             ],
         ] );
         $this->add_control( 'custom_layouts', [
-            'label' => esc_html__( 'Override by Attribute', 'mh-plug' ),
+            'label' => esc_html__( 'Override by Attribute', 'mh-plug-ecommerce-builder-widgets' ),
             'type' => \Elementor\Controls_Manager::REPEATER,
             'fields' => $repeater->get_controls(),
             'title_field' => '{{{ attribute_type === "global" ? attribute_name : custom_attribute_name }}} - {{{ layout }}}',
@@ -94,87 +94,87 @@ class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base {
         /**
          * Label Styles
          */
-        $this->start_controls_section( 'section_style_label', [ 'label' => esc_html__('Label Style', 'mh-plug'), 'tab' => \Elementor\Controls_Manager::TAB_STYLE, ] );
-        $this->add_control( 'label_color', [ 'label' => esc_html__('Text Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#004265', 'selectors' => [ '{{WRAPPER}} .mh-woo-attribute-label' => 'color: {{VALUE}};', ], ] );
+        $this->start_controls_section( 'section_style_label', [ 'label' => esc_html__('Label Style', 'mh-plug-ecommerce-builder-widgets'), 'tab' => \Elementor\Controls_Manager::TAB_STYLE, ] );
+        $this->add_control( 'label_color', [ 'label' => esc_html__('Text Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#004265', 'selectors' => [ '{{WRAPPER}} .mh-woo-attribute-label' => 'color: {{VALUE}};', ], ] );
         $this->add_group_control( \Elementor\Group_Control_Typography::get_type(), [ 'name' => 'label_typography', 'selector' => '{{WRAPPER}} .mh-woo-attribute-label', ] );
-        $this->add_responsive_control( 'label_spacing', [ 'label' => esc_html__('Gap to Dropdown', 'mh-plug'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px', 'em'], 'range' => [ 'px' => ['min' => 0, 'max' => 50], ], 'default' => ['unit' => 'px', 'size' => 10], 'selectors' => [ '{{WRAPPER}} .mh-woo-attribute-label' => 'margin-bottom: {{SIZE}}{{UNIT}}; display: block;', ], ] );
+        $this->add_responsive_control( 'label_spacing', [ 'label' => esc_html__('Gap to Dropdown', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px', 'em'], 'range' => [ 'px' => ['min' => 0, 'max' => 50], ], 'default' => ['unit' => 'px', 'size' => 10], 'selectors' => [ '{{WRAPPER}} .mh-woo-attribute-label' => 'margin-bottom: {{SIZE}}{{UNIT}}; display: block;', ], ] );
         $this->end_controls_section();
 
         /**
          * General Layout (Applies to all layouts)
          */
-        $this->start_controls_section( 'section_style_general', [ 'label' => esc_html__('General Layout', 'mh-plug'), 'tab' => \Elementor\Controls_Manager::TAB_STYLE, ] );
-        $this->add_responsive_control( 'attribute_group_spacing', [ 'label' => esc_html__('Spacing Between Attributes', 'mh-plug'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px', 'em'], 'default' => ['unit' => 'px', 'size' => 20], 'selectors' => [ '{{WRAPPER}} .mh-woo-attribute-wrapper' => 'margin-bottom: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-woo-attribute-wrapper:last-child' => 'margin-bottom: 0;', ], ] );
+        $this->start_controls_section( 'section_style_general', [ 'label' => esc_html__('General Layout', 'mh-plug-ecommerce-builder-widgets'), 'tab' => \Elementor\Controls_Manager::TAB_STYLE, ] );
+        $this->add_responsive_control( 'attribute_group_spacing', [ 'label' => esc_html__('Spacing Between Attributes', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px', 'em'], 'default' => ['unit' => 'px', 'size' => 20], 'selectors' => [ '{{WRAPPER}} .mh-woo-attribute-wrapper' => 'margin-bottom: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-woo-attribute-wrapper:last-child' => 'margin-bottom: 0;', ], ] );
         $this->end_controls_section();
 
         /**
          * Dropdown (<select>) Styles
          */
         $this->start_controls_section( 'section_style_dropdown', [ 
-            'label' => esc_html__('Dropdown Style', 'mh-plug'), 
+            'label' => esc_html__('Dropdown Style', 'mh-plug-ecommerce-builder-widgets'), 
             'tab' => \Elementor\Controls_Manager::TAB_STYLE, 
         ] );
-        $this->add_control( 'dropdown_color', [ 'label' => esc_html__('Text Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#4a5568', 'selectors' => [ 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select' => 'color: {{VALUE}} !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single .select2-selection__rendered' => 'color: {{VALUE}} !important;', ], ] );
-        $this->add_control( 'dropdown_bg', [ 'label' => esc_html__('Background Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#e8edf2', 'selectors' => [ 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select' => 'background-color: {{VALUE}} !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single' => 'background-color: {{VALUE}} !important;', ], ] );
+        $this->add_control( 'dropdown_color', [ 'label' => esc_html__('Text Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#4a5568', 'selectors' => [ 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select' => 'color: {{VALUE}} !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single .select2-selection__rendered' => 'color: {{VALUE}} !important;', ], ] );
+        $this->add_control( 'dropdown_bg', [ 'label' => esc_html__('Background Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#e8edf2', 'selectors' => [ 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select' => 'background-color: {{VALUE}} !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single' => 'background-color: {{VALUE}} !important;', ], ] );
         $this->add_group_control( \Elementor\Group_Control_Typography::get_type(), [ 'name' => 'dropdown_typography', 'selector' => 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select, body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single .select2-selection__rendered', ] );
         
         $this->add_group_control( \Elementor\Group_Control_Border::get_type(), [ 'name' => 'dropdown_border', 'selector' => 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select, body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single', ] );
         $this->add_group_control( \Elementor\Group_Control_Box_Shadow::get_type(), [ 'name' => 'dropdown_box_shadow', 'selector' => 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select, body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single', ] );
 
-        $this->add_responsive_control( 'dropdown_padding', [ 'label' => esc_html__('Padding', 'mh-plug'), 'type' => \Elementor\Controls_Manager::DIMENSIONS, 'size_units' => ['px', 'em', '%'], 'default' => [ 'top' => 12, 'right' => 16, 'bottom' => 12, 'left' => 16, 'isLinked' => false, ], 'selectors' => [ 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select' => 'padding-top: {{TOP}}{{UNIT}} !important; padding-right: {{RIGHT}}{{UNIT}} !important; padding-bottom: {{BOTTOM}}{{UNIT}} !important; padding-left: {{LEFT}}{{UNIT}} !important; height: auto !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single' => 'height: auto !important; padding-top: {{TOP}}{{UNIT}} !important; padding-right: {{RIGHT}}{{UNIT}} !important; padding-bottom: {{BOTTOM}}{{UNIT}} !important; padding-left: {{LEFT}}{{UNIT}} !important; display: flex !important; align-items: center !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single .select2-selection__rendered' => 'padding: 0 !important; line-height: normal !important; flex: 1 !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single .select2-selection__arrow' => 'position: relative !important; top: auto !important; right: auto !important; height: auto !important;', ], ] );
-        $this->add_responsive_control( 'dropdown_radius', [ 'label' => esc_html__('Border Radius', 'mh-plug'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px', '%'], 'default' => ['unit' => 'px', 'size' => 12], 'selectors' => [ 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select' => 'border-radius: {{SIZE}}{{UNIT}} !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single' => 'border-radius: {{SIZE}}{{UNIT}} !important;', ], ] );
-        $this->add_responsive_control( 'dropdown_width', [ 'label' => esc_html__('Width', 'mh-plug'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px', '%'], 'default' => ['unit' => '%', 'size' => 100], 'selectors' => [ 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select' => 'width: {{SIZE}}{{UNIT}} !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container' => 'width: {{SIZE}}{{UNIT}} !important;', ], ] );
-        $this->add_control( 'dropdown_arrow_color', [ 'label' => esc_html__('Arrow Color (Select2)', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .select2-container--default .select2-selection--single .select2-selection__arrow b' => 'border-color: {{VALUE}} transparent transparent transparent !important;', '{{WRAPPER}} .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b' => 'border-color: transparent transparent {{VALUE}} transparent !important;', '{{WRAPPER}} .select2-container--default .select2-selection--single .select2-selection__arrow' => 'color: {{VALUE}} !important;', '{{WRAPPER}} .select2-container--default .select2-selection--single .select2-selection__arrow::after' => 'color: {{VALUE}} !important;', ], ] );
+        $this->add_responsive_control( 'dropdown_padding', [ 'label' => esc_html__('Padding', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::DIMENSIONS, 'size_units' => ['px', 'em', '%'], 'default' => [ 'top' => 12, 'right' => 16, 'bottom' => 12, 'left' => 16, 'isLinked' => false, ], 'selectors' => [ 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select' => 'padding-top: {{TOP}}{{UNIT}} !important; padding-right: {{RIGHT}}{{UNIT}} !important; padding-bottom: {{BOTTOM}}{{UNIT}} !important; padding-left: {{LEFT}}{{UNIT}} !important; height: auto !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single' => 'height: auto !important; padding-top: {{TOP}}{{UNIT}} !important; padding-right: {{RIGHT}}{{UNIT}} !important; padding-bottom: {{BOTTOM}}{{UNIT}} !important; padding-left: {{LEFT}}{{UNIT}} !important; display: flex !important; align-items: center !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single .select2-selection__rendered' => 'padding: 0 !important; line-height: normal !important; flex: 1 !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single .select2-selection__arrow' => 'position: relative !important; top: auto !important; right: auto !important; height: auto !important;', ], ] );
+        $this->add_responsive_control( 'dropdown_radius', [ 'label' => esc_html__('Border Radius', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px', '%'], 'default' => ['unit' => 'px', 'size' => 12], 'selectors' => [ 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select' => 'border-radius: {{SIZE}}{{UNIT}} !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container--default .select2-selection--single' => 'border-radius: {{SIZE}}{{UNIT}} !important;', ], ] );
+        $this->add_responsive_control( 'dropdown_width', [ 'label' => esc_html__('Width', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px', '%'], 'default' => ['unit' => '%', 'size' => 100], 'selectors' => [ 'body {{WRAPPER}} .mh-woo-attributes-container select.mh-woo-attribute-select' => 'width: {{SIZE}}{{UNIT}} !important;', 'body {{WRAPPER}} .mh-woo-attributes-container .select2-container' => 'width: {{SIZE}}{{UNIT}} !important;', ], ] );
+        $this->add_control( 'dropdown_arrow_color', [ 'label' => esc_html__('Arrow Color (Select2)', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .select2-container--default .select2-selection--single .select2-selection__arrow b' => 'border-color: {{VALUE}} transparent transparent transparent !important;', '{{WRAPPER}} .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b' => 'border-color: transparent transparent {{VALUE}} transparent !important;', '{{WRAPPER}} .select2-container--default .select2-selection--single .select2-selection__arrow' => 'color: {{VALUE}} !important;', '{{WRAPPER}} .select2-container--default .select2-selection--single .select2-selection__arrow::after' => 'color: {{VALUE}} !important;', ], ] );
         $this->end_controls_section();
 
         /**
          * Select2 Menu Styles
          */
-        $this->start_controls_section( 'section_style_select2_menu', [ 'label' => esc_html__('Select2 Menu Style', 'mh-plug'), 'tab' => \Elementor\Controls_Manager::TAB_STYLE, ] );
-        $this->add_control( 's2_menu_bg', [ 'label' => esc_html__('Background Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .select2-dropdown' => 'background-color: {{VALUE}};', ], ] );
+        $this->start_controls_section( 'section_style_select2_menu', [ 'label' => esc_html__('Select2 Menu Style', 'mh-plug-ecommerce-builder-widgets'), 'tab' => \Elementor\Controls_Manager::TAB_STYLE, ] );
+        $this->add_control( 's2_menu_bg', [ 'label' => esc_html__('Background Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .select2-dropdown' => 'background-color: {{VALUE}};', ], ] );
         $this->add_group_control( \Elementor\Group_Control_Border::get_type(), [ 'name' => 's2_menu_border', 'selector' => '{{WRAPPER}} .select2-dropdown', ] );
         $this->add_group_control( \Elementor\Group_Control_Box_Shadow::get_type(), [ 'name' => 's2_menu_box_shadow', 'selector' => '{{WRAPPER}} .select2-dropdown', ] );
-        $this->add_control( 's2_option_color', [ 'label' => esc_html__('Option Text Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .select2-results__option' => 'color: {{VALUE}};', ], ] );
-        $this->add_control( 's2_option_bg_hover', [ 'label' => esc_html__('Option Hover BG', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .select2-results__option--highlighted' => 'background-color: {{VALUE}};', ], ] );
+        $this->add_control( 's2_option_color', [ 'label' => esc_html__('Option Text Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .select2-results__option' => 'color: {{VALUE}};', ], ] );
+        $this->add_control( 's2_option_bg_hover', [ 'label' => esc_html__('Option Hover BG', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .select2-results__option--highlighted' => 'background-color: {{VALUE}};', ], ] );
         $this->end_controls_section();
 
         /**
          * Pills & Radio Styles
          */
         $this->start_controls_section( 'section_style_pills', [ 
-            'label' => esc_html__('Pills & Radio Style', 'mh-plug'), 
+            'label' => esc_html__('Pills & Radio Style', 'mh-plug-ecommerce-builder-widgets'), 
             'tab' => \Elementor\Controls_Manager::TAB_STYLE, 
         ] );
         $this->start_controls_tabs('tabs_pills_style');
         
-        $this->start_controls_tab('tab_pills_normal', ['label' => __('Normal', 'mh-plug')]);
-        $this->add_control( 'pills_color', [ 'label' => esc_html__('Text Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ '{{WRAPPER}} .mh-attr-pill, {{WRAPPER}} .mh-attr-radio-label' => 'color: {{VALUE}};', ], ] );
-        $this->add_control( 'pills_bg', [ 'label' => esc_html__('Background Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#f2f2f2', 'selectors' => [ '{{WRAPPER}} .mh-attr-pill' => 'background-color: {{VALUE}};', ] ] );
+        $this->start_controls_tab('tab_pills_normal', ['label' => __('Normal', 'mh-plug-ecommerce-builder-widgets')]);
+        $this->add_control( 'pills_color', [ 'label' => esc_html__('Text Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => [ '{{WRAPPER}} .mh-attr-pill, {{WRAPPER}} .mh-attr-radio-label' => 'color: {{VALUE}};', ], ] );
+        $this->add_control( 'pills_bg', [ 'label' => esc_html__('Background Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#f2f2f2', 'selectors' => [ '{{WRAPPER}} .mh-attr-pill' => 'background-color: {{VALUE}};', ] ] );
         $this->add_group_control( \Elementor\Group_Control_Border::get_type(), [ 'name' => 'pills_border', 'selector' => '{{WRAPPER}} .mh-attr-pill' ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab('tab_pills_hover', ['label' => __('Hover', 'mh-plug')]);
-        $this->add_control( 'pills_color_hover', [ 'label' => esc_html__('Text Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-attr-pill:not(.mh-active):hover, {{WRAPPER}} .mh-attr-radio-item:hover .mh-attr-radio-label' => 'color: {{VALUE}};', ], ] );
-        $this->add_control( 'pills_bg_hover', [ 'label' => esc_html__('Background Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-attr-pill:not(.mh-active):hover' => 'background-color: {{VALUE}};', ] ] );
-        $this->add_control( 'pills_border_hover_color', [ 'label' => esc_html__('Border Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-attr-pill:not(.mh-active):hover' => 'border-color: {{VALUE}};', ] ] );
+        $this->start_controls_tab('tab_pills_hover', ['label' => __('Hover', 'mh-plug-ecommerce-builder-widgets')]);
+        $this->add_control( 'pills_color_hover', [ 'label' => esc_html__('Text Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-attr-pill:not(.mh-active):hover, {{WRAPPER}} .mh-attr-radio-item:hover .mh-attr-radio-label' => 'color: {{VALUE}};', ], ] );
+        $this->add_control( 'pills_bg_hover', [ 'label' => esc_html__('Background Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-attr-pill:not(.mh-active):hover' => 'background-color: {{VALUE}};', ] ] );
+        $this->add_control( 'pills_border_hover_color', [ 'label' => esc_html__('Border Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'selectors' => [ '{{WRAPPER}} .mh-attr-pill:not(.mh-active):hover' => 'border-color: {{VALUE}};', ] ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab('tab_pills_active', ['label' => __('Active', 'mh-plug')]);
-        $this->add_control( 'pills_color_active', [ 'label' => esc_html__('Text Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-attr-pill.mh-active, {{WRAPPER}} input:checked + .mh-attr-radio-mark + .mh-attr-radio-label' => 'color: {{VALUE}};', ], ] );
-        $this->add_control( 'pills_bg_active', [ 'label' => esc_html__('Background Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#004265', 'selectors' => [ '{{WRAPPER}} .mh-attr-pill.mh-active' => 'background-color: {{VALUE}};', ] ] );
-        $this->add_control( 'pills_border_active_color', [ 'label' => esc_html__('Border Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#004265', 'selectors' => [ '{{WRAPPER}} .mh-attr-pill.mh-active' => 'border-color: {{VALUE}};', ] ] );
+        $this->start_controls_tab('tab_pills_active', ['label' => __('Active', 'mh-plug-ecommerce-builder-widgets')]);
+        $this->add_control( 'pills_color_active', [ 'label' => esc_html__('Text Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => [ '{{WRAPPER}} .mh-attr-pill.mh-active, {{WRAPPER}} input:checked + .mh-attr-radio-mark + .mh-attr-radio-label' => 'color: {{VALUE}};', ], ] );
+        $this->add_control( 'pills_bg_active', [ 'label' => esc_html__('Background Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#004265', 'selectors' => [ '{{WRAPPER}} .mh-attr-pill.mh-active' => 'background-color: {{VALUE}};', ] ] );
+        $this->add_control( 'pills_border_active_color', [ 'label' => esc_html__('Border Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#004265', 'selectors' => [ '{{WRAPPER}} .mh-attr-pill.mh-active' => 'border-color: {{VALUE}};', ] ] );
         $this->end_controls_tab();
 
         $this->end_controls_tabs();
 
-        $this->add_control( 'radio_color_active', [ 'label' => esc_html__('Radio Mark Color', 'mh-plug'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#004265', 'selectors' => [ '{{WRAPPER}} input:checked + .mh-attr-radio-mark' => 'border-color: {{VALUE}}; background-color: {{VALUE}};', ], 'separator' => 'before' ] );
+        $this->add_control( 'radio_color_active', [ 'label' => esc_html__('Radio Mark Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::COLOR, 'default' => '#004265', 'selectors' => [ '{{WRAPPER}} input:checked + .mh-attr-radio-mark' => 'border-color: {{VALUE}}; background-color: {{VALUE}};', ], 'separator' => 'before' ] );
 
         $this->add_group_control( \Elementor\Group_Control_Typography::get_type(), [ 'name' => 'pills_typography', 'selector' => '{{WRAPPER}} .mh-attr-pill, {{WRAPPER}} .mh-attr-radio-label', 'separator' => 'before' ] );
-        $this->add_responsive_control( 'pills_padding', [ 'label' => esc_html__('Padding (Pills)', 'mh-plug'), 'type' => \Elementor\Controls_Manager::DIMENSIONS, 'size_units' => ['px', 'em'], 'default' => [ 'top' => 8, 'right' => 16, 'bottom' => 8, 'left' => 16, 'isLinked' => false, ], 'selectors' => [ '{{WRAPPER}} .mh-attr-pill' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ] ] );
-        $this->add_responsive_control( 'pills_radius', [ 'label' => esc_html__('Border Radius (Pills)', 'mh-plug'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px', '%'], 'default' => ['unit' => 'px', 'size' => 6], 'selectors' => [ '{{WRAPPER}} .mh-attr-pill' => 'border-radius: {{SIZE}}{{UNIT}};', ] ] );
-        $this->add_responsive_control( 'pills_gap', [ 'label' => esc_html__('Row Gap', 'mh-plug'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px'], 'default' => ['unit' => 'px', 'size' => 10], 'selectors' => [ '{{WRAPPER}} .mh-attr-pills-container' => 'gap: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-attr-radio-container' => 'gap: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-attr-grid-container' => 'row-gap: {{SIZE}}{{UNIT}};', ], ] );
-        $this->add_responsive_control( 'grid_column_gap', [ 'label' => esc_html__('Column Gap', 'mh-plug'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px'], 'default' => ['unit' => 'px', 'size' => 20], 'selectors' => [ '{{WRAPPER}} .mh-attr-grid-container' => 'column-gap: {{SIZE}}{{UNIT}};', ] ] );
-        $this->add_responsive_control( 'grid_columns', [ 'label' => esc_html__('Grid Columns', 'mh-plug'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => [''], 'default' => ['size' => 2], 'range' => [ '' => ['min' => 1, 'max' => 6] ], 'selectors' => [ '{{WRAPPER}} .mh-attr-grid-container' => 'grid-template-columns: repeat({{SIZE}}, 1fr);', ] ] );
+        $this->add_responsive_control( 'pills_padding', [ 'label' => esc_html__('Padding (Pills)', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::DIMENSIONS, 'size_units' => ['px', 'em'], 'default' => [ 'top' => 8, 'right' => 16, 'bottom' => 8, 'left' => 16, 'isLinked' => false, ], 'selectors' => [ '{{WRAPPER}} .mh-attr-pill' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};', ] ] );
+        $this->add_responsive_control( 'pills_radius', [ 'label' => esc_html__('Border Radius (Pills)', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px', '%'], 'default' => ['unit' => 'px', 'size' => 6], 'selectors' => [ '{{WRAPPER}} .mh-attr-pill' => 'border-radius: {{SIZE}}{{UNIT}};', ] ] );
+        $this->add_responsive_control( 'pills_gap', [ 'label' => esc_html__('Row Gap', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px'], 'default' => ['unit' => 'px', 'size' => 10], 'selectors' => [ '{{WRAPPER}} .mh-attr-pills-container' => 'gap: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-attr-radio-container' => 'gap: {{SIZE}}{{UNIT}};', '{{WRAPPER}} .mh-attr-grid-container' => 'row-gap: {{SIZE}}{{UNIT}};', ], ] );
+        $this->add_responsive_control( 'grid_column_gap', [ 'label' => esc_html__('Column Gap', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => ['px'], 'default' => ['unit' => 'px', 'size' => 20], 'selectors' => [ '{{WRAPPER}} .mh-attr-grid-container' => 'column-gap: {{SIZE}}{{UNIT}};', ] ] );
+        $this->add_responsive_control( 'grid_columns', [ 'label' => esc_html__('Grid Columns', 'mh-plug-ecommerce-builder-widgets'), 'type' => \Elementor\Controls_Manager::SLIDER, 'size_units' => [''], 'default' => ['size' => 2], 'range' => [ '' => ['min' => 1, 'max' => 6] ], 'selectors' => [ '{{WRAPPER}} .mh-attr-grid-container' => 'grid-template-columns: repeat({{SIZE}}, 1fr);', ] ] );
         $this->end_controls_section();
     }
 
@@ -278,7 +278,7 @@ class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base {
             $extra_class = ( $layout === 'dropdown_search' ) ? ' mh-select2-enabled' : '';
             
             echo '<select id="' . esc_attr($select_id) . '" name="' . esc_attr($select_name) . '" class="mh-woo-attribute-select' . $extra_class . '" style="' . esc_attr($select_style) . '" data-attribute_name="' . esc_attr($select_name) . '" data-is-variation="' . esc_attr($is_variation) . '">';
-            echo '<option value="">' . esc_html(sprintf(__('Choose %s', 'mh-plug'), $label)) . '</option>';
+            echo '<option value="">' . esc_html(sprintf(__('Choose %s', 'mh-plug-ecommerce-builder-widgets'), $label)) . '</option>';
             foreach ($options_data as $opt) {
                 echo '<option value="' . esc_attr($opt['value']) . '">' . esc_html($opt['label']) . '</option>';
             }

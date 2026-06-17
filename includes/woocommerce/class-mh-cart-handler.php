@@ -111,10 +111,10 @@ class MH_Cart_Handler {
         $cart_item_key = WC()->cart->add_to_cart( $product_id, $quantity );
 
         if ( $cart_item_key ) {
-            wc_add_notice( __( 'Item successfully added to your cart.', 'mh-plug' ), 'success' );
+            wc_add_notice( __( 'Item successfully added to your cart.', 'mh-plug-ecommerce-builder-widgets' ), 'success' );
         } else {
             if ( ! wc_notice_count( 'error' ) ) {
-                wc_add_notice( __( 'Could not add this item to your cart. Please try again.', 'mh-plug' ), 'error' );
+                wc_add_notice( __( 'Could not add this item to your cart. Please try again.', 'mh-plug-ecommerce-builder-widgets' ), 'error' );
             }
         }
 

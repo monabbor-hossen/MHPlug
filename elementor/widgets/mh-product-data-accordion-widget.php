@@ -17,7 +17,7 @@ use Elementor\Group_Control_Border;
 class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_data_accordion'; }
-    public function get_title() { return __( 'MH Product Data (Tabs & Accordion)', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Product Data (Tabs & Accordion)', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-tabs'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'product', 'accordion', 'tabs', 'description', 'shipping', 'reviews', 'woocommerce', 'mh' ]; }
@@ -29,88 +29,88 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
 
         /* ── CONTENT: LAYOUT & DATA ── */
         $this->start_controls_section( 'section_data_content', [
-            'label' => __( 'Layout & Content', 'mh-plug' ),
+            'label' => __( 'Layout & Content', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_control( 'layout_style', [
-            'label'   => __( 'Layout Style', 'mh-plug' ),
+            'label'   => __( 'Layout Style', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'accordion',
             'options' => [
-                'accordion' => __( 'Accordion (Vertical)', 'mh-plug' ),
-                'tabs'      => __( 'Tabs (Horizontal)', 'mh-plug' ),
+                'accordion' => __( 'Accordion (Vertical)', 'mh-plug-ecommerce-builder-widgets' ),
+                'tabs'      => __( 'Tabs (Horizontal)', 'mh-plug-ecommerce-builder-widgets' ),
             ],
         ] );
 
         // 1. Description
         $this->add_control( 'show_desc', [
-            'label'     => __( 'Show Description', 'mh-plug' ),
+            'label'     => __( 'Show Description', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SWITCHER,
             'default'   => 'yes',
             'separator' => 'before',
         ] );
         $this->add_control( 'title_desc', [
-            'label'     => __( 'Description Title', 'mh-plug' ),
+            'label'     => __( 'Description Title', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::TEXT,
-            'default'   => __( 'Description', 'mh-plug' ),
+            'default'   => __( 'Description', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'show_desc' => 'yes' ],
         ] );
 
         // 2. Additional Info
         $this->add_control( 'show_info', [
-            'label'     => __( 'Show Additional Info', 'mh-plug' ),
+            'label'     => __( 'Show Additional Info', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SWITCHER,
             'default'   => 'yes',
             'separator' => 'before',
         ] );
         $this->add_control( 'title_info', [
-            'label'     => __( 'Additional Info Title', 'mh-plug' ),
+            'label'     => __( 'Additional Info Title', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::TEXT,
-            'default'   => __( 'Additional information', 'mh-plug' ),
+            'default'   => __( 'Additional information', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'show_info' => 'yes' ],
         ] );
 
         // 3. Shipping
         $this->add_control( 'show_shipping', [
-            'label'     => __( 'Show Shipping & Delivery', 'mh-plug' ),
+            'label'     => __( 'Show Shipping & Delivery', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SWITCHER,
             'default'   => 'yes',
             'separator' => 'before',
         ] );
         $this->add_control( 'title_shipping', [
-            'label'     => __( 'Shipping Title', 'mh-plug' ),
+            'label'     => __( 'Shipping Title', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::TEXT,
-            'default'   => __( 'Shipping & Delivery', 'mh-plug' ),
+            'default'   => __( 'Shipping & Delivery', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'show_shipping' => 'yes' ],
         ] );
         $this->add_control( 'content_shipping', [
-            'label'     => __( 'Shipping Content', 'mh-plug' ),
+            'label'     => __( 'Shipping Content', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::WYSIWYG,
-            'default'   => __( 'Enter your shipping and delivery policy here.', 'mh-plug' ),
+            'default'   => __( 'Enter your shipping and delivery policy here.', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'show_shipping' => 'yes' ],
         ] );
 
         // 4. Reviews
         $this->add_control( 'show_reviews', [
-            'label'     => __( 'Show Reviews', 'mh-plug' ),
+            'label'     => __( 'Show Reviews', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SWITCHER,
             'default'   => 'yes',
             'separator' => 'before',
         ] );
         $this->add_control( 'title_reviews', [
-            'label'     => __( 'Reviews Title', 'mh-plug' ),
+            'label'     => __( 'Reviews Title', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::TEXT,
-            'default'   => __( 'Reviews', 'mh-plug' ),
+            'default'   => __( 'Reviews', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'show_reviews' => 'yes' ],
         ] );
         
         // 🚀 NEW: Show Review Count Toggle
         $this->add_control( 'show_reviews_count', [
-            'label'     => __( 'Show Review Count in Title', 'mh-plug' ),
+            'label'     => __( 'Show Review Count in Title', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SWITCHER,
             'default'   => 'yes',
-            'description' => __( 'Will display as "Reviews (5)"', 'mh-plug' ),
+            'description' => __( 'Will display as "Reviews (5)"', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'show_reviews' => 'yes' ],
         ] );
 
@@ -118,7 +118,7 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: ACCORDION SPECIFIC ── */
         $this->start_controls_section( 'style_accordion_header', [
-            'label'     => __( 'Accordion Headers', 'mh-plug' ),
+            'label'     => __( 'Accordion Headers', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'layout_style' => 'accordion' ],
         ] );
@@ -129,30 +129,30 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->start_controls_tabs( 'acc_header_style_tabs' );
-        $this->start_controls_tab( 'acc_header_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'acc_header_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'acc_header_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#333333',
             'selectors' => [ '{{WRAPPER}} .mh-accordion-header' => 'color: {{VALUE}};' ],
         ] );
         $this->add_control( 'acc_icon_color', [
-            'label'     => __( 'Icon Color', 'mh-plug' ),
+            'label'     => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#999999',
             'selectors' => [ '{{WRAPPER}} .mh-accordion-icon' => 'color: {{VALUE}};' ],
         ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'acc_header_active', [ 'label' => __( 'Active', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'acc_header_active', [ 'label' => __( 'Active', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'acc_header_color_active', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [ '{{WRAPPER}} .mh-accordion-item.active .mh-accordion-header' => 'color: {{VALUE}};' ],
         ] );
         $this->add_control( 'acc_icon_color_active', [
-            'label'     => __( 'Icon Color', 'mh-plug' ),
+            'label'     => __( 'Icon Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [ '{{WRAPPER}} .mh-accordion-item.active .mh-accordion-icon' => 'color: {{VALUE}};' ],
@@ -161,7 +161,7 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tabs();
 
         $this->add_control( 'acc_header_padding', [
-            'label'      => __( 'Padding', 'mh-plug' ),
+            'label'      => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'top' => 15, 'right' => 0, 'bottom' => 15, 'left' => 0, 'unit' => 'px' ],
@@ -170,7 +170,7 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'acc_border_color', [
-            'label'     => __( 'Separator Border Color', 'mh-plug' ),
+            'label'     => __( 'Separator Border Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#eeeeee',
             'selectors' => [ 
@@ -183,18 +183,18 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: TABS SPECIFIC ── */
         $this->start_controls_section( 'style_tabs_nav', [
-            'label'     => __( 'Tabs Navigation', 'mh-plug' ),
+            'label'     => __( 'Tabs Navigation', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'layout_style' => 'tabs' ],
         ] );
 
         $this->add_responsive_control( 'tabs_nav_align', [
-            'label'     => __( 'Alignment', 'mh-plug' ),
+            'label'     => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
-                'flex-start' => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center'     => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'flex-end'   => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+                'flex-start' => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center'     => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'flex-end'   => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
             ],
             'default'   => 'flex-start',
             'selectors' => [ '{{WRAPPER}} .mh-tabs-nav' => 'justify-content: {{VALUE}};', ],
@@ -206,7 +206,7 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'tabs_nav_spacing', [
-            'label'      => __( 'Spacing Between Tabs', 'mh-plug' ),
+            'label'      => __( 'Spacing Between Tabs', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'default'    => [ 'size' => 10 ],
@@ -214,36 +214,36 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->start_controls_tabs( 'tabs_nav_style_tabs' );
-        $this->start_controls_tab( 'tabs_nav_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tabs_nav_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'tabs_nav_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#777777',
             'selectors' => [ '{{WRAPPER}} .mh-tab-btn' => 'color: {{VALUE}};' ],
         ] );
         $this->add_control( 'tabs_nav_bg', [
-            'label'     => __( 'Background Color', 'mh-plug' ),
+            'label'     => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#f5f5f5',
             'selectors' => [ '{{WRAPPER}} .mh-tab-btn' => 'background-color: {{VALUE}};' ],
         ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'tabs_nav_active', [ 'label' => __( 'Active', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tabs_nav_active', [ 'label' => __( 'Active', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'tabs_nav_color_active', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [ '{{WRAPPER}} .mh-tab-btn.mh-active-tab' => 'color: {{VALUE}};' ],
         ] );
         $this->add_control( 'tabs_nav_bg_active', [
-            'label'     => __( 'Background Color', 'mh-plug' ),
+            'label'     => __( 'Background Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffffff',
             'selectors' => [ '{{WRAPPER}} .mh-tab-btn.mh-active-tab' => 'background-color: {{VALUE}};' ],
         ] );
         $this->add_control( 'tabs_nav_border_active', [
-            'label'     => __( 'Border Color', 'mh-plug' ),
+            'label'     => __( 'Border Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#d63638',
             'selectors' => [ '{{WRAPPER}} .mh-tab-btn.mh-active-tab' => 'border-color: {{VALUE}};' ],
@@ -252,7 +252,7 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
         $this->end_controls_tabs();
 
         $this->add_control( 'tabs_nav_border_width', [
-            'label'      => __( 'Border Width', 'mh-plug' ),
+            'label'      => __( 'Border Width', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px' ],
             'default'    => [ 'top' => 0, 'right' => 0, 'bottom' => 2, 'left' => 0, 'unit' => 'px' ],
@@ -261,7 +261,7 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'tabs_nav_padding', [
-            'label'      => __( 'Padding', 'mh-plug' ),
+            'label'      => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'top' => 12, 'right' => 20, 'bottom' => 12, 'left' => 20, 'unit' => 'px' ],
@@ -272,12 +272,12 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: SHARED CONTENT AREA ── */
         $this->start_controls_section( 'style_shared_content', [
-            'label' => __( 'Inner Content Text', 'mh-plug' ),
+            'label' => __( 'Inner Content Text', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control( 'content_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#555555',
             'selectors' => [ 
@@ -292,7 +292,7 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'content_padding', [
-            'label'      => __( 'Padding', 'mh-plug' ),
+            'label'      => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'top' => 15, 'right' => 0, 'bottom' => 15, 'left' => 0, 'unit' => 'px' ],
@@ -306,31 +306,31 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: TABLE (ADDITIONAL INFO) ── */
         $this->start_controls_section( 'style_table_content', [
-            'label' => __( 'Table (Additional Info)', 'mh-plug' ),
+            'label' => __( 'Table (Additional Info)', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
             'name'     => 'table_th_typography',
-            'label'    => __( 'Heading Typography', 'mh-plug' ),
+            'label'    => __( 'Heading Typography', 'mh-plug-ecommerce-builder-widgets' ),
             'selector' => '{{WRAPPER}} .woocommerce-product-attributes th',
         ] );
 
         $this->add_group_control( Group_Control_Typography::get_type(), [
             'name'     => 'table_td_typography',
-            'label'    => __( 'Content Typography', 'mh-plug' ),
+            'label'    => __( 'Content Typography', 'mh-plug-ecommerce-builder-widgets' ),
             'selector' => '{{WRAPPER}} .woocommerce-product-attributes td',
         ] );
 
         $this->add_control( 'table_th_color', [
-            'label'     => __( 'Heading Color', 'mh-plug' ),
+            'label'     => __( 'Heading Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#111111',
             'selectors' => [ '{{WRAPPER}} .woocommerce-product-attributes th' => 'color: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'table_td_color', [
-            'label'     => __( 'Content Color', 'mh-plug' ),
+            'label'     => __( 'Content Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#555555',
             'selectors' => [ '{{WRAPPER}} .woocommerce-product-attributes td' => 'color: {{VALUE}};' ],
@@ -338,13 +338,13 @@ class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
 
         $this->add_group_control( Group_Control_Border::get_type(), [
             'name'     => 'table_border',
-            'label'    => __( 'Cell Borders', 'mh-plug' ),
+            'label'    => __( 'Cell Borders', 'mh-plug-ecommerce-builder-widgets' ),
             'selector' => '{{WRAPPER}} .woocommerce-product-attributes th, {{WRAPPER}} .woocommerce-product-attributes td',
             'separator' => 'before',
         ] );
 
         $this->add_responsive_control( 'table_padding', [
-            'label'      => __( 'Cell Padding', 'mh-plug' ),
+            'label'      => __( 'Cell Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'top' => 10, 'right' => 0, 'bottom' => 10, 'left' => 0, 'unit' => 'px' ],

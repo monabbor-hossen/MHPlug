@@ -19,7 +19,7 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 	}
 
 	public function get_title() {
-		return __( 'MH Button', 'mhds-plug' );
+		return __( 'MH Button', 'mh-plug-ecommerce-builder-widgets' );
 	}
 
 	public function get_icon() {
@@ -37,7 +37,7 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'content_section',
 			[
-				'label' => __( 'Content', 'mhds-plug' ),
+				'label' => __( 'Content', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -45,10 +45,10 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'button_text',
 			[
-				'label'       => __( 'Text', 'mhds-plug' ),
+				'label'       => __( 'Text', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => __( 'Click Here', 'mhds-plug' ),
-				'placeholder' => __( 'Click Here', 'mhds-plug' ),
+				'default'     => __( 'Click Here', 'mh-plug-ecommerce-builder-widgets' ),
+				'placeholder' => __( 'Click Here', 'mh-plug-ecommerce-builder-widgets' ),
 				'dynamic'     => [
 					'active' => true,
 				],
@@ -58,9 +58,9 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'button_url',
 			[
-				'label'       => __( 'Link', 'mhds-plug' ),
+				'label'       => __( 'Link', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'        => Controls_Manager::URL,
-				'placeholder' => __( 'https://your-link.com', 'mhds-plug' ),
+				'placeholder' => __( 'https://your-link.com', 'mh-plug-ecommerce-builder-widgets' ),
 				'default'     => [
 					'url' => '#',
 				],
@@ -73,23 +73,23 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			[
-				'label'        => __( 'Alignment', 'mhds-plug' ),
+				'label'        => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'         => Controls_Manager::CHOOSE,
 				'options'      => [
 					'left'    => [
-						'title' => __( 'Left', 'mhds-plug' ),
+						'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center'  => [
-						'title' => __( 'Center', 'mhds-plug' ),
+						'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'   => [
-						'title' => __( 'Right', 'mhds-plug' ),
+						'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 					'justify' => [
-						'title' => __( 'Justified', 'mhds-plug' ),
+						'title' => __( 'Justified', 'mh-plug-ecommerce-builder-widgets' ),
 						'icon'  => 'eicon-text-align-justify',
 					],
 				],
@@ -101,15 +101,15 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'size',
 			[
-				'label'   => __( 'Size', 'mhds-plug' ),
+				'label'   => __( 'Size', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'sm',
 				'options' => [
-					'xs' => __( 'Extra Small', 'mhds-plug' ),
-					'sm' => __( 'Small', 'mhds-plug' ),
-					'md' => __( 'Medium', 'mhds-plug' ),
-					'lg' => __( 'Large', 'mhds-plug' ),
-					'xl' => __( 'Extra Large', 'mhds-plug' ),
+					'xs' => __( 'Extra Small', 'mh-plug-ecommerce-builder-widgets' ),
+					'sm' => __( 'Small', 'mh-plug-ecommerce-builder-widgets' ),
+					'md' => __( 'Medium', 'mh-plug-ecommerce-builder-widgets' ),
+					'lg' => __( 'Large', 'mh-plug-ecommerce-builder-widgets' ),
+					'xl' => __( 'Extra Large', 'mh-plug-ecommerce-builder-widgets' ),
 				],
 			]
 		);
@@ -117,7 +117,7 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'icon',
 			[
-				'label'   => __( 'Icon', 'mhds-plug' ),
+				'label'   => __( 'Icon', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'    => Controls_Manager::ICONS,
 				'default' => [
 					'value'   => 'fas fa-arrow-right',
@@ -129,12 +129,12 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'icon_align',
 			[
-				'label'     => __( 'Icon Position', 'mhds-plug' ),
+				'label'     => __( 'Icon Position', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'right',
 				'options'   => [
-					'left'  => __( 'Before', 'mhds-plug' ),
-					'right' => __( 'After', 'mhds-plug' ),
+					'left'  => __( 'Before', 'mh-plug-ecommerce-builder-widgets' ),
+					'right' => __( 'After', 'mh-plug-ecommerce-builder-widgets' ),
 				],
 				'condition' => [
 					'icon[value]!' => '',
@@ -145,7 +145,7 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'icon_indent',
 			[
-				'label'     => __( 'Icon Spacing', 'mhds-plug' ),
+				'label'     => __( 'Icon Spacing', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -170,7 +170,7 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'style_section',
 			[
-				'label' => __( 'Button Style', 'mhds-plug' ),
+				'label' => __( 'Button Style', 'mh-plug-ecommerce-builder-widgets' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -197,14 +197,14 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_normal',
 			[
-				'label' => __( 'Normal', 'mhds-plug' ),
+				'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
 		$this->add_control(
 			'button_text_color',
 			[
-				'label'     => __( 'Text Color', 'mhds-plug' ),
+				'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
@@ -219,7 +219,7 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 			Group_Control_Background::get_type(),
 			[
 				'name'     => 'background',
-				'label'    => __( 'Background', 'mhds-plug' ),
+				'label'    => __( 'Background', 'mh-plug-ecommerce-builder-widgets' ),
 				'types'    => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .mh-button',
 			]
@@ -239,14 +239,14 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_hover',
 			[
-				'label' => __( 'Hover', 'mhds-plug' ),
+				'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ),
 			]
 		);
 
 		$this->add_control(
 			'hover_color',
 			[
-				'label'     => __( 'Text Color', 'mhds-plug' ),
+				'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .mh-button:hover, {{WRAPPER}} .mh-button:focus' => 'color: {{VALUE}};',
@@ -260,7 +260,7 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 			Group_Control_Background::get_type(),
 			[
 				'name'     => 'button_background_hover',
-				'label'    => __( 'Background', 'mhds-plug' ),
+				'label'    => __( 'Background', 'mh-plug-ecommerce-builder-widgets' ),
 				'types'    => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .mh-button:hover, {{WRAPPER}} .mh-button:focus',
 			]
@@ -277,7 +277,7 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'hover_animation',
 			[
-				'label' => __( 'Hover Animation', 'mhds-plug' ),
+				'label' => __( 'Hover Animation', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'  => Controls_Manager::HOVER_ANIMATION,
 			]
 		);
@@ -286,10 +286,10 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'icon_hover_animation',
 			[
-				'label'        => __( 'Icon Slide Effect', 'mhds-plug' ),
+				'label'        => __( 'Icon Slide Effect', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'mhds-plug' ),
-				'label_off'    => __( 'No', 'mhds-plug' ),
+				'label_on'     => __( 'Yes', 'mh-plug-ecommerce-builder-widgets' ),
+				'label_off'    => __( 'No', 'mh-plug-ecommerce-builder-widgets' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 				'separator'    => 'before',
@@ -314,7 +314,7 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'border_radius',
 			[
-				'label'      => __( 'Border Radius', 'mhds-plug' ),
+				'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -326,7 +326,7 @@ class MH_Button_Widget extends \Elementor\Widget_Base {
 		$this->add_responsive_control(
 			'text_padding',
 			[
-				'label'      => __( 'Padding', 'mhds-plug' ),
+				'label'      => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors'  => [

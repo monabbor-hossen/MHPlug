@@ -27,7 +27,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
     // ──────────────────────────────────────────────────────────────────────────
 
     public function get_name()       { return 'mh_combo_products'; }
-    public function get_title()      { return __( 'MH Combo Products', 'mh-plug' ); }
+    public function get_title()      { return __( 'MH Combo Products', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon()       { return 'eicon-products'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
@@ -46,25 +46,25 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
 
         /* ── Layout ── */
         $this->start_controls_section( 'section_layout', [
-            'label' => __( 'Layout', 'mh-plug' ),
+            'label' => __( 'Layout', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_responsive_control( 'combo_layout', [
-            'label'   => __( 'Layout', 'mh-plug' ),
+            'label'   => __( 'Layout', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::CHOOSE,
             'default' => 'grid',
             'options' => [
-                'grid'     => [ 'title' => __( 'Grid', 'mh-plug' ), 'icon' => 'eicon-apps' ],
-                'list'     => [ 'title' => __( 'List', 'mh-plug' ), 'icon' => 'eicon-editor-list-ul' ],
-                'carousel' => [ 'title' => __( 'Carousel', 'mh-plug' ), 'icon' => 'eicon-slider-push' ],
+                'grid'     => [ 'title' => __( 'Grid', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-apps' ],
+                'list'     => [ 'title' => __( 'List', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-editor-list-ul' ],
+                'carousel' => [ 'title' => __( 'Carousel', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-slider-push' ],
             ],
             'toggle' => false,
         ] );
 
         /* Columns – visible for grid & carousel */
         $this->add_responsive_control( 'columns', [
-            'label'          => __( 'Columns', 'mh-plug' ),
+            'label'          => __( 'Columns', 'mh-plug-ecommerce-builder-widgets' ),
             'type'           => Controls_Manager::NUMBER,
             'default'        => 3,
             'tablet_default' => 2,
@@ -79,7 +79,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
 
         /* Gap */
         $this->add_responsive_control( 'items_gap', [
-            'label'      => __( 'Gap Between Items', 'mh-plug' ),
+            'label'      => __( 'Gap Between Items', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'rem' ],
             'range'      => [ 'px' => [ 'min' => 0, 'max' => 100 ] ],
@@ -99,36 +99,36 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
 
         /* Content toggles */
         $this->add_control( 'show_price', [
-            'label'        => __( 'Show Price', 'mh-plug' ),
+            'label'        => __( 'Show Price', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'link_items', [
-            'label'        => __( 'Link to Product', 'mh-plug' ),
+            'label'        => __( 'Link to Product', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'empty_message', [
-            'label'       => __( 'Empty State Message', 'mh-plug' ),
+            'label'       => __( 'Empty State Message', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::TEXT,
-            'default'     => __( 'No products found in this combo.', 'mh-plug' ),
+            'default'     => __( 'No products found in this combo.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->end_controls_section();
 
         /* ── Carousel Options (only when layout = carousel) ── */
         $this->start_controls_section( 'section_carousel', [
-            'label'     => __( 'Carousel Options', 'mh-plug' ),
+            'label'     => __( 'Carousel Options', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_CONTENT,
             'condition' => [ 'combo_layout' => 'carousel' ],
         ] );
 
         $this->add_control( 'carousel_cols_tablet', [
-            'label'   => __( 'Columns (Tablet)', 'mh-plug' ),
+            'label'   => __( 'Columns (Tablet)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::NUMBER,
             'default' => 2,
             'min'     => 1,
@@ -136,7 +136,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'carousel_cols_mobile', [
-            'label'   => __( 'Columns (Mobile)', 'mh-plug' ),
+            'label'   => __( 'Columns (Mobile)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::NUMBER,
             'default' => 1,
             'min'     => 1,
@@ -144,28 +144,28 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'carousel_arrows', [
-            'label'        => __( 'Show Arrows', 'mh-plug' ),
+            'label'        => __( 'Show Arrows', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'carousel_dots', [
-            'label'        => __( 'Show Dots', 'mh-plug' ),
+            'label'        => __( 'Show Dots', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'carousel_autoplay', [
-            'label'        => __( 'Autoplay', 'mh-plug' ),
+            'label'        => __( 'Autoplay', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
             'return_value' => 'yes',
             'default'      => '',
         ] );
 
         $this->add_control( 'carousel_autoplay_speed', [
-            'label'     => __( 'Autoplay Speed (ms)', 'mh-plug' ),
+            'label'     => __( 'Autoplay Speed (ms)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::NUMBER,
             'default'   => 3000,
             'min'       => 500,
@@ -181,7 +181,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
 
         /* ── Card / Box ── */
         $this->start_controls_section( 'section_style_card', [
-            'label' => __( 'Card / Box', 'mh-plug' ),
+            'label' => __( 'Card / Box', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
@@ -192,7 +192,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'card_padding', [
-            'label'      => __( 'Padding', 'mh-plug' ),
+            'label'      => __( 'Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'selectors'  => [
@@ -201,7 +201,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'card_border_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%', 'em' ],
             'selectors'  => [
@@ -223,12 +223,12 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
 
         /* ── Image ── */
         $this->start_controls_section( 'section_style_image', [
-            'label' => __( 'Image', 'mh-plug' ),
+            'label' => __( 'Image', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_responsive_control( 'image_width', [
-            'label'      => __( 'Width', 'mh-plug' ),
+            'label'      => __( 'Width', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', '%' ],
             'range'      => [
@@ -242,7 +242,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'image_height', [
-            'label'      => __( 'Height', 'mh-plug' ),
+            'label'      => __( 'Height', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'vh' ],
             'range'      => [ 'px' => [ 'min' => 50, 'max' => 600 ] ],
@@ -252,14 +252,14 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'image_object_fit', [
-            'label'     => __( 'Object Fit', 'mh-plug' ),
+            'label'     => __( 'Object Fit', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::SELECT,
             'default'   => 'cover',
             'options'   => [
-                'cover'   => __( 'Cover',   'mh-plug' ),
-                'contain' => __( 'Contain', 'mh-plug' ),
-                'fill'    => __( 'Fill',    'mh-plug' ),
-                'none'    => __( 'None',    'mh-plug' ),
+                'cover'   => __( 'Cover',   'mh-plug-ecommerce-builder-widgets' ),
+                'contain' => __( 'Contain', 'mh-plug-ecommerce-builder-widgets' ),
+                'fill'    => __( 'Fill',    'mh-plug-ecommerce-builder-widgets' ),
+                'none'    => __( 'None',    'mh-plug-ecommerce-builder-widgets' ),
             ],
             'selectors' => [
                 '{{WRAPPER}} .mh-combo-image img' => 'object-fit: {{VALUE}};',
@@ -267,7 +267,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'image_border_radius', [
-            'label'      => __( 'Border Radius', 'mh-plug' ),
+            'label'      => __( 'Border Radius', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', '%' ],
             'selectors'  => [
@@ -276,7 +276,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'image_spacing', [
-            'label'      => __( 'Spacing (margin-bottom)', 'mh-plug' ),
+            'label'      => __( 'Spacing (margin-bottom)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'unit' => 'px', 'size' => 0 ],
@@ -290,23 +290,23 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
 
         /* ── Content (Title & Price) ── */
         $this->start_controls_section( 'section_style_content', [
-            'label' => __( 'Content', 'mh-plug' ),
+            'label' => __( 'Content', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_responsive_control( 'content_align', [
-            'label'     => __( 'Alignment', 'mh-plug' ),
+            'label'     => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
-                'left'   => [ 'title' => __( 'Left',   'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center' => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'right'  => [ 'title' => __( 'Right',  'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+                'left'   => [ 'title' => __( 'Left',   'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center' => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'right'  => [ 'title' => __( 'Right',  'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
             ],
             'selectors' => [ '{{WRAPPER}} .mh-combo-info' => 'text-align: {{VALUE}};' ],
         ] );
 
         $this->add_responsive_control( 'info_padding', [
-            'label'      => __( 'Info Padding', 'mh-plug' ),
+            'label'      => __( 'Info Padding', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::DIMENSIONS,
             'size_units' => [ 'px', 'em', '%' ],
             'default'    => [ 'top' => '12', 'right' => '0', 'bottom' => '0', 'left' => '0', 'unit' => 'px' ],
@@ -317,13 +317,13 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
 
         /* Title */
         $this->add_control( 'heading_title', [
-            'label'     => __( 'Title', 'mh-plug' ),
+            'label'     => __( 'Title', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::HEADING,
             'separator' => 'before',
         ] );
 
         $this->add_control( 'title_color', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [
                 '{{WRAPPER}} .mh-combo-title'   => 'color: {{VALUE}};',
@@ -332,7 +332,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'title_hover_color', [
-            'label'     => __( 'Hover Color', 'mh-plug' ),
+            'label'     => __( 'Hover Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-combo-title a:hover' => 'color: {{VALUE}};' ],
         ] );
@@ -343,7 +343,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'title_spacing', [
-            'label'      => __( 'Spacing Below Title', 'mh-plug' ),
+            'label'      => __( 'Spacing Below Title', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'unit' => 'px', 'size' => 6 ],
@@ -352,14 +352,14 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
 
         /* Price */
         $this->add_control( 'heading_price', [
-            'label'     => __( 'Price', 'mh-plug' ),
+            'label'     => __( 'Price', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::HEADING,
             'separator' => 'before',
             'condition' => [ 'show_price' => 'yes' ],
         ] );
 
         $this->add_control( 'price_color', [
-            'label'     => __( 'Price Color', 'mh-plug' ),
+            'label'     => __( 'Price Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'condition' => [ 'show_price' => 'yes' ],
             'selectors' => [
@@ -369,7 +369,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'price_del_color', [
-            'label'     => __( 'Old / Sale Price Color', 'mh-plug' ),
+            'label'     => __( 'Old / Sale Price Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#aaaaaa',
             'condition' => [ 'show_price' => 'yes' ],
@@ -401,8 +401,8 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
             if ( \Elementor\Plugin::instance()->editor->is_edit_mode() ) {
                 $this->_render_placeholder(
                     '#cccccc',
-                    __( 'MH Combo Products', 'mh-plug' ),
-                    __( 'Place this widget inside a Single Product template for a Combo product.', 'mh-plug' )
+                    __( 'MH Combo Products', 'mh-plug-ecommerce-builder-widgets' ),
+                    __( 'Place this widget inside a Single Product template for a Combo product.', 'mh-plug-ecommerce-builder-widgets' )
                 );
             }
             return;
@@ -413,8 +413,8 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
             if ( \Elementor\Plugin::instance()->editor->is_edit_mode() ) {
                 $this->_render_placeholder(
                     '#f0a500',
-                    __( 'Not a Combo product', 'mh-plug' ),
-                    __( 'This widget only renders for "Combo" product types.', 'mh-plug' )
+                    __( 'Not a Combo product', 'mh-plug-ecommerce-builder-widgets' ),
+                    __( 'This widget only renders for "Combo" product types.', 'mh-plug-ecommerce-builder-widgets' )
                 );
             }
             return;
@@ -439,7 +439,7 @@ class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
         if ( empty( $ids ) ) {
             $msg = ! empty( $settings['empty_message'] )
                 ? $settings['empty_message']
-                : __( 'No products found in this combo.', 'mh-plug' );
+                : __( 'No products found in this combo.', 'mh-plug-ecommerce-builder-widgets' );
             echo '<p class="mh-combo-empty">' . esc_html( $msg ) . '</p>';
             return;
         }

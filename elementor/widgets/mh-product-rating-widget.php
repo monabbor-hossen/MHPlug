@@ -16,7 +16,7 @@ use Elementor\Group_Control_Typography;
 class MH_Product_Rating_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_rating'; }
-    public function get_title() { return __( 'MH Product Rating', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Product Rating', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-rating'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'product', 'rating', 'stars', 'reviews', 'woocommerce', 'mh' ]; }
@@ -27,55 +27,55 @@ class MH_Product_Rating_Widget extends \Elementor\Widget_Base {
 
         /* ── CONTENT: RATING ELEMENTS ── */
         $this->start_controls_section( 'section_rating_content', [
-            'label' => __( 'Rating Elements', 'mh-plug' ),
+            'label' => __( 'Rating Elements', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_control( 'show_numeric', [
-            'label'        => __( 'Show Numeric Rating (e.g., 4.8)', 'mh-plug' ),
+            'label'        => __( 'Show Numeric Rating (e.g., 4.8)', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
-            'label_on'     => __( 'Show', 'mh-plug' ),
-            'label_off'    => __( 'Hide', 'mh-plug' ),
+            'label_on'     => __( 'Show', 'mh-plug-ecommerce-builder-widgets' ),
+            'label_off'    => __( 'Hide', 'mh-plug-ecommerce-builder-widgets' ),
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'show_stars', [
-            'label'        => __( 'Show Stars', 'mh-plug' ),
+            'label'        => __( 'Show Stars', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
-            'label_on'     => __( 'Show', 'mh-plug' ),
-            'label_off'    => __( 'Hide', 'mh-plug' ),
+            'label_on'     => __( 'Show', 'mh-plug-ecommerce-builder-widgets' ),
+            'label_off'    => __( 'Hide', 'mh-plug-ecommerce-builder-widgets' ),
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'show_count', [
-            'label'        => __( 'Show Review Count', 'mh-plug' ),
+            'label'        => __( 'Show Review Count', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
-            'label_on'     => __( 'Show', 'mh-plug' ),
-            'label_off'    => __( 'Hide', 'mh-plug' ),
+            'label_on'     => __( 'Show', 'mh-plug-ecommerce-builder-widgets' ),
+            'label_off'    => __( 'Hide', 'mh-plug-ecommerce-builder-widgets' ),
             'return_value' => 'yes',
             'default'      => 'yes',
         ] );
 
         $this->add_control( 'hide_empty', [
-            'label'        => __( 'Hide if No Reviews', 'mh-plug' ),
+            'label'        => __( 'Hide if No Reviews', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
-            'label_on'     => __( 'Yes', 'mh-plug' ),
-            'label_off'    => __( 'No', 'mh-plug' ),
+            'label_on'     => __( 'Yes', 'mh-plug-ecommerce-builder-widgets' ),
+            'label_off'    => __( 'No', 'mh-plug-ecommerce-builder-widgets' ),
             'return_value' => 'yes',
             'default'      => 'no',
-            'description'  => __( 'If enabled, the widget will completely hide if the product has 0 reviews.', 'mh-plug' ),
+            'description'  => __( 'If enabled, the widget will completely hide if the product has 0 reviews.', 'mh-plug-ecommerce-builder-widgets' ),
             'separator'    => 'before',
         ] );
 
         $this->add_responsive_control( 'align', [
-            'label'     => __( 'Alignment', 'mh-plug' ),
+            'label'     => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
-                'flex-start' => [ 'title' => __( 'Left', 'mh-plug' ), 'icon' => 'eicon-text-align-left' ],
-                'center'     => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'flex-end'   => [ 'title' => __( 'Right', 'mh-plug' ), 'icon' => 'eicon-text-align-right' ],
+                'flex-start' => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-left' ],
+                'center'     => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'flex-end'   => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-right' ],
             ],
             'default'   => 'flex-start',
             'selectors' => [ '{{WRAPPER}} .mh-rating-wrapper' => 'justify-content: {{VALUE}};', ],
@@ -83,7 +83,7 @@ class MH_Product_Rating_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'gap', [
-            'label'      => __( 'Gap Between Elements', 'mh-plug' ),
+            'label'      => __( 'Gap Between Elements', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'default'    => [ 'size' => 10 ],
@@ -94,27 +94,27 @@ class MH_Product_Rating_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: STARS ── */
         $this->start_controls_section( 'style_stars', [
-            'label'     => __( 'Stars Style', 'mh-plug' ),
+            'label'     => __( 'Stars Style', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_stars' => 'yes' ],
         ] );
 
         $this->add_control( 'star_color', [
-            'label'     => __( 'Filled Star Color', 'mh-plug' ),
+            'label'     => __( 'Filled Star Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#ffb200', // Classic gold
             'selectors' => [ '{{WRAPPER}} .mh-stars-container i.fas' => 'color: {{VALUE}};' ],
         ] );
 
         $this->add_control( 'empty_star_color', [
-            'label'     => __( 'Empty Star Color', 'mh-plug' ),
+            'label'     => __( 'Empty Star Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#e2e2e2',
             'selectors' => [ '{{WRAPPER}} .mh-stars-container i.far' => 'color: {{VALUE}};' ],
         ] );
 
         $this->add_responsive_control( 'star_size', [
-            'label'      => __( 'Star Size', 'mh-plug' ),
+            'label'      => __( 'Star Size', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'size' => 14, 'unit' => 'px' ],
@@ -122,7 +122,7 @@ class MH_Product_Rating_Widget extends \Elementor\Widget_Base {
         ] );
         
         $this->add_responsive_control( 'star_gap', [
-            'label'      => __( 'Gap Between Stars', 'mh-plug' ),
+            'label'      => __( 'Gap Between Stars', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'default'    => [ 'size' => 2, 'unit' => 'px' ],
@@ -133,13 +133,13 @@ class MH_Product_Rating_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: NUMERIC RATING ── */
         $this->start_controls_section( 'style_numeric', [
-            'label'     => __( 'Numeric Rating Style (4.8)', 'mh-plug' ),
+            'label'     => __( 'Numeric Rating Style (4.8)', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_numeric' => 'yes' ],
         ] );
 
         $this->add_control( 'numeric_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#1d2327',
             'selectors' => [ '{{WRAPPER}} .mh-numeric-rating' => 'color: {{VALUE}};' ],
@@ -154,13 +154,13 @@ class MH_Product_Rating_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLE: REVIEW COUNT ── */
         $this->start_controls_section( 'style_count', [
-            'label'     => __( 'Review Count Style', 'mh-plug' ),
+            'label'     => __( 'Review Count Style', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'       => Controls_Manager::TAB_STYLE,
             'condition' => [ 'show_count' => 'yes' ],
         ] );
 
         $this->add_control( 'count_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#777777',
             'selectors' => [ '{{WRAPPER}} .mh-rating-count' => 'color: {{VALUE}};' ],
@@ -239,7 +239,7 @@ class MH_Product_Rating_Widget extends \Elementor\Widget_Base {
             <?php // 3. Review Count ?>
             <?php if ( 'yes' === $settings['show_count'] ) : ?>
                 <div class="mh-rating-count">
-                    (<?php echo esc_html( $rating_count ); ?> <?php echo _n( 'Review', 'Reviews', $rating_count, 'mh-plug' ); ?>)
+                    (<?php echo esc_html( $rating_count ); ?> <?php echo _n( 'Review', 'Reviews', $rating_count, 'mh-plug-ecommerce-builder-widgets' ); ?>)
                 </div>
             <?php endif; ?>
 

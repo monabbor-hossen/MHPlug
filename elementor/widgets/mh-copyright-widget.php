@@ -16,7 +16,7 @@ use Elementor\Group_Control_Typography;
 class MH_Copyright_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_copyright'; }
-    public function get_title() { return __( 'MH Copyright', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Copyright', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-t-letter'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
     public function get_keywords() { return [ 'copyright', 'footer', 'text', 'year', 'mh' ]; }
@@ -27,23 +27,23 @@ class MH_Copyright_Widget extends \Elementor\Widget_Base {
          * CONTENT TAB
          * ========================================== */
         $this->start_controls_section( 'section_content', [
-            'label' => __( 'Copyright Text', 'mh-plug' ),
+            'label' => __( 'Copyright Text', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_control( 'copyright_text', [
-            'label'       => __( 'Content', 'mh-plug' ),
+            'label'       => __( 'Content', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::WYSIWYG,
-            'default'     => __( '&copy; [year] [site_title]. All rights reserved.', 'mh-plug' ),
-            'description' => __( 'Use <strong>[year]</strong> to display the current year, and <strong>[site_title]</strong> to display your website name.', 'mh-plug' ),
+            'default'     => __( '&copy; [year] [site_title]. All rights reserved.', 'mh-plug-ecommerce-builder-widgets' ),
+            'description' => __( 'Use <strong>[year]</strong> to display the current year, and <strong>[site_title]</strong> to display your website name.', 'mh-plug-ecommerce-builder-widgets' ),
         ] );
 
         $this->add_responsive_control( 'align', [
-            'label'     => __( 'Alignment', 'mh-plug' ),
+            'label'     => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
-                'left'   => [ 'title' => __( 'Left', 'mh-plug' ),   'icon' => 'eicon-text-align-left' ],
-                'center' => [ 'title' => __( 'Center', 'mh-plug' ), 'icon' => 'eicon-text-align-center' ],
-                'right'  => [ 'title' => __( 'Right', 'mh-plug' ),  'icon' => 'eicon-text-align-right' ],
+                'left'   => [ 'title' => __( 'Left', 'mh-plug-ecommerce-builder-widgets' ),   'icon' => 'eicon-text-align-left' ],
+                'center' => [ 'title' => __( 'Center', 'mh-plug-ecommerce-builder-widgets' ), 'icon' => 'eicon-text-align-center' ],
+                'right'  => [ 'title' => __( 'Right', 'mh-plug-ecommerce-builder-widgets' ),  'icon' => 'eicon-text-align-right' ],
             ],
             'selectors' => [ '{{WRAPPER}} .mh-copyright-wrapper' => 'text-align: {{VALUE}};' ],
         ] );
@@ -54,12 +54,12 @@ class MH_Copyright_Widget extends \Elementor\Widget_Base {
          * STYLE TAB
          * ========================================== */
         $this->start_controls_section( 'section_style', [
-            'label' => __( 'Text Style', 'mh-plug' ),
+            'label' => __( 'Text Style', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_control( 'text_color', [
-            'label'     => __( 'Text Color', 'mh-plug' ),
+            'label'     => __( 'Text Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#777777',
             'selectors' => [ '{{WRAPPER}} .mh-copyright-wrapper' => 'color: {{VALUE}};' ],
@@ -72,24 +72,24 @@ class MH_Copyright_Widget extends \Elementor\Widget_Base {
 
         // Link Colors
         $this->add_control( 'link_heading', [
-            'label'     => __( 'Link Colors', 'mh-plug' ),
+            'label'     => __( 'Link Colors', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::HEADING,
             'separator' => 'before',
         ] );
 
         $this->start_controls_tabs( 'tabs_link_colors' );
 
-        $this->start_controls_tab( 'tab_link_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_link_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'link_color', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-copyright-wrapper a' => 'color: {{VALUE}}; text-decoration: none; transition: 0.3s;' ],
         ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'tab_link_hover', [ 'label' => __( 'Hover', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_link_hover', [ 'label' => __( 'Hover', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'link_hover_color', [
-            'label'     => __( 'Color', 'mh-plug' ),
+            'label'     => __( 'Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'selectors' => [ '{{WRAPPER}} .mh-copyright-wrapper a:hover' => 'color: {{VALUE}};' ],
         ] );

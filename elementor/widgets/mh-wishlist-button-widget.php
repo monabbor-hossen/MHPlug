@@ -14,7 +14,7 @@ use Elementor\Group_Control_Typography;
 class MH_Wishlist_Button_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_wishlist_button'; }
-    public function get_title() { return __( 'MH Wishlist Button', 'mh-plug' ); }
+    public function get_title() { return __( 'MH Wishlist Button', 'mh-plug-ecommerce-builder-widgets' ); }
     public function get_icon() { return 'eicon-heart'; }
     public function get_categories() { return [ 'mh-plug-widgets' ]; }
 
@@ -25,29 +25,29 @@ class MH_Wishlist_Button_Widget extends \Elementor\Widget_Base {
 
         /* ── CONTENT: LOGIC & BEHAVIOR ── */
         $this->start_controls_section( 'content_logic', [
-            'label' => __( 'Wishlist Behavior', 'mh-plug' ),
+            'label' => __( 'Wishlist Behavior', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_CONTENT,
         ] );
 
         $this->add_control( 'behavior', [
-            'label'   => __( 'Button Action', 'mh-plug' ),
+            'label'   => __( 'Button Action', 'mh-plug-ecommerce-builder-widgets' ),
             'type'    => Controls_Manager::SELECT,
             'default' => 'toggle',
             'options' => [
-                'toggle' => __( 'Toggle (Add / Remove instantly)', 'mh-plug' ),
-                'browse' => __( 'Browse (Go to Wishlist Page)', 'mh-plug' ),
+                'toggle' => __( 'Toggle (Add / Remove instantly)', 'mh-plug-ecommerce-builder-widgets' ),
+                'browse' => __( 'Browse (Go to Wishlist Page)', 'mh-plug-ecommerce-builder-widgets' ),
             ],
         ] );
 
         $this->add_control( 'wishlist_url', [
-            'label'       => __( 'Wishlist Page URL', 'mh-plug' ),
+            'label'       => __( 'Wishlist Page URL', 'mh-plug-ecommerce-builder-widgets' ),
             'type'        => Controls_Manager::URL,
-            'placeholder' => __( 'https://your-site.com/wishlist', 'mh-plug' ),
+            'placeholder' => __( 'https://your-site.com/wishlist', 'mh-plug-ecommerce-builder-widgets' ),
             'condition'   => [ 'behavior' => 'browse' ],
         ] );
 
         $this->add_control( 'show_label', [
-            'label'        => __( 'Show Text Label', 'mh-plug' ),
+            'label'        => __( 'Show Text Label', 'mh-plug-ecommerce-builder-widgets' ),
             'type'         => Controls_Manager::SWITCHER,
             'return_value' => 'yes',
             'default'      => 'yes',
@@ -55,28 +55,28 @@ class MH_Wishlist_Button_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_control( 'add_text', [
-            'label'     => __( '"Add" Text', 'mh-plug' ),
+            'label'     => __( '"Add" Text', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::TEXT,
-            'default'   => __( 'Add to wishlist', 'mh-plug' ),
+            'default'   => __( 'Add to wishlist', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'show_label' => 'yes' ],
         ] );
 
         $this->add_control( 'remove_text', [
-            'label'     => __( '"Remove" Text', 'mh-plug' ),
+            'label'     => __( '"Remove" Text', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::TEXT,
-            'default'   => __( 'Remove from wishlist', 'mh-plug' ),
+            'default'   => __( 'Remove from wishlist', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'show_label' => 'yes', 'behavior' => 'toggle' ],
         ] );
 
         $this->add_control( 'browse_text', [
-            'label'     => __( '"Browse" Text', 'mh-plug' ),
+            'label'     => __( '"Browse" Text', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::TEXT,
-            'default'   => __( 'Browse Wishlist', 'mh-plug' ),
+            'default'   => __( 'Browse Wishlist', 'mh-plug-ecommerce-builder-widgets' ),
             'condition' => [ 'show_label' => 'yes', 'behavior' => 'browse' ],
         ] );
 
         $this->add_responsive_control( 'align', [
-            'label'     => __( 'Alignment', 'mh-plug' ),
+            'label'     => __( 'Alignment', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::CHOOSE,
             'options'   => [
                 'left'   => [ 'title' => 'Left', 'icon' => 'eicon-text-align-left' ],
@@ -90,12 +90,12 @@ class MH_Wishlist_Button_Widget extends \Elementor\Widget_Base {
 
         /* ── STYLING ── */
         $this->start_controls_section( 'style_section', [
-            'label' => __( 'Icon & Text Styling', 'mh-plug' ),
+            'label' => __( 'Icon & Text Styling', 'mh-plug-ecommerce-builder-widgets' ),
             'tab'   => Controls_Manager::TAB_STYLE,
         ] );
 
         $this->add_responsive_control( 'icon_size', [
-            'label'      => __( 'Icon Size', 'mh-plug' ),
+            'label'      => __( 'Icon Size', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px', 'em' ],
             'default'    => [ 'size' => 16 ],
@@ -105,7 +105,7 @@ class MH_Wishlist_Button_Widget extends \Elementor\Widget_Base {
         ] );
 
         $this->add_responsive_control( 'icon_spacing', [
-            'label'      => __( 'Space Between Icon & Text', 'mh-plug' ),
+            'label'      => __( 'Space Between Icon & Text', 'mh-plug-ecommerce-builder-widgets' ),
             'type'       => Controls_Manager::SLIDER,
             'size_units' => [ 'px' ],
             'default'    => [ 'size' => 8 ],
@@ -122,9 +122,9 @@ class MH_Wishlist_Button_Widget extends \Elementor\Widget_Base {
 
         $this->start_controls_tabs( 'style_tabs' );
 
-        $this->start_controls_tab( 'tab_normal', [ 'label' => __( 'Normal', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_normal', [ 'label' => __( 'Normal', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'color_normal', [
-            'label'     => __( 'Text & Icon Color', 'mh-plug' ),
+            'label'     => __( 'Text & Icon Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#777777',
             'selectors' => [ 
@@ -134,9 +134,9 @@ class MH_Wishlist_Button_Widget extends \Elementor\Widget_Base {
         ] );
         $this->end_controls_tab();
 
-        $this->start_controls_tab( 'tab_active', [ 'label' => __( 'Added', 'mh-plug' ) ] );
+        $this->start_controls_tab( 'tab_active', [ 'label' => __( 'Added', 'mh-plug-ecommerce-builder-widgets' ) ] );
         $this->add_control( 'color_active', [
-            'label'     => __( 'Text & Icon Color', 'mh-plug' ),
+            'label'     => __( 'Text & Icon Color', 'mh-plug-ecommerce-builder-widgets' ),
             'type'      => Controls_Manager::COLOR,
             'default'   => '#d63638',
             'selectors' => [ 
@@ -153,18 +153,18 @@ class MH_Wishlist_Button_Widget extends \Elementor\Widget_Base {
         // ----------------------------------------------------
         // STYLE: SNACK ALERT (TOAST)
         // ----------------------------------------------------
-        $this->start_controls_section('section_style_toast', ['label' => __('Snack Alert (Toast)', 'mh-plug'), 'tab' => Controls_Manager::TAB_STYLE]);
+        $this->start_controls_section('section_style_toast', ['label' => __('Snack Alert (Toast)', 'mh-plug-ecommerce-builder-widgets'), 'tab' => Controls_Manager::TAB_STYLE]);
         $this->add_control('toast_position', [
-            'label' => __('Position', 'mh-plug'),
+            'label' => __('Position', 'mh-plug-ecommerce-builder-widgets'),
             'type' => Controls_Manager::SELECT,
             'default' => 'bottom-left',
             'options' => [
-                'bottom-left'   => __('Bottom Left', 'mh-plug'),
-                'bottom-center' => __('Bottom Center', 'mh-plug'),
-                'bottom-right'  => __('Bottom Right', 'mh-plug'),
-                'top-left'      => __('Top Left', 'mh-plug'),
-                'top-center'    => __('Top Center', 'mh-plug'),
-                'top-right'     => __('Top Right', 'mh-plug'),
+                'bottom-left'   => __('Bottom Left', 'mh-plug-ecommerce-builder-widgets'),
+                'bottom-center' => __('Bottom Center', 'mh-plug-ecommerce-builder-widgets'),
+                'bottom-right'  => __('Bottom Right', 'mh-plug-ecommerce-builder-widgets'),
+                'top-left'      => __('Top Left', 'mh-plug-ecommerce-builder-widgets'),
+                'top-center'    => __('Top Center', 'mh-plug-ecommerce-builder-widgets'),
+                'top-right'     => __('Top Right', 'mh-plug-ecommerce-builder-widgets'),
             ],
             'selectors_dictionary' => [
                 'bottom-left'   => 'bottom: 20px !important; left: 20px !important; top: auto !important; right: auto !important; align-items: flex-start !important; transform: none !important;',
@@ -178,14 +178,14 @@ class MH_Wishlist_Button_Widget extends \Elementor\Widget_Base {
                 'body .mh-toast-container' => '{{VALUE}}',
             ],
         ]);
-        $this->add_control('toast_bg', ['label' => __('Background Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => ['body .mh-toast' => 'background-color: {{VALUE}} !important;']]);
-        $this->add_control('toast_color', ['label' => __('Text Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => ['body .mh-toast' => 'color: {{VALUE}} !important;']]);
-        $this->add_control('toast_success_border', ['label' => __('Success Border Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#4caf50', 'selectors' => ['body .mh-toast-success' => 'border-left-color: {{VALUE}} !important;']]);
-        $this->add_control('toast_error_border', ['label' => __('Error Border Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#f44336', 'selectors' => ['body .mh-toast-error' => 'border-left-color: {{VALUE}} !important;']]);
-        $this->add_control('toast_info_border', ['label' => __('Info Border Color', 'mh-plug'), 'type' => Controls_Manager::COLOR, 'default' => '#2196f3', 'selectors' => ['body .mh-toast-info' => 'border-left-color: {{VALUE}} !important;']]);
+        $this->add_control('toast_bg', ['label' => __('Background Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => Controls_Manager::COLOR, 'default' => '#333333', 'selectors' => ['body .mh-toast' => 'background-color: {{VALUE}} !important;']]);
+        $this->add_control('toast_color', ['label' => __('Text Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => Controls_Manager::COLOR, 'default' => '#ffffff', 'selectors' => ['body .mh-toast' => 'color: {{VALUE}} !important;']]);
+        $this->add_control('toast_success_border', ['label' => __('Success Border Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => Controls_Manager::COLOR, 'default' => '#4caf50', 'selectors' => ['body .mh-toast-success' => 'border-left-color: {{VALUE}} !important;']]);
+        $this->add_control('toast_error_border', ['label' => __('Error Border Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => Controls_Manager::COLOR, 'default' => '#f44336', 'selectors' => ['body .mh-toast-error' => 'border-left-color: {{VALUE}} !important;']]);
+        $this->add_control('toast_info_border', ['label' => __('Info Border Color', 'mh-plug-ecommerce-builder-widgets'), 'type' => Controls_Manager::COLOR, 'default' => '#2196f3', 'selectors' => ['body .mh-toast-info' => 'border-left-color: {{VALUE}} !important;']]);
         $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'toast_typo', 'selector' => 'body .mh-toast']);
-        $this->add_responsive_control('toast_radius', ['label' => __('Border Radius', 'mh-plug'), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%'], 'selectors' => ['body .mh-toast' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;']]);
-        $this->add_responsive_control('toast_padding', ['label' => __('Padding', 'mh-plug'), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', 'em'], 'selectors' => ['body .mh-toast' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;']]);
+        $this->add_responsive_control('toast_radius', ['label' => __('Border Radius', 'mh-plug-ecommerce-builder-widgets'), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%'], 'selectors' => ['body .mh-toast' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;']]);
+        $this->add_responsive_control('toast_padding', ['label' => __('Padding', 'mh-plug-ecommerce-builder-widgets'), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', 'em'], 'selectors' => ['body .mh-toast' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;']]);
         $this->end_controls_section();
     }
 

@@ -21,7 +21,7 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_title() {
-        return esc_html__('MH Brush Text', 'mh-plug');
+        return esc_html__('MH Brush Text', 'mh-plug-ecommerce-builder-widgets');
     }
 
     public function get_icon() {
@@ -48,7 +48,7 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_content_text',
             [
-                'label' => esc_html__('Content', 'mh-plug'),
+                'label' => esc_html__('Content', 'mh-plug-ecommerce-builder-widgets'),
                 'tab' => Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -56,9 +56,9 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'primary_text',
             [
-                'label' => esc_html__('Primary Text', 'mh-plug'),
+                'label' => esc_html__('Primary Text', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::TEXT,
-                'default' => esc_html__('1 - 2', 'mh-plug'),
+                'default' => esc_html__('1 - 2', 'mh-plug-ecommerce-builder-widgets'),
                 'dynamic' => ['active' => true],
             ]
         );
@@ -66,9 +66,9 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'secondary_text',
             [
-                'label' => esc_html__('Secondary Text', 'mh-plug'),
+                'label' => esc_html__('Secondary Text', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::TEXT,
-                'default' => esc_html__('years', 'mh-plug'),
+                'default' => esc_html__('years', 'mh-plug-ecommerce-builder-widgets'),
                 'dynamic' => ['active' => true],
             ]
         );
@@ -76,9 +76,9 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'link',
             [
-                'label' => esc_html__('Link', 'mh-plug'),
+                'label' => esc_html__('Link', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::URL,
-                'placeholder' => esc_html__('https://your-link.com', 'mh-plug'),
+                'placeholder' => esc_html__('https://your-link.com', 'mh-plug-ecommerce-builder-widgets'),
                 'dynamic' => ['active' => true],
             ]
         );
@@ -86,19 +86,19 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'align',
             [
-                'label' => esc_html__('Alignment', 'mh-plug'),
+                'label' => esc_html__('Alignment', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
                     'flex-start' => [
-                        'title' => esc_html__('Left', 'mh-plug'),
+                        'title' => esc_html__('Left', 'mh-plug-ecommerce-builder-widgets'),
                         'icon' => 'eicon-text-align-left',
                     ],
                     'center' => [
-                        'title' => esc_html__('Center', 'mh-plug'),
+                        'title' => esc_html__('Center', 'mh-plug-ecommerce-builder-widgets'),
                         'icon' => 'eicon-text-align-center',
                     ],
                     'flex-end' => [
-                        'title' => esc_html__('Right', 'mh-plug'),
+                        'title' => esc_html__('Right', 'mh-plug-ecommerce-builder-widgets'),
                         'icon' => 'eicon-text-align-right',
                     ],
                 ],
@@ -116,7 +116,7 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_style_brush_shape',
             [
-                'label' => esc_html__('Brush Shape', 'mh-plug'),
+                'label' => esc_html__('Brush Shape', 'mh-plug-ecommerce-builder-widgets'),
                 'tab' => Controls_Manager::TAB_STYLE,
             ]
         );
@@ -128,14 +128,14 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_brush_normal',
             [
-                'label' => esc_html__( 'Normal', 'mh-plug' ),
+                'label' => esc_html__( 'Normal', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control(
             'brush_color',
             [
-                'label' => esc_html__('Brush Color', 'mh-plug'),
+                'label' => esc_html__('Brush Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::COLOR,
                 'default' => '#ecd3cb', // Default color from your SVG
                 'selectors' => [
@@ -150,14 +150,14 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_brush_hover',
             [
-                'label' => esc_html__( 'Hover', 'mh-plug' ),
+                'label' => esc_html__( 'Hover', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control(
             'brush_color_hover',
             [
-                'label' => esc_html__('Brush Color', 'mh-plug'),
+                'label' => esc_html__('Brush Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     // Target the wrapper on hover
@@ -181,7 +181,7 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'brush_width',
             [
-                'label' => esc_html__('Width', 'mh-plug'),
+                'label' => esc_html__('Width', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'px' => ['min' => 50, 'max' => 1000],
@@ -198,7 +198,7 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'brush_height',
             [
-                'label' => esc_html__('Height', 'mh-plug'),
+                'label' => esc_html__('Height', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'px' => ['min' => 50, 'max' => 1000],
@@ -214,13 +214,13 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'content_padding',
             [
-                'label' => esc_html__('Content Padding', 'mh-plug'),
+                'label' => esc_html__('Content Padding', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => [ 'px', '%', 'em' ],
                 'selectors' => [
                     '{{WRAPPER}} .mh-brush-text-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
-                'description' => esc_html__('Adjust the padding for the text *inside* the brush shape.', 'mh-plug'),
+                'description' => esc_html__('Adjust the padding for the text *inside* the brush shape.', 'mh-plug-ecommerce-builder-widgets'),
             ]
         );
 
@@ -228,7 +228,7 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'hover_transition',
             [
-                'label' => esc_html__( 'Transition Duration', 'mh-plug' ),
+                'label' => esc_html__( 'Transition Duration', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'ms' => [
@@ -255,7 +255,7 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_style_primary_text',
             [
-                'label' => esc_html__('Primary Text', 'mh-plug'),
+                'label' => esc_html__('Primary Text', 'mh-plug-ecommerce-builder-widgets'),
                 'tab' => Controls_Manager::TAB_STYLE,
             ]
         );
@@ -267,14 +267,14 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_primary_text_normal',
             [
-                'label' => esc_html__( 'Normal', 'mh-plug' ),
+                'label' => esc_html__( 'Normal', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control(
             'primary_text_color',
             [
-                'label' => esc_html__('Color', 'mh-plug'),
+                'label' => esc_html__('Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::COLOR,
                 'default' => '#000000',
                 'selectors' => [
@@ -289,14 +289,14 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_primary_text_hover',
             [
-                'label' => esc_html__( 'Hover', 'mh-plug' ),
+                'label' => esc_html__( 'Hover', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control(
             'primary_text_color_hover',
             [
-                'label' => esc_html__('Color', 'mh-plug'),
+                'label' => esc_html__('Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-brush-text-wrapper:hover .mh-brush-primary-text' => 'color: {{VALUE}};',
@@ -328,7 +328,7 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->add_responsive_control(
             'primary_text_spacing',
             [
-                'label' => esc_html__('Bottom Spacing', 'mh-plug'),
+                'label' => esc_html__('Bottom Spacing', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::SLIDER,
                 'range' => ['px' => ['min' => 0, 'max' => 100]],
                 'selectors' => [
@@ -343,7 +343,7 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'section_style_secondary_text',
             [
-                'label' => esc_html__('Secondary Text', 'mh-plug'),
+                'label' => esc_html__('Secondary Text', 'mh-plug-ecommerce-builder-widgets'),
                 'tab' => Controls_Manager::TAB_STYLE,
             ]
         );
@@ -355,14 +355,14 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_secondary_text_normal',
             [
-                'label' => esc_html__( 'Normal', 'mh-plug' ),
+                'label' => esc_html__( 'Normal', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control(
             'secondary_text_color',
             [
-                'label' => esc_html__('Color', 'mh-plug'),
+                'label' => esc_html__('Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::COLOR,
                 'default' => '#000000',
                 'selectors' => [
@@ -377,14 +377,14 @@ class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
         $this->start_controls_tab(
             'tab_secondary_text_hover',
             [
-                'label' => esc_html__( 'Hover', 'mh-plug' ),
+                'label' => esc_html__( 'Hover', 'mh-plug-ecommerce-builder-widgets' ),
             ]
         );
 
         $this->add_control(
             'secondary_text_color_hover',
             [
-                'label' => esc_html__('Color', 'mh-plug'),
+                'label' => esc_html__('Color', 'mh-plug-ecommerce-builder-widgets'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mh-brush-text-wrapper:hover .mh-brush-secondary-text' => 'color: {{VALUE}};',
