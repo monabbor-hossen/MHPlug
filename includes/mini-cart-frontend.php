@@ -116,7 +116,7 @@ function mh_plug_render_floating_mini_cart() {
         background: <?php echo esc_attr( $opts['panel_bg'] ); ?>;
         color: <?php echo esc_attr( $opts['panel_text_color'] ); ?>;
         z-index: 999992;
-        transform: <?php echo $panel_transform_hidden; ?>;
+        transform: <?php echo esc_attr( $panel_transform_hidden ); ?>;
         transition: transform 0.35s ease;
         display: flex;
         flex-direction: column;
@@ -139,7 +139,7 @@ function mh_plug_render_floating_mini_cart() {
         <div id="mh-mini-cart-footer" style="padding:16px 24px; border-top:1px solid rgba(0,0,0,0.08); display:flex; gap:10px; <?php if ( $cart_count === 0 ) echo 'display:none;'; ?>">
             <a href="<?php echo esc_url( $opts['cart_url'] ); ?>" style="
                 flex:1; text-align:center; padding:12px 16px; text-decoration:none; font-weight:600; font-size:14px;
-                border-radius:<?php echo $br; ?>px;
+                border-radius:<?php echo esc_attr( $br ); ?>px;
                 background:<?php echo esc_attr( $opts['btn_view_cart_bg'] ); ?>;
                 color:<?php echo esc_attr( $opts['btn_view_cart_text'] ); ?>;
                 border:1px solid rgba(0,0,0,0.08);
@@ -147,7 +147,7 @@ function mh_plug_render_floating_mini_cart() {
             "><?php esc_html_e( 'View Cart', 'mh-plug-ecommerce-builder-widgets' ); ?></a>
             <a href="<?php echo esc_url( $opts['checkout_url'] ); ?>" style="
                 flex:1; text-align:center; padding:12px 16px; text-decoration:none; font-weight:600; font-size:14px;
-                border-radius:<?php echo $br; ?>px;
+                border-radius:<?php echo esc_attr( $br ); ?>px;
                 background:<?php echo esc_attr( $opts['btn_checkout_bg'] ); ?>;
                 color:<?php echo esc_attr( $opts['btn_checkout_text'] ); ?>;
                 transition: opacity 0.2s;

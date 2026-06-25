@@ -87,26 +87,26 @@ function mh_plug_add_menu_item_icon_field( $item_id, $item, $depth, $args, $id =
     <div class="field-mh-menu-icon-container description-wide">
 
         <input type="hidden"
-               id="<?php echo $icon_input_id; ?>"
+               id="<?php echo esc_attr( $icon_input_id ); ?>"
                class="widefat edit-menu-item-icon"
-               name="<?php echo $icon_input_name; ?>"
+               name="<?php echo esc_attr( $icon_input_name ); ?>"
                value="<?php echo esc_attr( $icon_class ); ?>" />
 
         <strong class="mh-menu-icon-label"><?php esc_html_e('Icon', 'mh-plug-ecommerce-builder-widgets'); ?></strong>
 
         <div class="mh-menu-icon-button-row">
             <button type="button"
-                    id="mh-menu-icon-picker-button-<?php echo $menu_item_db_id; ?>"
+                    id="mh-menu-icon-picker-button-<?php echo esc_attr( $menu_item_db_id ); ?>"
                     class="mh-menu-icon-picker-button mh-plug-neumorphic-button"
-                    data-itemid="<?php echo $menu_item_db_id; ?>"
-                    data-target-input="#<?php echo $icon_input_id; ?>">
+                    data-itemid="<?php echo esc_attr( $menu_item_db_id ); ?>"
+                    data-target-input="#<?php echo esc_attr( $icon_input_id ); ?>">
 
                 <span class="mh-plug-button-icon <?php echo esc_attr($icon_class ? $icon_class : 'mhi-add-plus'); ?>"></span>
                 <span class="mh-plug-button-text"><?php esc_html_e('Select Icon', 'mh-plug-ecommerce-builder-widgets'); ?></span>
             </button>
 
             <span class="mh-menu-icon-remove"
-                  data-itemid="<?php echo $menu_item_db_id; ?>"
+                  data-itemid="<?php echo esc_attr( $menu_item_db_id ); ?>"
                   <?php echo empty($icon_class) ? 'style="display: none;"' : ''; ?>>
                 <?php esc_html_e('Remove', 'mh-plug-ecommerce-builder-widgets'); ?>
             </span>
@@ -120,13 +120,13 @@ function mh_plug_add_menu_item_icon_field( $item_id, $item, $depth, $args, $id =
                 <div class="mh-plug-toggle-switch-container">
                     <div class="mh-plug-toggle-switch">
                         <input type="checkbox"
-                               id="<?php echo $hide_label_input_id; ?>"
+                               id="<?php echo esc_attr( $hide_label_input_id ); ?>"
                                class="edit-menu-item-hide-label"
-                               name="<?php echo $hide_label_input_name; ?>"
-                               value="1" <?php echo $hide_label_checked; ?> />
-                        <label for="<?php echo $hide_label_input_id; ?>"></label>
+                               name="<?php echo esc_attr( $hide_label_input_name ); ?>"
+                               value="1" <?php checked( ! empty( $hide_label_value ), true ); ?> />
+                        <label for="<?php echo esc_attr( $hide_label_input_id ); ?>"></label>
                     </div>
-                    <label for="<?php echo $hide_label_input_id; ?>" class="mh-plug-toggle-label">
+                    <label for="<?php echo esc_attr( $hide_label_input_id ); ?>" class="mh-plug-toggle-label">
                         <?php esc_html_e('Hide Navigation Label (Only show icon)', 'mh-plug-ecommerce-builder-widgets'); ?>
                     </label>
                 </div>
@@ -145,9 +145,9 @@ add_action( 'wp_update_nav_menu_item', 'mh_plug_save_menu_item_icon_field', 10, 
  */
 function mh_plug_save_menu_item_icon_field( $menu_id, $menu_item_db_id, $args ) {
     // Save Icon Field
-    // phpcs:ignore WordPress.Security.NonceVerification.Missing
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
     if ( isset( $_POST['menu-item-icon'][ $menu_item_db_id ] ) ) {
-        // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         $sanitized_icon_class = sanitize_text_field( trim( wp_unslash( $_POST['menu-item-icon'][ $menu_item_db_id ] ) ) );
         update_post_meta( $menu_item_db_id, '_menu_item_icon', $sanitized_icon_class );
     } else {
@@ -155,7 +155,7 @@ function mh_plug_save_menu_item_icon_field( $menu_id, $menu_item_db_id, $args ) 
     }
 
     // Save Hide Label Switch
-    // phpcs:ignore WordPress.Security.NonceVerification.Missing
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
     if ( isset( $_POST['menu-item-hide-label'][ $menu_item_db_id ] ) && $_POST['menu-item-hide-label'][ $menu_item_db_id ] === '1' ) {
         update_post_meta( $menu_item_db_id, '_menu_item_hide_label', '1' );
     } else {

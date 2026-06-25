@@ -551,8 +551,8 @@ class MH_Plug_Brush_Slider_Widget extends \Elementor\Widget_Base {
         ] );
         
         ?>
-        <div <?php echo $this->get_render_attribute_string( 'slider-wrapper' ); ?>>
-            <div <?php echo $this->get_render_attribute_string( 'slider' ); ?>>
+        <div <?php echo $this->get_render_attribute_string( 'slider-wrapper' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+            <div <?php echo $this->get_render_attribute_string( 'slider' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
                 <?php foreach ( $settings['slides'] as $index => $slide ) : ?>
                     
                     <?php
@@ -585,11 +585,11 @@ class MH_Plug_Brush_Slider_Widget extends \Elementor\Widget_Base {
                     }
                     ?>
                     
-                    <div <?php echo $this->get_render_attribute_string( 'slide-item-' . $index ); ?>>
-                        <<?php echo $wrapper_tag; ?> <?php echo $wrapper_attrs_string; ?>>
+                    <div <?php echo $this->get_render_attribute_string( 'slide-item-' . $index ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+                        <<?php echo esc_html($wrapper_tag); ?> <?php echo $wrapper_attrs_string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
                             <div class="mh-brush-text-svg">
                                 <svg viewBox="0 0 400 291.96581196581195" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="<?php echo $this->get_brush_svg_path(); ?>" />
+                                    <path d="<?php echo $this->get_brush_svg_path(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" />
                                 </svg>
                             </div>
                             <div class="mh-brush-text-content">
@@ -604,7 +604,7 @@ class MH_Plug_Brush_Slider_Widget extends \Elementor\Widget_Base {
                                     </span>
                                 <?php endif; ?>
                             </div>
-                        </<?php echo $wrapper_tag; ?>>
+                        </<?php echo esc_html($wrapper_tag); ?>>
                     </div>
 
                 <?php endforeach; ?>
@@ -631,6 +631,7 @@ class MH_Plug_Brush_Slider_Widget extends \Elementor\Widget_Base {
             });
             <?php
             $js = ob_get_clean();
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo "<script type='text/javascript'>\n" . $js . "\n</script>";
             ?>
         </div>

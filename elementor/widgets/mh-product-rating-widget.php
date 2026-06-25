@@ -239,7 +239,7 @@ class MH_Plug_Product_Rating_Widget extends \Elementor\Widget_Base {
             <?php // 3. Review Count ?>
             <?php if ( 'yes' === $settings['show_count'] ) : ?>
                 <div class="mh-rating-count">
-                    (<?php echo esc_html( $rating_count ); ?> <?php echo _n( 'Review', 'Reviews', $rating_count, 'mh-plug-ecommerce-builder-widgets' ); ?>)
+                    (<?php echo esc_html( $rating_count ); ?> <?php echo esc_html( _n( 'Review', 'Reviews', $rating_count, 'mh-plug-ecommerce-builder-widgets' ) ); ?>)
                 </div>
             <?php endif; ?>
 

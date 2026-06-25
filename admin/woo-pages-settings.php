@@ -96,9 +96,9 @@ function mh_woo_color( $key, $label, $opts ) {
 function mh_woo_number( $key, $label, $opts, $min = 0, $max = 100, $suffix = 'px' ) {
     ?>
     <div class="mh-tb-form-group">
-        <label class="mh-tb-form-label"><?php echo esc_html( $label ); ?> (<?php echo $suffix; ?>)</label>
+        <label class="mh-tb-form-label"><?php echo esc_html( $label ); ?> (<?php echo esc_html( $suffix ); ?>)</label>
         <div class="mh-tb-form-field-control">
-            <input type="number" name="mh_plug_woo_pages_settings[<?php echo esc_attr($key); ?>]" value="<?php echo esc_attr( $opts[$key] ); ?>" min="<?php echo $min; ?>" max="<?php echo $max; ?>" />
+            <input type="number" name="mh_plug_woo_pages_settings[<?php echo esc_attr($key); ?>]" value="<?php echo esc_attr( $opts[$key] ); ?>" min="<?php echo esc_attr( $min ); ?>" max="<?php echo esc_attr( $max ); ?>" />
         </div>
     </div>
     <?php

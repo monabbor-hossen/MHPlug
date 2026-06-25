@@ -365,8 +365,8 @@ class MH_Plug_Button_Widget extends \Elementor\Widget_Base {
 			$this->add_render_attribute( 'button', 'class', 'mh-icon-slide' );
 		}
 		?>
-		<div <?php echo $this->get_render_attribute_string( 'wrapper' ); ?>>
-			<a <?php echo $this->get_render_attribute_string( 'button' ); ?>>
+		<div <?php echo $this->get_render_attribute_string( 'wrapper' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+			<a <?php echo $this->get_render_attribute_string( 'button' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<?php $this->render_button_content( $settings ); ?>
 			</a>
 		</div>
@@ -382,11 +382,12 @@ class MH_Plug_Button_Widget extends \Elementor\Widget_Base {
 			'mh-button-icon-' . $icon_align,
 		] );
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<span ' . $this->get_render_attribute_string( 'content-wrapper' ) . '>';
 
 		// Render Icon (Left)
 		if ( ! empty( $settings['icon']['value'] ) && 'left' === $icon_align ) : ?>
-			<span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?>>
+			<span <?php echo $this->get_render_attribute_string( 'icon-align' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<?php Icons_Manager::render_icon( $settings['icon'], [ 'aria-hidden' => 'true' ] ); ?>
 			</span>
 		<?php endif; ?>
@@ -396,7 +397,7 @@ class MH_Plug_Button_Widget extends \Elementor\Widget_Base {
 		<?php
 		// Render Icon (Right)
 		if ( ! empty( $settings['icon']['value'] ) && 'right' === $icon_align ) : ?>
-			<span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?>>
+			<span <?php echo $this->get_render_attribute_string( 'icon-align' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<?php Icons_Manager::render_icon( $settings['icon'], [ 'aria-hidden' => 'true' ] ); ?>
 			</span>
 		<?php endif; ?>

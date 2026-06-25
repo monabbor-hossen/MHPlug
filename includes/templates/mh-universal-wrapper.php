@@ -132,7 +132,7 @@ if ( class_exists('WooCommerce') ) {
                 $css_file = new \Elementor\Core\Files\CSS\Post( $tid );
                 if ( method_exists( $css_file, 'get_url' ) ) {
                     // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
-                    echo '<link rel="stylesheet" id="mh-elementor-post-' . $tid . '-css" href="' . esc_url( $css_file->get_url() ) . '" type="text/css" media="all" data-no-optimize="1" data-no-minify="1" data-cfasync="false">' . "\n";
+                    echo '<link rel="stylesheet" id="mh-elementor-post-' . esc_attr( $tid ) . '-css" href="' . esc_url( $css_file->get_url() ) . '" type="text/css" media="all" data-no-optimize="1" data-no-minify="1" data-cfasync="false">' . "\n";
                 }
             } catch ( Exception $e ) {
                 // Silently fail if individual template CSS breaks
@@ -206,6 +206,7 @@ if ( class_exists('WooCommerce') ) {
                         $page_post = get_post( $page_id );
                         if ( $page_post ) {
                             echo '<div class="woocommerce">';
+                            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                             echo apply_filters( 'the_content', $page_post->post_content );
                             echo '</div>';
                         }

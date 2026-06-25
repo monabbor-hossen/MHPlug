@@ -164,7 +164,7 @@ $is_wc_active = class_exists( 'WooCommerce' );
                     <label class="switch">
                         <input class="cb mh-tb-status-cb" type="checkbox"
                                data-id="<?php echo esc_attr( $template_id ); ?>"
-                               <?php echo $is_active; ?> />
+                               <?php echo esc_attr( $is_active ); ?> />
                         <span class="toggle">
                             <span class="left">off</span>
                             <span class="right">on</span>

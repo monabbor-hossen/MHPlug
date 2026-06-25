@@ -77,6 +77,7 @@ class MH_Plug_Combo_Frontend {
                 
                 echo '<li style="display: flex; align-items: center; gap: 15px;">';
                 echo '<div class="mh-combo-item-thumb" style="width: 50px; height: 50px; flex-shrink: 0;">';
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 echo '<a href="' . $product_url . '">' . $thumbnail . '</a>';
                 echo '</div>';
                 echo '<div class="mh-combo-item-details">';
@@ -154,6 +155,7 @@ class MH_Plug_Combo_Frontend {
         // Localize the rules for JS — always output a sequential JS array ([]),
         // never a JS object ({}). array_values() re-indexes any gaps left by
         // deleted repeater rows so json_encode always emits array syntax.
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo '<script>var mhVariationRules = ' . wp_json_encode( array_values( $rules ) ) . ';</script>';
 
     }

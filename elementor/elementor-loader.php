@@ -239,7 +239,10 @@ final class MH_Plug_Elementor_Loader {
                         <td class="mh-compare-item">
                             <div class="mh-compare-image">
                                 <a href="#" class="mh-remove-compare" data-product-id="<?php echo esc_attr($product->get_id()); ?>" title="<?php esc_attr_e( 'Remove', 'mh-plug-ecommerce-builder-widgets' ); ?>"><i class="fas fa-times"></i></a>
-                                <?php echo $product->get_image('woocommerce_thumbnail'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                <?php
+                                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                echo $product->get_image('woocommerce_thumbnail');
+                                ?>
                             </div>
                             <h3 class="mh-compare-title"><a href="<?php echo esc_url( $product->get_permalink() ); ?>"><?php echo esc_html( $product->get_title() ); ?></a></h3>
                             <div class="mh-compare-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>

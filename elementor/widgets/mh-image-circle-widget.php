@@ -373,11 +373,11 @@ class MH_Plug_Image_Circle_Widget extends \Elementor\Widget_Base {
         }
 
         ?>
-        <div <?php echo $this->get_render_attribute_string('wrapper'); ?>>
-            <<?php echo $link_tag; ?> <?php echo $this->get_render_attribute_string('link'); ?>>
+        <div <?php echo $this->get_render_attribute_string('wrapper'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+            <<?php echo esc_html($link_tag); ?> <?php echo $this->get_render_attribute_string('link'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
                 
                 <div class="mh-image-circle-image-wrapper">
-                    <div <?php echo $this->get_render_attribute_string('border_div'); ?>></div>
+                    <div <?php echo $this->get_render_attribute_string('border_div'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>></div>
                     
                     <div class="mh-image-circle-inner" style="<?php echo esc_attr($image_style); ?>"></div>
                 </div>
@@ -387,7 +387,7 @@ class MH_Plug_Image_Circle_Widget extends \Elementor\Widget_Base {
                         <?php echo esc_html( $settings['text'] ); ?>
                     </div>
                 <?php endif; ?>
-            </<?php echo $link_tag; ?>>
+            </<?php echo esc_html($link_tag); ?>>
         </div>
         <?php
     }

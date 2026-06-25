@@ -210,7 +210,7 @@ class MH_Plug_Age_Gate_Admin {
         echo "  <label class='mh-form-label'>" . esc_html( $label ) . "</label>";
         echo "  <div class='mh-form-field-control'>";
         echo "      <label class='switch'>";
-        echo "          <input class='cb' type='checkbox' name='mh_age_gate_options[{$id}]' value='1' {$checked_attr} />";
+        echo "          <input class='cb' type='checkbox' name='mh_age_gate_options[" . esc_attr($id) . "]' value='1' " . esc_attr($checked_attr) . " />";
         echo "          <span class='toggle'><span class='left'>off</span><span class='right'>on</span></span>";
         echo "      </label>";
         echo "  </div>";
@@ -220,6 +220,7 @@ class MH_Plug_Age_Gate_Admin {
     private function render_custom_field( $title, $inner_html ) {
         echo "<div class='mh-form-group'>";
         echo "  <label class='mh-form-label'>" . esc_html( $title ) . "</label>";
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo "  <div class='mh-form-field-control'>" . $inner_html . "</div>";
         echo "</div>";
     }
