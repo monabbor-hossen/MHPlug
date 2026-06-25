@@ -1,7 +1,7 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-final class MH_Elementor_Loader {
+final class MH_Plug_Elementor_Loader {
 
     private static $_instance = null;
 
@@ -268,67 +268,70 @@ final class MH_Elementor_Loader {
             </tbody>
         </table>
         <?php
-        wp_send_json_success(['html' => ob_get_clean()]);
+        $html = ob_get_clean();
+        wp_send_json_success(['html' => $html]);
     }
 
     public function register_widget_category($elements_manager) { $elements_manager->add_category('mh-plug-widgets', ['title' => esc_html__('MH Plug', 'mh-plug-ecommerce-builder-widgets'), 'icon' => 'eicon-plug']); }
-    public function print_inline_editor_styles() { echo '<style id="mh-plug-editor-badge-styles"> .elementor-element-wrapper [class^="mhi-"] { position: relative !important; } .elementor-element-wrapper [class^="mhi-"]::after { content: "MH"; position: absolute; top: -10px; right: -45px; z-index: 10; background-color: #2293e9ff; color: #ffffff; padding: 2px 6px; font-size: 10px; line-height: 1; font-weight: 600; border-radius: 4px; text-transform: uppercase; box-shadow: 0 1px 2px rgba(0,0,0,0.2); } </style>'; }
+    public function print_inline_editor_styles() { 
+        wp_enqueue_style( 'mh-plug-editor-styles', MH_PLUG_URL . 'elementor/assets/css/editor.css', [], filemtime( MH_PLUG_PATH . 'elementor/assets/css/editor.css' ) );
+    }
     
     // Continue below...
     public function register_widgets($widgets_manager) {
         $widget_options = get_option('mh_plug_widgets_settings', []);
         $widget_map = [
-            'mh_heading' => ['file' => 'mh-heading-widget.php', 'class' => 'MH_Heading_Widget'],
-            'mh_site_logo' => ['file' => 'mh-site-logo-widget.php', 'class' => 'MH_Site_Logo_Widget'],
-            'mh_site_title' => ['file' => 'mh-site-title-widget.php', 'class' => 'MH_Site_Title_Widget'],
-            'mh_brush_text' => ['file' => 'mh-brush-text-widget.php', 'class' => 'MH_Brush_Text_Widget'],
-            'mh_brush_slider' => ['file' => 'mh-brush-slider-widget.php', 'class' => 'MH_Brush_Slider_Widget'],
-            'mh_image_circle' => ['file' => 'mh-image-circle-widget.php', 'class' => 'MH_Image_Circle_Widget'],
-            'mh_image_circle_slider' => ['file' => 'mh-image-circle-slider-widget.php', 'class' => 'MH_Image_Circle_Slider_Widget'],
-            'mh_feature_card' => ['file' => 'mh-feature-card-widget.php', 'class' => 'MH_Feature_Card_Widget'],
-            'mh_post_carousel' => ['file' => 'mh-post-carousel-widget.php', 'class' => 'MH_Post_Carousel_Widget'],
-            'mh_synced_slider' => ['file' => 'mh-synced-slider-widget.php', 'class' => 'MH_Synced_Slider_Widget'],
-            'mh_button' => ['file' => 'mh-button-widget.php', 'class' => 'MH_Button_Widget'],
-            'mh_stacked_carousel' => ['file' => 'mh-stacked-carousel-widget.php', 'class' => 'MH_Stacked_Carousel_Widget'],
-            'mh_wishlist_button' => ['file' => 'mh-wishlist-button-widget.php', 'class' => 'MH_Wishlist_Button_Widget'],
-            'mh_wishlist_table' => ['file' => 'mh-wishlist-table-widget.php', 'class' => 'MH_Wishlist_Table_Widget'],
-            'mh_nav_menu' => ['file' => 'mh-nav-menu-widget.php', 'class' => 'MH_Nav_Menu_Widget'],
-            'mh_copyright' => ['file' => 'mh-copyright-widget.php', 'class' => 'MH_Copyright_Widget'],
+            'mh_heading' => ['file' => 'mh-heading-widget.php', 'class' => 'MH_Plug_Heading_Widget'],
+            'mh_site_logo' => ['file' => 'mh-site-logo-widget.php', 'class' => 'MH_Plug_Site_Logo_Widget'],
+            'mh_site_title' => ['file' => 'mh-site-title-widget.php', 'class' => 'MH_Plug_Site_Title_Widget'],
+            'mh_brush_text' => ['file' => 'mh-brush-text-widget.php', 'class' => 'MH_Plug_Brush_Text_Widget'],
+            'mh_brush_slider' => ['file' => 'mh-brush-slider-widget.php', 'class' => 'MH_Plug_Brush_Slider_Widget'],
+            'mh_image_circle' => ['file' => 'mh-image-circle-widget.php', 'class' => 'MH_Plug_Image_Circle_Widget'],
+            'mh_image_circle_slider' => ['file' => 'mh-image-circle-slider-widget.php', 'class' => 'MH_Plug_Image_Circle_Slider_Widget'],
+            'mh_feature_card' => ['file' => 'mh-feature-card-widget.php', 'class' => 'MH_Plug_Feature_Card_Widget'],
+            'mh_post_carousel' => ['file' => 'mh-post-carousel-widget.php', 'class' => 'MH_Plug_Post_Carousel_Widget'],
+            'mh_synced_slider' => ['file' => 'mh-synced-slider-widget.php', 'class' => 'MH_Plug_Synced_Slider_Widget'],
+            'mh_button' => ['file' => 'mh-button-widget.php', 'class' => 'MH_Plug_Button_Widget'],
+            'mh_stacked_carousel' => ['file' => 'mh-stacked-carousel-widget.php', 'class' => 'MH_Plug_Stacked_Carousel_Widget'],
+            'mh_wishlist_button' => ['file' => 'mh-wishlist-button-widget.php', 'class' => 'MH_Plug_Wishlist_Button_Widget'],
+            'mh_wishlist_table' => ['file' => 'mh-wishlist-table-widget.php', 'class' => 'MH_Plug_Wishlist_Table_Widget'],
+            'mh_nav_menu' => ['file' => 'mh-nav-menu-widget.php', 'class' => 'MH_Plug_Nav_Menu_Widget'],
+            'mh_copyright' => ['file' => 'mh-copyright-widget.php', 'class' => 'MH_Plug_Copyright_Widget'],
             'mh_taxonomy_card' => ['file' => 'mh-taxonomy-card-widget.php', 'class' => 'MH_Plug_Taxonomy_Card_Widget'],
-            'mh_breadcrumb' => [ 'file' => 'mh-breadcrumb-widget.php', 'class' => 'MH_Breadcrumb_Widget' ],
+            'mh_breadcrumb' => [ 'file' => 'mh-breadcrumb-widget.php', 'class' => 'MH_Plug_Breadcrumb_Widget' ],
             // 🚀 NEW: Register FAQ Widget
-            'mh_faq' => [ 'file' => 'mh-faq-widget.php', 'class' => 'MH_FAQ_Widget' ],
-            'mh_testimonial' => [ 'file' => 'mh-testimonial-widget.php', 'class' => 'MH_Testimonial_Widget' ],
+            'mh_faq' => [ 'file' => 'mh-faq-widget.php', 'class' => 'MH_Plug_FAQ_Widget' ],
+            'mh_testimonial' => [ 'file' => 'mh-testimonial-widget.php', 'class' => 'MH_Plug_Testimonial_Widget' ],
             'mh_taxonomy_slider' => ['file' => 'mh-taxonomy-slider-widget.php', 'class' => 'MH_Plug_Taxonomy_Slider_Widget'],
-            'mh_blog_post' => [ 'file' => 'mh-blog-post-widget.php', 'class' => 'MH_Blog_Post_Widget' ],
-            'mh_single_post' => [ 'file' => 'mh-single-post-widget.php', 'class' => 'MH_Single_Post_Widget' ],
+            'mh_blog_post' => [ 'file' => 'mh-blog-post-widget.php', 'class' => 'MH_Plug_Blog_Post_Widget' ],
+            'mh_single_post' => [ 'file' => 'mh-single-post-widget.php', 'class' => 'MH_Plug_Single_Post_Widget' ],
         ];
         
         if ( class_exists( 'WooCommerce' ) ) {
             $wc_widget_map = [
-                'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php', 'class' => 'MH_Woo_Add_To_Cart_Widget' ],
-                'mh_woo_attributes' => [ 'file' => 'mh-woo-attributes-widget.php', 'class' => 'MH_Woo_Attributes_Widget' ],
+                'mh_woo_add_to_cart' => [ 'file' => 'mh-woo-add-to-cart-widget.php', 'class' => 'MH_Plug_Woo_Add_To_Cart_Widget' ],
+                'mh_woo_attributes' => [ 'file' => 'mh-woo-attributes-widget.php', 'class' => 'MH_Plug_Woo_Attributes_Widget' ],
                 'mh_product_search' => [ 'file' => 'mh-product-search-widget.php', 'class' => 'MH_Plug_Product_Search_Widget' ],
-                'mh_product_title' => [ 'file' => 'mh-product-title-widget.php', 'class' => 'MH_Product_Title_Widget' ],
-                'mh_product_price' => [ 'file' => 'mh-product-price-widget.php', 'class' => 'MH_Product_Price_Widget' ],
-                'mh_product_short_description' => [ 'file' => 'mh-product-short-description-widget.php', 'class' => 'MH_Product_Short_Description_Widget' ],
-                'mh_product_category' => [ 'file' => 'mh-product-category-widget.php', 'class' => 'MH_Product_Category_Widget' ],
-                'mh_product_tags' => [ 'file' => 'mh-product-tags-widget.php', 'class' => 'MH_Product_Tags_Widget' ],
-                'mh_product_brands' => [ 'file' => 'mh-product-brands-widget.php', 'class' => 'MH_Product_Brands_Widget' ],
-                'mh_product_rating' => [ 'file' => 'mh-product-rating-widget.php', 'class' => 'MH_Product_Rating_Widget' ],
-                'mh_product_gallery' => [ 'file' => 'mh-product-gallery-widget.php', 'class' => 'MH_Product_Gallery_Widget' ],
-                'mh_product_share' => [ 'file' => 'mh-product-share-widget.php', 'class' => 'MH_Product_Share_Widget' ],
-                'mh_product_data_accordion' => [ 'file' => 'mh-product-data-accordion-widget.php', 'class' => 'MH_Product_Data_Accordion_Widget' ],
-                'mh_header_wishlist' => [ 'file' => 'mh-header-wishlist-widget.php', 'class' => 'MH_Header_Wishlist_Widget' ],
-                'mh_header_cart' => [ 'file' => 'mh-header-cart-widget.php', 'class' => 'MH_Header_Cart_Widget' ],
-                'mh_product_grid' => [ 'file' => 'mh-product-grid-widget.php', 'class' => 'MH_Product_Grid_Widget' ],
-                'mh_header_compare' => [ 'file' => 'mh-header-compare-widget.php', 'class' => 'MH_Header_Compare_Widget' ],
-                'mh_product_compare_btn' => [ 'file' => 'mh-product-compare-btn-widget.php', 'class' => 'MH_Product_Compare_Btn_Widget' ],
-                'mh_compare_table' => [ 'file' => 'mh-compare-table-widget.php', 'class' => 'MH_Compare_Table_Widget' ],
-                'mh_product_slider' => [ 'file' => 'mh-product-slider-widget.php', 'class' => 'MH_Product_Slider_Widget' ],
-                'mh_product_filter' => [ 'file' => 'mh-product-filter-widget.php', 'class' => 'MH_Product_Filter_Widget' ],
-                'mh_product_attribute_filter' => [ 'file' => 'mh-product-attribute-filter-widget.php', 'class' => 'MH_Product_Attribute_Filter_Widget' ],
-                'mh_combo_products'          => [ 'file' => 'mh-combo-products-widget.php',           'class' => 'MH_Combo_Products_Widget' ],
+                'mh_product_title' => [ 'file' => 'mh-product-title-widget.php', 'class' => 'MH_Plug_Product_Title_Widget' ],
+                'mh_product_price' => [ 'file' => 'mh-product-price-widget.php', 'class' => 'MH_Plug_Product_Price_Widget' ],
+                'mh_product_short_description' => [ 'file' => 'mh-product-short-description-widget.php', 'class' => 'MH_Plug_Product_Short_Description_Widget' ],
+                'mh_product_category' => [ 'file' => 'mh-product-category-widget.php', 'class' => 'MH_Plug_Product_Category_Widget' ],
+                'mh_product_tags' => [ 'file' => 'mh-product-tags-widget.php', 'class' => 'MH_Plug_Product_Tags_Widget' ],
+                'mh_product_brands' => [ 'file' => 'mh-product-brands-widget.php', 'class' => 'MH_Plug_Product_Brands_Widget' ],
+                'mh_product_rating' => [ 'file' => 'mh-product-rating-widget.php', 'class' => 'MH_Plug_Product_Rating_Widget' ],
+                'mh_product_gallery' => [ 'file' => 'mh-product-gallery-widget.php', 'class' => 'MH_Plug_Product_Gallery_Widget' ],
+                'mh_product_share' => [ 'file' => 'mh-product-share-widget.php', 'class' => 'MH_Plug_Product_Share_Widget' ],
+                'mh_product_data_accordion' => [ 'file' => 'mh-product-data-accordion-widget.php', 'class' => 'MH_Plug_Product_Data_Accordion_Widget' ],
+                'mh_header_wishlist' => [ 'file' => 'mh-header-wishlist-widget.php', 'class' => 'MH_Plug_Header_Wishlist_Widget' ],
+                'mh_header_cart' => [ 'file' => 'mh-header-cart-widget.php', 'class' => 'MH_Plug_Header_Cart_Widget' ],
+                'mh_product_grid' => [ 'file' => 'mh-product-grid-widget.php', 'class' => 'MH_Plug_Product_Grid_Widget' ],
+                'mh_header_compare' => [ 'file' => 'mh-header-compare-widget.php', 'class' => 'MH_Plug_Header_Compare_Widget' ],
+                'mh_product_compare_btn' => [ 'file' => 'mh-product-compare-btn-widget.php', 'class' => 'MH_Plug_Product_Compare_Btn_Widget' ],
+                'mh_compare_table' => [ 'file' => 'mh-compare-table-widget.php', 'class' => 'MH_Plug_Compare_Table_Widget' ],
+                'mh_product_slider' => [ 'file' => 'mh-product-slider-widget.php', 'class' => 'MH_Plug_Product_Slider_Widget' ],
+                'mh_product_filter' => [ 'file' => 'mh-product-filter-widget.php', 'class' => 'MH_Plug_Product_Filter_Widget' ],
+                'mh_product_attribute_filter' => [ 'file' => 'mh-product-attribute-filter-widget.php', 'class' => 'MH_Plug_Product_Attribute_Filter_Widget' ],
+                'mh_combo_products'          => [ 'file' => 'mh-combo-products-widget.php',           'class' => 'MH_Plug_Combo_Products_Widget' ],
             ];
             $widget_map = array_merge( $widget_map, $wc_widget_map );
         }
@@ -396,7 +399,7 @@ final class MH_Elementor_Loader {
     }
 }
 
-MH_Elementor_Loader::instance();
+MH_Plug_Elementor_Loader::instance();
 
 function mh_plug_enqueue_editor_icons() {
     wp_enqueue_style('mhi-icons', MH_PLUG_URL . 'elementor/assets/css/style.css', [], MH_PLUG_VERSION);

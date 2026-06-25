@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class MH_Cart_Handler {
+class MH_Plug_Cart_Handler {
 
     /**
      * Register all hooks.

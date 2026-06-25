@@ -16,7 +16,7 @@ use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Border;
 use Elementor\Repeater;
 
-class MH_Product_Filter_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Product_Filter_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_filter'; }
     public function get_title() { return __( 'MH Product Sorting Filter', 'mh-plug-ecommerce-builder-widgets' ); }

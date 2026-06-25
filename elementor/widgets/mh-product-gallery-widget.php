@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 
-class MH_Product_Gallery_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Product_Gallery_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_gallery'; }
     public function get_title() { return __( 'MH Product Gallery', 'mh-plug-ecommerce-builder-widgets' ); }

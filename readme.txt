@@ -2,7 +2,7 @@
 Contributors: monabborhossen
 Tags: ecommerce, page-builder, wishlist, age-gate
 Requires at least: 6.0
-Tested up to: 6.6
+Tested up to: 6.9
 Requires PHP: 7.4
 Stable tag: 1.0.0
 License: GPLv3 or later
@@ -33,7 +33,3 @@ Yes. Our wishlist system uses secure first-party cookies to identify guests, com
 
 = 1.0.0 =
 *   Initial release.
-
-== External services ==
-This plugin connects to the WhatsApp API (api.whatsapp.com) to allow users to share products. It only sends the product title and URL when the user explicitly clicks the share button.
-This service is provided by WhatsApp LLC: https://www.whatsapp.com/legal/terms-of-service/

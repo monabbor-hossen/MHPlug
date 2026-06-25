@@ -176,11 +176,4 @@ $opts = wp_parse_args( $opts, $defaults );
     </form>
 </div>
 
-<script>
-jQuery(document).ready(function($){
-    // Init color pickers
-    if ( $.fn.wpColorPicker ) {
-        $('.mh-color-picker').wpColorPicker();
-    }
-});
-</script>
+

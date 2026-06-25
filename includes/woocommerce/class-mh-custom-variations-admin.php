@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class MH_Custom_Variations_Admin {
+class MH_Plug_Custom_Variations_Admin {
 
     public static function init() {
         add_filter( 'woocommerce_product_data_tabs', [ __CLASS__, 'add_product_data_tab' ] );
@@ -36,7 +36,8 @@ class MH_Custom_Variations_Admin {
         wp_add_inline_style( 'woocommerce_admin_styles', $css );
 
         // JS
-        $js = 'jQuery(document).ready(function($){function initMHSelect(){var opts={minimumResultsForSearch:1,width:\'120px\',dropdownCssClass:\'mh-select-dropdown-fix\'};if($.fn.selectWoo){$(\'.mh-enhanced-select\').selectWoo(opts);}else if($.fn.select2){$(\'.mh-enhanced-select\').select2(opts);}}initMHSelect();$(document).on(\'click\',\'#mh-add-custom-var-rule\',function(e){e.preventDefault();var template=$(\'#mh-variation-row-template\').html();if(!template){alert(\'Template missing!\');return;}var uniqueIndex=Date.now();var newRow=template.replace(/{index}/g,uniqueIndex);$(\'#mh-custom-variations-tbody\').append(newRow);initMHSelect();});$(document).on(\'click\',\'.mh-remove-variation-row\',function(e){e.preventDefault();if(confirm(\'Remove this rule?\')){$(this).closest(\'tr\').remove();}});$(document).on(\'click\',\'.mh-save-variations-btn\',function(e){e.preventDefault();var $btn=$(this);var $spinner=$btn.next(\'.mh-save-spinner\');var formData=$(\'#mh_custom_variations_panel :input\').serialize();var productId=$(\'#post_ID\').val();$btn.prop(\'disabled\',true);$spinner.addClass(\'is-active\');$.post(ajaxurl,{action:\'mh_save_custom_variations\',product_id:productId,form_data:formData},function(response){$spinner.removeClass(\'is-active\');if(response.success){$btn.text(\'Saved!\').removeClass(\'button-primary\').addClass(\'button-secondary\');setTimeout(function(){$btn.text(\'Save Variations\').removeClass(\'button-secondary\').addClass(\'button-primary\').prop(\'disabled\',false);},2000);}else{alert(\'Error saving variations.\');$btn.prop(\'disabled\',false);}});});});';
+        $nonce = wp_create_nonce( 'mh_save_custom_variations_nonce' );
+        $js = 'jQuery(document).ready(function($){function initMHSelect(){var opts={minimumResultsForSearch:1,width:\'120px\',dropdownCssClass:\'mh-select-dropdown-fix\'};if($.fn.selectWoo){$(\'.mh-enhanced-select\').selectWoo(opts);}else if($.fn.select2){$(\'.mh-enhanced-select\').select2(opts);}}initMHSelect();$(document).on(\'click\',\'#mh-add-custom-var-rule\',function(e){e.preventDefault();var template=$(\'#mh-variation-row-template\').html();if(!template){alert(\'Template missing!\');return;}var uniqueIndex=Date.now();var newRow=template.replace(/{index}/g,uniqueIndex);$(\'#mh-custom-variations-tbody\').append(newRow);initMHSelect();});$(document).on(\'click\',\'.mh-remove-variation-row\',function(e){e.preventDefault();if(confirm(\'Remove this rule?\')){$(this).closest(\'tr\').remove();}});$(document).on(\'click\',\'.mh-save-variations-btn\',function(e){e.preventDefault();var $btn=$(this);var $spinner=$btn.next(\'.mh-save-spinner\');var formData=$(\'#mh_custom_variations_panel :input\').serialize();var productId=$(\'#post_ID\').val();$btn.prop(\'disabled\',true);$spinner.addClass(\'is-active\');$.post(ajaxurl,{action:\'mh_save_custom_variations\',product_id:productId,form_data:formData,nonce:\'' . esc_js( $nonce ) . '\'},function(response){$spinner.removeClass(\'is-active\');if(response.success){$btn.text(\'Saved!\').removeClass(\'button-primary\').addClass(\'button-secondary\');setTimeout(function(){$btn.text(\'Save Variations\').removeClass(\'button-secondary\').addClass(\'button-primary\').prop(\'disabled\',false);},2000);}else{alert(\'Error saving variations.\');$btn.prop(\'disabled\',false);}});});});';
 
         wp_add_inline_script( 'jquery', $js );
     }
@@ -181,6 +182,12 @@ class MH_Custom_Variations_Admin {
      * AJAX handler: save custom variation rules without a full page reload.
      */
     public static function ajax_save_variations() {
+        check_ajax_referer( 'mh_save_custom_variations_nonce', 'nonce' );
+
+        if ( ! current_user_can( 'edit_products' ) ) {
+            wp_send_json_error( 'Insufficient permissions' );
+        }
+
         $product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
         if ( ! $product_id ) {
             wp_send_json_error( 'Invalid Product ID' );
@@ -199,8 +206,14 @@ class MH_Custom_Variations_Admin {
 
                 ksort( $row['attributes'] );
 
+                // Sanitize keys before processing to prevent untrusted keys reaching the database.
+                $sanitized_row_attributes = [];
+                foreach ( $row['attributes'] as $attr_key => $attr_val ) {
+                    $sanitized_row_attributes[ sanitize_key( $attr_key ) ] = $attr_val;
+                }
+
                 // Preserve original case for admin UI selected() matching.
-                $clean_attributes = array_map( 'wc_clean', $row['attributes'] );
+                $clean_attributes = array_map( 'wc_clean', $sanitized_row_attributes );
 
                 // Only lowercase for the combination_string (frontend JS matching).
                 $combination_string = implode( '|', array_map( 'strtolower', $clean_attributes ) );
@@ -237,8 +250,14 @@ class MH_Custom_Variations_Admin {
             // CRITICAL: sort the attributes alphabetically by key (mirrors JS selectedValues.sort())
             ksort( $row['attributes'] );
 
+            // Sanitize keys before processing to prevent untrusted keys reaching the database.
+            $sanitized_row_attributes = [];
+            foreach ( $row['attributes'] as $attr_key => $attr_val ) {
+                $sanitized_row_attributes[ sanitize_key( $attr_key ) ] = $attr_val;
+            }
+
             // Preserve original case for admin UI selected() matching.
-            $clean_attributes = array_map( 'wc_clean', $row['attributes'] );
+            $clean_attributes = array_map( 'wc_clean', $sanitized_row_attributes );
 
             // Only lowercase for the combination_string — the frontend JS
             // always lowercases selected values before building the combo

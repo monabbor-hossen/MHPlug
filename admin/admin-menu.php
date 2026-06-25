@@ -137,27 +137,7 @@ class MH_Admin_Menu
 
     public function add_menu_inline_styles()
     {
-        ?>
-        <style id="mh-plug-menu-styles">
-            #adminmenu #toplevel_page_mh-plug-settings .wp-menu-image {
-                background-image: url('<?php echo esc_url(MH_PLUG_URL . 'admin/assets/images/MH-icon.png'); ?>') !important;
-                background-repeat: no-repeat !important;
-                background-position: center center !important;
-                background-size: 20px auto !important;
-            }
-
-            #adminmenu #toplevel_page_mh-plug-settings .wp-menu-image::before {
-                content: '' !important;
-            }
-
-            #adminmenu li#toplevel_page_mh-plug-settings:hover a,
-            #adminmenu li.current#toplevel_page_mh-plug-settings a,
-            #adminmenu li.wp-has-current-submenu#toplevel_page_mh-plug-settings a {
-                background: #004265 !important;
-                color: #fff !important;
-            }
-        </style>
-        <?php
+        // Moved to admin/assets/css/admin-styles.css
     }
 
     public function enqueue_page_assets($hook)
@@ -375,21 +355,57 @@ class MH_Admin_Menu
     }
 
     /**
-     * Generic array sanitization for WordPress.org compliance.
-     * Sanitizes every string value in the settings array.
+     * Smart array sanitization for WordPress.org compliance.
+     * Explicitly sanitizes each key based on its expected data type:
+     * - Colors  → sanitize_hex_color()
+     * - URLs    → esc_url_raw()
+     * - Toggles → 1 or 0
+     * - Text    → sanitize_text_field()
      */
-    public function sanitize_generic_array($input)
-    {
+    public function sanitize_generic_array( $input ) {
+        if ( ! is_array( $input ) ) {
+            return [];
+        }
+
+        // Keys that hold a hex color value.
+        $color_keys = [
+            'loader_c1', 'loader_c2',
+            'bg_c1', 'bg_c2',
+            'text_c1', 'text_c2',
+            'panel_bg', 'panel_text_color',
+            'icon_color', 'icon_bg',
+            'counter_bg', 'counter_color',
+            'btn_view_cart_bg', 'btn_view_cart_text',
+            'btn_checkout_bg', 'btn_checkout_text',
+        ];
+
+        // Keys that hold a URL.
+        $url_keys = [ 'cart_url', 'checkout_url', 'image' ];
+
+        // Keys that are boolean toggles (checkbox / radio "yes"/"no" or "1"/"0").
+        $toggle_keys = [ 'enable', 'enable_mini_cart' ];
+
         $sanitized = [];
-        if (is_array($input)) {
-            foreach ($input as $key => $value) {
-                if (is_array($value)) {
-                    $sanitized[sanitize_key($key)] = $this->sanitize_generic_array($value);
-                } else {
-                    $sanitized[sanitize_key($key)] = sanitize_text_field($value);
-                }
+
+        foreach ( $input as $key => $value ) {
+            $safe_key = sanitize_key( $key );
+
+            if ( is_array( $value ) ) {
+                $sanitized[ $safe_key ] = $this->sanitize_generic_array( $value );
+                continue;
+            }
+
+            if ( in_array( $safe_key, $color_keys, true ) ) {
+                $sanitized[ $safe_key ] = sanitize_hex_color( $value ) ?: '';
+            } elseif ( in_array( $safe_key, $url_keys, true ) ) {
+                $sanitized[ $safe_key ] = esc_url_raw( $value );
+            } elseif ( in_array( $safe_key, $toggle_keys, true ) ) {
+                $sanitized[ $safe_key ] = ( $value === 'yes' || $value === '1' || $value === true ) ? '1' : '0';
+            } else {
+                $sanitized[ $safe_key ] = sanitize_text_field( $value );
             }
         }
+
         return $sanitized;
     }
 }

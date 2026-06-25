@@ -11,7 +11,7 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 
-class MH_Wishlist_Button_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Wishlist_Button_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_wishlist_button'; }
     public function get_title() { return __( 'MH Wishlist Button', 'mh-plug-ecommerce-builder-widgets' ); }

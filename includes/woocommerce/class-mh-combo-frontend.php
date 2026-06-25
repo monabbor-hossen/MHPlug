@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class MH_Combo_Frontend
  */
-class MH_Combo_Frontend {
+class MH_Plug_Combo_Frontend {
 
     /**
      * Boot the class: register frontend hooks.

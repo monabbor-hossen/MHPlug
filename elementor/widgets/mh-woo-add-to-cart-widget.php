@@ -18,7 +18,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 
-class MH_Woo_Add_To_Cart_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Woo_Add_To_Cart_Widget extends \Elementor\Widget_Base {
 
     public function get_name()        { return 'mh_woo_add_to_cart'; }
     public function get_title()       { return __( 'MH Add to Cart', 'mh-plug-ecommerce-builder-widgets' ); }

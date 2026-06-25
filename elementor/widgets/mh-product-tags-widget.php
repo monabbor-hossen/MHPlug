@@ -13,7 +13,7 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 
-class MH_Product_Tags_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Product_Tags_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_tags'; }
     public function get_title() { return __( 'MH Product Tags', 'mh-plug-ecommerce-builder-widgets' ); }

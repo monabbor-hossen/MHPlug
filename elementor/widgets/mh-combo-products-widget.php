@@ -20,7 +20,7 @@ use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Background;
 use Elementor\Group_Control_Image_Size;
 
-class MH_Combo_Products_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Combo_Products_Widget extends \Elementor\Widget_Base {
 
     // ──────────────────────────────────────────────────────────────────────────
     // Identity

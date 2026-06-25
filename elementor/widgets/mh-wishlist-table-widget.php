@@ -18,7 +18,7 @@ use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
 
-class MH_Wishlist_Table_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Wishlist_Table_Widget extends \Elementor\Widget_Base {
 
     public function get_name()        { return 'mh_wishlist_table'; }
     public function get_title()       { return __( 'MH Wishlist Table', 'mh-plug-ecommerce-builder-widgets' ); }

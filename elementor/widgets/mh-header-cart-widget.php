@@ -14,7 +14,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Border;
 
-class MH_Header_Cart_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Header_Cart_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_header_cart'; }
     public function get_title() { return __( 'MH Header Cart', 'mh-plug-ecommerce-builder-widgets' ); }

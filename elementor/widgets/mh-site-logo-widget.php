@@ -13,7 +13,7 @@ use Elementor\Group_Control_Box_Shadow;
 /**
  * MH Site Logo Widget Class
  */
-class MH_Site_Logo_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Site_Logo_Widget extends \Elementor\Widget_Base {
 
     public function get_name() {
         return 'mh-site-logo';

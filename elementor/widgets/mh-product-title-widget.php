@@ -15,7 +15,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Text_Shadow;
 use Elementor\Utils;
 
-class MH_Product_Title_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Product_Title_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_title'; }
     public function get_title() { return __( 'MH Product Title', 'mh-plug-ecommerce-builder-widgets' ); }

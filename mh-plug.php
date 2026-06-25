@@ -5,10 +5,10 @@
  * Plugin URI:        https://monabbor-hossen.github.io/MHPlug/
  * Version:           1.0.0
  * Author:            MHutin
- * Author URI:        https://mhutin.com/
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * License:           GPLv3 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       mh-plug-ecommerce-builder-widgets
+ * Requires Plugins:  elementor, woocommerce
  */
 
 if (!defined('ABSPATH')) {
@@ -116,27 +116,27 @@ function mh_plug_initialize_all_files() {
         // 🛍️ Combo Product
         if ( is_admin() ) {
             mh_plug_safe_require( MH_PLUG_PATH . 'includes/woocommerce/class-mh-combo-admin.php' );
-            if ( class_exists('MH_Combo_Admin') ) {
-                MH_Combo_Admin::init();
+            if ( class_exists('MH_Plug_Combo_Admin') ) {
+                MH_Plug_Combo_Admin::init();
             }
 
             mh_plug_safe_require( MH_PLUG_PATH . 'includes/woocommerce/class-mh-custom-variations-admin.php' );
-            if ( class_exists('MH_Custom_Variations_Admin') ) {
-                MH_Custom_Variations_Admin::init();
+            if ( class_exists('MH_Plug_Custom_Variations_Admin') ) {
+                MH_Plug_Custom_Variations_Admin::init();
             }
         }
 
         if ( ! is_admin() || wp_doing_ajax() ) {
             mh_plug_safe_require( MH_PLUG_PATH . 'includes/woocommerce/class-mh-combo-frontend.php' );
-            if ( class_exists('MH_Combo_Frontend') ) {
-                MH_Combo_Frontend::init();
+            if ( class_exists('MH_Plug_Combo_Frontend') ) {
+                MH_Plug_Combo_Frontend::init();
             }
         }
 
         // 🛒 Cart Handler for Custom Variations Pricing (needed globally for calculations)
         mh_plug_safe_require( MH_PLUG_PATH . 'includes/woocommerce/class-mh-cart-handler.php' );
-        if ( class_exists('MH_Cart_Handler') ) {
-            MH_Cart_Handler::init();
+        if ( class_exists('MH_Plug_Cart_Handler') ) {
+            MH_Plug_Cart_Handler::init();
         }
     }
 }

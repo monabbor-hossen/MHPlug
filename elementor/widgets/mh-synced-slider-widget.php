@@ -11,7 +11,7 @@ use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Background;
 
-class MH_Synced_Slider_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Synced_Slider_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_synced_slider'; }
     public function get_title() { return __( 'MH Synced Slider', 'mh-plug-ecommerce-builder-widgets' ); }

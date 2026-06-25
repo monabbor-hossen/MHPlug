@@ -13,7 +13,7 @@ use Elementor\Group_Control_Text_Shadow;
 /**
  * MH Site Title Widget Class
  */
-class MH_Site_Title_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Site_Title_Widget extends \Elementor\Widget_Base {
 
     public function get_name() {
         return 'mh-site-title';

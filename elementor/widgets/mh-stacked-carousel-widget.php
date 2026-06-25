@@ -9,7 +9,7 @@ use Elementor\Group_Control_Text_Shadow;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Repeater;
 
-class MH_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
 
     public function get_name()       { return 'mh_stacked_carousel'; }
     public function get_title()      { return __( 'MH Stacked Carousel', 'mh-plug-ecommerce-builder-widgets' ); }

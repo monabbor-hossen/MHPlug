@@ -14,7 +14,7 @@ use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Text_Shadow;
 
-class MH_Product_Short_Description_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Product_Short_Description_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_short_description'; }
     public function get_title() { return __( 'MH Short Description', 'mh-plug-ecommerce-builder-widgets' ); }

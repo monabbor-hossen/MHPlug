@@ -15,7 +15,7 @@ use Elementor\Repeater;
  * MH Advanced Heading Widget Class
  * Fixed: Shrink-Wrapper added so "Entire Heading Box" underlines don't stretch!
  */
-class MH_Heading_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Heading_Widget extends \Elementor\Widget_Base {
 
     public function get_name()
     {
@@ -197,58 +197,58 @@ class MH_Heading_Widget extends \Elementor\Widget_Base {
         ob_start();
         ?>
             /* Alignment Wrapper handles the positioning inside the column */
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-alignment-wrapper {
+            .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-heading-alignment-wrapper {
                 width: 100%;
             }
 
             /* 🚀 THE FIX: inline-flex forces it to shrink-wrap perfectly to the text */
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-advanced-heading-wrapper {
+            .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-advanced-heading-wrapper {
                 display: inline-flex;
                 flex-wrap: wrap;
                 align-items: baseline;
             }
 
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part-outer {
+            .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-heading-part-outer {
                 position: relative;
             }
 
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-inline {
+            .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-layout-inline {
                 display: inline-block;
             }
 
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-block {
+            .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-layout-block {
                 display: block;
                 flex-basis: 100%;
                 width: 100%;
             }
 
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-layout-vertical {
+            .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-layout-vertical {
                 display: inline-block;
                 writing-mode: vertical-rl;
                 transform: rotate(180deg);
             }
 
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-heading-part-inner {
+            .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-heading-part-inner {
                 position: relative;
                 display: inline-block;
                 line-height: 1;
             }
 
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper {
+            .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-underline-wrapper {
                 position: relative;
                 line-height: 1;
             }
 
-            .elementor-element-<?php echo $this->get_id(); ?> .mh-typing-effect {
+            .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-typing-effect {
                 display: inline-block;
                 overflow: hidden;
                 white-space: nowrap;
                 border-right: 2px solid;
                 width: 0;
-                animation: mh-typing-<?php echo $this->get_id(); ?> 2s forwards steps(30, end), mh-blink-<?php echo $this->get_id(); ?> .75s step-end infinite;
+                animation: mh-typing-<?php echo esc_attr( $this->get_id() ); ?> 2s forwards steps(30, end), mh-blink-<?php echo esc_attr( $this->get_id() ); ?> .75s step-end infinite;
             }
 
-            @keyframes mh-typing-<?php echo $this->get_id(); ?> {
+            @keyframes mh-typing-<?php echo esc_attr( $this->get_id() ); ?> {
                 from {
                     width: 0;
                 }
@@ -258,7 +258,7 @@ class MH_Heading_Widget extends \Elementor\Widget_Base {
                 }
             }
 
-            @keyframes mh-blink-<?php echo $this->get_id(); ?> {
+            @keyframes mh-blink-<?php echo esc_attr( $this->get_id() ); ?> {
 
                 from,
                 to {
@@ -271,7 +271,7 @@ class MH_Heading_Widget extends \Elementor\Widget_Base {
             }
 
             <?php if ($is_native_underline): ?>
-                .elementor-element-<?php echo $this->get_id(); ?> .mh-has-underline {
+                .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-has-underline {
                     text-decoration-line:
                         <?php echo $settings['underline_position'] === 'top' ? 'overline' : 'underline'; ?>
                     ;
@@ -286,8 +286,8 @@ class MH_Heading_Widget extends \Elementor\Widget_Base {
             <?php endif; ?>
 
             <?php if ($is_pseudo_underline): ?>
-                .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-wrapper::after,
-                .elementor-element-<?php echo $this->get_id(); ?> .mh-has-underline::after {
+                .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-underline-wrapper::after,
+                .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-has-underline::after {
                     content: '';
                     position: absolute;
                     left: 50%;
@@ -297,11 +297,11 @@ class MH_Heading_Widget extends \Elementor\Widget_Base {
                     z-index: -1;
                 }
 
-                .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-pos--bottom::after {
+                .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-underline-pos--bottom::after {
                     bottom: var(--underline-offset, -5px);
                 }
 
-                .elementor-element-<?php echo $this->get_id(); ?> .mh-underline-pos--top::after {
+                .elementor-element-<?php echo esc_attr( $this->get_id() ); ?> .mh-underline-pos--top::after {
                     top: var(--underline-offset, -5px);
                 }
 
@@ -311,11 +311,11 @@ class MH_Heading_Widget extends \Elementor\Widget_Base {
 
                 if ($u_style === 'wavy') {
                     $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q25,-1 50,5 T100,5' stroke='" . $svg_color_safe . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
-                    echo '.elementor-element-' . $this->get_id() . ' .mh-underline--wavy::after { background-image: url("' . $svg . '"); background-size: cover; }';
+                    echo '.elementor-element-' . esc_attr( $this->get_id() ) . ' .mh-underline--wavy::after { background-image: url("' . $svg . '"); background-size: cover; }';
                 }
                 if ($u_style === 'jagged') {
                     $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpolyline points='0,5 15,0 30,5 45,0 60,5 75,0 90,5' stroke='" . $svg_color_safe . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
-                    echo '.elementor-element-' . $this->get_id() . ' .mh-underline--jagged::after { background-image: url("' . $svg . '"); background-size: cover; }';
+                    echo '.elementor-element-' . esc_attr( $this->get_id() ) . ' .mh-underline--jagged::after { background-image: url("' . $svg . '"); background-size: cover; }';
                 }
                 ?>
             <?php endif; ?>

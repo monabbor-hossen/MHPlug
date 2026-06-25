@@ -12,7 +12,7 @@ use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Icons_Manager;
 
-class MH_Product_Attribute_Filter_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Product_Attribute_Filter_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_attribute_filter'; }
     public function get_title() { return __( 'MH Product Attribute Filter', 'mh-plug-ecommerce-builder-widgets' ); }

@@ -16,7 +16,7 @@ use Elementor\Group_Control_Text_Shadow;
 use Elementor\Icons_Manager;
 use Elementor\Repeater;
 
-class MH_Brush_Slider_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Brush_Slider_Widget extends \Elementor\Widget_Base {
 
     public function get_name() {
         return 'mh-brush-slider';
@@ -547,7 +547,7 @@ class MH_Brush_Slider_Widget extends \Elementor\Widget_Base {
         $this->add_render_attribute( 'slider-wrapper', 'class', 'mh-brush-slider-wrapper' );
         $this->add_render_attribute( 'slider', [
             'class' => 'mh-brush-slider',
-            'data-slick' => json_encode( $slick_options ),
+            'data-slick' => wp_json_encode( $slick_options ),
         ] );
         
         ?>

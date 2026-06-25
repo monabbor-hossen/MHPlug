@@ -14,7 +14,7 @@ use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Text_Shadow;
 
-class MH_Brush_Text_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Brush_Text_Widget extends \Elementor\Widget_Base {
 
     public function get_name() {
         return 'mh-brush-text';

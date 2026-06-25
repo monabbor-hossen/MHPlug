@@ -18,7 +18,7 @@ use Elementor\Group_Control_Border;
 use Elementor\Icons_Manager;
 use Elementor\Repeater;
 
-class MH_Image_Circle_Slider_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Image_Circle_Slider_Widget extends \Elementor\Widget_Base {
 
     public function get_name() {
         return 'mh-image-circle-slider';
@@ -548,7 +548,7 @@ class MH_Image_Circle_Slider_Widget extends \Elementor\Widget_Base {
         $this->add_render_attribute( 'slider-wrapper', 'class', 'mh-brush-slider-wrapper' );
         $this->add_render_attribute( 'slider', [
             'class' => 'mh-brush-slider',
-            'data-slick' => json_encode( $slick_options ),
+            'data-slick' => wp_json_encode( $slick_options ),
         ] );
 
         // Border Class for Animation

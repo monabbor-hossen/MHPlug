@@ -7,7 +7,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 
-class MH_Header_Compare_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Header_Compare_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_header_compare'; }
     public function get_title() { return __( 'MH Header Compare', 'mh-plug-ecommerce-builder-widgets' ); }

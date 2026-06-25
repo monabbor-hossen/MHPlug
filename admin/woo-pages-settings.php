@@ -350,4 +350,3 @@ $weights = [
         </button>
     </form>
 </div>
-<script>jQuery(function($){ if($.fn.wpColorPicker) $('.mh-color-picker').wpColorPicker(); });</script>

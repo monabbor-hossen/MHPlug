@@ -7,7 +7,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 
-class MH_Compare_Table_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Compare_Table_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_compare_table'; }
     public function get_title() { return __( 'MH Compare Table', 'mh-plug-ecommerce-builder-widgets' ); }

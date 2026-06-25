@@ -9,7 +9,7 @@ use Elementor\Group_Control_Background;
 use Elementor\Group_Control_Border;
 use Elementor\Repeater;
 
-class MH_Testimonial_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Testimonial_Widget extends \Elementor\Widget_Base {
 
 	public function get_name() {
 		return 'mh_testimonial';

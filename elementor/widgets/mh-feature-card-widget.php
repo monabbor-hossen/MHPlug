@@ -16,7 +16,7 @@ use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Utils;
 
-class MH_Feature_Card_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Feature_Card_Widget extends \Elementor\Widget_Base {
 
 	public function get_name() {
 		return 'mh-feature-card';

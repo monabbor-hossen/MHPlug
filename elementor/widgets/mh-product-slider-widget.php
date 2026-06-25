@@ -18,7 +18,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Border;
 
-class MH_Product_Slider_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Product_Slider_Widget extends \Elementor\Widget_Base {
 
     use MH_Quick_View_Trait;
 

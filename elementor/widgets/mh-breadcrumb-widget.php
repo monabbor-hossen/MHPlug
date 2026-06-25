@@ -13,7 +13,7 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 
-class MH_Breadcrumb_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Breadcrumb_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_breadcrumb'; }
     public function get_title() { return __( 'MH Breadcrumb', 'mh-plug-ecommerce-builder-widgets' ); }

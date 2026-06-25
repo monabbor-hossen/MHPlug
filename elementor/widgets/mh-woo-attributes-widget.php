@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 /**
  * MH Plug - WooCommerce Product Attributes Widget (With JS Bridge Fix)
  */
-class MH_Woo_Attributes_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Woo_Attributes_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_woo_attributes'; }
     public function get_title() { return esc_html__('Product Attributes', 'mh-plug-ecommerce-builder-widgets'); }

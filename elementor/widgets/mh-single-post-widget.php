@@ -12,7 +12,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Border;
 
-class MH_Single_Post_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Single_Post_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_single_post'; }
     public function get_title() { return __( 'MH Single Post', 'mh-plug-ecommerce-builder-widgets' ); }

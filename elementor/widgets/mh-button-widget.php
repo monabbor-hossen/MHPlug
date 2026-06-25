@@ -12,7 +12,7 @@ use Elementor\Group_Control_Background;
 use Elementor\Group_Control_Text_Shadow;
 use Elementor\Icons_Manager;
 
-class MH_Button_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Button_Widget extends \Elementor\Widget_Base {
 
 	public function get_name() {
 		return 'mh_button';

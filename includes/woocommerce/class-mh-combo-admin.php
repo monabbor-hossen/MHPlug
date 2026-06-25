@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class MH_Combo_Admin
  */
-class MH_Combo_Admin {
+class MH_Plug_Combo_Admin {
 
     /**
      * Boot the class: register all hooks.

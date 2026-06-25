@@ -14,7 +14,7 @@ use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
 
-class MH_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'mh_product_data_accordion'; }
     public function get_title() { return __( 'MH Product Data (Tabs & Accordion)', 'mh-plug-ecommerce-builder-widgets' ); }

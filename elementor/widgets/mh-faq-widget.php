@@ -17,7 +17,7 @@ use Elementor\Group_Control_Background;
 use Elementor\Repeater;
 use Elementor\Icons_Manager;
 
-class MH_FAQ_Widget extends \Elementor\Widget_Base {
+class MH_Plug_FAQ_Widget extends \Elementor\Widget_Base {
 
     public function get_name()        { return 'mh_faq'; }
     public function get_title()       { return __( 'MH Animated FAQ', 'mh-plug-ecommerce-builder-widgets' ); }

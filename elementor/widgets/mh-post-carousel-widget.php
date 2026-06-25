@@ -23,7 +23,7 @@ use Elementor\Group_Control_Border;
 use Elementor\Icons_Manager;
 use Elementor\Repeater;
 
-class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
+class MH_Plug_Post_Carousel_Widget extends \Elementor\Widget_Base {
 
     public function get_name() {
         return 'mh-post-carousel';
@@ -397,7 +397,7 @@ class MH_Post_Carousel_Widget extends \Elementor\Widget_Base {
             }
             ?>
             <div class="mh-post-carousel-wrapper">
-                <div class="mh-post-carousel" data-slick='<?php echo json_encode($slick_options); ?>'>
+                <div class="mh-post-carousel" data-slick='<?php echo wp_json_encode($slick_options); ?>'>
                     <?php while ($query->have_posts()) : $query->the_post(); ?>
                         <div class="mh-post-carousel-item">
                             <?php $this->render_post_card($settings); ?>
