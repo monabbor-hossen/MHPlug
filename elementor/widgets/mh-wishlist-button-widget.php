@@ -245,11 +245,11 @@ class MH_Plug_Wishlist_Button_Widget extends \Elementor\Widget_Base {
                data-wishlist-url="<?php echo esc_url( $browse_url ); ?>">
                 
                 <span class="mh-icon-wrap mh-icon-normal">
-                    <?php echo $svg_empty; ?>
+                    <?php echo $svg_empty; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                 </span>
                 
                 <span class="mh-icon-wrap mh-icon-added">
-                    <?php echo $svg_filled; ?>
+                    <?php echo $svg_filled; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                 </span>
 
                 <?php if ( $show_label ) : ?>

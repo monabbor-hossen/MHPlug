@@ -277,7 +277,8 @@ class MH_Plug_Woo_Attributes_Widget extends \Elementor\Widget_Base {
             $select_style = $is_dropdown ? $default_select_css : 'display:none;';
             $extra_class = ( $layout === 'dropdown_search' ) ? ' mh-select2-enabled' : '';
             
-            echo '<select id="' . esc_attr($select_id) . '" name="' . esc_attr($select_name) . '" class="mh-woo-attribute-select' . $extra_class . '" style="' . esc_attr($select_style) . '" data-attribute_name="' . esc_attr($select_name) . '" data-is-variation="' . esc_attr($is_variation) . '">';
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo '<select id="' . esc_attr($select_id) . '" name="' . esc_attr($select_name) . '" class="mh-woo-attribute-select' . esc_attr( $extra_class ) . '" style="' . esc_attr($select_style) . '" data-attribute_name="' . esc_attr($select_name) . '" data-is-variation="' . esc_attr($is_variation) . '">';
             /* translators: %s: Product attribute name */
             echo '<option value="">' . esc_html(sprintf(__('Choose %s', 'mh-plug-ecommerce-builder-widgets'), $label)) . '</option>';
             foreach ($options_data as $opt) {

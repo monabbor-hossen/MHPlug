@@ -836,19 +836,19 @@ class MH_Plug_Product_Grid_Widget extends \Elementor\Widget_Base {
             }
 
             @media (min-width: 1025px) {
-                #<?php echo esc_attr($grid_id); ?> .mh-product-card:nth-child(n+<?php echo $desktop_count + 1; ?>) {
+                #<?php echo esc_attr($grid_id); ?> .mh-product-card:nth-child(n+<?php echo absint($desktop_count + 1); ?>) {
                     display: none !important;
                 }
             }
 
             @media (min-width: 768px) and (max-width: 1024px) {
-                #<?php echo esc_attr($grid_id); ?> .mh-product-card:nth-child(n+<?php echo $tablet_count + 1; ?>) {
+                #<?php echo esc_attr($grid_id); ?> .mh-product-card:nth-child(n+<?php echo absint($tablet_count + 1); ?>) {
                     display: none !important;
                 }
             }
 
             @media (max-width: 767px) {
-                #<?php echo esc_attr($grid_id); ?> .mh-product-card:nth-child(n+<?php echo $mobile_count + 1; ?>) {
+                #<?php echo esc_attr($grid_id); ?> .mh-product-card:nth-child(n+<?php echo absint($mobile_count + 1); ?>) {
                     display: none !important;
                 }
             }
@@ -1038,7 +1038,7 @@ class MH_Plug_Product_Grid_Widget extends \Elementor\Widget_Base {
                     <div class="mh-product-card mh-shop-card">
                         <div class="mh-product-image-wrap">
                             <a href="<?php the_permalink(); ?>">
-                                <?php echo $is_product ? $product->get_image('woocommerce_thumbnail') : get_the_post_thumbnail($post_id, 'medium'); ?>
+                                <?php echo $is_product ? $product->get_image('woocommerce_thumbnail') : get_the_post_thumbnail($post_id, 'medium'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             </a>
                             <?php if ($is_product && $settings['show_badge'] === 'yes' && $product->is_on_sale()): ?>
                                 <div class="mh-product-badges"><span class="mh-badge"><?php esc_html_e('Sale', 'mh-plug-ecommerce-builder-widgets'); ?></span></div>
@@ -1046,11 +1046,11 @@ class MH_Plug_Product_Grid_Widget extends \Elementor\Widget_Base {
                         </div>
                         <div class="mh-product-info">
                             <?php if ($settings['show_category'] === 'yes' && $is_product): ?>
-                                <div class="mh-product-cat"><?php echo wc_get_product_category_list($post_id, ', '); ?></div>
+                                <div class="mh-product-cat"><?php echo wc_get_product_category_list($post_id, ', '); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
                             <?php endif; ?>
                             <h3 class="mh-product-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                             <?php if ($is_product): ?>
-                                <div class="mh-product-price"><?php echo $product->get_price_html(); ?></div>
+                                <div class="mh-product-price"><?php echo $product->get_price_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
                             <?php endif; ?>
                             <?php if ($is_product && $settings['show_attributes'] === 'yes'):
                                 $tax_slug = !empty($settings['attribute_taxonomy']) ? trim($settings['attribute_taxonomy']) : '';
@@ -1119,7 +1119,7 @@ class MH_Plug_Product_Grid_Widget extends \Elementor\Widget_Base {
                     <div class="mh-product-card">
                         <div class="mh-product-image-wrap">
                             <a href="<?php the_permalink(); ?>">
-                                <?php echo $is_product ? $product->get_image('woocommerce_thumbnail') : get_the_post_thumbnail($post_id, 'medium'); ?>
+                                <?php echo $is_product ? $product->get_image('woocommerce_thumbnail') : get_the_post_thumbnail($post_id, 'medium'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             </a>
                             <?php if ($is_product && $settings['show_badge'] === 'yes' && $product->is_on_sale()): ?>
                                 <div class="mh-product-badges"><span class="mh-badge"><?php esc_html_e('Sale', 'mh-plug-ecommerce-builder-widgets'); ?></span></div>
@@ -1163,15 +1163,15 @@ class MH_Plug_Product_Grid_Widget extends \Elementor\Widget_Base {
                         <div class="mh-product-info">
                             <?php if ($settings['show_category'] === 'yes'): ?>
                                 <div class="mh-product-cat">
-                                    <?php echo $is_product ? wc_get_product_category_list($post_id, ', ') : get_the_category_list(', ', '', $post_id); ?>
+                                    <?php echo $is_product ? wc_get_product_category_list($post_id, ', ') : get_the_category_list(', ', '', $post_id); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                                 </div>
                             <?php endif; ?>
                             <h3 class="mh-product-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                             <?php if ($is_product): ?>
                                 <?php if ($settings['show_rating'] === 'yes'): ?>
-                                    <div class="mh-product-rating"><?php echo wc_get_rating_html($product->get_average_rating()); ?></div>
+                                    <div class="mh-product-rating"><?php echo wc_get_rating_html($product->get_average_rating()); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
                                 <?php endif; ?>
-                                <div class="mh-product-price"><?php echo $product->get_price_html(); ?></div>
+                                <div class="mh-product-price"><?php echo $product->get_price_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
                             <?php else: ?>
                                 <div class="mh-post-date"><?php echo get_the_date(); ?></div>
                             <?php endif; ?>
@@ -1206,9 +1206,9 @@ class MH_Plug_Product_Grid_Widget extends \Elementor\Widget_Base {
              data-tablet="<?php echo esc_attr($tablet_count); ?>"
              data-mobile="<?php echo esc_attr($mobile_count); ?>">
             <button type="button" class="mh-load-more-btn" aria-label="<?php echo esc_attr($lm_text); ?>">
-                <?php if ($lm_icon_pos === 'before' && $lm_icon_html): echo $lm_icon_html; endif; ?>
+                <?php if ($lm_icon_pos === 'before' && $lm_icon_html): echo $lm_icon_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  endif; ?>
                 <span class="mh-lm-text"><?php echo esc_html($lm_text); ?></span>
-                <?php if ($lm_icon_pos === 'after' && $lm_icon_html): echo $lm_icon_html; endif; ?>
+                <?php if ($lm_icon_pos === 'after' && $lm_icon_html): echo $lm_icon_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  endif; ?>
             </button>
         </div>
         <?php

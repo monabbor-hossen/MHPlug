@@ -133,6 +133,6 @@ class MH_Plug_Product_Title_Widget extends \Elementor\Widget_Base {
         $title    = $product->get_name();
 
         // 5. Render the Title
-        echo '<' . $html_tag . ' class="mh-product-title entry-title" style="margin-top: 0;">' . esc_html( $title ) . '</' . $html_tag . '>';
+        echo '<' . esc_html( $html_tag ) . ' class="mh-product-title entry-title" style="margin-top: 0;">' . esc_html( $title ) . '</' . esc_html( $html_tag ) . '>';
     }
 }

@@ -568,8 +568,8 @@ class MH_Plug_Image_Circle_Slider_Widget extends \Elementor\Widget_Base {
         $this->add_render_attribute( 'slider-wrapper', 'class', [ 'mh-brush-slider-wrapper', $shape_class, $hover_class ] );
 
         ?>
-        <div <?php echo $this->get_render_attribute_string( 'slider-wrapper' ); ?>>
-            <div <?php echo $this->get_render_attribute_string( 'slider' ); ?>>
+        <div <?php echo $this->get_render_attribute_string( 'slider-wrapper' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+            <div <?php echo $this->get_render_attribute_string( 'slider' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
                 <?php foreach ( $settings['slides'] as $index => $slide ) : ?>
                     <div class="mh-brush-slide-item mh-image-circle-slide-item">
                         <?php
@@ -591,7 +591,7 @@ class MH_Plug_Image_Circle_Slider_Widget extends \Elementor\Widget_Base {
                         ?>
 
                         <div class="mh-image-circle-wrapper">
-                            <<?php echo $wrapper_tag; ?> <?php echo $this->get_render_attribute_string( $link_key ); ?>>
+                            <<?php echo esc_html($wrapper_tag); ?> <?php echo $this->get_render_attribute_string( $link_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
                                 <div class="mh-image-circle-image-wrapper">
                                     <div class="<?php echo esc_attr($border_class); ?>"></div>
                                     <div class="mh-image-circle-inner" style="<?php echo esc_attr($image_style); ?>"></div>
@@ -599,7 +599,7 @@ class MH_Plug_Image_Circle_Slider_Widget extends \Elementor\Widget_Base {
                                 <?php if ( $slide['text'] ) : ?>
                                     <div class="mh-image-circle-text"><?php echo esc_html( $slide['text'] ); ?></div>
                                 <?php endif; ?>
-                            </<?php echo $wrapper_tag; ?>>
+                            </<?php echo esc_html($wrapper_tag); ?>>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -625,7 +625,7 @@ class MH_Plug_Image_Circle_Slider_Widget extends \Elementor\Widget_Base {
             });
             <?php
             $js = ob_get_clean();
-            echo "<script type='text/javascript'>\n" . $js . "\n</script>";
+            echo "<script type='text/javascript'>\n" . $js . "\n</script>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             ?>
         </div>
         <?php

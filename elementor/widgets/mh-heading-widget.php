@@ -149,7 +149,7 @@ class MH_Plug_Heading_Widget extends \Elementor\Widget_Base {
 
         // 🚀 THE FIX: The outer Alignment Shrink-Wrapper
         echo '<div class="mh-heading-alignment-wrapper">';
-        echo '<' . $tag . ' class="' . implode(' ', $wrapper_classes) . '">';
+        echo '<' . esc_html($tag) . ' class="' . esc_attr(implode(' ', $wrapper_classes)) . '">';
 
         $parts_count = count($settings['heading_parts']);
 
@@ -185,12 +185,12 @@ class MH_Plug_Heading_Widget extends \Elementor\Widget_Base {
                 $inner_classes[] = 'mh-typing-effect';
             }
 
-            echo '<span class="' . implode(' ', $outer_classes) . '">';
-            echo '<span class="' . implode(' ', $inner_classes) . '">' . wp_kses_post($item['part_text']) . '</span>';
+            echo '<span class="' . esc_attr(implode(' ', $outer_classes)) . '">';
+            echo '<span class="' . esc_attr(implode(' ', $inner_classes)) . '">' . wp_kses_post($item['part_text']) . '</span>';
             echo '</span> ';
         }
 
-        echo '</' . $tag . '>';
+        echo '</' . esc_html($tag) . '>';
         echo '</div>'; // End Alignment Shrink-Wrapper
 
     
@@ -311,11 +311,11 @@ class MH_Plug_Heading_Widget extends \Elementor\Widget_Base {
 
                 if ($u_style === 'wavy') {
                     $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q25,-1 50,5 T100,5' stroke='" . $svg_color_safe . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
-                    echo '.elementor-element-' . esc_attr( $this->get_id() ) . ' .mh-underline--wavy::after { background-image: url("' . $svg . '"); background-size: cover; }';
+                    echo '.elementor-element-' . esc_attr( $this->get_id() ) . ' .mh-underline--wavy::after { background-image: url("' . $svg . '"); background-size: cover; }'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 }
                 if ($u_style === 'jagged') {
                     $svg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpolyline points='0,5 15,0 30,5 45,0 60,5 75,0 90,5' stroke='" . $svg_color_safe . "' stroke-width='2' fill='none'/%3E%3C/svg%3E";
-                    echo '.elementor-element-' . esc_attr( $this->get_id() ) . ' .mh-underline--jagged::after { background-image: url("' . $svg . '"); background-size: cover; }';
+                    echo '.elementor-element-' . esc_attr( $this->get_id() ) . ' .mh-underline--jagged::after { background-image: url("' . $svg . '"); background-size: cover; }'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 }
                 ?>
             <?php endif; ?>

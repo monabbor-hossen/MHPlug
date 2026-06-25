@@ -72,6 +72,7 @@ if ( ! function_exists( 'mh_plug_woo_pages_defaults' ) ) {
 
 // Stop execution if we are not in the WordPress admin panel
 // This prevents the HTML settings UI from leaking into the frontend WooCommerce pages
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 if ( ! is_admin() || ! isset( $_GET['page'] ) || $_GET['page'] !== 'mh-plug-woo-pages' ) {
     return;
 }

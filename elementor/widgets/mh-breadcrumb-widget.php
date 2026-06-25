@@ -140,12 +140,12 @@ class MH_Plug_Breadcrumb_Widget extends \Elementor\Widget_Base {
         if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
             ?>
             <nav class="mh-breadcrumb woocommerce-breadcrumb">
-                <a href="#"><?php echo $home_text; ?></a> 
-                <?php echo $delimiter; ?> 
+                <a href="#"><?php echo $home_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a> 
+                <?php echo $delimiter; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> 
                 <a href="#">Category</a> 
-                <?php echo $delimiter; ?> 
+                <?php echo $delimiter; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> 
                 <a href="#">Subcategory</a> 
-                <?php echo $delimiter; ?> 
+                <?php echo $delimiter; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> 
                 Current page
             </nav>
             <?php

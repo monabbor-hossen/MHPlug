@@ -71,10 +71,10 @@ $disabled_attr = $is_elementor_active ? '' : 'disabled';
                     </span>
                     <span class="mh-header-controls">
                         <span class="mh-widget-controls">
-                            <button type="button" class="button button-small mh-toggle-all" data-action="enable" data-section="woocommerce" <?php echo $wc_disabled_attr; ?>>
+                            <button type="button" class="button button-small mh-toggle-all" data-action="enable" data-section="woocommerce" <?php echo esc_attr( $wc_disabled_attr ); ?>>
                                 <?php esc_html_e( 'Enable All', 'mh-plug-ecommerce-builder-widgets' ); ?>
                             </button>
-                            <button type="button" class="button button-small mh-toggle-all" data-action="disable" data-section="woocommerce" <?php echo $wc_disabled_attr; ?>>
+                            <button type="button" class="button button-small mh-toggle-all" data-action="disable" data-section="woocommerce" <?php echo esc_attr( $wc_disabled_attr ); ?>>
                                 <?php esc_html_e( 'Disable All', 'mh-plug-ecommerce-builder-widgets' ); ?>
                             </button>
                         </span>
@@ -111,10 +111,10 @@ $disabled_attr = $is_elementor_active ? '' : 'disabled';
                     <span class="mh-header-controls">
                         
                         <span class="mh-widget-controls">
-                            <button type="button" class="button button-small mh-toggle-all" data-action="enable" <?php echo $disabled_attr; ?>>
+                            <button type="button" class="button button-small mh-toggle-all" data-action="enable" <?php echo esc_attr( $disabled_attr ); ?>>
                                 <?php esc_html_e('Enable All', 'mh-plug-ecommerce-builder-widgets'); ?>
                             </button>
-                            <button type="button" class="button button-small mh-toggle-all" data-action="disable" <?php echo $disabled_attr; ?>>
+                            <button type="button" class="button button-small mh-toggle-all" data-action="disable" <?php echo esc_attr( $disabled_attr ); ?>>
                                 <?php esc_html_e('Disable All', 'mh-plug-ecommerce-builder-widgets'); ?>
                             </button>
                         </span>

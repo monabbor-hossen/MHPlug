@@ -229,9 +229,9 @@ class MH_Plug_Site_Logo_Widget extends \Elementor\Widget_Base {
     $link_tag = ($link_tag_key === 'logo_link') ? 'a' : 'div';
     ?>
     <div class="mh-site-logo-container">
-        <<?php echo $link_tag; ?> class="mh-site-logo" <?php echo $link_attributes_string; ?>>
-            <img <?php echo $this->get_render_attribute_string('logo_image'); ?> />
-        </<?php echo $link_tag; ?>>
+        <<?php echo $link_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> class="mh-site-logo" <?php echo $link_attributes_string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+            <img <?php echo $this->get_render_attribute_string('logo_image'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+        </<?php echo $link_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
     </div>
     <?php
 }

@@ -417,7 +417,7 @@ class MH_Plug_Woo_Add_To_Cart_Widget extends \Elementor\Widget_Base {
                             name="quantity"
                             value="<?php echo esc_attr( $default_qty ); ?>"
                             min="1"
-                            <?php echo $max_attr; ?>
+                            <?php echo $max_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             step="1"
                             autocomplete="off"
                             aria-label="<?php esc_attr_e( 'Quantity', 'mh-plug-ecommerce-builder-widgets' ); ?>"

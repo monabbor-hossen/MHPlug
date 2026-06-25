@@ -572,24 +572,24 @@ class MH_Plug_Product_Attribute_Filter_Widget extends \Elementor\Widget_Base {
         ?>
 
         <!-- Floating Button (mobile only) -->
-        <button type="button" class="mhaf-fab mhaf-fab-<?php echo $wid; ?>" id="mhaf-fab-<?php echo $wid; ?>" aria-label="<?php esc_attr_e('Open Filters', 'mh-plug-ecommerce-builder-widgets'); ?>">
+        <button type="button" class="mhaf-fab mhaf-fab-<?php echo esc_attr($wid); ?>" id="mhaf-fab-<?php echo esc_attr($wid); ?>" aria-label="<?php esc_attr_e('Open Filters', 'mh-plug-ecommerce-builder-widgets'); ?>">
             <i class="<?php echo esc_attr($fab_icon); ?>"></i>
         </button>
 
         <!-- Sidebar Overlay -->
-        <div class="mhaf-overlay" id="mhaf-overlay-<?php echo $wid; ?>"></div>
-        <div class="mhaf-sidebar-panel" id="mhaf-sidebar-<?php echo $wid; ?>">
+        <div class="mhaf-overlay" id="mhaf-overlay-<?php echo esc_attr($wid); ?>"></div>
+        <div class="mhaf-sidebar-panel" id="mhaf-sidebar-<?php echo esc_attr($wid); ?>">
             <div class="mhaf-sidebar-header">
                 <span class="mhaf-sidebar-title"><?php esc_html_e('Filters', 'mh-plug-ecommerce-builder-widgets'); ?></span>
-                <button type="button" class="mhaf-sidebar-close" id="mhaf-close-<?php echo $wid; ?>" aria-label="<?php esc_attr_e('Close', 'mh-plug-ecommerce-builder-widgets'); ?>">
+                <button type="button" class="mhaf-sidebar-close" id="mhaf-close-<?php echo esc_attr($wid); ?>" aria-label="<?php esc_attr_e('Close', 'mh-plug-ecommerce-builder-widgets'); ?>">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="mhaf-sidebar-body" id="mhaf-sidebar-body-<?php echo $wid; ?>"></div>
+            <div class="mhaf-sidebar-body" id="mhaf-sidebar-body-<?php echo esc_attr($wid); ?>"></div>
         </div>
 
         <!-- Desktop Filter (hidden on mobile) -->
-        <div class="mhaf-widget mhaf-desktop-filter mhaf-desktop-filter-<?php echo $wid; ?>" id="mhaf-<?php echo $wid; ?>" data-target="<?php echo $target; ?>">
+        <div class="mhaf-widget mhaf-desktop-filter mhaf-desktop-filter-<?php echo esc_attr($wid); ?>" id="mhaf-<?php echo esc_attr($wid); ?>" data-target="<?php echo esc_attr($target); ?>">
 
             <?php if ($s['show_search'] === 'yes'): ?>
             <div class="mhaf-section">
@@ -608,7 +608,7 @@ class MH_Plug_Product_Attribute_Filter_Widget extends \Elementor\Widget_Base {
                     <input type="checkbox" class="mhaf-cb" data-filter="product_cat" value="<?php echo esc_attr($cat->slug); ?>">
                     <span class="mhaf-mark"></span>
                     <span class="mhaf-label"><?php echo esc_html($cat->name); ?></span>
-                    <span class="mhaf-count">(<?php echo $cat->count; ?>)</span>
+                    <span class="mhaf-count">(<?php echo esc_html($cat->count); ?>)</span>
                 </label>
                 <?php endforeach; ?>
             </div>
@@ -618,15 +618,15 @@ class MH_Plug_Product_Attribute_Filter_Widget extends \Elementor\Widget_Base {
             <div class="mhaf-section">
                 <div class="mhaf-heading"><?php esc_html_e('Price', 'mh-plug-ecommerce-builder-widgets'); ?></div>
                 <div class="mhaf-price-wrap">
-                    <div class="mhaf-range-bar" data-min="<?php echo $min_p; ?>" data-max="<?php echo $max_p; ?>">
+                    <div class="mhaf-range-bar" data-min="<?php echo esc_attr($min_p); ?>" data-max="<?php echo esc_attr($max_p); ?>">
                         <div class="mhaf-range-track"></div>
                         <div class="mhaf-range-handle mhaf-handle-min" data-type="min"></div>
                         <div class="mhaf-range-handle mhaf-handle-max" data-type="max"></div>
                     </div>
                     <div class="mhaf-price-inputs">
-                        <input type="number" class="mhaf-price-min" value="<?php echo $min_p; ?>" min="<?php echo $min_p; ?>" max="<?php echo $max_p; ?>">
+                        <input type="number" class="mhaf-price-min" value="<?php echo esc_attr($min_p); ?>" min="<?php echo esc_attr($min_p); ?>" max="<?php echo esc_attr($max_p); ?>">
                         <span>–</span>
-                        <input type="number" class="mhaf-price-max" value="<?php echo $max_p; ?>" min="<?php echo $min_p; ?>" max="<?php echo $max_p; ?>">
+                        <input type="number" class="mhaf-price-max" value="<?php echo esc_attr($max_p); ?>" min="<?php echo esc_attr($min_p); ?>" max="<?php echo esc_attr($max_p); ?>">
                     </div>
                 </div>
             </div>
@@ -677,7 +677,7 @@ class MH_Plug_Product_Attribute_Filter_Widget extends \Elementor\Widget_Base {
                     <input type="checkbox" class="mhaf-cb" data-filter="mh_brand" value="<?php echo esc_attr($brand->slug); ?>">
                     <span class="mhaf-mark"></span>
                     <span class="mhaf-label"><?php echo esc_html($brand->name); ?></span>
-                    <span class="mhaf-count">(<?php echo $brand->count; ?>)</span>
+                    <span class="mhaf-count">(<?php echo esc_html($brand->count); ?>)</span>
                 </label>
                 <?php endforeach; ?>
             </div>
@@ -698,7 +698,7 @@ class MH_Plug_Product_Attribute_Filter_Widget extends \Elementor\Widget_Base {
                 <div class="mhaf-heading"><?php esc_html_e('Rating', 'mh-plug-ecommerce-builder-widgets'); ?></div>
                 <?php for($i = 5; $i >= 1; $i--): ?>
                 <label class="mhaf-item">
-                    <input type="radio" name="mhaf_rating_<?php echo $wid; ?>" class="mhaf-cb" data-filter="mh_rating" value="<?php echo $i; ?>">
+                    <input type="radio" name="mhaf_rating_<?php echo esc_attr($wid); ?>" class="mhaf-cb" data-filter="mh_rating" value="<?php echo esc_attr($i); ?>">
                     <span class="mhaf-mark"></span>
                     <span class="mhaf-stars">
                         <?php for($j=1;$j<=5;$j++) echo $j<=$i ? '<i class="fas fa-star"></i>' : '<i class="fas fa-star empty"></i>'; ?>
@@ -732,7 +732,7 @@ class MH_Plug_Product_Attribute_Filter_Widget extends \Elementor\Widget_Base {
         ob_start();
         ?>
         (function($){
-            var wid = '<?php echo $wid; ?>';
+            var wid = '<?php echo esc_js($wid); ?>';
             var $w = $('#mhaf-' + wid);
             var timer, debounce = 500;
 

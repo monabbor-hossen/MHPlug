@@ -138,12 +138,12 @@ class MH_Plug_Header_Compare_Widget extends \Elementor\Widget_Base {
 
     protected function render() {
         $settings = $this->get_settings_for_display();
-        $target = $settings['compare_page_url']['is_external'] ? ' target="_blank"' : '';
+        $target = !empty($settings['compare_page_url']['is_external']) ? '_blank' : '';
         $url = !empty($settings['compare_page_url']['url']) ? $settings['compare_page_url']['url'] : '#';
         $animation_class = !empty($settings['hover_animation']) ? ' elementor-animation-' . $settings['hover_animation'] : '';
         ?>
         <div class="mh-header-compare-wrapper" style="position: relative; display: inline-block;">
-            <a href="<?php echo esc_url($url); ?>" <?php echo $target; ?> class="mh-header-compare-icon<?php echo esc_attr($animation_class); ?>" style="text-decoration:none; position:relative;">
+            <a href="<?php echo esc_url($url); ?>" <?php echo $target ? 'target="' . esc_attr($target) . '"' : ''; ?> class="mh-header-compare-icon<?php echo esc_attr($animation_class); ?>" style="text-decoration:none; position:relative;">
                 <?php \Elementor\Icons_Manager::render_icon($settings['icon'], ['aria-hidden' => 'true']); ?>
                 <span class="mh-compare-count" style="position: absolute; top: -8px; right: -10px; font-size: 11px; padding: 2px 5px; border-radius: 50%; min-width: 18px; text-align: center; line-height: 1;">0</span>
             </a>

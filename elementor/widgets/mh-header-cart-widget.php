@@ -437,7 +437,7 @@ class MH_Plug_Header_Cart_Widget extends \Elementor\Widget_Base {
         </div>
 
         <?php if ( $show_floating ) : ?>
-            <a href="<?php echo esc_url( $cart_url ); ?>" class="mh-floating-cart <?php echo $is_offcanvas ? 'mh-open-mini-cart' : ''; ?>" id="mh-float-cart-<?php echo $wid; ?>">
+            <a href="<?php echo esc_url( $cart_url ); ?>" class="mh-floating-cart <?php echo $is_offcanvas ? 'mh-open-mini-cart' : ''; ?>" id="mh-float-cart-<?php echo esc_attr( $wid ); ?>">
                 <i class="<?php echo esc_attr($cart_icon); ?>"></i>
                 <?php if ($show_badge): ?>
                     <span class="mh-float-badge mh-cart-count"><?php echo esc_html( $cart_count ); ?></span>

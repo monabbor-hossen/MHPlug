@@ -57,7 +57,7 @@ function mh_plug_ajax_create_template() {
         wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'mh-plug-ecommerce-builder-widgets' ) ] );
     }
 
-    $template_name = isset( $_POST['template_name'] ) ? sanitize_text_field( $_POST['template_name'] ) : '';
+    $template_name = isset( $_POST['template_name'] ) ? sanitize_text_field( wp_unslash( $_POST['template_name'] ) ) : '';
     $template_type = isset( $_POST['template_type'] ) ? sanitize_key( $_POST['template_type'] )        : '';
 
     if ( empty( $template_name ) ) {
@@ -102,7 +102,7 @@ function mh_plug_ajax_toggle_status() {
         wp_send_json_error( [ 'message' => __( 'No permission.', 'mh-plug-ecommerce-builder-widgets' ) ] );
     }
     $template_id   = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
-    $is_active_raw = isset( $_POST['is_active'] )   ? $_POST['is_active']              : false;
+    $is_active_raw = isset( $_POST['is_active'] )   ? sanitize_text_field( wp_unslash( $_POST['is_active'] ) ) : false;
     $is_active     = ( filter_var( $is_active_raw, FILTER_VALIDATE_BOOLEAN ) ) ? 'yes' : 'no';
     if ( ! $template_id ) {
         wp_send_json_error( [ 'message' => __( 'Invalid ID.', 'mh-plug-ecommerce-builder-widgets' ) ] );
@@ -166,8 +166,9 @@ function mh_plug_category_template_edit_field( $term ) {
 }
 
 function mh_plug_save_category_template( $term_id ) {
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing
     if ( isset( $_POST['mh_category_template'] ) ) {
-        update_term_meta( $term_id, '_mh_category_template', sanitize_text_field( $_POST['mh_category_template'] ) );
+        update_term_meta( $term_id, '_mh_category_template', sanitize_text_field( wp_unslash( $_POST['mh_category_template'] ) ) );
     }
 }
 

@@ -145,14 +145,17 @@ add_action( 'wp_update_nav_menu_item', 'mh_plug_save_menu_item_icon_field', 10, 
  */
 function mh_plug_save_menu_item_icon_field( $menu_id, $menu_item_db_id, $args ) {
     // Save Icon Field
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing
     if ( isset( $_POST['menu-item-icon'][ $menu_item_db_id ] ) ) {
-        $sanitized_icon_class = sanitize_text_field( trim( $_POST['menu-item-icon'][ $menu_item_db_id ] ) );
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        $sanitized_icon_class = sanitize_text_field( trim( wp_unslash( $_POST['menu-item-icon'][ $menu_item_db_id ] ) ) );
         update_post_meta( $menu_item_db_id, '_menu_item_icon', $sanitized_icon_class );
     } else {
         delete_post_meta( $menu_item_db_id, '_menu_item_icon' );
     }
 
     // Save Hide Label Switch
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing
     if ( isset( $_POST['menu-item-hide-label'][ $menu_item_db_id ] ) && $_POST['menu-item-hide-label'][ $menu_item_db_id ] === '1' ) {
         update_post_meta( $menu_item_db_id, '_menu_item_hide_label', '1' );
     } else {

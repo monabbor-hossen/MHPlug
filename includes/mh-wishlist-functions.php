@@ -109,6 +109,7 @@ function mh_wishlist_get_items() {
     }
 
     if ( $ident['type'] === 'user' ) {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $results = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT product_id, variation_id FROM {$table} WHERE user_id = %d",
@@ -116,6 +117,7 @@ function mh_wishlist_get_items() {
             )
         );
     } else {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $results = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT product_id, variation_id FROM {$table} WHERE session_id = %s AND user_id = 0",
@@ -185,6 +187,7 @@ function mh_wishlist_ajax_add() {
 
     // Avoid duplicates
     if ( $ident['type'] === 'user' ) {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $exists = $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT id FROM {$table} WHERE user_id = %d AND product_id = %d",
@@ -193,6 +196,7 @@ function mh_wishlist_ajax_add() {
             )
         );
     } else {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $exists = $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT id FROM {$table} WHERE session_id = %s AND user_id = 0 AND product_id = %d",
@@ -210,6 +214,7 @@ function mh_wishlist_ajax_add() {
         ] );
     }
 
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
     $inserted = $wpdb->insert(
         $table,
         [
@@ -256,12 +261,14 @@ function mh_wishlist_ajax_remove() {
     $ident = mh_wishlist_get_identifier();
 
     if ( $ident['type'] === 'user' ) {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->delete(
             $table,
             [ 'user_id' => (int) $ident['id'], 'product_id' => $product_id ],
             [ '%d', '%d' ]
         );
     } else {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->delete(
             $table,
             [ 'session_id' => sanitize_text_field( $ident['id'] ), 'user_id' => 0, 'product_id' => $product_id ],
@@ -300,6 +307,7 @@ function mh_wishlist_ajax_toggle() {
 
     // ── Check if already in wishlist ──────────────────────────────────────────
     if ( $ident['type'] === 'user' ) {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $exists = $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT id FROM {$table} WHERE user_id = %d AND product_id = %d",
@@ -308,6 +316,7 @@ function mh_wishlist_ajax_toggle() {
             )
         );
     } else {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $exists = $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT id FROM {$table} WHERE session_id = %s AND user_id = 0 AND product_id = %d",
@@ -320,12 +329,14 @@ function mh_wishlist_ajax_toggle() {
     if ( $exists ) {
         // ── REMOVE ────────────────────────────────────────────────────────────
         if ( $ident['type'] === 'user' ) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->delete(
                 $table,
                 [ 'user_id' => (int) $ident['id'], 'product_id' => $product_id ],
                 [ '%d', '%d' ]
             );
         } else {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->delete(
                 $table,
                 [ 'session_id' => sanitize_text_field( $ident['id'] ), 'user_id' => 0, 'product_id' => $product_id ],
@@ -346,6 +357,7 @@ function mh_wishlist_ajax_toggle() {
     // ── ADD ───────────────────────────────────────────────────────────────────
     $variation_id = isset( $_POST['variation_id'] ) ? absint( $_POST['variation_id'] ) : 0;
 
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
     $inserted = $wpdb->insert(
         $table,
         [

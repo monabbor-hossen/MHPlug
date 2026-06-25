@@ -559,7 +559,7 @@ class MH_Plug_Feature_Card_Widget extends \Elementor\Widget_Base {
         // If 'none', no style attribute is added
 
 		?>
-		<div class="mh-feature-card-wrapper" style="<?php echo $wrapper_style; ?>">
+		<div class="mh-feature-card-wrapper" style="<?php echo esc_attr($wrapper_style); ?>">
 			
 			<?php if ( ! empty( $settings['card_title'] ) ) : ?>
 				<h3 class="mh-feature-card-title">

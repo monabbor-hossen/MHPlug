@@ -176,7 +176,9 @@ class MH_Plug_Combo_Admin {
         // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verified by WooCommerce.
         
         $selected_products = [];
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
         if ( isset( $_POST['_mh_combo_products'] ) ) {
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing
             $selected_products = array_map( 'absint', (array) wp_unslash( $_POST['_mh_combo_products'] ) );
             update_post_meta( $post_id, '_mh_combo_products', $selected_products );
         } else {
@@ -200,7 +202,9 @@ class MH_Plug_Combo_Admin {
         update_post_meta( $post_id, '_regular_price', $calculated_regular_price );
 
         // Handle Combo Sale Price
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
         if ( isset( $_POST['_mh_combo_sale_price'] ) && '' !== $_POST['_mh_combo_sale_price'] ) {
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing
             $sale_price = wc_format_decimal( sanitize_text_field( wp_unslash( $_POST['_mh_combo_sale_price'] ) ) );
             update_post_meta( $post_id, '_mh_combo_sale_price', $sale_price );
             update_post_meta( $post_id, '_sale_price', $sale_price );

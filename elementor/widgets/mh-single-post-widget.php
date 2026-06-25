@@ -364,7 +364,7 @@ class MH_Plug_Single_Post_Widget extends \Elementor\Widget_Base {
                     </div>
                     <div class="mh-sp-author-info">
                         <h4 class="mh-sp-author-name"><?php echo esc_html__( 'Written by', 'mh-plug-ecommerce-builder-widgets' ); ?> <?php the_author(); ?></h4>
-                        <p class="mh-sp-author-bio"><?php echo get_the_author_meta( 'description' ); ?></p>
+                        <p class="mh-sp-author-bio"><?php echo wp_kses_post( get_the_author_meta( 'description' ) ); ?></p>
                     </div>
                 </div>
             <?php endif; ?>

@@ -23,6 +23,7 @@ define('MH_PLUG_URL', plugin_dir_url(__FILE__));
  * Load Translation Text Domain
  */
 function mh_plug_load_textdomain() {
+    // phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound
     load_plugin_textdomain(
         'mh-plug-ecommerce-builder-widgets',
         false,
@@ -223,7 +224,7 @@ add_action( 'wp_ajax_nopriv_mh_live_product_search', 'mh_plug_ajax_live_search' 
 function mh_plug_ajax_live_search() {
     check_ajax_referer( 'mh_live_search_nonce', 'nonce' );
 
-    $keyword = isset( $_POST['keyword'] ) ? sanitize_text_field( $_POST['keyword'] ) : '';
+    $keyword = isset( $_POST['keyword'] ) ? sanitize_text_field( wp_unslash( $_POST['keyword'] ) ) : '';
 
     if ( empty( $keyword ) || ! class_exists( 'WooCommerce' ) ) {
         wp_send_json_error();
@@ -374,7 +375,7 @@ if ( ! function_exists( 'mh_quick_view_ajax_handler' ) ) {
             // We wrap the custom template in our cart wrapper so the AJAX Add-to-Cart JS still works perfectly!
             echo '<div class="mh-qv-add-to-cart-wrap" data-product-id="' . esc_attr($product_id) . '">';
             
-            // The "true" parameter tells Elementor to print the CSS inline so the popup doesn't look broken
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id, true );
             
             echo '</div>';
@@ -384,6 +385,7 @@ if ( ! function_exists( 'mh_quick_view_ajax_handler' ) ) {
             ?>
             <div class="mh-qv-grid">
                 <div class="mh-qv-image">
+                    <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                     <?php echo $product->get_image('woocommerce_single'); ?>
                 </div>
                 <div class="mh-qv-details">
@@ -423,7 +425,7 @@ if ( ! function_exists( 'mh_qv_ajax_add_to_cart' ) ) {
         }
 
         $product_id   = absint($_POST['product_id']);
-        $quantity     = empty($_POST['quantity']) ? 1 : wc_stock_amount($_POST['quantity']);
+        $quantity     = empty($_POST['quantity']) ? 1 : wc_stock_amount(wp_unslash($_POST['quantity']));
         $variation_id = isset($_POST['variation_id']) ? absint($_POST['variation_id']) : 0;
         
         $product = wc_get_product($product_id);

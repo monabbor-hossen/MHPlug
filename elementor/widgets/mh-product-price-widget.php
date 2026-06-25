@@ -111,7 +111,7 @@ class MH_Plug_Product_Price_Widget extends \Elementor\Widget_Base {
             // The outer .elementor-widget-container already carries the .mh-product-price class
             // via get_html_wrapper_class(). The JS rewrites that container's innerHTML directly,
             // so the inner wrapper only needs its own structural class.
-            echo '<div class="mh-price-inner" style="display: inline-block; line-height: 1.2;">' . $price_html . '</div>';
+            echo '<div class="mh-price-inner" style="display: inline-block; line-height: 1.2;">' . $price_html . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         }
     }
 }

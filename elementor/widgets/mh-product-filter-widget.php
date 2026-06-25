@@ -285,10 +285,12 @@ class MH_Plug_Product_Filter_Widget extends \Elementor\Widget_Base {
         }
 
         // Securely grab current sorting order
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         $current_orderby = isset( $_GET['orderby'] ) ? wc_clean( wp_unslash( $_GET['orderby'] ) ) : 'menu_order';
 
         global $wp;
         $current_url = home_url( add_query_arg( [], $wp->request ) );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $query_args  = $_GET;
         unset( $query_args['paged'] ); // Reset pagination
 

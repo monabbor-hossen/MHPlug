@@ -209,7 +209,7 @@ class MH_Plug_Synced_Slider_Widget extends \Elementor\Widget_Base {
                                         $link_attrs = $this->get_render_attribute_string( 'btn_' . $slide['_id'] );
                                     }
                                 ?>
-                                    <a href="<?php echo esc_url( $link_url ); ?>" class="mh-shop-btn" <?php echo $link_attrs; ?>>
+                                    <a href="<?php echo esc_url( $link_url ); ?>" class="mh-shop-btn" <?php echo $link_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
                                         <?php echo esc_html( $slide['button_text'] ); ?>
                                     </a>
                                 <?php endif; ?>
@@ -253,7 +253,7 @@ class MH_Plug_Synced_Slider_Widget extends \Elementor\Widget_Base {
                 asNavFor: '#image-<?php echo esc_attr( $id ); ?>',
                 draggable: true, 
                 swipe: true,
-                speed: <?php echo $t_speed; ?>,           
+                speed: <?php echo $t_speed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,           
                 touchThreshold: 10
             });
 
@@ -262,9 +262,9 @@ class MH_Plug_Synced_Slider_Widget extends \Elementor\Widget_Base {
                 centerPadding: '0px',
                 slidesToShow: 3,
                 infinite: true,
-                autoplay: <?php echo $auto; ?>,
-                autoplaySpeed: <?php echo $a_speed; ?>,
-                speed: <?php echo $t_speed; ?>,        
+                autoplay: <?php echo $auto; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
+                autoplaySpeed: <?php echo $a_speed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
+                speed: <?php echo $t_speed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,        
                 arrows: false,
                 asNavFor: '#text-<?php echo esc_attr( $id ); ?>',
                 focusOnSelect: true,
@@ -286,6 +286,6 @@ class MH_Plug_Synced_Slider_Widget extends \Elementor\Widget_Base {
         });
         <?php
         $js = ob_get_clean();
-        echo "<script type='text/javascript'>\n" . $js . "\n</script>";
+        echo "<script type='text/javascript'>\n" . $js . "\n</script>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             }
 }

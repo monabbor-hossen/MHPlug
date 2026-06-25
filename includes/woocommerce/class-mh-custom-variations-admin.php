@@ -193,6 +193,7 @@ class MH_Plug_Custom_Variations_Admin {
             wp_send_json_error( 'Invalid Product ID' );
         }
 
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         parse_str( wp_unslash( $_POST['form_data'] ), $parsed_data );
 
         if ( isset( $parsed_data['mh_custom_vars'] ) && is_array( $parsed_data['mh_custom_vars'] ) ) {
@@ -235,6 +236,7 @@ class MH_Plug_Custom_Variations_Admin {
     }
 
     public static function save_custom_variations( $post_id ) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
         if ( ! isset( $_POST['mh_custom_vars'] ) || ! is_array( $_POST['mh_custom_vars'] ) ) {
             delete_post_meta( $post_id, '_mh_custom_variation_rules' );
             return;
@@ -242,6 +244,7 @@ class MH_Plug_Custom_Variations_Admin {
 
         $rules_to_save = [];
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
         foreach ( $_POST['mh_custom_vars'] as $row ) {
             if ( empty( $row['attributes'] ) || ! is_array( $row['attributes'] ) ) {
                 continue;

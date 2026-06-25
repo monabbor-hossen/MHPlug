@@ -328,7 +328,7 @@ class MH_Admin_Menu
         echo "  <div class='mh-widget-card-header'>";
         echo "      <div class='mh-widget-title'>" . esc_html($args['label']) . "</div>";
         echo "      <label class='switch'>";
-        echo "<input class='cb' type='checkbox' name='mh_plug_widgets_settings[{$id}]' value='1' " . esc_attr($checked_attr) . " " . esc_attr($disabled_string) . "/>";
+        echo "<input class='cb' type='checkbox' name='mh_plug_widgets_settings[" . esc_attr($id) . "]' value='1' " . esc_attr($checked_attr) . " " . esc_attr($disabled_string) . "/>";
         echo "          <span class='toggle'>";
         echo "              <span class='left'>off</span>";
         echo "              <span class='right'>on</span>";
@@ -337,7 +337,7 @@ class MH_Admin_Menu
         echo "  </div>";
 
         if ($disabled_string !== '') {
-            echo "<input type='hidden' name='mh_plug_widgets_settings[{$id}]' value='" . esc_attr($current_value) . "' />";
+            echo "<input type='hidden' name='mh_plug_widgets_settings[" . esc_attr($id) . "]' value='" . esc_attr($current_value) . "' />";
         }
         echo "</div>";
     }

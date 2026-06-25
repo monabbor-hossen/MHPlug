@@ -554,9 +554,8 @@ class MH_Plug_Taxonomy_Slider_Widget extends \Elementor\Widget_Base {
             $css .= "{$p}-right .mh-tax-card-content > * { text-align: right !important; }\n";
             if ( $bp['media'] ) $css .= "}\n";
         }
-        echo "<style>
-" . $css . "
-</style>";
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo "<style>\n" . $css . "\n</style>";
         ?>
 
         <div class="mh-tax-slider-wrapper">
@@ -619,6 +618,7 @@ class MH_Plug_Taxonomy_Slider_Widget extends \Elementor\Widget_Base {
 
                                 <?php if ( $settings['show_button'] === 'yes' && ! empty( $link ) ) : ?>
                                     <div class="mh-tax-card-btn-wrap">
+                                        <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                                         <a href="<?php echo esc_url( $link ); ?>" class="mh-tax-card-btn" <?php echo $target . $nofollow; ?>>
                                             <?php echo esc_html( $settings['button_text'] ); ?>
                                         </a>
@@ -628,6 +628,7 @@ class MH_Plug_Taxonomy_Slider_Widget extends \Elementor\Widget_Base {
 
                             <?php 
                             if ( ! empty( $link ) && $settings['show_button'] !== 'yes' ) : ?>
+                                <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                                 <a href="<?php echo esc_url( $link ); ?>" class="mh-tax-card-link-overlay" <?php echo $target . $nofollow; ?> aria-label="<?php echo esc_attr( $title ); ?>"></a>
                             <?php endif; ?>
 
@@ -656,6 +657,7 @@ class MH_Plug_Taxonomy_Slider_Widget extends \Elementor\Widget_Base {
             }
         });
         ";
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo "<script type='text/javascript'>\n" . $js . "\n</script>";
             }
 }

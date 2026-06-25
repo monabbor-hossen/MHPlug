@@ -1012,12 +1012,11 @@ class MH_Plug_Testimonial_Widget extends \Elementor\Widget_Base {
                 background-color: #333333;
             }
         ";
-        echo "<style>
-" . $css . "
-</style>";
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo "<style>\n" . $css . "\n</style>";
         ?>
 
-        <div class="mh-testimonial-wrapper mh-testimonial-wrapper-<?php echo $widget_id; ?> <?php echo esc_attr($dots_style_class); ?> <?php echo esc_attr($arrows_pos_class); ?> <?php echo esc_attr($dots_pos_class); ?>">
+        <div class="mh-testimonial-wrapper mh-testimonial-wrapper-<?php echo esc_attr( $widget_id ); ?> <?php echo esc_attr($dots_style_class); ?> <?php echo esc_attr($arrows_pos_class); ?> <?php echo esc_attr($dots_pos_class); ?>">
             <?php if ( $enable_slider ) : 
                 $slider_settings = [
                     'slidesToShow' => absint( $settings['slides_to_show'] ),
@@ -1043,7 +1042,7 @@ class MH_Plug_Testimonial_Widget extends \Elementor\Widget_Base {
                     ]
                 ];
             ?>
-                <div class="mh-testimonial-slider mh-testimonial-slider-<?php echo $widget_id; ?>" data-settings='<?php echo wp_json_encode( $slider_settings ); ?>'>
+                <div class="mh-testimonial-slider mh-testimonial-slider-<?php echo esc_attr( $widget_id ); ?>" data-settings='<?php echo esc_attr( wp_json_encode( $slider_settings ) ); ?>'>
                     <?php foreach ( $testimonials as $item ) : ?>
                         <div class="mh-testimonial-slider-item">
                             <?php $this->render_testimonial_card($item, $lift_up_class); ?>
@@ -1088,6 +1087,7 @@ class MH_Plug_Testimonial_Widget extends \Elementor\Widget_Base {
                 });
             });
         ";
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo "<script type='text/javascript'>\n" . $js . "\n</script>";
         endif;
 

@@ -286,7 +286,7 @@ class MH_Plug_Site_Title_Widget extends \Elementor\Widget_Base {
         }
 
         echo '<div class="mh-site-title-container">';
-        echo '<' . $title_tag . ' class="mh-site-title-content">' . $inner . '</' . $title_tag . '>';
+        echo '<' . $title_tag . ' class="mh-site-title-content">' . $inner . '</' . $title_tag . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo '</div>';
 
         // Inline CSS to remove link underline

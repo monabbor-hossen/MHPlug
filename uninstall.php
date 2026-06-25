@@ -18,6 +18,7 @@ global $wpdb;
 
 // 1. Drop the custom Wishlist table.
 $table_name = $wpdb->prefix . 'mh_woocommerce_wishlist';
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.SchemaChange
 $wpdb->query( "DROP TABLE IF EXISTS {$table_name}" );
 
 // 2. Delete all plugin settings/options.

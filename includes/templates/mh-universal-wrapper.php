@@ -113,6 +113,7 @@ if ( class_exists('WooCommerce') ) {
             try {
                 $global_css = new \Elementor\Core\Files\CSS\Global_CSS();
                 if ( method_exists( $global_css, 'get_url' ) ) {
+                    // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
                     echo '<link rel="stylesheet" href="' . esc_url( $global_css->get_url() ) . '" type="text/css" media="all" data-no-optimize="1" data-no-minify="1" data-cfasync="false">' . "\n";
                 }
             } catch ( Exception $e ) {
@@ -130,6 +131,7 @@ if ( class_exists('WooCommerce') ) {
             try {
                 $css_file = new \Elementor\Core\Files\CSS\Post( $tid );
                 if ( method_exists( $css_file, 'get_url' ) ) {
+                    // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
                     echo '<link rel="stylesheet" id="mh-elementor-post-' . $tid . '-css" href="' . esc_url( $css_file->get_url() ) . '" type="text/css" media="all" data-no-optimize="1" data-no-minify="1" data-cfasync="false">' . "\n";
                 }
             } catch ( Exception $e ) {

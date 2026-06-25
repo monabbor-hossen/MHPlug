@@ -317,7 +317,7 @@ class MH_Plug_Blog_Post_Widget extends \Elementor\Widget_Base {
 
                             <?php if ( $settings['show_excerpt'] === 'yes' ) : ?>
                                 <div class="mh-blog-excerpt">
-                                    <?php echo wp_trim_words( get_the_excerpt(), $settings['excerpt_length'], '...' ); ?>
+                                    <?php echo wp_kses_post( wp_trim_words( get_the_excerpt(), $settings['excerpt_length'], '...' ) ); ?>
                                 </div>
                             <?php endif; ?>
 

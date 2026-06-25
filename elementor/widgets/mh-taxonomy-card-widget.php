@@ -489,6 +489,7 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
 
                 <?php if ( $settings['show_button'] === 'yes' && ! empty( $link ) ) : ?>
                     <div class="mh-tax-card-btn-wrap">
+                        <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                         <a href="<?php echo esc_url( $link ); ?>" class="mh-tax-card-btn" <?php echo $target . $nofollow; ?>>
                             <?php echo esc_html( $settings['button_text'] ); ?>
                         </a>
@@ -499,6 +500,7 @@ class MH_Plug_Taxonomy_Card_Widget extends \Elementor\Widget_Base {
             <?php 
             // 🚀 THE FIX: Only apply the full-card clickable overlay if the Button is DISABLED!
             if ( ! empty( $link ) && $settings['show_button'] !== 'yes' ) : ?>
+                <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                 <a href="<?php echo esc_url( $link ); ?>" class="mh-tax-card-link-overlay" <?php echo $target . $nofollow; ?> aria-label="<?php echo esc_attr( $title ); ?>"></a>
             <?php endif; ?>
 

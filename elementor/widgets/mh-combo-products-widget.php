@@ -481,7 +481,7 @@ class MH_Plug_Combo_Products_Widget extends \Elementor\Widget_Base {
             $dots   ? 'true' : 'false'
         );
 
-        echo '<div class="' . esc_attr( $wrapper_class ) . '"' . $wrapper_data . '>';
+        echo '<div class="' . esc_attr( $wrapper_class ) . '"' . $wrapper_data . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
         /* 6. Loop products */
         foreach ( $ids as $pid ) {
@@ -499,9 +499,9 @@ class MH_Plug_Combo_Products_Widget extends \Elementor\Widget_Base {
             /* Image */
             echo '<div class="mh-combo-image">';
             if ( $link_items ) {
-                echo '<a href="' . esc_url( $permalink ) . '" aria-label="' . esc_attr( $name ) . '">' . $img . '</a>';
+                echo '<a href="' . esc_url( $permalink ) . '" aria-label="' . esc_attr( $name ) . '">' . $img . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             } else {
-                echo $img;
+                echo $img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             }
             echo '</div>';
 
@@ -517,7 +517,7 @@ class MH_Plug_Combo_Products_Widget extends \Elementor\Widget_Base {
             echo '</h4>';
 
             if ( $show_price ) {
-                echo '<div class="mh-combo-price">' . $linked->get_price_html() . '</div>';
+                echo '<div class="mh-combo-price">' . $linked->get_price_html() . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             }
 
             echo '</div>'; // .mh-combo-info

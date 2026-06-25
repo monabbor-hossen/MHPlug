@@ -406,7 +406,7 @@ class MH_Plug_Post_Carousel_Widget extends \Elementor\Widget_Base {
                 </div>
                 <?php
                 $js = "jQuery(document).ready(function($){var s=$('.elementor-element-" . esc_attr($widget_id) . " .mh-post-carousel');if(s.length&&$.fn.slick){s.slick(s.data('slick'));}});";
-                echo "<script type='text/javascript'>\n" . $js . "\n</script>";
+                echo "<script type='text/javascript'>\n" . $js . "\n</script>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 ?>
             </div>
             <?php
@@ -477,21 +477,21 @@ class MH_Plug_Post_Carousel_Widget extends \Elementor\Widget_Base {
                 if ( has_post_thumbnail() ) {
                     $thumb_size = isset($element['thumbnail_size']) ? $element['thumbnail_size'] : 'medium_large';
                     echo '<div class="' . esc_attr($wrapper_class) . '">';
-                    echo '<a href="' . get_permalink() . '">';
+                    echo '<a href="' . esc_url( get_permalink() ) . '">';
                     the_post_thumbnail( $thumb_size );
                     echo '</a>';
                     echo '</div>';
                 }
                 break;
             case 'title':
-                echo '<h3 class="' . esc_attr($wrapper_class) . '"><a href="' . get_permalink() . '">' . get_the_title() . '</a></h3>';
+                echo '<h3 class="' . esc_attr($wrapper_class) . '"><a href="' . esc_url( get_permalink() ) . '">' . wp_kses_post( get_the_title() ) . '</a></h3>';
                 break;
             case 'excerpt':
-                echo '<div class="' . esc_attr($wrapper_class) . '">' . wp_trim_words( get_the_excerpt(), isset($element['excerpt_length']) ? $element['excerpt_length'] : 15 ) . '</div>';
+                echo '<div class="' . esc_attr($wrapper_class) . '">' . wp_kses_post( wp_trim_words( get_the_excerpt(), isset($element['excerpt_length']) ? $element['excerpt_length'] : 15 ) ) . '</div>';
                 break;
             case 'button':
                 echo '<div class="' . esc_attr($wrapper_class) . ' mh-post-button-wrapper">';
-                echo '<a href="' . get_permalink() . '" class="mh-post-button">' . esc_html( isset($element['button_text']) ? $element['button_text'] : 'Read More' ) . '</a>';
+                echo '<a href="' . esc_url( get_permalink() ) . '" class="mh-post-button">' . esc_html( isset($element['button_text']) ? $element['button_text'] : 'Read More' ) . '</a>';
                 echo '</div>';
                 break;
             case 'date':
@@ -516,7 +516,7 @@ class MH_Plug_Post_Carousel_Widget extends \Elementor\Widget_Base {
         if ( ! empty( $element['meta_icon']['value'] ) ) {
             Icons_Manager::render_icon( $element['meta_icon'], [ 'aria-hidden' => 'true', 'class' => 'mh-meta-icon' ] );
         }
-        echo '<span class="mh-meta-text">' . $content . '</span>';
+        echo '<span class="mh-meta-text">' . wp_kses_post( $content ) . '</span>';
         echo '</div>';
     }
 }

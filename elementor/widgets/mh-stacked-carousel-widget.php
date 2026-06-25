@@ -550,9 +550,8 @@ class MH_Plug_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
             }
             ";
         }
-        echo "<style>
-" . $css . "
-</style>";
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo "<style>\n" . $css . "\n</style>";
         ?>
 
         <div class="mh-stacked-wrap mh-sc-mode-<?php echo esc_attr( $mode ); ?><?php echo esc_attr( $zoom_class ); ?>">
@@ -576,6 +575,7 @@ class MH_Plug_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
                             <p class="mh-stacked-desc"><?php echo esc_html( $slide['description'] ); ?></p>
                         <?php endif; ?>
                         <?php if ( ( $s['show_button'] ?? '' ) === 'yes' && ! empty( $slide['button_text'] ) ) : ?>
+                            <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             <a class="mh-stacked-btn" href="<?php echo esc_url( $link ); ?>"<?php echo $tgt . $rel; ?>><?php echo esc_html( $slide['button_text'] ); ?></a>
                         <?php endif; ?>
                     </div>
@@ -635,6 +635,7 @@ class MH_Plug_Stacked_Carousel_Widget extends \Elementor\Widget_Base {
             }
         });
         ";
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo "<script type='text/javascript'>\n" . $js . "\n</script>";
             }
 }

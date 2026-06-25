@@ -285,7 +285,7 @@ class MH_Plug_Wishlist_Table_Widget extends \Elementor\Widget_Base {
                             <?php if ( $show_image ) : ?>
                             <td class="mh-wl-col-image" style="padding: 15px;">
                                 <a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>">
-                                    <?php echo $product->get_image( [ 60, 60 ] ); ?>
+                                    <?php echo $product->get_image( [ 60, 60 ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                                 </a>
                             </td>
                             <?php endif; ?>
@@ -296,7 +296,7 @@ class MH_Plug_Wishlist_Table_Widget extends \Elementor\Widget_Base {
                             </td>
                             <?php if ( $show_price ) : ?>
                             <td class="mh-wl-col-price" style="padding: 15px;">
-                                <?php echo $product->get_price_html(); ?>
+                                <?php echo $product->get_price_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             </td>
                             <?php endif; ?>
                             <?php if ( $show_stock ) : ?>
@@ -310,7 +310,7 @@ class MH_Plug_Wishlist_Table_Widget extends \Elementor\Widget_Base {
                             <td class="mh-wl-col-cart" style="padding: 15px;">
                                 <?php
                                 if ( $product->is_in_stock() ) {
-                                    echo apply_filters( 'woocommerce_loop_add_to_cart_link',
+                                    echo apply_filters( 'woocommerce_loop_add_to_cart_link', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                         sprintf(
                                             '<a href="%s" data-product_id="%d" data-product_sku="%s" class="button add_to_cart_button ajax_add_to_cart">%s</a>',
                                             esc_url( $product->add_to_cart_url() ),
