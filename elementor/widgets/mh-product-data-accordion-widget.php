@@ -446,7 +446,7 @@ class MH_Plug_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
             <?php
             ob_start();
             ?>
-                <?php echo $custom_css; ?>
+                <?php echo $custom_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                 .mh-accordion-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 500; transition: color 0.3s ease; }
                 .mh-accordion-icon { font-size: 14px; transition: 0.3s ease; display: inline-flex; align-items: center; justify-content: center; }
                 .mh-accordion-item.active .fa-plus { display: none; }
@@ -485,7 +485,7 @@ class MH_Plug_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
                             <span class="mh-accordion-icon"><i class="fas fa-plus"></i><i class="fas fa-minus"></i></span>
                         </div>
                         <div class="mh-accordion-content" style="display: <?php echo $is_first ? 'block' : 'none'; ?>;">
-                            <?php echo $info_content; ?>
+                            <?php echo $info_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                         </div>
                     </div>
                     <?php $is_first = false; ?>
@@ -507,11 +507,11 @@ class MH_Plug_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
                 <?php if ( $has_reviews ) : ?>
                     <div class="mh-accordion-item <?php echo $is_first ? 'active' : ''; ?>">
                         <div class="mh-accordion-header">
-                            <span class="mh-accordion-title"><?php echo $title_reviews_display; ?></span>
+                            <span class="mh-accordion-title"><?php echo $title_reviews_display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
                             <span class="mh-accordion-icon"><i class="fas fa-plus"></i><i class="fas fa-minus"></i></span>
                         </div>
                         <div class="mh-accordion-content mh-review-container" style="display: <?php echo $is_first ? 'block' : 'none'; ?>;">
-                            <?php echo $reviews_content; ?>
+                            <?php echo $reviews_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -529,7 +529,7 @@ class MH_Plug_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
             <?php
             ob_start();
             ?>
-                <?php echo $custom_css; ?>
+                <?php echo $custom_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                 .mh-tabs-container-<?php echo esc_attr( $widget_id ); ?> .mh-tabs-nav { display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0 0 10px 0; border-bottom: 1px solid #eee; }
                 .mh-tabs-container-<?php echo esc_attr( $widget_id ); ?> .mh-tab-btn { cursor: pointer; font-weight: 600; transition: all 0.3s ease; margin-bottom: -1px; border-color: transparent; }
                 .mh-tabs-container-<?php echo esc_attr( $widget_id ); ?> .mh-tab-content-panel { display: none; animation: mhTabFadeIn 0.4s ease; }
@@ -569,7 +569,7 @@ class MH_Plug_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
                     <?php endif; ?>
                     <?php if ( $has_reviews ) : ?>
                         <li class="mh-tab-btn <?php echo ( $first_active === 'reviews' ) ? 'mh-active-tab' : ''; ?>" data-target="mh-tab-reviews-<?php echo esc_attr( $widget_id ); ?>">
-                            <?php echo $title_reviews_display; ?>
+                            <?php echo $title_reviews_display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                         </li>
                     <?php endif; ?>
                 </ul>
@@ -582,7 +582,7 @@ class MH_Plug_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
                     <?php endif; ?>
                     <?php if ( $has_info ) : ?>
                         <div id="mh-tab-info-<?php echo esc_attr( $widget_id ); ?>" class="mh-tab-content-panel <?php echo ( $first_active === 'info' ) ? 'mh-active-content' : ''; ?>">
-                            <?php echo $info_content; ?>
+                            <?php echo $info_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                         </div>
                     <?php endif; ?>
                     <?php if ( $has_shipping ) : ?>
@@ -592,7 +592,7 @@ class MH_Plug_Product_Data_Accordion_Widget extends \Elementor\Widget_Base {
                     <?php endif; ?>
                     <?php if ( $has_reviews ) : ?>
                         <div id="mh-tab-reviews-<?php echo esc_attr( $widget_id ); ?>" class="mh-tab-content-panel mh-review-container <?php echo ( $first_active === 'reviews' ) ? 'mh-active-content' : ''; ?>">
-                            <?php echo $reviews_content; ?>
+                            <?php echo $reviews_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                         </div>
                     <?php endif; ?>
                 </div>

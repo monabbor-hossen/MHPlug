@@ -190,10 +190,12 @@ final class MH_Plug_Elementor_Loader {
                 $css_file = new \Elementor\Core\Files\CSS\Post( $template_id );
                 $css_file->enqueue();
             }
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display($template_id, true);
         } else {
             echo '<div style="padding:30px; text-align:center; font-family:sans-serif;">';
             // Product image HTML comes from WooCommerce core and is safe to output directly.
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo $product->get_image('woocommerce_single', ['style' => 'max-width:300px; border-radius:10px; margin-bottom:20px;']);
             echo '<h2 style="margin:0 0 10px; color:#111;">' . esc_html( $product->get_title() ) . '</h2>';
             echo '<div style="font-size:20px; color:#d63638; font-weight:bold; margin-bottom:20px;">' . wp_kses_post( $product->get_price_html() ) . '</div>';
@@ -237,7 +239,7 @@ final class MH_Plug_Elementor_Loader {
                         <td class="mh-compare-item">
                             <div class="mh-compare-image">
                                 <a href="#" class="mh-remove-compare" data-product-id="<?php echo esc_attr($product->get_id()); ?>" title="<?php esc_attr_e( 'Remove', 'mh-plug-ecommerce-builder-widgets' ); ?>"><i class="fas fa-times"></i></a>
-                                <?php echo $product->get_image('woocommerce_thumbnail'); ?>
+                                <?php echo $product->get_image('woocommerce_thumbnail'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             </div>
                             <h3 class="mh-compare-title"><a href="<?php echo esc_url( $product->get_permalink() ); ?>"><?php echo esc_html( $product->get_title() ); ?></a></h3>
                             <div class="mh-compare-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>

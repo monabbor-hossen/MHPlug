@@ -185,7 +185,7 @@ class MH_Plug_Site_Title_Widget extends \Elementor\Widget_Base {
         $this->add_control(
             'hover_transition',
             [
-                'label' => esc_html__( 'Transition Duration', 'elementor' ),
+                'label' => esc_html__( 'Transition Duration', 'mh-plug-ecommerce-builder-widgets' ),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'px' => [

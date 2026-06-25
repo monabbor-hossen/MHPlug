@@ -318,6 +318,7 @@ if ( ! function_exists( 'mh_qv_output_simple_attributes' ) ) {
             echo '<div style="margin-bottom: 10px;">';
             echo '<label style="display:block; font-weight:600; margin-bottom: 5px; color:#333;">' . esc_html( $label ) . '</label>';
             echo '<select name="' . esc_attr( $select_name ) . '" class="mh-qv-attr-select" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9; color:#333; outline:none;">';
+            /* translators: %s: Attribute label */
             echo '<option value="">' . esc_html( sprintf( __( 'Choose %s', 'mh-plug-ecommerce-builder-widgets' ), $label ) ) . '</option>';
 
             if ( $attribute->is_taxonomy() ) {
