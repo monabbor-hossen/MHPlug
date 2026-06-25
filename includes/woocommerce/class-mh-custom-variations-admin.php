@@ -79,7 +79,7 @@ class MH_Plug_Custom_Variations_Admin {
         }
 
         if ( empty( $attributes ) ) {
-            echo '<p style="padding:15px;">' . __( 'Please add attributes and check "Used for variations" in the "Attributes" tab first.', 'mh-plug-ecommerce-builder-widgets' ) . '</p>';
+            echo '<p style="padding:15px;">' . esc_html__( 'Please add attributes and check "Used for variations" in the "Attributes" tab first.', 'mh-plug-ecommerce-builder-widgets' ) . '</p>';
             echo '</div>';
             return;
         }

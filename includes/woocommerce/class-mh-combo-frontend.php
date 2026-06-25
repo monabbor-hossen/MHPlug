@@ -81,7 +81,7 @@ class MH_Plug_Combo_Frontend {
                 echo '<a href="' . $product_url . '">' . $thumbnail . '</a>';
                 echo '</div>';
                 echo '<div class="mh-combo-item-details">';
-                echo '<strong style="display: block; font-size: 14px;"><a href="' . $product_url . '" style="text-decoration: none; color: inherit;">' . $title . '</a></strong>';
+                echo '<strong style="display: block; font-size: 14px;"><a href="' . esc_url( $product_url ) . '" style="text-decoration: none; color: inherit;">' . wp_kses_post( $title ) . '</a></strong>';
                 echo '</div>';
                 echo '</li>';
             }

@@ -105,7 +105,7 @@ class MH_Plug_Copyright_Widget extends \Elementor\Widget_Base {
         $text = $settings['copyright_text'];
 
         // Automatically fetch the current year and site title
-        $current_year = date( 'Y' );
+        $current_year = gmdate( 'Y' );
         $site_title   = get_bloginfo( 'name' );
 
         // Replace the shortcodes in the text

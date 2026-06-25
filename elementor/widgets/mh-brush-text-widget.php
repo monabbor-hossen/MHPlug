@@ -428,7 +428,7 @@ class MH_Plug_Brush_Text_Widget extends \Elementor\Widget_Base {
         if ( ! empty( $settings['link']['url'] ) ) {
             $wrapper_tag = 'a';
             $this->add_link_attributes( 'link_wrapper', $settings['link'] );
-            $wrapper_attrs_string = $this->get_render_attribute_string( 'link_wrapper' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            $wrapper_attrs_string = $this->get_render_attribute_string( 'link_wrapper' );
             if (strpos($wrapper_attrs_string, 'class="') !== false) {
                  $wrapper_attrs_string = str_replace( 'class="', 'class="mh-brush-text-wrapper ', $wrapper_attrs_string );
             } else {
@@ -436,10 +436,13 @@ class MH_Plug_Brush_Text_Widget extends \Elementor\Widget_Base {
             }
         }
         ?>
-        <<?php echo esc_html($wrapper_tag); ?> <?php echo $wrapper_attrs_string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+        <<?php echo esc_html($wrapper_tag); ?> <?php 
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo $wrapper_attrs_string; ?>>
             
             <div class="mh-brush-text-svg">
                 <svg viewBox="0 0 400 291.96581196581195" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                    <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                     <path d="<?php echo $this->get_brush_svg_path(); ?>" />
                 </svg>
             </div>
